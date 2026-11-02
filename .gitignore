@@ -22,3 +22,9 @@ GoogleService-Info.plist
 # local CI-generated artifacts
 .ci-metrics/
 **/__pycache__/
+
+# CI report archive on self-hosted workstation
+.ci-reports/
+
+# Local Android build cache
+**/.kotlin/

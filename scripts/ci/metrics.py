@@ -35,7 +35,7 @@ def collect(a):
  sources=list((Path(a.repo)/"apps/customer/lib").rglob("*.dart"))
  data={
  "sha":os.getenv("GITHUB_SHA","local"),
- "environment":"GitHub Actions Android emulator API 35; no physical low-end device",
+ "environment":"Mashwar G16 self-hosted Ubuntu; Android emulator API 34; not a physical low-end device",
  "metrics":{
   "fps_frame_ms":None,
   "startup_ms":parse(r"^TotalTime:\s*(\d+)",start),
@@ -62,6 +62,9 @@ def collect(a):
 def render(a):
  cur=json.loads(read(a.current)); b=read(a.baseline)
  old=json.loads(b) if b else None
+ if old and old.get("environment") != cur.get("environment"):
+  old=None  # hosted and self-hosted measurements are not comparable
+
  lines=["# Mashwar — performance regression report","",
   f"Current: `{cur['sha'][:12]}` · Baseline: "+(f"`{old['sha'][:12]}`" if old else "none (first run)"),"",
   "| Goal | Current | Previous | Change | Result |","|---|---:|---:|---:|---|"]
