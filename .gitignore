@@ -18,3 +18,7 @@
 *.pem
 google-services.json
 GoogleService-Info.plist
+
+# local CI-generated artifacts
+.ci-metrics/
+**/__pycache__/

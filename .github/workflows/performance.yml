@@ -1,0 +1,89 @@
+name: Mashwar performance and quality
+on:
+  push:
+    branches: [main, hazem-dev]
+  pull_request:
+    branches: [main, hazem-dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  customer:
+    name: Customer / regression report
+    runs-on: ubuntu-22.04
+    timeout-minutes: 55
+    env:
+      CI_METRICS_DIR: ${{ github.workspace }}/.ci-metrics
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.4'
+          channel: stable
+          cache: true
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - name: Validate routing provider PHP and trial boundaries
+        run: |
+          find backend/laravel -name '*.php' -print0 | xargs -0 -n1 php -l
+          php backend/laravel/tests/routing_selector_smoke.php
+      - name: Resolve packages
+        working-directory: apps/customer
+        run: flutter pub get
+      - name: Formatting
+        working-directory: apps/customer
+        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Static analysis
+        working-directory: apps/customer
+        run: flutter analyze
+      - name: Functional tests
+        working-directory: apps/customer
+        run: |
+          set -o pipefail
+          mkdir -p "$CI_METRICS_DIR"
+          flutter test -r expanded | tee "$CI_METRICS_DIR/flutter-tests.log"
+          flutter test test/core/cache/cache_policy_test.dart -r expanded > "$CI_METRICS_DIR/cache-tests.log"
+          echo 1 > "$CI_METRICS_DIR/cache_checks.txt"
+          flutter test test/core/network/request_coalescer_test.dart -r expanded > "$CI_METRICS_DIR/coalescer-tests.log"
+          echo 1 > "$CI_METRICS_DIR/offline_checks.txt"
+      - name: Android build and emulator diagnostics
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: pixel_4
+          cores: 2
+          ram-size: 2048M
+          disable-animations: true
+          script: bash scripts/ci/android_smoke.sh
+      - name: Collect current measurements
+        if: always()
+        run: python3 scripts/ci/metrics.py collect --repo . --output "$CI_METRICS_DIR/current.json"
+      - name: Obtain previous successful metrics
+        if: always()
+        continue-on-error: true
+        env:
+          REPO_NAME: ${{ github.repository }}
+          REF_NAME: ${{ github.head_ref || github.ref_name }}
+        run: bash scripts/ci/fetch_baseline.sh
+      - name: Report performance changes
+        if: always()
+        run: |
+          python3 scripts/ci/metrics.py report --current "$CI_METRICS_DIR/current.json" --baseline "$CI_METRICS_DIR/baseline/metrics.json" --markdown "$CI_METRICS_DIR/report.md"
+          cat "$CI_METRICS_DIR/report.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-metrics
+          path: .ci-metrics/
+          retention-days: 90
