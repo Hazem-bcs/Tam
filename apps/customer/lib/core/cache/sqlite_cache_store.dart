@@ -1,5 +1,5 @@
-import 'package:mashwar_customer/core/cache/local_cache_store.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tam_customer/core/cache/local_cache_store.dart';
 
 /// Durable cache for non-sensitive read models. Not an offline booking queue.
 final class SqliteCacheStore implements LocalCacheStore {
@@ -10,7 +10,7 @@ final class SqliteCacheStore implements LocalCacheStore {
   Future<Database> _open() async {
     final directory = await getDatabasesPath();
     return openDatabase(
-      '$directory/mashwar_cache.db',
+      '$directory/tam_cache.db',
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''

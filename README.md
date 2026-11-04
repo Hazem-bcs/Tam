@@ -1,4 +1,4 @@
-# مشوار | Mashwar
+# تم | Tam
 
 Flutter-first mobility platform. The repository starts with the **customer app**; driver, merchant, admin and backend code may be added here as independently deployable folders when required.
 
@@ -23,4 +23,8 @@ flutter analyze
 flutter test
 ```
 
-No CI workflows are enabled by default. Never commit API secrets, service-account credentials, signing keys or personal data.
+The performance workflow supports pushes and manual runs. Use `[skip ci]` in commit messages when pushing changes that must not trigger Actions. Never commit API secrets, service-account credentials, signing keys or personal data.
+
+## Infrastructure naming
+
+The product is **تم | Tam**. Existing repository URLs, local checkout paths, runner labels/services and the dedicated CI AVD retain their provisioned names until an infrastructure migration.

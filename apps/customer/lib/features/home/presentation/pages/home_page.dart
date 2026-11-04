@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mashwar_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/l10n/app_localizations.dart';
 
 /// Temporary boot screen; replaced after professional UI review.
 class HomePage extends StatelessWidget {

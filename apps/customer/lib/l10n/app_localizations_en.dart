@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Mashwar';
+  String get appName => 'Tam';
 
   @override
   String get starterTitle => 'App foundation is ready';

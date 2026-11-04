@@ -1,4 +1,4 @@
-# Mashwar self-hosted GitHub Actions runner — one-time registration
+# Tam self-hosted GitHub Actions runner — one-time registration
 
 ## Already prepared on the Ubuntu laptop
 
@@ -32,7 +32,7 @@ systemctl --user enable --now mashwar-actions-runner.service
 systemctl --user status mashwar-actions-runner.service --no-pager
 ```
 
-3. Confirm that `mashwar-g16-local` shows **Idle/Online** on GitHub > Settings > Actions > Runners. You can trigger **Actions > Mashwar performance and quality > Run workflow** for a manual validation.
+3. Confirm that `mashwar-g16-local` shows **Idle/Online** on GitHub > Settings > Actions > Runners. You can trigger **Actions > Tam performance and quality > Run workflow** for a manual validation.
 
 **Do not** run `./config.sh` with the token pasted literally in your shell command history. Do not send the token to a teammate or chat.
 

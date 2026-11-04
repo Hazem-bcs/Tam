@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mashwar_customer/core/network/request_coalescer.dart';
+import 'package:tam_customer/core/network/request_coalescer.dart';
 
 void main() {
   test('concurrent calls to the same key execute once', () async {

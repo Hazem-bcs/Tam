@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mashwar_customer/features/ride_request/domain/entities/geo_point.dart';
+import 'package:tam_customer/features/ride_request/domain/entities/geo_point.dart';
 
 sealed class RideDraftEvent extends Equatable {
   const RideDraftEvent();

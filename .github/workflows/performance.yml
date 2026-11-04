@@ -1,4 +1,4 @@
-name: Mashwar performance and quality
+name: Tam performance and quality
 on:
   push:
     branches: [main, hazem-dev]

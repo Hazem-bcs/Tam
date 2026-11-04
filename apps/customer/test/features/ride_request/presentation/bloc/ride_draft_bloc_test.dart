@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mashwar_customer/features/ride_request/domain/entities/geo_point.dart';
-import 'package:mashwar_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
+import 'package:tam_customer/features/ride_request/domain/entities/geo_point.dart';
+import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 
 void main() {
   test('draft is complete only after pickup and destination', () async {

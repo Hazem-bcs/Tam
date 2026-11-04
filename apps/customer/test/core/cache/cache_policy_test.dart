@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mashwar_customer/core/cache/cache_policy.dart';
+import 'package:tam_customer/core/cache/cache_policy.dart';
 
 void main() {
   test('fresh, stale and expired boundaries are separate', () {

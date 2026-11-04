@@ -1,4 +1,4 @@
-package com.mashwar.mashwar_customer
+package com.tam.tam_customer
 
 import io.flutter.embedding.android.FlutterActivity
 
