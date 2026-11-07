@@ -1,4 +1,5 @@
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 
 enum RouteAccess { public, authentication, authenticated }
@@ -8,6 +9,23 @@ enum RouteAccess { public, authentication, authenticated }
 /// Unclassified paths require authentication; new public pages opt in explicitly.
 final class RouteAccessPolicy {
   const RouteAccessPolicy({this.routes = appRoutes});
+
+  factory RouteAccessPolicy.forFeatures(FeatureDataModes modes) {
+    RouteAccess access(CustomerFeature feature) =>
+        modes.forFeature(feature) == FeatureDataMode.mock
+        ? RouteAccess.public
+        : RouteAccess.authenticated;
+    return RouteAccessPolicy(
+      routes: {
+        ...appRoutes,
+        AppRoutes.rideRequest: access(CustomerFeature.rideRequest),
+        AppRoutes.trips: access(CustomerFeature.trips),
+        AppRoutes.tripDetails: access(CustomerFeature.trips),
+        AppRoutes.notifications: access(CustomerFeature.notifications),
+        AppRoutes.settings: access(CustomerFeature.settings),
+      },
+    );
+  }
 
   static const appRoutes = {
     AppRoutes.home: RouteAccess.public,

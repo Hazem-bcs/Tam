@@ -307,7 +307,7 @@ void main() {
       await tester.tap(find.text('متابعة'));
       await tester.pumpAndSettle();
       expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
-      expect(find.text('رقم هاتفك'), findsOneWidget);
+      expect(find.text('+963941234567'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
     },

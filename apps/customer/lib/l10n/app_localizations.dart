@@ -367,6 +367,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يمكنك العودة لاحقًا للتحقق من توفر الخدمة.'**
   String get homeServiceDescription;
+
+  /// No description provided for @navHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get navHome;
+
+  /// No description provided for @navRideRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب رحلة'**
+  String get navRideRequest;
+
+  /// No description provided for @navTrips.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
+  String get navTrips;
+
+  /// No description provided for @navNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get navNotifications;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get navSettings;
+
+  /// No description provided for @featureNotConnected.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الميزة غير متاحة حاليًا.'**
+  String get featureNotConnected;
 }
 
 class _AppLocalizationsDelegate

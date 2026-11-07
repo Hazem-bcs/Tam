@@ -1,40 +1,121 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
+import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/pages/auth_status_page.dart';
 import 'package:tam_customer/features/auth/presentation/pages/otp_auth_page.dart';
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
-import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+import 'package:tam_customer/features/home/home_entry.dart';
+import 'package:tam_customer/features/notifications/notifications_entry.dart';
+import 'package:tam_customer/features/ride_request/ride_request_entry.dart';
+import 'package:tam_customer/features/settings/settings_entry.dart';
+import 'package:tam_customer/features/trips/trips_entry.dart';
+import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 
 export 'app_routes.dart';
 
-GoRouter createAppRouter(AuthCubit auth, Listenable refresh) => GoRouter(
-  initialLocation: AppRoutes.authStatus,
-  refreshListenable: refresh,
-  redirect: createAuthRedirect(auth),
-  routes: [
-    GoRoute(
-      path: AppRoutes.home,
-      builder: (context, state) => const HomePage(),
+GoRouter createAppRouter(
+  AuthCubit auth,
+  Listenable refresh, {
+  FeatureDataModes dataModes = const FeatureDataModes(),
+  MockTripStore? mockTrips,
+  AppLocaleController? locale,
+}) {
+  final trips = mockTrips ?? MockTripStore();
+  final language = locale ?? AppLocaleController();
+  CustomerNavigation navigation(BuildContext context) =>
+      RouterCustomerNavigation(GoRouter.of(context));
+  String? phone() => auth.state.localPhoneE164 ?? auth.state.user?.phoneE164;
+  return GoRouter(
+    initialLocation: AppRoutes.authStatus,
+    refreshListenable: refresh,
+    redirect: createAuthRedirect(
+      auth,
+      policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
-    GoRoute(
-      path: AppRoutes.auth,
-      builder: (context, state) => const PhoneAuthPage(),
-    ),
-    GoRoute(
-      path: AppRoutes.otp,
-      builder: (context, state) => const OtpAuthPage(),
-    ),
-    GoRoute(
-      path: AppRoutes.authStatus,
-      builder: (context, state) => const AuthStatusPage(),
-    ),
-  ],
-);
+    routes: [
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) => buildHomeFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.home),
+          phoneE164: phone(),
+          logout: auth.logout,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.rideRequest,
+        builder: (context, state) => buildRideRequestFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
+          mockTrips: trips,
+          prefill: state.extra is TripPrefill
+              ? state.extra as TripPrefill
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.trips,
+        builder: (context, state) => buildTripsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.trips),
+          mockTrips: trips,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.tripDetails,
+        builder: (context, state) => buildTripsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.trips),
+          mockTrips: trips,
+          tripId: state.pathParameters['tripId'],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) => buildNotificationsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.notifications),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        builder: (context, state) => buildSettingsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.settings),
+          locale: language,
+          phoneE164: phone(),
+          logout: auth.logout,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.auth,
+        builder: (context, state) => const PhoneAuthPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.otp,
+        builder: (context, state) => const OtpAuthPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.authStatus,
+        builder: (context, state) => const AuthStatusPage(),
+      ),
+    ],
+  );
+}
 
 /// Shared guard wiring for app routes and isolated feature-route tests.
 GoRouterRedirect createAuthRedirect(

@@ -160,4 +160,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeServiceDescription =>
       'Please check back later for service availability.';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navRideRequest => 'Request a ride';
+
+  @override
+  String get navTrips => 'My trips';
+
+  @override
+  String get navNotifications => 'Notifications';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get featureNotConnected => 'This feature is currently unavailable.';
 }

@@ -86,5 +86,11 @@
   "homeWelcome": "Your journey starts with Tam",
   "homePhoneTitle": "Your phone number",
   "homeServiceTitle": "Rides are currently unavailable",
-  "homeServiceDescription": "Please check back later for service availability."
+  "homeServiceDescription": "Please check back later for service availability.",
+  "navHome": "Home",
+  "navRideRequest": "Request a ride",
+  "navTrips": "My trips",
+  "navNotifications": "Notifications",
+  "navSettings": "Settings",
+  "featureNotConnected": "This feature is currently unavailable."
 }

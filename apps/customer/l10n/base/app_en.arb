@@ -1,0 +1,96 @@
+{
+  "@@locale": "en",
+  "appName": "Tam",
+  "authWelcome": "Welcome to Tam",
+  "authPhoneDescription": "Enter your phone number to continue",
+  "authPhoneLabel": "Phone number",
+  "authPhoneHelper": "Syrian mobile in local or international format.",
+  "authPhoneInvalid": "Enter a valid Syrian mobile number",
+  "authSendCode": "Send verification code",
+  "authSending": "Sending code",
+  "authContinueGuest": "Continue as a guest",
+  "authUnifiedAccount": "Your verified number signs you in or creates a new account.",
+  "authVerifyTitle": "Verify your phone",
+  "authVerifyDescription": "Enter the six-digit verification code",
+  "authEditPhone": "Change phone number",
+  "authCodeLabel": "Verification code",
+  "authCodeInvalid": "Enter all six digits",
+  "authCodeExpired": "The code has expired",
+  "authVerifyCode": "Verify code",
+  "authVerifying": "Verifying",
+  "authResendCode": "Resend code",
+  "authRestartHint": "Go back to your phone number to start again after the waiting period.",
+  "authRestoring": "Checking your session",
+  "authSessionDescription": "Restoring your account information",
+  "authRetry": "Try again",
+  "authSignOutThisDevice": "Sign out of this device",
+  "authGuestTitle": "You are browsing as a guest",
+  "authGuestDescription": "Sign in to continue with your phone number.",
+  "authSignedInTitle": "You are signed in",
+  "authLogout": "Sign out",
+  "authLoggingOut": "Signing out",
+  "authSignIn": "Sign in",
+  "authRetryIn": "Try again in {seconds} seconds",
+  "@authRetryIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResendIn": "Resend in {seconds} seconds",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authCodeExpires": "Code expires in {seconds} seconds",
+  "@authCodeExpires": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authAttemptsRemaining": "Attempts remaining: {count}",
+  "@authAttemptsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authSignedInAs": "Welcome, {identity}",
+  "@authSignedInAs": {
+    "placeholders": {
+      "identity": {
+        "type": "String"
+      }
+    }
+  },
+  "authNationalPhoneHint": "9XX XXX XXX",
+  "authPhoneWithCountry": "Phone number, country code +963",
+  "authResendCountdown": "Resend code in {time}",
+  "@authResendCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "authContinue": "Continue",
+  "authContinuing": "Continuing",
+  "authPhonePrivacy": "Use your phone number to personalize your experience.",
+  "homeWelcome": "Your journey starts with Tam",
+  "homePhoneTitle": "Your phone number",
+  "homeServiceTitle": "Rides are currently unavailable",
+  "homeServiceDescription": "Please check back later for service availability.",
+  "navHome": "Home",
+  "navRideRequest": "Request a ride",
+  "navTrips": "My trips",
+  "navNotifications": "Notifications",
+  "navSettings": "Settings",
+  "featureNotConnected": "This feature is currently unavailable."
+}

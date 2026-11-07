@@ -157,4 +157,22 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get homeServiceDescription =>
       'يمكنك العودة لاحقًا للتحقق من توفر الخدمة.';
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navRideRequest => 'طلب رحلة';
+
+  @override
+  String get navTrips => 'طلباتي';
+
+  @override
+  String get navNotifications => 'الإشعارات';
+
+  @override
+  String get navSettings => 'الإعدادات';
+
+  @override
+  String get featureNotConnected => 'هذه الميزة غير متاحة حاليًا.';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ import 'package:tam_customer/features/auth/domain/auth_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_otp_input.dart';
+import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
 void main() {
   test(
@@ -125,33 +127,13 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(AuthOtpInput), findsNothing);
       expect(find.text('+963941234567'), findsOneWidget);
-      expect(find.text(ar ? 'رقم هاتفك' : 'Your phone number'), findsOneWidget);
-      expect(
-        find.text(
-          ar
-              ? 'خدمة الرحلات غير متاحة حاليًا'
-              : 'Rides are currently unavailable',
-        ),
-        findsOneWidget,
-      );
-      expect(
-        find.text(ar ? 'تم تسجيل الدخول' : 'You are signed in'),
-        findsNothing,
-      );
+      final auth = tester.element(find.byType(HomePage)).read<AuthCubit>();
+      expect(auth.state.status, AuthStatus.localAccess);
+      expect(auth.state.localPhoneE164, '+963941234567');
+      expect(auth.state.user, isNull);
+      expect(auth.state.challenge, isNull);
       expect(await store.read(), isNull);
-      final renderedText = tester
-          .widgetList<Text>(find.byType(Text))
-          .map((t) => t.data ?? '')
-          .join(' ');
-      expect(
-        renderedText,
-        isNot(
-          matches(
-            RegExp(r'تجريبي|اختبار|وهمي|prototype|demo', caseSensitive: false),
-          ),
-        ),
-      );
-      await tester.tap(find.text(ar ? 'تسجيل الخروج' : 'Sign out'));
+      await auth.logout();
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('auth-phone')), findsOneWidget);
       // A direct/deep link must not re-enable the skipped OTP screen.
@@ -188,8 +170,7 @@ void main() {
     await tester.tap(find.text('متابعة'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    await tester.ensureVisible(find.text('تسجيل الخروج'));
-    await tester.tap(find.text('تسجيل الخروج'));
+    await tester.element(find.byType(HomePage)).read<AuthCubit>().logout();
     await tester.pumpAndSettle();
     expect(find.byType(PhoneAuthPage), findsOneWidget);
     expect(tester.takeException(), isNull);

@@ -86,5 +86,11 @@
   "homeWelcome": "رحلتك تبدأ مع تم",
   "homePhoneTitle": "رقم هاتفك",
   "homeServiceTitle": "خدمة الرحلات غير متاحة حاليًا",
-  "homeServiceDescription": "يمكنك العودة لاحقًا للتحقق من توفر الخدمة."
+  "homeServiceDescription": "يمكنك العودة لاحقًا للتحقق من توفر الخدمة.",
+  "navHome": "الرئيسية",
+  "navRideRequest": "طلب رحلة",
+  "navTrips": "طلباتي",
+  "navNotifications": "الإشعارات",
+  "navSettings": "الإعدادات",
+  "featureNotConnected": "هذه الميزة غير متاحة حاليًا."
 }
