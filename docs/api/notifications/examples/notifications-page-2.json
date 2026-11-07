@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id": "notice-trips-001",
+      "kind": "trip",
+      "title": {
+        "ar": "راجع رحلاتك السابقة",
+        "en": "Review your past trips"
+      },
+      "body": {
+        "ar": "تجد سجل رحلاتك السابقة في قسم طلباتي.",
+        "en": "Your ride history is available under My trips."
+      },
+      "created_at": "2026-11-07T10:10:00Z",
+      "read_at": null,
+      "target": {
+        "type": "trips"
+      }
+    },
+    {
+      "id": "notice-account-001",
+      "kind": "account",
+      "title": {
+        "ar": "مرحبًا بك في تم",
+        "en": "Welcome to Tam"
+      },
+      "body": {
+        "ar": "استكشف الخدمات من الصفحة الرئيسية.",
+        "en": "Discover our services on the home screen."
+      },
+      "created_at": "2026-11-06T18:00:00Z",
+      "read_at": "2026-11-06T18:10:00Z",
+      "target": {
+        "type": "home"
+      }
+    }
+  ],
+  "meta": {
+    "next_cursor": "bjE6NA"
+  }
+}

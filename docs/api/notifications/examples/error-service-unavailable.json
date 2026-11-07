@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SERVICE_UNAVAILABLE",
+    "message": {
+      "ar": "خدمة الإشعارات غير متاحة حاليًا.",
+      "en": "Notifications service is currently unavailable."
+    }
+  }
+}

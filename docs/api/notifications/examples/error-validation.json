@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "حقول الطلب غير صالحة.",
+      "en": "Invalid request fields."
+    }
+  }
+}

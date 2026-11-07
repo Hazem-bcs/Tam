@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "id": "notice-trip-complete-001",
+      "kind": "trip",
+      "title": {
+        "ar": "اكتملت رحلتك",
+        "en": "Your trip is complete"
+      },
+      "body": {
+        "ar": "شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.",
+        "en": "Thanks for choosing Tam. Review your trip details."
+      },
+      "created_at": "2026-11-07T12:20:00Z",
+      "read_at": null,
+      "target": {
+        "type": "trip",
+        "trip_id": "mock-history-001"
+      }
+    },
+    {
+      "id": "notice-offer-001",
+      "kind": "offer",
+      "title": {
+        "ar": "عرض جديد على رحلاتك",
+        "en": "A new ride offer"
+      },
+      "body": {
+        "ar": "تعرّف على عروض الرحلات المتاحة داخل التطبيق.",
+        "en": "Explore available ride offers in the app."
+      },
+      "created_at": "2026-11-07T11:40:00Z",
+      "read_at": null,
+      "target": {
+        "type": "home"
+      }
+    }
+  ],
+  "meta": {
+    "next_cursor": "bjE6Mg"
+  }
+}

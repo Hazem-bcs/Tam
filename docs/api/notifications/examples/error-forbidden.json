@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "لا يسمح لك بالوصول إلى المورد.",
+      "en": "You cannot access this resource."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "notice-trip-complete-001",
+    "kind": "trip",
+    "title": {
+      "ar": "اكتملت رحلتك",
+      "en": "Your trip is complete"
+    },
+    "body": {
+      "ar": "شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.",
+      "en": "Thanks for choosing Tam. Review your trip details."
+    },
+    "created_at": "2026-11-07T12:20:00Z",
+    "read_at": "2026-11-07T15:00:00Z",
+    "target": {
+      "type": "trip",
+      "trip_id": "mock-history-001"
+    }
+  }
+}

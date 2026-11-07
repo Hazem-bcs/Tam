@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "INVALID_CURSOR",
+    "message": {
+      "ar": "مؤشر الصفحة غير صالح أو منتهي الصلاحية.",
+      "en": "Invalid or expired page cursor."
+    }
+  }
+}

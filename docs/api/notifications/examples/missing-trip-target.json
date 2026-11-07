@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "notice-missing-trip-001",
+    "kind": "trip",
+    "title": {
+      "ar": "تفاصيل رحلة غير متاحة",
+      "en": "Trip details unavailable"
+    },
+    "body": {
+      "ar": "يمكنك قراءة الرسالة دون فتح رحلة غير محددة.",
+      "en": "You can read this message without opening a missing trip."
+    },
+    "created_at": "2026-11-05T09:00:00Z",
+    "read_at": null,
+    "target": {
+      "type": "trip",
+      "trip_id": null
+    }
+  }
+}
