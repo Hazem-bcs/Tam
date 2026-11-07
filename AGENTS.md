@@ -14,6 +14,15 @@ These instructions are provider-neutral: they apply to Codex, Claude, Gemini and
 - Reuse established behavior and components. Extract shared code when it represents the same responsibility; do not couple unrelated features merely because their code looks similar. Avoid giant utility classes, duplicate sources of truth and global mutable application state.
 - Add abstractions or use cases only for real boundaries, rules, orchestration or useful test seams. Do not add forwarding-only classes, speculative frameworks, packages or architectural layers without a concrete need.
 
+## Dart readability and file organization
+
+- Keep handwritten Dart files focused and preferably at or below 300 lines, especially pages. This is a review guideline, not a hard cap: exceed it only when a cohesive implementation is clearer, and explain the reason in the handoff. Generated files are exempt; never compress formatting to meet the count.
+- Keep a page's `build` readable as a composition of clearly named sections. Extract substantial sections into focused widget classes/files; avoid deeply nested widget trees and chains of large `_build...` methods. Keep small, clear local helpers inline when extraction adds no value.
+- Organize files within their owning feature by responsibility: pages in `presentation/pages`, feature UI in `presentation/widgets`, state in `presentation/bloc`, and business/data code in the existing domain/data boundaries. Add section subfolders only when they improve navigation; do not create empty scaffolding.
+- Use descriptive `snake_case.dart` filenames and matching, responsibility-specific class names. Prefer one main responsibility per file; small tightly related private types may stay together. Avoid catch-all files such as `widgets.dart`, `helpers.dart` or `utils.dart` for unrelated code.
+- Pass explicit, focused inputs and callbacks to extracted widgets, preserve state/controller ownership and disposal, and keep rebuild scopes narrow. Promote components to shared UI only when they are genuinely shared. Do not create tiny files, unnecessary wrappers, `part` fragments or new abstractions merely to reduce line counts.
+- Apply these rules to new and touched code within the task scope; do not launch unrelated repository-wide refactors. See the [organization example](docs/engineering/dart-code-organization.md).
+
 ## One application design system and configuration
 
 - Every screen, feature, dialog, sheet and UI state must consume the central theme. Read semantic colors from `Theme.of(context).colorScheme`, typography from `textTheme`, and custom semantic roles from existing theme extensions.
@@ -34,11 +43,15 @@ These instructions are provider-neutral: they apply to Codex, Claude, Gemini and
 ## Behavior, validation and delivery
 
 - Preserve existing Auth behavior, guest access, the authorized temporary `localAccess` flow and the current `TEMPORARY_PHONE_ENTRY` default unless the user explicitly changes that scope. Local/guest access must never become backend authentication or grant access to protected routes/APIs.
-- Do not fabricate production users, trips, drivers, credentials or service responses. Keep test doubles under `test/`; represent unavailable integrations honestly and preserve agreed API contracts.
+- The user authorizes mock-backed development for the new customer features while the backend is unavailable. Follow [the mock/API policy](docs/engineering/mock-api-policy.md): domain repository contracts, isolated `data/mock/` fixtures, deterministic scenarios, and centrally selected per-feature mock/API implementations. UI/state must not contain fixtures or mode switches; API mode must never silently fall back to mock success.
+- Preserve the existing Auth contract and temporary phone-entry behavior: feature mocks must not create backend credentials, verified users or authenticated sessions. Auth test doubles remain under `test/`. Distinguish simulated operations from real bookings/payments and document the active mode; this development permission does not establish release readiness.
+- Every new backend-dependent feature must deliver a versioned Arabic-readable API contract, importable Postman collection with request/response/error examples, matching fixtures and a backend handoff README under `docs/api/<feature>/`, following the [handoff checklist](docs/engineering/api-handoff-template.md). Local-only settings do not require invented server endpoints.
 - Test meaningful behavior, boundary/error cases and navigation/layout regressions relevant to the change. Avoid tests that only repeat implementation or trivial styling details.
 - For Flutter code changes, run the appropriate checks from `apps/customer`: `dart format --output=none --set-exit-if-changed lib test`, `flutter analyze --no-pub`, and `flutter test --no-pub`. Report actual results and any checks that could not run; documentation-only changes do not require Flutter builds/tests.
 - Keep changes focused and preserve unrelated work. Do not automatically push, merge into `main`, run GitHub Actions or start expensive builds. Report real limitations; do not infer release readiness from a polished UI alone.
 - For authorized parallel work, follow [the coordination plan](docs/engineering/parallel-work.md): isolate writers in worktrees, assign file ownership, review exact commit SHAs, and let the supervisor coordinate shared files and final integration.
+- Consult the [task board](docs/engineering/task-board.md) for availability; start only a READY task assigned by the supervisor with a baseline and owned paths. The supervisor alone records assignments/status; send handoffs rather than editing competing copies of the board.
+- The current staffing proposal is [five feature owners plus one supervisor](docs/engineering/wave-one-plan.md), with independent reviews assigned when submissions are ready. It supersedes the earlier fixed developer/reviewer pairing proposal.
 - Read the relevant existing guidance: [working agreement](docs/engineering/working-agreement.md), [architecture ADR](docs/architecture/0001-frontend-architecture.md), [design system](docs/engineering/design-system.md), and [navigation](docs/engineering/navigation.md).
 
 ## Local Android emulator

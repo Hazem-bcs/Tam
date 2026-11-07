@@ -29,7 +29,7 @@
 ```text
 Task ID / Title:
 Role: SUPERVISOR | DEVELOPER | REVIEWER | QA
-Assigned agent / paired agent identifiers:
+Feature owner / reviewer identifier (reviewer may be assigned at submission):
 Repository location or supplied snapshot:
 Baseline SHA / dependency SHAs:
 Implementation branch / review branch / worktree:
@@ -42,6 +42,8 @@ Owned paths:
 Shared-file owner and change-request route:
 Design references supplied and required visual states:
 Agreed interfaces / route access / localization keys:
+Data mode / mock scenarios / repository contract:
+API contract / Postman / examples / backend handoff paths:
 Dependencies and READY conditions:
 Required verification and actual available execution environment:
 Deliverables / limitations / communication method authorized by the user:
@@ -67,6 +69,8 @@ Deliverables / limitations / communication method authorized by the user:
 نفّذ بطاقة المهمة ضمن الملفات المملوكة، باتباع AGENTS.md ونظام التصميم.
 استخدم الثيم والمكوّنات والإعدادات العامة، وحافظ على حدود الطبقات والعقود.
 اختبر السلوك والحالات الاستثنائية والتجاوب واللغتين حسب المهمة.
+افصل Mock في data/mock خلف عقد Repository؛ لا تضع بيانات ثابتة أو شروط
+وضع التشغيل داخل UI/Cubit. سلّم عقد API وPostman والأمثلة وفق سياسة المشروع.
 اطلب أي تغيير مشترك من مالكه؛ لا تتجاوزه بنسخة مكررة أو قيمة hardcoded.
 سلّم كوميتات واضحة وSHA نهائيًا، أو patch مرتبطًا بالنسخة المرسلة إذا لم
 يتوفر Git. اذكر الفحوص المنفذة والتي تعذر تنفيذها بدقة.
@@ -80,6 +84,8 @@ Deliverables / limitations / communication method authorized by the user:
 اقرأ الشروط والعقد والتغيير كاملًا والملفات المحيطة المؤثرة.
 تحقق من صحة السلوك، Clean Architecture وSOLID وDRY، الثيم والإعدادات،
 التجاوب، RTL/LTR، إدارة الموارد، التوجيه والاختبارات بحسب نطاق المهمة.
+راجع عزل المحاكاة وتطابقها مع العقد وPostman، ومنع fallback من API إلى
+Mock، والحفاظ على Auth وحماية البيانات الحقيقية عند تغيير وضع التشغيل.
 شغّل التحقق بنفسك إذا كانت الأدوات متاحة، وافحص الصور المرسومة للواجهة.
 صحح الأخطاء ضمن فرع المراجعة وملكيتك المسموحة، أو أعطِ طلب إصلاح محددًا.
 لا تحذف الاختبارات لتخفي الفشل ولا تعتمد تعديل عقد أو نطاق غير مأذون به.
@@ -107,6 +113,7 @@ Implementation SHA or supplied patch identity:
 Final SHA after fixes (if available):
 Branch / worktree / snapshot location:
 Changed files and user-visible result:
+Active data mode / API contract version / Postman and fixture paths:
 Acceptance criteria met / not met:
 Tests: exact command, environment, result, failure or NOT_RUN reason:
 Visual review: actual image paths, environment, sizes/locales inspected:

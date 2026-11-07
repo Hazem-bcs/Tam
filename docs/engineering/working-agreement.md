@@ -7,7 +7,13 @@ localization, accessibility and validation. Apply them consistently to Home and
 all later features. Follow the [architecture ADR](../architecture/0001-frontend-architecture.md)
 and [design system](design-system.md) for the established implementation patterns.
 
-- Default branch: `main`; use short-lived `feat/*`, `fix/*`, `chore/*` branches.
+For the current five-owner wave, follow the [team plan](wave-one-plan.md),
+[task board](task-board.md), [mock/API policy](mock-api-policy.md) and
+[backend handoff checklist](api-handoff-template.md). The user authorizes
+isolated mock-backed development until the backend is ready; Auth remains
+on its existing temporary phone-entry flow.
+
+- Default branch: `main`; use short-lived branches with the repository/tool's configured prefix. The current wave proposes `codex/w1-*`, independently of the agent provider. Start from the supervisor's exact baseline, not necessarily `main`.
 - Pull request should state scope, before/after images for UI, risks, test evidence and rollback plan.
 - Review requirements: `dart format`, `flutter analyze`, `flutter test` on touched project.
 - No giant `utils.dart`, no global mutable state, no business rules in widgets, no magic string route names.

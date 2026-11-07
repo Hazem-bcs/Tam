@@ -7,6 +7,16 @@ Flutter-first mobility platform. The repository starts with the **customer app**
 - `docs/architecture` — architecture decisions and caching model.
 - `docs/engineering` — code review and contribution rules.
 
+## Team starting point
+
+Read [AGENTS.md](AGENTS.md), the [five-feature plan](docs/engineering/wave-one-plan.md)
+and [task board](docs/engineering/task-board.md). New feature work is planned
+with isolated mock repositories and backend API/Postman handoffs; see the
+[mock/API policy](docs/engineering/mock-api-policy.md). This is a plan, not an
+existing switch in the current app. The supervisor supplies the same exact
+baseline SHA to all owners after the shared setup; each uses its own branch
+and isolated checkout. Do not assume `main` contains that baseline.
+
 ## Run locally
 ```bash
 cd apps/customer
