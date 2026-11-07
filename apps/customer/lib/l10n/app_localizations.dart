@@ -403,6 +403,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هذه الميزة غير متاحة حاليًا.'**
   String get featureNotConnected;
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلًا بك،'**
+  String get homeGreeting;
+
+  /// No description provided for @homeChooseService.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر خدمتك'**
+  String get homeChooseService;
+
+  /// No description provided for @homeRideEntryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وين حابب تروح؟'**
+  String get homeRideEntryTitle;
+
+  /// No description provided for @homeRideEntryHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد نقطة الانطلاق والوجهة لطلب رحلة'**
+  String get homeRideEntryHint;
+
+  /// No description provided for @homeRide.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشوار'**
+  String get homeRide;
+
+  /// No description provided for @homeFood.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطعام'**
+  String get homeFood;
+
+  /// No description provided for @homeShopping.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسوق'**
+  String get homeShopping;
+
+  /// No description provided for @homeComingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريبًا'**
+  String get homeComingSoon;
+
+  /// No description provided for @homeLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل الرئيسية'**
+  String get homeLoading;
+
+  /// No description provided for @homeEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد محتوى متاح حاليًا.'**
+  String get homeEmpty;
+
+  /// No description provided for @homeUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الرئيسية غير متاحة في وضع API حاليًا.'**
+  String get homeUnavailable;
+
+  /// No description provided for @homeError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا.'**
+  String get homeError;
 }
 
 class _AppLocalizationsDelegate

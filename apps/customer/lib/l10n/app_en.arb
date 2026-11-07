@@ -92,5 +92,17 @@
   "navTrips": "My trips",
   "navNotifications": "Notifications",
   "navSettings": "Settings",
-  "featureNotConnected": "This feature is currently unavailable."
+  "featureNotConnected": "This feature is currently unavailable.",
+  "homeGreeting": "Welcome,",
+  "homeChooseService": "Choose a service",
+  "homeRideEntryTitle": "Where to?",
+  "homeRideEntryHint": "Choose your pickup and destination to request a ride",
+  "homeRide": "Ride",
+  "homeFood": "Food",
+  "homeShopping": "Shopping",
+  "homeComingSoon": "Coming soon",
+  "homeLoading": "Loading home",
+  "homeEmpty": "There's no home content available right now.",
+  "homeUnavailable": "Home is not yet available in API mode.",
+  "homeError": "Couldn't load Home. Check your connection and try again."
 }

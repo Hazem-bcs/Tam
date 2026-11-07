@@ -175,4 +175,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get featureNotConnected => 'هذه الميزة غير متاحة حاليًا.';
+
+  @override
+  String get homeGreeting => 'أهلًا بك،';
+
+  @override
+  String get homeChooseService => 'اختر خدمتك';
+
+  @override
+  String get homeRideEntryTitle => 'وين حابب تروح؟';
+
+  @override
+  String get homeRideEntryHint => 'حدد نقطة الانطلاق والوجهة لطلب رحلة';
+
+  @override
+  String get homeRide => 'مشوار';
+
+  @override
+  String get homeFood => 'الطعام';
+
+  @override
+  String get homeShopping => 'التسوق';
+
+  @override
+  String get homeComingSoon => 'قريبًا';
+
+  @override
+  String get homeLoading => 'جارٍ تحميل الرئيسية';
+
+  @override
+  String get homeEmpty => 'لا يوجد محتوى متاح حاليًا.';
+
+  @override
+  String get homeUnavailable => 'خدمة الرئيسية غير متاحة في وضع API حاليًا.';
+
+  @override
+  String get homeError => 'تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا.';
 }

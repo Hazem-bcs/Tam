@@ -178,4 +178,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get featureNotConnected => 'This feature is currently unavailable.';
+
+  @override
+  String get homeGreeting => 'Welcome,';
+
+  @override
+  String get homeChooseService => 'Choose a service';
+
+  @override
+  String get homeRideEntryTitle => 'Where to?';
+
+  @override
+  String get homeRideEntryHint =>
+      'Choose your pickup and destination to request a ride';
+
+  @override
+  String get homeRide => 'Ride';
+
+  @override
+  String get homeFood => 'Food';
+
+  @override
+  String get homeShopping => 'Shopping';
+
+  @override
+  String get homeComingSoon => 'Coming soon';
+
+  @override
+  String get homeLoading => 'Loading home';
+
+  @override
+  String get homeEmpty => 'There\'s no home content available right now.';
+
+  @override
+  String get homeUnavailable => 'Home is not yet available in API mode.';
+
+  @override
+  String get homeError =>
+      'Couldn\'t load Home. Check your connection and try again.';
 }

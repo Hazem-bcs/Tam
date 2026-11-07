@@ -92,5 +92,17 @@
   "navTrips": "طلباتي",
   "navNotifications": "الإشعارات",
   "navSettings": "الإعدادات",
-  "featureNotConnected": "هذه الميزة غير متاحة حاليًا."
+  "featureNotConnected": "هذه الميزة غير متاحة حاليًا.",
+  "homeGreeting": "أهلًا بك،",
+  "homeChooseService": "اختر خدمتك",
+  "homeRideEntryTitle": "وين حابب تروح؟",
+  "homeRideEntryHint": "حدد نقطة الانطلاق والوجهة لطلب رحلة",
+  "homeRide": "مشوار",
+  "homeFood": "الطعام",
+  "homeShopping": "التسوق",
+  "homeComingSoon": "قريبًا",
+  "homeLoading": "جارٍ تحميل الرئيسية",
+  "homeEmpty": "لا يوجد محتوى متاح حاليًا.",
+  "homeUnavailable": "خدمة الرئيسية غير متاحة في وضع API حاليًا.",
+  "homeError": "تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا."
 }
