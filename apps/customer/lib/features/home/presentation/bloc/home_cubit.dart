@@ -18,8 +18,11 @@ final class HomeState {
 final class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repository) : super(const HomeState.initial());
   final HomeRepository _repository;
+  bool _loading = false;
 
   Future<void> load() async {
+    if (isClosed || _loading) return;
+    _loading = true;
     emit(const HomeState(status: HomeLoadStatus.loading));
     try {
       final value = await _repository.load();
@@ -44,6 +47,8 @@ final class HomeCubit extends Cubit<HomeState> {
           ),
         );
       }
+    } finally {
+      _loading = false;
     }
   }
 }

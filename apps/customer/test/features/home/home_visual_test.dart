@@ -18,11 +18,17 @@ ThemeData _captureTheme() {
   final base = AppTheme.light;
   final scheme = base.colorScheme;
   return base.copyWith(
-    textTheme: base.textTheme.apply(fontFamily: 'GoldenReadable'),
+    textTheme: base.textTheme.apply(
+      fontFamily: 'GoldenReadable',
+      fontFamilyFallback: const ['GoldenLatin'],
+    ),
     textButtonTheme: TextButtonThemeData(
       style: base.textButtonTheme.style?.copyWith(
         textStyle: WidgetStatePropertyAll(
-          base.textTheme.labelLarge?.copyWith(fontFamily: 'GoldenReadable'),
+          base.textTheme.labelLarge?.copyWith(
+            fontFamily: 'GoldenReadable',
+            fontFamilyFallback: const ['GoldenLatin'],
+          ),
         ),
       ),
     ),
@@ -30,6 +36,7 @@ ThemeData _captureTheme() {
       labelTextStyle: WidgetStateProperty.resolveWith(
         (states) => base.textTheme.labelMedium?.copyWith(
           fontFamily: 'GoldenReadable',
+          fontFamilyFallback: const ['GoldenLatin'],
           color: states.contains(WidgetState.selected)
               ? scheme.primary
               : scheme.onSurfaceVariant,
@@ -53,7 +60,11 @@ void main() {
           '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
         ),
       );
-    await Future.wait([font.load(), icons.load()]);
+    final latin = FontLoader('GoldenLatin')
+      ..addFont(
+        _loadFont('/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf'),
+      );
+    await Future.wait([font.load(), latin.load(), icons.load()]);
   });
 
   for (final config in [
@@ -75,6 +86,7 @@ void main() {
           tester,
           repository: const MockHomeRepository(latency: Duration.zero),
           navigation: RecordingHomeNavigation(),
+          authenticated: false,
           language: config.locale,
           renderTheme: capture ? _captureTheme() : null,
         );

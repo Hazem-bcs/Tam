@@ -15,7 +15,7 @@ abstract final class HomeContentMapper {
         title: _text(v['title']),
         subtitle: _text(v['subtitle']),
         enabled: _bool(v['enabled']),
-        action: _action(v['action']),
+        action: _requiredAction(v),
       );
     }).toList();
     final services = _array(data['services']).map((item) {
@@ -28,10 +28,11 @@ abstract final class HomeContentMapper {
           _ => throw const FormatException('Unknown service'),
         },
         available: _bool(v['available']),
-        action: _action(v['action']),
+        action: _requiredAction(v),
       );
     }).toList();
-    if (promos.map((e) => e.id).toSet().length != promos.length ||
+    if (promos.length > 5 ||
+        promos.map((e) => e.id).toSet().length != promos.length ||
         services.map((e) => e.id).toSet().length != services.length ||
         promos.any((e) => e.enabled != (e.action != null)) ||
         services.any((e) => e.available != (e.action != null)) ||
@@ -75,4 +76,11 @@ abstract final class HomeContentMapper {
     'ride_request' => HomeAction.rideRequest,
     _ => throw const FormatException('Invalid action'),
   };
+
+  static HomeAction? _requiredAction(Map<String, dynamic> value) {
+    if (!value.containsKey('action')) {
+      throw const FormatException('Missing required action');
+    }
+    return _action(value['action']);
+  }
 }

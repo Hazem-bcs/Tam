@@ -7,6 +7,22 @@ import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 import 'home_test_support.dart';
 
 void main() {
+  testWidgets(
+    'Arabic phone aligns with the greeting while its text stays LTR',
+    (tester) async {
+      await pumpHome(
+        tester,
+        repository: const MockHomeRepository(latency: Duration.zero),
+        navigation: RecordingHomeNavigation(),
+      );
+      final phone = find.text('+963941234567');
+      expect(
+        tester.getTopRight(phone).dx,
+        closeTo(tester.getTopRight(find.text('تم تسجيل الدخول')).dx, 0.01),
+      );
+      expect(tester.widget<Text>(phone).textDirection, TextDirection.ltr);
+    },
+  );
   testWidgets('Arabic Home shows sections and uses only navigation callbacks', (
     tester,
   ) async {

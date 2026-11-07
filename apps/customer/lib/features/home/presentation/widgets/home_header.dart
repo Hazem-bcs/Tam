@@ -45,15 +45,13 @@ class HomeHeader extends StatelessWidget {
               ),
               if (phoneE164 != null) ...[
                 const SizedBox(height: AppSpacing.xs),
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      phoneE164!,
-                      style: text.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    phoneE164!,
+                    textDirection: TextDirection.ltr,
+                    style: text.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
                 ),

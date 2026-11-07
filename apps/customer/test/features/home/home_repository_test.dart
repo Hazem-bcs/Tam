@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -107,6 +108,52 @@ void main() {
     );
   });
 
+  for (final kind in ['promotion', 'service']) {
+    test('nullable action is still required for a disabled $kind', () {
+      final value =
+          jsonDecode(jsonEncode(homeSuccessFixture)) as Map<String, dynamic>;
+      final data = value['data'] as Map<String, dynamic>;
+      final items =
+          data[kind == 'promotion' ? 'promotions' : 'services']
+              as List<dynamic>;
+      (items[1] as Map<String, dynamic>).remove('action');
+      expect(
+        () => HomeContentMapper.fromEnvelope(value),
+        throwsFormatException,
+      );
+    });
+  }
+
+  test('decoder rejects more than the contracted five promotions', () {
+    final value =
+        jsonDecode(jsonEncode(homeSuccessFixture)) as Map<String, dynamic>;
+    final data = value['data'] as Map<String, dynamic>;
+    final template =
+        (data['promotions'] as List<dynamic>)[0] as Map<String, dynamic>;
+    data['promotions'] = List.generate(
+      6,
+      (index) => {...template, 'id': 'promo-$index'},
+    );
+    expect(() => HomeContentMapper.fromEnvelope(value), throwsFormatException);
+  });
+
+  test('closed cubit ignores a stale load callback', () async {
+    final cubit = HomeCubit(const MockHomeRepository(latency: Duration.zero));
+    await cubit.close();
+    await expectLater(cubit.load(), completes);
+  });
+
+  test('overlapping retries do not issue duplicate loads', () async {
+    final repo = _DeferredRepository();
+    final cubit = HomeCubit(repo);
+    final first = cubit.load();
+    final second = cubit.load();
+    repo.result.complete(HomeContentMapper.fromEnvelope(homeSuccessFixture));
+    await Future.wait([first, second]);
+    await cubit.close();
+    expect(repo.calls, 1);
+  });
+
   test('cubit supports loading, empty, error and manual retry', () async {
     final repo = _RetryRepository();
     final cubit = HomeCubit(repo);
@@ -127,6 +174,16 @@ void main() {
     await subscription.cancel();
     await cubit.close();
   });
+}
+
+final class _DeferredRepository implements HomeRepository {
+  final result = Completer<HomeContent>();
+  int calls = 0;
+  @override
+  Future<HomeContent> load() {
+    calls++;
+    return result.future;
+  }
 }
 
 final class _RetryRepository implements HomeRepository {
