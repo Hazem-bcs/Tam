@@ -9,6 +9,9 @@ Flutter-first mobility platform. The repository starts with the **customer app**
 
 ## Team starting point
 
+New agents start with the [onboarding guide](docs/engineering/agent-onboarding.md)
+and [design reference index](docs/engineering/design-reference-index.md).
+
 Read [AGENTS.md](AGENTS.md), the [five-feature plan](docs/engineering/wave-one-plan.md)
 and [task board](docs/engineering/task-board.md). New feature work is planned
 with isolated mock repositories and backend API/Postman handoffs; see the
