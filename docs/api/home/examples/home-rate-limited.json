@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": {
+      "ar": "تجاوزت الحد المسموح. حاول لاحقًا.",
+      "en": "Too many requests. Try again later."
+    }
+  }
+}

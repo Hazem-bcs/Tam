@@ -1,0 +1,226 @@
+{
+  "info": {
+    "name": "Tam — Home API v1 (proposed)",
+    "description": "Contract proposal only. API is not deployed. GET /home is public and contains no trips, location or notification badge.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0
+    }
+  },
+  "item": [
+    {
+      "name": "GET /home — read homepage",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/home",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "home"
+          ]
+        },
+        "auth": {
+          "type": "noauth"
+        },
+        "description": "Returns Home content only; public, read-only, never creates trips or session."
+      },
+      "response": [
+        {
+          "name": "200 — available content",
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"revision\": \"home-demo-1\",\n    \"promotions\": [\n      {\n        \"id\": \"promo-ride\",\n        \"kind\": \"hero\",\n        \"title\": {\n          \"ar\": \"مشوارك أسهل مع تم\",\n          \"en\": \"Getting there is easier with Tam\"\n        },\n        \"subtitle\": {\n          \"ar\": \"من أول خطوة حتى وجهتك، اطلب رحلتك ببساطة.\",\n          \"en\": \"From pickup to destination, request a ride with ease.\"\n        },\n        \"enabled\": true,\n        \"action\": \"ride_request\"\n      },\n      {\n        \"id\": \"promo-future\",\n        \"kind\": \"announcement\",\n        \"title\": {\n          \"ar\": \"مزايا جديدة في الطريق\",\n          \"en\": \"More is on the way\"\n        },\n        \"subtitle\": {\n          \"ar\": \"تابعنا لمعرفة الخدمات الجديدة عند إطلاقها.\",\n          \"en\": \"Look out for new services as they launch.\"\n        },\n        \"enabled\": false,\n        \"action\": null\n      }\n    ],\n    \"services\": [\n      {\n        \"id\": \"ride\",\n        \"available\": true,\n        \"action\": \"ride_request\"\n      },\n      {\n        \"id\": \"food\",\n        \"available\": false,\n        \"action\": null\n      },\n      {\n        \"id\": \"shopping\",\n        \"available\": false,\n        \"action\": null\n      }\n    ]\n  }\n}\n",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "home"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Returns Home content only; public, read-only, never creates trips or session."
+          }
+        },
+        {
+          "name": "200 — empty content",
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"revision\": \"home-demo-empty-1\",\n    \"promotions\": [],\n    \"services\": []\n  }\n}\n",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "home"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Returns Home content only; public, read-only, never creates trips or session."
+          }
+        },
+        {
+          "name": "503 — unavailable",
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الرئيسية غير متاحة حاليًا.\",\n      \"en\": \"Home content is currently unavailable.\"\n    }\n  }\n}\n",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "home"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Returns Home content only; public, read-only, never creates trips or session."
+          }
+        },
+        {
+          "name": "429 — rate limit",
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"تجاوزت الحد المسموح. حاول لاحقًا.\",\n      \"en\": \"Too many requests. Try again later.\"\n    }\n  }\n}\n",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "home"
+              ]
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Returns Home content only; public, read-only, never creates trips or session."
+          }
+        }
+      ],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Success response uses data envelope', function () {",
+              "  if (pm.response.code === 200) {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body).to.have.property('data');",
+              "    pm.expect(body.data.promotions).to.be.an('array');",
+              "    pm.expect(body.data.services).to.be.an('array');",
+              "  }",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.invalid/api/v1",
+      "type": "string"
+    }
+  ]
+}

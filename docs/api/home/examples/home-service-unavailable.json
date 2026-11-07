@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SERVICE_UNAVAILABLE",
+    "message": {
+      "ar": "خدمة الرئيسية غير متاحة حاليًا.",
+      "en": "Home content is currently unavailable."
+    }
+  }
+}
