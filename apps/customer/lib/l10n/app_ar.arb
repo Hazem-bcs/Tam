@@ -1,6 +1,90 @@
 {
   "@@locale": "ar",
   "appName": "تم",
-  "starterTitle": "هيكل التطبيق جاهز",
-  "starterDescription": "سنراجع التصميم قبل تنفيذ الواجهة الرئيسية."
+  "authWelcome": "أهلًا بك في تم",
+  "authPhoneDescription": "أدخل رقم هاتفك للمتابعة",
+  "authPhoneLabel": "رقم الهاتف",
+  "authPhoneHelper": "رقم جوال سوري، بصيغته المحلية أو الدولية.",
+  "authPhoneInvalid": "أدخل رقم هاتف سوريًا صالحًا",
+  "authSendCode": "إرسال رمز التحقق",
+  "authSending": "جارٍ إرسال الرمز",
+  "authContinueGuest": "المتابعة كضيف",
+  "authUnifiedAccount": "سنستخدم رقمك لتسجيل الدخول أو إنشاء حساب جديد بعد تأكيده.",
+  "authVerifyTitle": "تأكيد رقم الهاتف",
+  "authVerifyDescription": "أدخل رمز التحقق المكوّن من ست خانات",
+  "authEditPhone": "تعديل رقم الهاتف",
+  "authCodeLabel": "رمز التحقق",
+  "authCodeInvalid": "أدخل الرمز كاملًا من ست خانات",
+  "authCodeExpired": "انتهت صلاحية الرمز",
+  "authVerifyCode": "تأكيد الرمز",
+  "authVerifying": "جارٍ التحقق",
+  "authResendCode": "إعادة إرسال الرمز",
+  "authRestartHint": "عُد لتعديل الرقم وابدأ عملية تحقق جديدة بعد انتهاء فترة الانتظار.",
+  "authRestoring": "التحقق من الجلسة",
+  "authSessionDescription": "نستعيد بيانات حسابك بأمان",
+  "authRetry": "إعادة المحاولة",
+  "authSignOutThisDevice": "تسجيل الخروج من هذا الجهاز",
+  "authGuestTitle": "أنت تتصفح كضيف",
+  "authGuestDescription": "سجّل الدخول لمتابعة تجربتك برقم هاتفك.",
+  "authSignedInTitle": "تم تسجيل الدخول",
+  "authLogout": "تسجيل الخروج",
+  "authLoggingOut": "جارٍ تسجيل الخروج",
+  "authSignIn": "تسجيل الدخول",
+  "authRetryIn": "حاول بعد {seconds} ثانية",
+  "@authRetryIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authResendIn": "إعادة الإرسال بعد {seconds} ثانية",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authCodeExpires": "تنتهي صلاحية الرمز خلال {seconds} ثانية",
+  "@authCodeExpires": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "authAttemptsRemaining": "المحاولات المتبقية: {count}",
+  "@authAttemptsRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "authSignedInAs": "مرحبًا، {identity}",
+  "@authSignedInAs": {
+    "placeholders": {
+      "identity": {
+        "type": "String"
+      }
+    }
+  },
+  "authNationalPhoneHint": "9XX XXX XXX",
+  "authPhoneWithCountry": "رقم الهاتف، رمز البلد +963",
+  "authResendCountdown": "إعادة إرسال الرمز بعد {time}",
+  "@authResendCountdown": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "authContinue": "متابعة",
+  "authContinuing": "جارٍ المتابعة",
+  "authPhonePrivacy": "استخدم رقم هاتفك لتخصيص تجربتك.",
+  "homeWelcome": "رحلتك تبدأ مع تم",
+  "homePhoneTitle": "رقم هاتفك",
+  "homeServiceTitle": "خدمة الرحلات غير متاحة حاليًا",
+  "homeServiceDescription": "يمكنك العودة لاحقًا للتحقق من توفر الخدمة."
 }

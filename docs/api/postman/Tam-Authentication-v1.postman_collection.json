@@ -1,0 +1,2298 @@
+{
+  "info": {
+    "_postman_id": "3a8a7d34-3fb0-51a2-a665-2c202353dac1",
+    "name": "Tam | تم — Authentication API Contract v1.0",
+    "description": "# اقرأ هذا أولًا — إلى مطور Laravel\n\nهذا ملف تسليم متطلبات **Tam | تم — Authentication API v1.0**، وليس توثيقًا لخادم جاهز.\n\n**العقد كامل موجود أدناه داخل هذا الملف نفسه.** افتح وصف المجموعة لقراءته، وافتح كل طلب لقراءة متطلباته وأمثلة الاستجابات المحفوظة تحته.\n\n## إعداد المتغيرات عند توفر Staging\n\n| المتغير | المطلوب |\n|---|---|\n| `base_url` | عنوان الخادم الفعلي متضمنًا `/api/v1` ودون شرطة نهائية؛ القيمة الحالية مثال فقط |\n| `language` | `ar` أو `en`؛ تبقى رسائل الاستجابة متضمنة اللغتين معًا |\n| `phone_e164` | رقم اختبار تملكه أو يوفره مطور Backend، بصيغة E.164 |\n| `challenge_id` | انسخه من استجابة Request OTP؛ يبقى نفسه عند Resend صالح |\n| `otp_code` | الرمز الفعلي من SMS أو مزود الاختبار المعزول؛ يُرسل String من ست خانات |\n| `access_token` | رمز الوصول المعاد من Verify أو Refresh |\n| `refresh_token` | رمز التجديد المعاد من Verify أو Refresh؛ استبدله بعد كل تدوير |\n\nقيم الرموز وبيانات الاختبار فارغة في الملف. أمثلة الاستجابات توضيحية فقط وليست حسابات أو أسرارًا حقيقية. لا توجد سكربتات تسجل الرموز أو تحفظها أو تشغّل طلبات إضافية. عدّل القيم محليًا أثناء الاختبار ولا ترسل نسخة تحتوي رموزًا حقيقية.\n\n## مسار التجربة بعد التنفيذ\n\n1. Request OTP.\n2. Verify OTP بالرمز الحالي. Resend عملية اختيارية تُستخدم بعد انتهاء فترة الانتظار.\n3. Get Current User باستخدام Bearer token.\n4. Refresh Access Token ثم استبدال التوكنين بالقيم الجديدة وتجربة Get Current User مجددًا.\n5. Logout باستخدام Refresh Token حتى عند انتهاء Access Token، ثم التحقق من رفض الجلسة المبطلة.\n\nكل طلب يضم Examples للنجاح والأخطاء. لا يوجد Endpoint للضيف. المطلوب تسليم التنفيذ الآمن واختبارات Laravel وStaging وملف OpenAPI وفق العقد.\n\n---\n\n# TAM | تم\n# Authentication API Contract — Version 1.0\n\n## إلى مطور Backend — Laravel\n\nنريد بناء نظام مصادقة موحد لتطبيق **تم | Tam**.\n\nالعميل مبني باستخدام Flutter، والخادم باستخدام Laravel.\n\nالهدف من هذه الوثيقة هو الاتفاق مسبقاً على واجهة اتصال ثابتة بين الطرفين، بحيث يستطيع مطور Flutter بناء ميزة المصادقة قبل اكتمال Backend دون الحاجة إلى تعديلات جوهرية عند الربط.\n\n**هذا عقد API مطلوب تنفيذه، وليس وصفاً لواجهات موجودة حالياً.**\n\nيُرجى الالتزام بأسماء المسارات والحقول وأنواع البيانات والاستجابات وأكواد الأخطاء المحددة هنا.\n\n---\n\n## 1. القواعد العامة\n\n### API Base URL\n\n```text\nhttps://api.example.com/api/v1\n```\n\nالعنوان السابق مثال فقط؛ يُستبدل بعنوان الخادم الفعلي.\n\nتُضاف مسارات المصادقة إلى هذا المسار الأساسي.\n\nمثال:\n\n```text\nPOST https://api.example.com/api/v1/auth/otp/request\n```\n\n### Headers\n\n```http\nAccept: application/json\nContent-Type: application/json\nAccept-Language: ar\n```\n\nعند وجود جلسة مصادقة:\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Response Format\n\nجميع الاستجابات الناجحة التي تحتوي بيانات تستخدم:\n\n```json\n{\n  \"data\": {}\n}\n```\n\nجميع استجابات الأخطاء تستخدم:\n\n```json\n{\n  \"error\": {\n    \"code\": \"ERROR_CODE\",\n    \"message\": {\n      \"ar\": \"رسالة الخطأ بالعربية\",\n      \"en\": \"Error message in English\"\n    }\n  }\n}\n```\n\nلا نريد أن يعيد أحد المسارات `message` كنص مباشر، بينما يعيد مسار آخر `message` على شكل كائن.\n\nيجب أن يكون العقد موحداً.\n\n### اللغات\n\nالتطبيق يدعم:\n\n- العربية: `ar`\n- الإنجليزية: `en`\n\n**نريد أن تتضمن الرسائل النصية القابلة للترجمة اللغتين معاً.**\n\nمثال:\n\n```json\n{\n  \"message\": {\n    \"ar\": \"رمز التحقق غير صحيح\",\n    \"en\": \"Invalid verification code\"\n  }\n}\n```\n\nتطبيق Flutter يختار الرسالة المناسبة وفق لغة المستخدم.\n\nبالنسبة إلى البيانات النصية متعددة اللغات في واجهات API المستقبلية، مثل أسماء الخدمات والتصنيفات، نعتمد شكلاً ثابتاً:\n\n```json\n{\n  \"name\": {\n    \"ar\": \"تكسي عادي\",\n    \"en\": \"Standard Taxi\"\n  }\n}\n```\n\nأما البيانات الشخصية، مثل الاسم الذي أدخله المستخدم، فلا يجب ترجمتها اصطناعياً.\n\nيجب أيضاً إرجاع `error.code` ثابت، حتى لا يعتمد منطق Flutter على مقارنة نصوص رسائل الأخطاء.\n\n---\n\n## 2. نموذج رقم الهاتف\n\nيجب أن يعتمد Backend صيغة E.164.\n\nمثال لرقم سوري:\n\n```text\n+963912345678\n```\n\nيستطيع تطبيق Flutter السماح بإدخال الرقم بالشكل المحلي، مثل:\n\n```text\n0912345678\n```\n\nثم تحويله إلى الصيغة الدولية قبل إرسال الطلب.\n\nعلى Backend التحقق من الرقم أيضاً، وعدم الاعتماد على تحقق Flutter وحده.\n\nالحقل المعتمد دائماً:\n\n```text\nphone_e164\n```\n\nالنوع:\n\n```text\nString\n```\n\nلا تستخدموا نوعاً رقمياً لتخزين أرقام الهواتف.\n\n---\n\n# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---\n\n# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---\n\n# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---\n\n# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---\n\n# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---\n\n# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---\n\n# 9. Guest Mode\n\nالمستخدم الضيف لا يحتاج إلى حساب Backend.\n\n**لا نريد Endpoint لتسجيل دخول الضيف في الإصدار الأول.**\n\nحالة الضيف يديرها تطبيق Flutter محلياً.\n\nعندما يدخل المستخدم كضيف:\n\n- لا يُنشأ حساب جديد.\n- لا يُنشأ Access Token.\n- لا يُنشأ Refresh Token.\n- يُسمح له بالوصول إلى الموارد العامة فقط.\n\nكل Endpoint محمي يجب أن يتحقق من وجود جلسة مستخدم حقيقية.\n\nالطلبات التي لا تحتوي مصادقة صالحة يجب أن تعيد `401 Unauthorized`.\n\nالمستخدم المصادق عليه الذي لا يملك صلاحية معينة يمكن أن يحصل على `403 Forbidden`.\n\n---\n\n# 10. Unified Error Contract\n\nنريد تنسيقاً ثابتاً للأخطاء.\n\n### مثال: OTP غير صحيح\n\nHTTP:\n\n```http\n422 Unprocessable Content\n```\n\nResponse:\n\n```json\n{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": {\n      \"ar\": \"رمز التحقق غير صحيح\",\n      \"en\": \"Invalid verification code\"\n    },\n    \"attempts_remaining\": 3\n  }\n}\n```\n\n### مثال: تجاوز معدل الطلبات\n\nHTTP:\n\n```http\n429 Too Many Requests\nRetry-After: 45\n```\n\nResponse:\n\n```json\n{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}\n```\n\n### أكواد الأخطاء المطلوبة\n\n| HTTP | Error Code | الحالة |\n|---|---|---|\n| 422 | `PHONE_INVALID` | رقم الهاتف غير صالح |\n| 422 | `OTP_INVALID` | رمز التحقق غير صحيح |\n| 422 | `OTP_CHALLENGE_INVALID` | عملية التحقق غير صالحة |\n| 410 | `OTP_EXPIRED` | انتهت صلاحية الرمز |\n| 429 | `OTP_TOO_MANY_ATTEMPTS` | تجاوز محاولات التحقق |\n| 429 | `OTP_RESEND_TOO_EARLY` | إعادة إرسال قبل انتهاء الانتظار |\n| 429 | `RATE_LIMITED` | تجاوز معدل الطلبات |\n| 503 | `OTP_DELIVERY_UNAVAILABLE` | خدمة إرسال الرسائل غير متاحة |\n| 401 | `SESSION_INVALID` | جلسة غير صالحة أو منتهية |\n| 401 | `SESSION_REVOKED` | جلسة أُبطلت |\n| 403 | `ACCOUNT_DISABLED` | الحساب معطل |\n| 403 | `FORBIDDEN` | المستخدم لا يملك الصلاحية |\n| 500 | `INTERNAL_ERROR` | خطأ غير متوقع في الخادم |\n| 503 | `SERVICE_UNAVAILABLE` | الخدمة غير متاحة مؤقتاً |\n\nيجب أن يكون `error.code` ثابتاً وقابلاً للاعتماد عليه برمجياً.\n\nيمكن إضافة حقول أخرى للأخطاء، بشرط عدم كسر الحقول الأساسية.\n\nأخطاء الشبكة المحلية، مثل عدم وجود اتصال بالإنترنت أو انتهاء مهلة الاتصال، يعالجها Flutter حتى لو لم تصل أي استجابة من Backend.\n\n---\n\n# 11. قواعد الأمان\n\nمتطلبات إلزامية:\n\n1. عدم كشف OTP في أي استجابة إنتاجية.\n2. عدم تسجيل OTP أو Access Token أو Refresh Token في Logs.\n3. تخزين رموز OTP بصورة آمنة مع تاريخ انتهاء.\n4. فرض حدود زمنية وعددية على إرسال الرموز والتحقق منها.\n5. منع كشف وجود الحسابات عبر اختلاف استجابة طلب OTP.\n6. منع إنشاء حسابات متكررة لنفس رقم الهاتف.\n7. إبطال OTP مباشرة بعد استخدامه بنجاح.\n8. حماية Refresh Tokens وتدويرها.\n9. دعم إبطال الجلسات.\n10. استخدام HTTPS في الإنتاج.\n11. توثيق صلاحية كل Endpoint وتطبيق الصلاحيات على الخادم.\n12. عدم الاعتماد على قيود Flutter لحماية بيانات المستخدمين.\n\nيجب التحقق عملياً من قدرة مزود الرسائل على إرسال OTP إلى أرقام سوريا `+963` قبل اعتماد الخدمة للإنتاج.\n\n---\n\n# 12. Versioning and Compatibility\n\nجميع مسارات API الحالية تقع ضمن:\n\n```text\n/api/v1\n```\n\nبعد الاتفاق على العقد:\n\n- لا نغير أسماء الحقول دون تنسيق.\n- لا نغير أنواع الحقول دون إصدار جديد أو اتفاق مسبق.\n- لا نغير نوع استجابة `message` بين String وObject.\n- لا نغير أسماء أكواد الأخطاء المستخدمة بواسطة Flutter.\n- يمكن إضافة حقول اختيارية جديدة دون كسر التوافق.\n- يجب إبلاغ مطور Flutter قبل أي تغيير غير متوافق.\n\nيفضل إنشاء توثيق OpenAPI يعكس هذا العقد بدقة.\n\n---\n\n# 13. Integration Deliverables\n\nنحتاج من مطور Backend تسليم:\n\n1. جميع Endpoints الستة.\n2. تنفيذ آمن لإرسال والتحقق من OTP.\n3. إدارة الجلسات وتجديد الرموز.\n4. نماذج الأخطاء الموحدة.\n5. دعم العربية والإنجليزية في الرسائل.\n6. اختبارات Laravel Feature Tests للحالات الناجحة والفاشلة.\n7. ملف OpenAPI يوثق المسارات والحقول والاستجابات.\n8. بيئة Staging قابلة للاختبار.\n9. طريقة اختبار آمنة في بيئة التطوير دون إرسال SMS حقيقي لكل اختبار.\n\nبيئة التطوير يمكنها استخدام SMS Fake Provider، لكن يجب عزله تماماً عن الإنتاج.\n\nعند الانتهاء، سلّم لمطور Flutter:\n\n```text\nAPI_BASE_URL\nOpenAPI Specification\nTest Environment Details\nSupported Phone Regions\nOTP Configuration\nToken Expiration Policy\nError Codes\n```\n\nلا تُرسل مفاتيح SMS السرية أو مفاتيح توقيع الرموز إلى تطبيق Flutter.\n\n---\n\n# 14. Acceptance Criteria\n\nنعتبر Auth API جاهزاً للربط عندما يتحقق التالي:\n\n- يستطيع رقم جديد التسجيل عبر OTP.\n- يستطيع رقم مسجل تسجيل الدخول عبر OTP.\n- يحصل التطبيق على User وSession وفق النموذج المتفق عليه.\n- يستطيع التطبيق تجديد Access Token دون إعادة تسجيل الدخول.\n- يستطيع التطبيق استعادة بيانات المستخدم بعد إعادة فتحه.\n- يستطيع المستخدم تسجيل الخروج مع إبطال الجلسة.\n- تعمل حالات Invalid OTP وExpired OTP وRate Limiting بصورة صحيحة.\n- جميع الأخطاء تستخدم الأكواد والبنية المحددة.\n- جميع الرسائل القابلة للترجمة متوفرة بالعربية والإنجليزية.\n- تنجح اختبارات الأمان والاختبارات الوظيفية الأساسية.\n\n## Final Requirement\n\nThe Flutter team must be able to replace FakeAuthRepository with the real Laravel-backed repository without redesigning the authentication UI, domain entities, BLoC state model, or navigation architecture.\n\n**API contract compatibility is a delivery requirement, not an optional improvement.**",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.com/api/v1",
+      "type": "string",
+      "description": "عنوان توضيحي فقط. استبدله بعنوان Staging متضمنًا /api/v1 ودون شرطة نهائية."
+    },
+    {
+      "key": "language",
+      "value": "ar",
+      "type": "string",
+      "description": "ar أو en؛ الرسائل المترجمة تحتوي اللغتين دائمًا."
+    },
+    {
+      "key": "phone_e164",
+      "value": "",
+      "type": "string",
+      "description": "رقم اختبار بصيغة E.164، مثل +963912345678؛ المثال ليس رقمًا مخصصًا لإرسال SMS."
+    },
+    {
+      "key": "challenge_id",
+      "value": "",
+      "type": "string",
+      "description": "من استجابة طلب OTP؛ لا يتغير عند إعادة إرسال صالحة."
+    },
+    {
+      "key": "otp_code",
+      "value": "",
+      "type": "string",
+      "description": "رمز من ست خانات كنص، مع الحفاظ على الأصفار الأولى. لا يُعاد من API الإنتاج."
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string",
+      "description": "رمز مؤقت للاختبار المحلي؛ لا تشاركه أو تحفظه في Git."
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string",
+      "description": "استبدله بالرمز الجديد بعد Refresh؛ لا تشاركه أو تحفظه في Git."
+    }
+  ],
+  "item": [
+    {
+      "name": "01 — طلب رمز التحقق | Request OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/auth/otp/request",
+        "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone_e164\": \"{{phone_e164}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — نجاح | challenge",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}"
+        },
+        {
+          "name": "422 — PHONE_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"PHONE_INVALID\",\n    \"message\": {\n      \"ar\": \"رقم الهاتف غير صالح\",\n      \"en\": \"Invalid phone number\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — OTP_DELIVERY_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_DELIVERY_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة إرسال الرسائل غير متاحة\",\n      \"en\": \"SMS delivery is unavailable\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/request",
+            "description": "# 3. Request OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/request\n```\n\n### Request\n\n```json\n{\n  \"phone_e164\": \"+963912345678\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 5\n  }\n}\n```\n\n### شرح الحقول\n\n| Field | Type | Description |\n|---|---|---|\n| `challenge_id` | String | معرف عشوائي غير قابل للتخمين لعملية التحقق |\n| `phone_e164` | String | رقم الهاتف بعد توحيد صيغته |\n| `expires_in_seconds` | Integer | المدة المتبقية لصلاحية OTP |\n| `resend_after_seconds` | Integer | الوقت اللازم قبل السماح بإعادة الإرسال |\n| `attempts_remaining` | Integer | عدد محاولات التحقق المتبقية |\n\nالأرقام الموجودة في المثال توضيحية؛ القيم الفعلية يحددها الخادم.\n\n### شروط مهمة\n\n- توليد OTP من الخادم فقط.\n- إرسال الرمز عبر مزود SMS حقيقي.\n- عدم إرجاع رمز OTP داخل الاستجابة.\n- عدم تخزين OTP كنص صريح في قاعدة البيانات.\n- عدم كشف ما إذا كان الرقم يمتلك حساباً مسبقاً.\n- تطبيق Rate Limiting على الرقم وعنوان IP وعوامل إساءة الاستخدام المناسبة.\n- استخدام Redis أو تخزين آمن مناسب للرموز المؤقتة ومحددات المعدل.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_e164\": \"+963912345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "02 — إعادة إرسال الرمز | Resend OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/auth/otp/resend",
+        "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"challenge_id\": \"{{challenge_id}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — نجاح | resent_challenge",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}"
+        },
+        {
+          "name": "422 — OTP_CHALLENGE_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_CHALLENGE_INVALID\",\n    \"message\": {\n      \"ar\": \"عملية التحقق غير صالحة\",\n      \"en\": \"Invalid OTP challenge\"\n    }\n  }\n}"
+        },
+        {
+          "name": "410 — OTP_EXPIRED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Gone",
+          "code": 410,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية الرمز\",\n      \"en\": \"Verification code expired\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — OTP_RESEND_TOO_EARLY",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_RESEND_TOO_EARLY\",\n    \"message\": {\n      \"ar\": \"إعادة إرسال قبل انتهاء الانتظار\",\n      \"en\": \"Wait before resending the code\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "429 — OTP_TOO_MANY_ATTEMPTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_TOO_MANY_ATTEMPTS\",\n    \"message\": {\n      \"ar\": \"تجاوز محاولات التحقق\",\n      \"en\": \"Too many verification attempts\"\n    },\n    \"attempts_remaining\": 0\n  }\n}"
+        },
+        {
+          "name": "503 — OTP_DELIVERY_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_DELIVERY_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة إرسال الرسائل غير متاحة\",\n      \"en\": \"SMS delivery is unavailable\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/resend",
+            "description": "# 4. Resend OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/resend\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"challenge_id\": \"ch_8f6c91...\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_in_seconds\": 120,\n    \"resend_after_seconds\": 60,\n    \"attempts_remaining\": 4\n  }\n}\n```\n\n### السلوك المطلوب\n\n- يبقى `challenge_id` نفسه أثناء إعادة الإرسال، ما دامت عملية التحقق نفسها ما تزال صالحة.\n- إصدار OTP جديد وإبطال الرمز السابق.\n- تحديث مدة الصلاحية.\n- احترام فترة الانتظار قبل إعادة الإرسال.\n- منع المستخدم من تجاوز حدود المحاولات عبر طلب رموز متكررة.\n- عدم السماح بإعادة الإرسال دون حدود.\n\nإذا لم تنتهِ فترة الانتظار، يجب أن يعيد الخادم خطأ واضحاً مع مدة الانتظار المتبقية.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "03 — تأكيد الرمز وتسجيل الدخول أو إنشاء الحساب | Verify OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/auth/otp/verify",
+        "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"challenge_id\": \"{{challenge_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — نجاح | verification",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}"
+        },
+        {
+          "name": "200 — مستخدم موجود | Existing user",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": \"أحمد\",\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": false\n  }\n}"
+        },
+        {
+          "name": "422 — OTP_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": {\n      \"ar\": \"رمز التحقق غير صحيح\",\n      \"en\": \"Invalid verification code\"\n    },\n    \"attempts_remaining\": 3\n  }\n}"
+        },
+        {
+          "name": "422 — OTP_CHALLENGE_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Content",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_CHALLENGE_INVALID\",\n    \"message\": {\n      \"ar\": \"عملية التحقق غير صالحة\",\n      \"en\": \"Invalid OTP challenge\"\n    }\n  }\n}"
+        },
+        {
+          "name": "410 — OTP_EXPIRED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Gone",
+          "code": 410,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية الرمز\",\n      \"en\": \"Verification code expired\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — OTP_TOO_MANY_ATTEMPTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_TOO_MANY_ATTEMPTS\",\n    \"message\": {\n      \"ar\": \"تجاوز محاولات التحقق\",\n      \"en\": \"Too many verification attempts\"\n    },\n    \"attempts_remaining\": 0\n  }\n}"
+        },
+        {
+          "name": "403 — ACCOUNT_DISABLED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACCOUNT_DISABLED\",\n    \"message\": {\n      \"ar\": \"الحساب معطل\",\n      \"en\": \"Account disabled\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/otp/verify",
+            "description": "# 5. Verify OTP\n\n## Endpoint\n\n```http\nPOST /auth/otp/verify\n```\n\n### Request\n\n```json\n{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}\n```\n\n**مهم:** `code` من نوع String حتى لا نفقد الأصفار الموجودة في بداية الرمز.\n\nطول رمز OTP المعتمد في الإصدار الأول: **ست خانات رقمية**.\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    },\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    },\n    \"is_new_user\": true\n  }\n}\n```\n\n### ملاحظات\n\n`user.id` يجب أن يعامل كـString، حتى لو تغيرت استراتيجية المعرفات مستقبلاً.\n\n`display_name` اختياري ويسمح بالقيمة `null`.\n\nجميع التواريخ بصيغة ISO 8601 وبالتوقيت العالمي UTC.\n\n`is_new_user` يحدد ما إذا أنشأ Backend الحساب أثناء عملية التحقق الحالية.\n\n### إنشاء الحساب\n\nيجب أن يكون تسجيل الدخول والتسجيل في مسار واحد.\n\nالسيناريو:\n\n```text\nOTP صحيح\n    |\n    v\nهل المستخدم موجود؟\n    |\n    +-- نعم --> تسجيل الدخول\n    |\n    +-- لا --> إنشاء حساب جديد\n                    |\n                    v\n               إنشاء جلسة\n```\n\nإنشاء المستخدم والجلسة يجب أن يتم بطريقة ذرية وآمنة ضد الطلبات المتزامنة والتكرار.\n\nيُستخدم قيد فريد على رقم الهاتف الموحد لمنع تكرار الحسابات.\n\nبعد نجاح التحقق، يجب إبطال OTP حتى لا يمكن إعادة استخدامه.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"challenge_id\": \"ch_8f6c91...\",\n  \"code\": \"483921\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "04 — تجديد الجلسة وتدوير الرموز | Refresh Access Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/auth/token/refresh",
+        "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — نجاح | refreshed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — SESSION_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SESSION_INVALID\",\n    \"message\": {\n      \"ar\": \"جلسة غير صالحة أو منتهية\",\n      \"en\": \"Invalid or expired session\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — SESSION_REVOKED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SESSION_REVOKED\",\n    \"message\": {\n      \"ar\": \"جلسة أُبطلت\",\n      \"en\": \"Session revoked\"\n    }\n  }\n}"
+        },
+        {
+          "name": "403 — ACCOUNT_DISABLED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACCOUNT_DISABLED\",\n    \"message\": {\n      \"ar\": \"الحساب معطل\",\n      \"en\": \"Account disabled\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/token/refresh",
+            "description": "# 6. Refresh Access Token\n\n## Endpoint\n\n```http\nPOST /auth/token/refresh\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"session\": {\n      \"token_type\": \"Bearer\",\n      \"access_token\": \"<new_access_token>\",\n      \"expires_in_seconds\": 900,\n      \"refresh_token\": \"<new_refresh_token>\",\n      \"refresh_expires_in_seconds\": 2592000\n    }\n  }\n}\n```\n\n### متطلبات أمنية\n\n- استخدام Refresh Token Rotation.\n- إبطال Refresh Token القديم بعد الاستبدال الناجح.\n- منع الاستخدام المتكرر للرموز المبطلة.\n- دعم إبطال جلسة المستخدم.\n- استخدام تخزين آمن للرموز أو بصماتها على الخادم.\n- عدم تسجيل الرموز داخل Logs.\n- التعامل بصورة صريحة مع الطلبات المتزامنة وتجديد الرمز المكرر.\n- ألا يؤدي فشل الاتصال المؤقت إلى اعتبار الجلسة مبطلة.\n\nمدة صلاحية Access Token وRefresh Token تُدار من إعدادات Backend، ولا يضع Flutter افتراضات ثابتة حولها.\n\nيمكن لمطور Laravel اختيار آلية تنفيذ التوكنات المناسبة، بشرط الالتزام بهذا العقد.\n\n**تنبيه:** إذا استُخدم Laravel Sanctum، فإن نظام Refresh Token Rotation الموضح هنا يحتاج إلى تنفيذ إضافي؛ فهو ليس ميزة يوفرها Sanctum تلقائياً.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "05 — بيانات المستخدم الحالي | Get Current User",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "url": "{{base_url}}/auth/me",
+        "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+      },
+      "response": [
+        {
+          "name": "200 — نجاح | current_user",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — SESSION_INVALID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SESSION_INVALID\",\n    \"message\": {\n      \"ar\": \"جلسة غير صالحة أو منتهية\",\n      \"en\": \"Invalid or expired session\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — SESSION_REVOKED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SESSION_REVOKED\",\n    \"message\": {\n      \"ar\": \"جلسة أُبطلت\",\n      \"en\": \"Session revoked\"\n    }\n  }\n}"
+        },
+        {
+          "name": "403 — ACCOUNT_DISABLED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACCOUNT_DISABLED\",\n    \"message\": {\n      \"ar\": \"الحساب معطل\",\n      \"en\": \"Account disabled\"\n    }\n  }\n}"
+        },
+        {
+          "name": "403 — FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"المستخدم لا يملك الصلاحية\",\n      \"en\": \"You do not have permission\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": "{{base_url}}/auth/me",
+            "description": "# 7. Get Current User\n\n## Endpoint\n\n```http\nGET /auth/me\n```\n\n### Headers\n\n```http\nAuthorization: Bearer <access_token>\n```\n\n### Success Response — 200 OK\n\n```json\n{\n  \"data\": {\n    \"user\": {\n      \"id\": \"b8a9c7d1-2e44-4df3-9012-6f8a2b47e921\",\n      \"phone_e164\": \"+963912345678\",\n      \"phone_verified\": true,\n      \"display_name\": null,\n      \"created_at\": \"2026-11-04T12:00:00Z\"\n    }\n  }\n}\n```\n\nيستخدمه Flutter للتحقق من هوية المستخدم واستعادة بياناته.\n\nيجب أن يعتمد الخادم على الجلسة الفعلية، وليس على `user_id` يرسله العميل.\n\n---"
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "06 — تسجيل الخروج وإبطال الجلسة | Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/auth/logout",
+        "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "204 — إبطال الجلسة | No body",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/logout",
+            "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "204 — جلسة مبطلة مسبقًا | Idempotent logout",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/logout",
+            "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "429 — RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/logout",
+            "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Retry-After",
+              "value": "45"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة، يرجى المحاولة لاحقاً\",\n      \"en\": \"Too many requests. Please try again later.\"\n    },\n    \"retry_after_seconds\": 45\n  }\n}"
+        },
+        {
+          "name": "500 — INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/logout",
+            "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"خطأ غير متوقع في الخادم\",\n      \"en\": \"Unexpected server error\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/auth/logout",
+            "description": "# 8. Logout\n\n## Endpoint\n\n```http\nPOST /auth/logout\n```\n\n### Request\n\n```json\n{\n  \"refresh_token\": \"<refresh_token>\"\n}\n```\n\n### Success Response\n\n```http\n204 No Content\n```\n\nلا يوجد جسم JSON في استجابة 204.\n\n### السلوك\n\n- إبطال الجلسة المرتبطة بالـRefresh Token.\n- إبطال رموز الجلسة المرتبطة بها أو رفضها بعد تسجيل الخروج.\n- إعادة 204 حتى لو كانت الجلسة مبطلة مسبقاً، عند الإمكان.\n- على تطبيق Flutter حذف بيانات الجلسة المحلية بأمان.\n\nلا نريد أن يعتمد تسجيل الخروج على وصول المستخدم إلى Access Token ما زال صالحاً؛ قد يرغب في تسجيل الخروج بعد انتهاء صلاحية Access Token.\n\n---",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"<refresh_token>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة مؤقتاً\",\n      \"en\": \"Service temporarily unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

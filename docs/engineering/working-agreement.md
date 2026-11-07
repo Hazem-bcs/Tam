@@ -1,5 +1,12 @@
 # Working agreement
 
+The mandatory coding and UI standards for every feature are maintained in
+[`AGENTS.md`](../../AGENTS.md). They cover practical Clean Architecture, Clean Code,
+SOLID, DRY and KISS; shared application theme/configuration; responsive layouts;
+localization, accessibility and validation. Apply them consistently to Home and
+all later features. Follow the [architecture ADR](../architecture/0001-frontend-architecture.md)
+and [design system](design-system.md) for the established implementation patterns.
+
 - Default branch: `main`; use short-lived `feat/*`, `fix/*`, `chore/*` branches.
 - Pull request should state scope, before/after images for UI, risks, test evidence and rollback plan.
 - Review requirements: `dart format`, `flutter analyze`, `flutter test` on touched project.

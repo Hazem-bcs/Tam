@@ -104,17 +104,269 @@ abstract class AppLocalizations {
   /// **'تم'**
   String get appName;
 
-  /// No description provided for @starterTitle.
+  /// No description provided for @authWelcome.
   ///
   /// In ar, this message translates to:
-  /// **'هيكل التطبيق جاهز'**
-  String get starterTitle;
+  /// **'أهلًا بك في تم'**
+  String get authWelcome;
 
-  /// No description provided for @starterDescription.
+  /// No description provided for @authPhoneDescription.
   ///
   /// In ar, this message translates to:
-  /// **'سنراجع التصميم قبل تنفيذ الواجهة الرئيسية.'**
-  String get starterDescription;
+  /// **'أدخل رقم هاتفك للمتابعة'**
+  String get authPhoneDescription;
+
+  /// No description provided for @authPhoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف'**
+  String get authPhoneLabel;
+
+  /// No description provided for @authPhoneHelper.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم جوال سوري، بصيغته المحلية أو الدولية.'**
+  String get authPhoneHelper;
+
+  /// No description provided for @authPhoneInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رقم هاتف سوريًا صالحًا'**
+  String get authPhoneInvalid;
+
+  /// No description provided for @authSendCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رمز التحقق'**
+  String get authSendCode;
+
+  /// No description provided for @authSending.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ إرسال الرمز'**
+  String get authSending;
+
+  /// No description provided for @authContinueGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتابعة كضيف'**
+  String get authContinueGuest;
+
+  /// No description provided for @authUnifiedAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'سنستخدم رقمك لتسجيل الدخول أو إنشاء حساب جديد بعد تأكيده.'**
+  String get authUnifiedAccount;
+
+  /// No description provided for @authVerifyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد رقم الهاتف'**
+  String get authVerifyTitle;
+
+  /// No description provided for @authVerifyDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز التحقق المكوّن من ست خانات'**
+  String get authVerifyDescription;
+
+  /// No description provided for @authEditPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل رقم الهاتف'**
+  String get authEditPhone;
+
+  /// No description provided for @authCodeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التحقق'**
+  String get authCodeLabel;
+
+  /// No description provided for @authCodeInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الرمز كاملًا من ست خانات'**
+  String get authCodeInvalid;
+
+  /// No description provided for @authCodeExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت صلاحية الرمز'**
+  String get authCodeExpired;
+
+  /// No description provided for @authVerifyCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الرمز'**
+  String get authVerifyCode;
+
+  /// No description provided for @authVerifying.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحقق'**
+  String get authVerifying;
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة إرسال الرمز'**
+  String get authResendCode;
+
+  /// No description provided for @authRestartHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عُد لتعديل الرقم وابدأ عملية تحقق جديدة بعد انتهاء فترة الانتظار.'**
+  String get authRestartHint;
+
+  /// No description provided for @authRestoring.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق من الجلسة'**
+  String get authRestoring;
+
+  /// No description provided for @authSessionDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'نستعيد بيانات حسابك بأمان'**
+  String get authSessionDescription;
+
+  /// No description provided for @authRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get authRetry;
+
+  /// No description provided for @authSignOutThisDevice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج من هذا الجهاز'**
+  String get authSignOutThisDevice;
+
+  /// No description provided for @authGuestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت تتصفح كضيف'**
+  String get authGuestTitle;
+
+  /// No description provided for @authGuestDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل الدخول لمتابعة تجربتك برقم هاتفك.'**
+  String get authGuestDescription;
+
+  /// No description provided for @authSignedInTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل الدخول'**
+  String get authSignedInTitle;
+
+  /// No description provided for @authLogout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get authLogout;
+
+  /// No description provided for @authLoggingOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تسجيل الخروج'**
+  String get authLoggingOut;
+
+  /// No description provided for @authSignIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
+  String get authSignIn;
+
+  /// No description provided for @authRetryIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاول بعد {seconds} ثانية'**
+  String authRetryIn(int seconds);
+
+  /// No description provided for @authResendIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الإرسال بعد {seconds} ثانية'**
+  String authResendIn(int seconds);
+
+  /// No description provided for @authCodeExpires.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنتهي صلاحية الرمز خلال {seconds} ثانية'**
+  String authCodeExpires(int seconds);
+
+  /// No description provided for @authAttemptsRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحاولات المتبقية: {count}'**
+  String authAttemptsRemaining(int count);
+
+  /// No description provided for @authSignedInAs.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحبًا، {identity}'**
+  String authSignedInAs(String identity);
+
+  /// No description provided for @authNationalPhoneHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'9XX XXX XXX'**
+  String get authNationalPhoneHint;
+
+  /// No description provided for @authPhoneWithCountry.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف، رمز البلد +963'**
+  String get authPhoneWithCountry;
+
+  /// No description provided for @authResendCountdown.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة إرسال الرمز بعد {time}'**
+  String authResendCountdown(String time);
+
+  /// No description provided for @authContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get authContinue;
+
+  /// No description provided for @authContinuing.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ المتابعة'**
+  String get authContinuing;
+
+  /// No description provided for @authPhonePrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم رقم هاتفك لتخصيص تجربتك.'**
+  String get authPhonePrivacy;
+
+  /// No description provided for @homeWelcome.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتك تبدأ مع تم'**
+  String get homeWelcome;
+
+  /// No description provided for @homePhoneTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم هاتفك'**
+  String get homePhoneTitle;
+
+  /// No description provided for @homeServiceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الرحلات غير متاحة حاليًا'**
+  String get homeServiceTitle;
+
+  /// No description provided for @homeServiceDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك العودة لاحقًا للتحقق من توفر الخدمة.'**
+  String get homeServiceDescription;
 }
 
 class _AppLocalizationsDelegate

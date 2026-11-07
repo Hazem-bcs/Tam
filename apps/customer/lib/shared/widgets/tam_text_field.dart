@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// A form-aware input styled by the application's InputDecorationTheme.
 /// The caller owns controllers, focus nodes, validation and localized copy.
@@ -19,6 +20,7 @@ class TamTextField extends StatelessWidget {
     this.textInputAction,
     this.textDirection,
     this.autofillHints,
+    this.inputFormatters,
     this.prefixIcon,
     this.suffixIcon,
     this.enabled = true,
@@ -44,6 +46,7 @@ class TamTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final TextDirection? textDirection;
   final Iterable<String>? autofillHints;
+  final List<TextInputFormatter>? inputFormatters;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool enabled;
@@ -67,6 +70,7 @@ class TamTextField extends StatelessWidget {
       textDirection: textDirection,
       textAlign: TextAlign.start,
       autofillHints: autofillHints,
+      inputFormatters: inputFormatters,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
       validator: validator,

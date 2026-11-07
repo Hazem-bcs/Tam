@@ -1,0 +1,81 @@
+{
+  "challenge": {
+    "data": {
+      "challenge_id": "ch_8f6c91...",
+      "phone_e164": "+963912345678",
+      "expires_in_seconds": 120,
+      "resend_after_seconds": 60,
+      "attempts_remaining": 5
+    }
+  },
+  "resent_challenge": {
+    "data": {
+      "challenge_id": "ch_8f6c91...",
+      "phone_e164": "+963912345678",
+      "expires_in_seconds": 120,
+      "resend_after_seconds": 60,
+      "attempts_remaining": 4
+    }
+  },
+  "verification": {
+    "data": {
+      "user": {
+        "id": "b8a9c7d1-2e44-4df3-9012-6f8a2b47e921",
+        "phone_e164": "+963912345678",
+        "phone_verified": true,
+        "display_name": null,
+        "created_at": "2026-11-04T12:00:00Z"
+      },
+      "session": {
+        "token_type": "Bearer",
+        "access_token": "<access_token>",
+        "expires_in_seconds": 900,
+        "refresh_token": "<refresh_token>",
+        "refresh_expires_in_seconds": 2592000
+      },
+      "is_new_user": true
+    }
+  },
+  "refreshed": {
+    "data": {
+      "session": {
+        "token_type": "Bearer",
+        "access_token": "<new_access_token>",
+        "expires_in_seconds": 900,
+        "refresh_token": "<new_refresh_token>",
+        "refresh_expires_in_seconds": 2592000
+      }
+    }
+  },
+  "current_user": {
+    "data": {
+      "user": {
+        "id": "b8a9c7d1-2e44-4df3-9012-6f8a2b47e921",
+        "phone_e164": "+963912345678",
+        "phone_verified": true,
+        "display_name": null,
+        "created_at": "2026-11-04T12:00:00Z"
+      }
+    }
+  },
+  "otp_invalid": {
+    "error": {
+      "code": "OTP_INVALID",
+      "message": {
+        "ar": "رمز التحقق غير صحيح",
+        "en": "Invalid verification code"
+      },
+      "attempts_remaining": 3
+    }
+  },
+  "rate_limited": {
+    "error": {
+      "code": "RATE_LIMITED",
+      "message": {
+        "ar": "طلبات كثيرة، يرجى المحاولة لاحقاً",
+        "en": "Too many requests. Please try again later."
+      },
+      "retry_after_seconds": 45
+    }
+  }
+}

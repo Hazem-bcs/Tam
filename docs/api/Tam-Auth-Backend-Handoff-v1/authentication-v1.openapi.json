@@ -1,0 +1,975 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tam Authentication API",
+    "version": "1.0.0",
+    "description": "Required contract, not a deployed API. The user-supplied authentication-v1.md is authoritative for behavioral requirements. No guest endpoint."
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/api/v1",
+      "description": "Placeholder; replace with actual staging URL."
+    }
+  ],
+  "paths": {
+    "/auth/otp/request": {
+      "post": {
+        "operationId": "requestOtp",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeResponse"
+                },
+                "example": {
+                  "data": {
+                    "challenge_id": "ch_8f6c91...",
+                    "phone_e164": "+963912345678",
+                    "expires_in_seconds": 120,
+                    "resend_after_seconds": 60,
+                    "attempts_remaining": 5
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ACCOUNT_DISABLED / FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "PHONE_INVALID / OTP_INVALID / OTP_CHALLENGE_INVALID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OtpRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/otp/resend": {
+      "post": {
+        "operationId": "resendOtp",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeResponse"
+                },
+                "example": {
+                  "data": {
+                    "challenge_id": "ch_8f6c91...",
+                    "phone_e164": "+963912345678",
+                    "expires_in_seconds": 120,
+                    "resend_after_seconds": 60,
+                    "attempts_remaining": 4
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ACCOUNT_DISABLED / FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "OTP_EXPIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "PHONE_INVALID / OTP_INVALID / OTP_CHALLENGE_INVALID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeRequest"
+              }
+            }
+          }
+        },
+        "description": "Retain challenge_id; issue a new code and invalidate the previous one. Resending cannot reset the attempt budget."
+      }
+    },
+    "/auth/otp/verify": {
+      "post": {
+        "operationId": "verifyOtp",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationResponse"
+                },
+                "example": {
+                  "data": {
+                    "user": {
+                      "id": "b8a9c7d1-2e44-4df3-9012-6f8a2b47e921",
+                      "phone_e164": "+963912345678",
+                      "phone_verified": true,
+                      "display_name": null,
+                      "created_at": "2026-11-04T12:00:00Z"
+                    },
+                    "session": {
+                      "token_type": "Bearer",
+                      "access_token": "<access_token>",
+                      "expires_in_seconds": 900,
+                      "refresh_token": "<refresh_token>",
+                      "refresh_expires_in_seconds": 2592000
+                    },
+                    "is_new_user": true
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ACCOUNT_DISABLED / FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "OTP_EXPIRED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "PHONE_INVALID / OTP_INVALID / OTP_CHALLENGE_INVALID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyRequest"
+              }
+            }
+          }
+        },
+        "description": "Atomically consume the OTP, find or create the user and issue a session. Never reveal account existence before verification."
+      }
+    },
+    "/auth/token/refresh": {
+      "post": {
+        "operationId": "refreshToken",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                },
+                "example": {
+                  "data": {
+                    "session": {
+                      "token_type": "Bearer",
+                      "access_token": "<new_access_token>",
+                      "expires_in_seconds": 900,
+                      "refresh_token": "<new_refresh_token>",
+                      "refresh_expires_in_seconds": 2592000
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "SESSION_INVALID / SESSION_REVOKED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ACCOUNT_DISABLED / FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          }
+        },
+        "description": "Rotate both tokens, invalidate the old refresh token, handle duplicate/concurrent refreshes explicitly. TTLs are server-controlled."
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "currentUser",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                },
+                "example": {
+                  "data": {
+                    "user": {
+                      "id": "b8a9c7d1-2e44-4df3-9012-6f8a2b47e921",
+                      "phone_e164": "+963912345678",
+                      "phone_verified": true,
+                      "display_name": null,
+                      "created_at": "2026-11-04T12:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "SESSION_INVALID / SESSION_REVOKED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "ACCOUNT_DISABLED / FORBIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "logout",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Session revoked or already revoked; no response body. Access token is not required."
+          },
+          "429": {
+            "description": "OTP_TOO_MANY_ATTEMPTS / OTP_RESEND_TOO_EARLY / RATE_LIMITED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Required for RATE_LIMITED; seconds until retry is allowed.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "OTP_DELIVERY_UNAVAILABLE / SERVICE_UNAVAILABLE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "parameters": {
+      "AcceptLanguage": {
+        "name": "Accept-Language",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ar",
+            "en"
+          ],
+          "default": "ar"
+        },
+        "description": "Both languages remain present in translatable response messages."
+      }
+    },
+    "schemas": {
+      "BilingualMessage": {
+        "type": "object",
+        "properties": {
+          "ar": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "ar",
+          "en"
+        ]
+      },
+      "OtpRequest": {
+        "type": "object",
+        "properties": {
+          "phone_e164": {
+            "type": "string",
+            "pattern": "^\\+[1-9][0-9]{1,14}$",
+            "examples": [
+              "+963912345678"
+            ]
+          }
+        },
+        "required": [
+          "phone_e164"
+        ]
+      },
+      "ChallengeRequest": {
+        "type": "object",
+        "properties": {
+          "challenge_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "challenge_id"
+        ]
+      },
+      "VerifyRequest": {
+        "type": "object",
+        "properties": {
+          "challenge_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": [
+          "challenge_id",
+          "code"
+        ]
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "refresh_token"
+        ]
+      },
+      "Challenge": {
+        "type": "object",
+        "properties": {
+          "challenge_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phone_e164": {
+            "type": "string",
+            "pattern": "^\\+[1-9][0-9]{1,14}$",
+            "examples": [
+              "+963912345678"
+            ]
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "resend_after_seconds": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "attempts_remaining": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "challenge_id",
+          "phone_e164",
+          "expires_in_seconds",
+          "resend_after_seconds",
+          "attempts_remaining"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phone_e164": {
+            "type": "string",
+            "pattern": "^\\+[1-9][0-9]{1,14}$",
+            "examples": [
+              "+963912345678"
+            ]
+          },
+          "phone_verified": {
+            "type": "boolean"
+          },
+          "display_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 UTC timestamp"
+          }
+        },
+        "required": [
+          "id",
+          "phone_e164",
+          "phone_verified",
+          "created_at"
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "token_type": {
+            "type": "string",
+            "const": "Bearer"
+          },
+          "access_token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "refresh_token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "refresh_expires_in_seconds": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "token_type",
+          "access_token",
+          "expires_in_seconds",
+          "refresh_token",
+          "refresh_expires_in_seconds"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "$ref": "#/components/schemas/BilingualMessage"
+              },
+              "attempts_remaining": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "retry_after_seconds": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "ChallengeResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/Challenge"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "VerificationResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              },
+              "session": {
+                "$ref": "#/components/schemas/Session"
+              },
+              "is_new_user": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "user",
+              "session",
+              "is_new_user"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "session": {
+                "$ref": "#/components/schemas/Session"
+              }
+            },
+            "required": [
+              "session"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "required": [
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "data"
+        ]
+      }
+    }
+  },
+  "x-contract-error-codes": {
+    "422": [
+      "PHONE_INVALID",
+      "OTP_INVALID",
+      "OTP_CHALLENGE_INVALID"
+    ],
+    "410": [
+      "OTP_EXPIRED"
+    ],
+    "429": [
+      "OTP_TOO_MANY_ATTEMPTS",
+      "OTP_RESEND_TOO_EARLY",
+      "RATE_LIMITED"
+    ],
+    "503": [
+      "OTP_DELIVERY_UNAVAILABLE",
+      "SERVICE_UNAVAILABLE"
+    ],
+    "401": [
+      "SESSION_INVALID",
+      "SESSION_REVOKED"
+    ],
+    "403": [
+      "ACCOUNT_DISABLED",
+      "FORBIDDEN"
+    ],
+    "500": [
+      "INTERNAL_ERROR"
+    ]
+  }
+}
