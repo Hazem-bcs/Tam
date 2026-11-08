@@ -30,6 +30,8 @@ final class FakeNavigation implements CustomerNavigation {
   @override
   void openNotifications() => notifications++;
   @override
+  void openAddresses() {}
+  @override
   void openSettings() {}
 }
 

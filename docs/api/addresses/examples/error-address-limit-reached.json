@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "ADDRESS_LIMIT_REACHED",
+    "message": {
+      "ar": "وصلت إلى الحد الأقصى للعناوين.",
+      "en": "The address limit was reached."
+    }
+  }
+}

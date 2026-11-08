@@ -1,0 +1,60 @@
+{
+  "@@locale": "en",
+  "addressesTitle": "My addresses",
+  "addressesDescription": "Save places for faster booking",
+  "addressesAdd": "Add a place",
+  "addressesEdit": "Edit place",
+  "addressesDelete": "Delete place",
+  "addressesDeleteTitle": "Delete this place?",
+  "addressesDeleteBody": "It will be removed from saved addresses. Existing trips will stay unchanged.",
+  "addressesCancel": "Cancel",
+  "addressesConfirmDelete": "Delete",
+  "addressesLoading": "Loading addresses",
+  "addressesSaving": "Saving place",
+  "addressesSave": "Save place",
+  "addressesEmpty": "No saved addresses yet",
+  "addressesEmptyBody": "Add a place to choose it quickly when booking.",
+  "addressesError": "Unable to complete the operation. Try again.",
+  "addressesUnavailable": "The addresses service is unavailable in API mode.",
+  "addressesNotFound": "This address no longer exists.",
+  "addressesLimit": "You can save up to {max} addresses.",
+  "addressesConflict": "The save request conflicted. Try again.",
+  "addressesRetry": "Retry",
+  "addressesRefresh": "Refresh addresses",
+  "addressesName": "Place name",
+  "addressesNameHint": "For example: Home or Work",
+  "addressesNameError": "Enter a name between 1 and {max} characters.",
+  "addressesLocation": "Location",
+  "addressesChooseLocation": "Choose the place location",
+  "addressesLocationError": "Choose a location before saving.",
+  "addressesSearch": "Search places",
+  "addressesNoPlaces": "No matching places. Try another search.",
+  "addressesChooseIcon": "Choose an icon",
+  "addressesIconHome": "Home",
+  "addressesIconWork": "Work",
+  "addressesIconStudy": "Study",
+  "addressesIconGym": "Gym",
+  "addressesIconOther": "Other",
+  "addressesDiscardTitle": "Discard changes?",
+  "addressesDiscardBody": "Your changes to this place have not been saved.",
+  "addressesDiscard": "Discard",
+  "addressesKeepEditing": "Keep editing",
+  "addressesRetryPending": "The save confirmation was not received. Retry the same operation to avoid adding a duplicate.",
+  "addressesManage": "Manage addresses",
+  "addressesSavedTab": "Saved addresses",
+  "addressesSearchTab": "Search",
+  "@addressesNameError": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@addressesLimit": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  }
+}

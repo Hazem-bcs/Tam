@@ -1,6 +1,13 @@
 enum FeatureDataMode { mock, api }
 
-enum CustomerFeature { home, rideRequest, trips, notifications, settings }
+enum CustomerFeature {
+  home,
+  rideRequest,
+  trips,
+  notifications,
+  settings,
+  addresses,
+}
 
 /// Parsed at composition; widgets and feature states never select the mode.
 final class FeatureDataModes {

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "بيانات العنوان غير صالحة.",
+      "en": "The address data is invalid."
+    }
+  }
+}

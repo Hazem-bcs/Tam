@@ -23,6 +23,9 @@ final class RouteAccessPolicy {
         AppRoutes.tripDetails: access(CustomerFeature.trips),
         AppRoutes.notifications: access(CustomerFeature.notifications),
         AppRoutes.settings: access(CustomerFeature.settings),
+        AppRoutes.addresses: access(CustomerFeature.addresses),
+        AppRoutes.addAddress: access(CustomerFeature.addresses),
+        AppRoutes.editAddress: access(CustomerFeature.addresses),
       },
     );
   }

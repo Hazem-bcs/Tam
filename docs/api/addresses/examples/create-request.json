@@ -1,0 +1,9 @@
+{
+  "name": "النادي الرياضي",
+  "icon": "gym",
+  "location": {
+    "label": "ساحة الأمويين",
+    "latitude": 33.516,
+    "longitude": 36.271
+  }
+}

@@ -697,4 +697,142 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLoggingOut => 'Logging out';
+
+  @override
+  String get addressesTitle => 'My addresses';
+
+  @override
+  String get addressesDescription => 'Save places for faster booking';
+
+  @override
+  String get addressesAdd => 'Add a place';
+
+  @override
+  String get addressesEdit => 'Edit place';
+
+  @override
+  String get addressesDelete => 'Delete place';
+
+  @override
+  String get addressesDeleteTitle => 'Delete this place?';
+
+  @override
+  String get addressesDeleteBody =>
+      'It will be removed from saved addresses. Existing trips will stay unchanged.';
+
+  @override
+  String get addressesCancel => 'Cancel';
+
+  @override
+  String get addressesConfirmDelete => 'Delete';
+
+  @override
+  String get addressesLoading => 'Loading addresses';
+
+  @override
+  String get addressesSaving => 'Saving place';
+
+  @override
+  String get addressesSave => 'Save place';
+
+  @override
+  String get addressesEmpty => 'No saved addresses yet';
+
+  @override
+  String get addressesEmptyBody =>
+      'Add a place to choose it quickly when booking.';
+
+  @override
+  String get addressesError => 'Unable to complete the operation. Try again.';
+
+  @override
+  String get addressesUnavailable =>
+      'The addresses service is unavailable in API mode.';
+
+  @override
+  String get addressesNotFound => 'This address no longer exists.';
+
+  @override
+  String addressesLimit(int max) {
+    return 'You can save up to $max addresses.';
+  }
+
+  @override
+  String get addressesConflict => 'The save request conflicted. Try again.';
+
+  @override
+  String get addressesRetry => 'Retry';
+
+  @override
+  String get addressesRefresh => 'Refresh addresses';
+
+  @override
+  String get addressesName => 'Place name';
+
+  @override
+  String get addressesNameHint => 'For example: Home or Work';
+
+  @override
+  String addressesNameError(int max) {
+    return 'Enter a name between 1 and $max characters.';
+  }
+
+  @override
+  String get addressesLocation => 'Location';
+
+  @override
+  String get addressesChooseLocation => 'Choose the place location';
+
+  @override
+  String get addressesLocationError => 'Choose a location before saving.';
+
+  @override
+  String get addressesSearch => 'Search places';
+
+  @override
+  String get addressesNoPlaces => 'No matching places. Try another search.';
+
+  @override
+  String get addressesChooseIcon => 'Choose an icon';
+
+  @override
+  String get addressesIconHome => 'Home';
+
+  @override
+  String get addressesIconWork => 'Work';
+
+  @override
+  String get addressesIconStudy => 'Study';
+
+  @override
+  String get addressesIconGym => 'Gym';
+
+  @override
+  String get addressesIconOther => 'Other';
+
+  @override
+  String get addressesDiscardTitle => 'Discard changes?';
+
+  @override
+  String get addressesDiscardBody =>
+      'Your changes to this place have not been saved.';
+
+  @override
+  String get addressesDiscard => 'Discard';
+
+  @override
+  String get addressesKeepEditing => 'Keep editing';
+
+  @override
+  String get addressesRetryPending =>
+      'The save confirmation was not received. Retry the same operation to avoid adding a duplicate.';
+
+  @override
+  String get addressesManage => 'Manage addresses';
+
+  @override
+  String get addressesSavedTab => 'Saved addresses';
+
+  @override
+  String get addressesSearchTab => 'Search';
 }

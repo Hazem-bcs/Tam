@@ -31,6 +31,8 @@ final class _Nav implements CustomerNavigation {
   @override
   void openNotifications() {}
   @override
+  void openAddresses() {}
+  @override
   void openSettings() {}
 }
 

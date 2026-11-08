@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": {
+      "ar": "تعذر إكمال العملية.",
+      "en": "The operation could not be completed."
+    }
+  }
+}

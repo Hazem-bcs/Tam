@@ -1,0 +1,9 @@
+{
+  "name": "المنزل الجديد",
+  "icon": "home",
+  "location": {
+    "label": "ساحة الأمويين",
+    "latitude": 33.516,
+    "longitude": 36.271
+  }
+}

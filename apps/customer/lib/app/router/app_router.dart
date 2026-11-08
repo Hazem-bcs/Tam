@@ -7,6 +7,8 @@ import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/addresses/addresses_entry.dart';
+import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/pages/auth_status_page.dart';
 import 'package:tam_customer/features/auth/presentation/pages/otp_auth_page.dart';
@@ -26,6 +28,8 @@ GoRouter createAppRouter(
   AuthCubit auth,
   Listenable refresh, {
   required NotificationsRepository notifications,
+  required AddressesRepository addresses,
+  required AddressPlaceSearch Function(String languageCode) addressPlaceSearch,
   FeatureDataModes dataModes = const FeatureDataModes(),
   MockTripStore? mockTrips,
   AppLocaleController? locale,
@@ -61,6 +65,7 @@ GoRouter createAppRouter(
           navigation: navigation(context),
           dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
           mockTrips: trips,
+          addresses: addresses,
           prefill: state.extra is TripPrefill
               ? state.extra as TripPrefill
               : null,
@@ -102,6 +107,42 @@ GoRouter createAppRouter(
           locale: language,
           phoneE164: phone(),
           logout: auth.logout,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.addresses,
+        builder: (context, state) => buildAddressesFeature(
+          context,
+          repository: addresses,
+          onAdd: () =>
+              unawaited(GoRouter.of(context).push(AppRoutes.addAddress)),
+          onEdit: (id) => unawaited(
+            GoRouter.of(context).push(AppRoutes.addressEditLocation(id)),
+          ),
+          onBack: () => GoRouter.of(context).go(AppRoutes.home),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.addAddress,
+        builder: (context, state) => buildAddressEditorFeature(
+          context,
+          repository: addresses,
+          places: addressPlaceSearch(
+            Localizations.localeOf(context).languageCode,
+          ),
+          onBack: () => GoRouter.of(context).go(AppRoutes.addresses),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.editAddress,
+        builder: (context, state) => buildAddressEditorFeature(
+          context,
+          repository: addresses,
+          id: state.pathParameters['addressId'],
+          places: addressPlaceSearch(
+            Localizations.localeOf(context).languageCode,
+          ),
+          onBack: () => GoRouter.of(context).go(AppRoutes.addresses),
         ),
       ),
       GoRoute(

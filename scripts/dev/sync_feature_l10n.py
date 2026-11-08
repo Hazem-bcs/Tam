@@ -6,7 +6,7 @@ from pathlib import Path
 
 PREFIXES = {
     'home': 'home', 'ride_request': 'rideRequest', 'trips': 'trips',
-    'notifications': 'notifications', 'settings': 'settings',
+    'notifications': 'notifications', 'settings': 'settings', 'addresses': 'addresses',
 }
 
 

@@ -28,6 +28,8 @@ class _NavigationSpy implements CustomerNavigation {
   @override
   void openNotifications() {}
   @override
+  void openAddresses() {}
+  @override
   void openSettings() {}
   @override
   void openRideRequest({TripPrefill? prefill}) {}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "ADDRESS_NOT_FOUND",
+    "message": {
+      "ar": "العنوان غير موجود.",
+      "en": "The address was not found."
+    }
+  }
+}

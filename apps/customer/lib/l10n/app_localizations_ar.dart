@@ -685,4 +685,140 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsLoggingOut => 'جارٍ تسجيل الخروج';
+
+  @override
+  String get addressesTitle => 'عناويني';
+
+  @override
+  String get addressesDescription => 'احفظ أماكنك للوصول إليها أسرع';
+
+  @override
+  String get addressesAdd => 'إضافة موقع';
+
+  @override
+  String get addressesEdit => 'تعديل الموقع';
+
+  @override
+  String get addressesDelete => 'حذف الموقع';
+
+  @override
+  String get addressesDeleteTitle => 'حذف هذا الموقع؟';
+
+  @override
+  String get addressesDeleteBody =>
+      'سيُحذف من عناوينك المحفوظة. لن تتغير الرحلات السابقة.';
+
+  @override
+  String get addressesCancel => 'إلغاء';
+
+  @override
+  String get addressesConfirmDelete => 'حذف';
+
+  @override
+  String get addressesLoading => 'جارٍ تحميل العناوين';
+
+  @override
+  String get addressesSaving => 'جارٍ حفظ الموقع';
+
+  @override
+  String get addressesSave => 'حفظ الموقع';
+
+  @override
+  String get addressesEmpty => 'لا توجد عناوين محفوظة بعد';
+
+  @override
+  String get addressesEmptyBody => 'أضف مكانًا لتختاره بسهولة عند طلب رحلة.';
+
+  @override
+  String get addressesError => 'تعذر إكمال العملية. حاول مجددًا.';
+
+  @override
+  String get addressesUnavailable =>
+      'خدمة العناوين غير متاحة في وضع API حاليًا.';
+
+  @override
+  String get addressesNotFound => 'هذا العنوان لم يعد موجودًا.';
+
+  @override
+  String addressesLimit(int max) {
+    return 'يمكنك حفظ $max عنوانًا كحد أقصى.';
+  }
+
+  @override
+  String get addressesConflict => 'تعارضت محاولة الحفظ. أعد المحاولة.';
+
+  @override
+  String get addressesRetry => 'إعادة المحاولة';
+
+  @override
+  String get addressesRefresh => 'تحديث العناوين';
+
+  @override
+  String get addressesName => 'اسم المكان';
+
+  @override
+  String get addressesNameHint => 'مثال: المنزل أو العمل';
+
+  @override
+  String addressesNameError(int max) {
+    return 'اكتب اسمًا من 1 إلى $max محرفًا.';
+  }
+
+  @override
+  String get addressesLocation => 'الموقع';
+
+  @override
+  String get addressesChooseLocation => 'اختر موقع المكان';
+
+  @override
+  String get addressesLocationError => 'اختر موقعًا قبل الحفظ.';
+
+  @override
+  String get addressesSearch => 'ابحث عن مكان';
+
+  @override
+  String get addressesNoPlaces => 'لا توجد أماكن مطابقة. جرّب بحثًا آخر.';
+
+  @override
+  String get addressesChooseIcon => 'اختر أيقونة';
+
+  @override
+  String get addressesIconHome => 'منزل';
+
+  @override
+  String get addressesIconWork => 'عمل';
+
+  @override
+  String get addressesIconStudy => 'دراسة';
+
+  @override
+  String get addressesIconGym => 'نادي';
+
+  @override
+  String get addressesIconOther => 'أخرى';
+
+  @override
+  String get addressesDiscardTitle => 'تجاهل التعديلات؟';
+
+  @override
+  String get addressesDiscardBody => 'لم تُحفظ تعديلاتك على هذا المكان بعد.';
+
+  @override
+  String get addressesDiscard => 'تجاهل';
+
+  @override
+  String get addressesKeepEditing => 'متابعة التعديل';
+
+  @override
+  String get addressesRetryPending =>
+      'لم يصل تأكيد الحفظ. أعد المحاولة للتحقق من العملية نفسها دون إضافة موقع مكرر.';
+
+  @override
+  String get addressesManage => 'إدارة العناوين';
+
+  @override
+  String get addressesSavedTab => 'العناوين المحفوظة';
+
+  @override
+  String get addressesSearchTab => 'البحث';
 }

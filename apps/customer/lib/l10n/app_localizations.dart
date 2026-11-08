@@ -1375,6 +1375,264 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جارٍ تسجيل الخروج'**
   String get settingsLoggingOut;
+
+  /// No description provided for @addressesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناويني'**
+  String get addressesTitle;
+
+  /// No description provided for @addressesDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ أماكنك للوصول إليها أسرع'**
+  String get addressesDescription;
+
+  /// No description provided for @addressesAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة موقع'**
+  String get addressesAdd;
+
+  /// No description provided for @addressesEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الموقع'**
+  String get addressesEdit;
+
+  /// No description provided for @addressesDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الموقع'**
+  String get addressesDelete;
+
+  /// No description provided for @addressesDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا الموقع؟'**
+  String get addressesDeleteTitle;
+
+  /// No description provided for @addressesDeleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُحذف من عناوينك المحفوظة. لن تتغير الرحلات السابقة.'**
+  String get addressesDeleteBody;
+
+  /// No description provided for @addressesCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get addressesCancel;
+
+  /// No description provided for @addressesConfirmDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get addressesConfirmDelete;
+
+  /// No description provided for @addressesLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل العناوين'**
+  String get addressesLoading;
+
+  /// No description provided for @addressesSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ حفظ الموقع'**
+  String get addressesSaving;
+
+  /// No description provided for @addressesSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الموقع'**
+  String get addressesSave;
+
+  /// No description provided for @addressesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عناوين محفوظة بعد'**
+  String get addressesEmpty;
+
+  /// No description provided for @addressesEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف مكانًا لتختاره بسهولة عند طلب رحلة.'**
+  String get addressesEmptyBody;
+
+  /// No description provided for @addressesError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إكمال العملية. حاول مجددًا.'**
+  String get addressesError;
+
+  /// No description provided for @addressesUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة العناوين غير متاحة في وضع API حاليًا.'**
+  String get addressesUnavailable;
+
+  /// No description provided for @addressesNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا العنوان لم يعد موجودًا.'**
+  String get addressesNotFound;
+
+  /// No description provided for @addressesLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك حفظ {max} عنوانًا كحد أقصى.'**
+  String addressesLimit(int max);
+
+  /// No description provided for @addressesConflict.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعارضت محاولة الحفظ. أعد المحاولة.'**
+  String get addressesConflict;
+
+  /// No description provided for @addressesRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get addressesRetry;
+
+  /// No description provided for @addressesRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث العناوين'**
+  String get addressesRefresh;
+
+  /// No description provided for @addressesName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المكان'**
+  String get addressesName;
+
+  /// No description provided for @addressesNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: المنزل أو العمل'**
+  String get addressesNameHint;
+
+  /// No description provided for @addressesNameError.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسمًا من 1 إلى {max} محرفًا.'**
+  String addressesNameError(int max);
+
+  /// No description provided for @addressesLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get addressesLocation;
+
+  /// No description provided for @addressesChooseLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موقع المكان'**
+  String get addressesChooseLocation;
+
+  /// No description provided for @addressesLocationError.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موقعًا قبل الحفظ.'**
+  String get addressesLocationError;
+
+  /// No description provided for @addressesSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن مكان'**
+  String get addressesSearch;
+
+  /// No description provided for @addressesNoPlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أماكن مطابقة. جرّب بحثًا آخر.'**
+  String get addressesNoPlaces;
+
+  /// No description provided for @addressesChooseIcon.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر أيقونة'**
+  String get addressesChooseIcon;
+
+  /// No description provided for @addressesIconHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'منزل'**
+  String get addressesIconHome;
+
+  /// No description provided for @addressesIconWork.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمل'**
+  String get addressesIconWork;
+
+  /// No description provided for @addressesIconStudy.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراسة'**
+  String get addressesIconStudy;
+
+  /// No description provided for @addressesIconGym.
+  ///
+  /// In ar, this message translates to:
+  /// **'نادي'**
+  String get addressesIconGym;
+
+  /// No description provided for @addressesIconOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخرى'**
+  String get addressesIconOther;
+
+  /// No description provided for @addressesDiscardTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجاهل التعديلات؟'**
+  String get addressesDiscardTitle;
+
+  /// No description provided for @addressesDiscardBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُحفظ تعديلاتك على هذا المكان بعد.'**
+  String get addressesDiscardBody;
+
+  /// No description provided for @addressesDiscard.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجاهل'**
+  String get addressesDiscard;
+
+  /// No description provided for @addressesKeepEditing.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة التعديل'**
+  String get addressesKeepEditing;
+
+  /// No description provided for @addressesRetryPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يصل تأكيد الحفظ. أعد المحاولة للتحقق من العملية نفسها دون إضافة موقع مكرر.'**
+  String get addressesRetryPending;
+
+  /// No description provided for @addressesManage.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة العناوين'**
+  String get addressesManage;
+
+  /// No description provided for @addressesSavedTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'العناوين المحفوظة'**
+  String get addressesSavedTab;
+
+  /// No description provided for @addressesSearchTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث'**
+  String get addressesSearchTab;
 }
 
 class _AppLocalizationsDelegate

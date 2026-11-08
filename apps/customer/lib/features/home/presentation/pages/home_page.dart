@@ -81,6 +81,15 @@ class HomePage extends StatelessWidget {
                     isGuest: isGuest,
                     notificationsButton: notificationsButton,
                   ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton.icon(
+                      key: const Key('home-addresses'),
+                      onPressed: navigation.openAddresses,
+                      icon: const Icon(Icons.bookmark_border),
+                      label: Text(t.addressesTitle),
+                    ),
+                  ),
                   const SizedBox(height: AppSpacing.xl),
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) => _body(context, state),

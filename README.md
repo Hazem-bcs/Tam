@@ -22,6 +22,15 @@ and isolated checkout. The fixed wave reference is tag
 `tam-w1-baseline-2026-11-07`; verify its SHA against the dispatch message.
 Do not assume `main` contains that baseline.
 
+The integrated wave-one features and the saved-address feature follow the
+[two-phase delivery plan](docs/engineering/development-phases.md). Current
+progress and the exact starting SHA for new work are recorded in the task board;
+the older wave-one tag remains immutable. Saved addresses share one session-owned
+repository across Home, Settings and booking. Their mock edits reset on logout
+and process restart. `ADDRESSES_DATA_MODE=api` protects address routes and fails
+explicitly until the API adapter is implemented. See the
+[Arabic backend handoff](docs/api/addresses/README.ar.md).
+
 ## Run locally
 ```bash
 cd apps/customer

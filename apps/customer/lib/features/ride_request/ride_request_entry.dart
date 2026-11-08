@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/addresses/addresses_entry.dart';
+import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/data/repositories/unavailable_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
@@ -16,6 +18,7 @@ Widget buildRideRequestFeature(
   required CustomerNavigation navigation,
   required FeatureDataMode dataMode,
   required MockTripStore mockTrips,
+  AddressesRepository? addresses,
   TripPrefill? prefill,
 }) {
   final RideRequestRepository repository = switch (dataMode) {
@@ -27,6 +30,15 @@ Widget buildRideRequestFeature(
     create: (_) => locator.isRegistered<RideDraftBloc>()
         ? locator<RideDraftBloc>(param1: repository, param2: prefill)
         : RideDraftBloc(repository: repository, prefill: prefill),
-    child: RideRequestPage(navigation: navigation),
+    child: RideRequestPage(
+      navigation: navigation,
+      savedAddressPickerBuilder: addresses == null
+          ? null
+          : (onSelected) => buildSavedAddressPicker(
+              repository: addresses,
+              onSelected: onSelected,
+              onManage: navigation.openAddresses,
+            ),
+    ),
   );
 }

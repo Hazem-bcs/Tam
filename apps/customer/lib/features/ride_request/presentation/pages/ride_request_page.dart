@@ -9,13 +9,19 @@ import 'package:tam_customer/features/ride_request/presentation/widgets/ride_quo
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/simulated_route_map.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
 
 class RideRequestPage extends StatelessWidget {
-  const RideRequestPage({super.key, required this.navigation});
+  const RideRequestPage({
+    super.key,
+    required this.navigation,
+    this.savedAddressPickerBuilder,
+  });
 
   final CustomerNavigation navigation;
+  final Widget Function(ValueChanged<TripLocation>)? savedAddressPickerBuilder;
 
   Future<void> _pickLocation(
     BuildContext context, {
@@ -28,7 +34,10 @@ class RideRequestPage extends StatelessWidget {
       useSafeArea: true,
       builder: (_) => BlocProvider.value(
         value: bloc,
-        child: RidePlacePicker(pickup: pickup),
+        child: RidePlacePicker(
+          pickup: pickup,
+          savedAddressPickerBuilder: savedAddressPickerBuilder,
+        ),
       ),
     );
   }

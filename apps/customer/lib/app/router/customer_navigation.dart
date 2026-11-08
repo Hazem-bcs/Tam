@@ -11,6 +11,7 @@ abstract interface class CustomerNavigation {
   void openTrip(String id);
   void openNotifications();
   void openSettings();
+  void openAddresses();
 }
 
 final class RouterCustomerNavigation implements CustomerNavigation {
@@ -31,4 +32,6 @@ final class RouterCustomerNavigation implements CustomerNavigation {
       unawaited(router.push<void>(AppRoutes.notifications));
   @override
   void openSettings() => unawaited(router.push<void>(AppRoutes.settings));
+  @override
+  void openAddresses() => unawaited(router.push<void>(AppRoutes.addresses));
 }

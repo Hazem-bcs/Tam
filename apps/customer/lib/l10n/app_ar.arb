@@ -275,5 +275,62 @@
   "settingsSaveError": "تعذر حفظ التغييرات. لم يتم تعديل البيانات المحفوظة؛ يمكنك المحاولة مجددًا.",
   "settingsSaved": "تم حفظ التغييرات التجريبية",
   "settingsSaving": "جارٍ الحفظ",
-  "settingsLoggingOut": "جارٍ تسجيل الخروج"
+  "settingsLoggingOut": "جارٍ تسجيل الخروج",
+  "addressesTitle": "عناويني",
+  "addressesDescription": "احفظ أماكنك للوصول إليها أسرع",
+  "addressesAdd": "إضافة موقع",
+  "addressesEdit": "تعديل الموقع",
+  "addressesDelete": "حذف الموقع",
+  "addressesDeleteTitle": "حذف هذا الموقع؟",
+  "addressesDeleteBody": "سيُحذف من عناوينك المحفوظة. لن تتغير الرحلات السابقة.",
+  "addressesCancel": "إلغاء",
+  "addressesConfirmDelete": "حذف",
+  "addressesLoading": "جارٍ تحميل العناوين",
+  "addressesSaving": "جارٍ حفظ الموقع",
+  "addressesSave": "حفظ الموقع",
+  "addressesEmpty": "لا توجد عناوين محفوظة بعد",
+  "addressesEmptyBody": "أضف مكانًا لتختاره بسهولة عند طلب رحلة.",
+  "addressesError": "تعذر إكمال العملية. حاول مجددًا.",
+  "addressesUnavailable": "خدمة العناوين غير متاحة في وضع API حاليًا.",
+  "addressesNotFound": "هذا العنوان لم يعد موجودًا.",
+  "addressesLimit": "يمكنك حفظ {max} عنوانًا كحد أقصى.",
+  "addressesConflict": "تعارضت محاولة الحفظ. أعد المحاولة.",
+  "addressesRetry": "إعادة المحاولة",
+  "addressesRefresh": "تحديث العناوين",
+  "addressesName": "اسم المكان",
+  "addressesNameHint": "مثال: المنزل أو العمل",
+  "addressesNameError": "اكتب اسمًا من 1 إلى {max} محرفًا.",
+  "addressesLocation": "الموقع",
+  "addressesChooseLocation": "اختر موقع المكان",
+  "addressesLocationError": "اختر موقعًا قبل الحفظ.",
+  "addressesSearch": "ابحث عن مكان",
+  "addressesNoPlaces": "لا توجد أماكن مطابقة. جرّب بحثًا آخر.",
+  "addressesChooseIcon": "اختر أيقونة",
+  "addressesIconHome": "منزل",
+  "addressesIconWork": "عمل",
+  "addressesIconStudy": "دراسة",
+  "addressesIconGym": "نادي",
+  "addressesIconOther": "أخرى",
+  "addressesDiscardTitle": "تجاهل التعديلات؟",
+  "addressesDiscardBody": "لم تُحفظ تعديلاتك على هذا المكان بعد.",
+  "addressesDiscard": "تجاهل",
+  "addressesKeepEditing": "متابعة التعديل",
+  "addressesRetryPending": "لم يصل تأكيد الحفظ. أعد المحاولة للتحقق من العملية نفسها دون إضافة موقع مكرر.",
+  "addressesManage": "إدارة العناوين",
+  "addressesSavedTab": "العناوين المحفوظة",
+  "addressesSearchTab": "البحث",
+  "@addressesNameError": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "@addressesLimit": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  }
 }

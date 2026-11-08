@@ -35,7 +35,8 @@ Page -> Cubit/Bloc -> Domain Repository
 
 الإعداد `DATA_MODE=mock|api` داخل `AppConfig`، مع خيارات مستقلة
 لكل ميزة عند الربط التدريجي: `HOME_DATA_MODE` و`RIDE_REQUEST_DATA_MODE`
-و`TRIPS_DATA_MODE` و`NOTIFICATIONS_DATA_MODE` و`SETTINGS_DATA_MODE`.
+و`TRIPS_DATA_MODE` و`NOTIFICATIONS_DATA_MODE` و`SETTINGS_DATA_MODE`
+و`ADDRESSES_DATA_MODE` للعناوين المحفوظة.
 يرث خيار الميزة الوضع العام إذا لم يحدد؛ القيم غير المعروفة خطأ إعداد واضح.
 الخيارات منفذة عبر AppConfig وFeatureDataModes، وتُحقن قيمتها في نقاط دخول الميزات المسجلة؛ لا يختارها Widget أو Cubit.
 

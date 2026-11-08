@@ -20,6 +20,7 @@ abstract final class AppConfig {
         'NOTIFICATIONS_DATA_MODE',
       ),
       CustomerFeature.settings: String.fromEnvironment('SETTINGS_DATA_MODE'),
+      CustomerFeature.addresses: String.fromEnvironment('ADDRESSES_DATA_MODE'),
     },
   );
 

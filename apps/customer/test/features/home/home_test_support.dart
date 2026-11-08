@@ -27,6 +27,8 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   @override
   void openNotifications() => notifications++;
   @override
+  void openAddresses() {}
+  @override
   void openSettings() => settings++;
 }
 

@@ -1,0 +1,1638 @@
+{
+  "info": {
+    "name": "TAM | تم — Saved Addresses v1.0",
+    "description": "مطلوب للباكند: إدارة العناوين المحفوظة (قائمة/تفاصيل/حفظ/تعديل/حذف) وربطها ببحث الأماكن الحالي والحجز. اقرأ addresses-v1.md وREADME.ar.md. الأمثلة اصطناعية والخادم غير جاهز. القائمة bounded50 دونpagination. لا تنفذطلبًا حيًا قبل توفيرعنوانالخادم ومصادقةحقيقية.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.com/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "address_id",
+      "value": "address-home-001"
+    },
+    {
+      "key": "operation_id",
+      "value": "address-create-example-0001"
+    },
+    {
+      "key": "query",
+      "value": "المزة"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 — قائمة العناوين (حد أقصى50)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/addresses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addresses"
+          ]
+        },
+        "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"address-home-001\",\n      \"name\": \"المنزل\",\n      \"icon\": \"home\",\n      \"location\": {\n        \"label\": \"المزة، شارع الجلاء\",\n        \"latitude\": 33.5,\n        \"longitude\": 36.25\n      },\n      \"created_at\": \"2026-11-07T09:00:00Z\",\n      \"updated_at\": \"2026-11-07T09:00:00Z\"\n    },\n    {\n      \"id\": \"address-work-001\",\n      \"name\": \"العمل\",\n      \"icon\": \"work\",\n      \"location\": {\n        \"label\": \"أبو رمانة، شارع الحمراء\",\n        \"latitude\": 33.519,\n        \"longitude\": 36.283\n      },\n      \"created_at\": \"2026-11-07T08:00:00Z\",\n      \"updated_at\": \"2026-11-07T08:00:00Z\"\n    }\n  ]\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"جلسة الدخول غير صالحة.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية هذه العملية.\",\n      \"en\": \"This operation is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "قائمة فارغة",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "02 — تفاصيل عنوان",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addresses",
+            "{{address_id}}"
+          ]
+        },
+        "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"address-home-001\",\n    \"name\": \"المنزل\",\n    \"icon\": \"home\",\n    \"location\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"created_at\": \"2026-11-07T09:00:00Z\",\n    \"updated_at\": \"2026-11-07T09:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"جلسة الدخول غير صالحة.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية هذه العملية.\",\n      \"en\": \"This operation is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "ADDRESS_NOT_FOUND",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ADDRESS_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"العنوان غير موجود.\",\n      \"en\": \"The address was not found.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "03 — حفظ عنوان (أعد المفتاح نفسه بعدtimeout)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{operation_id}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/addresses",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addresses"
+          ]
+        },
+        "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-address-1\",\n    \"name\": \"النادي الرياضي\",\n    \"icon\": \"gym\",\n    \"location\": {\n      \"label\": \"ساحة الأمويين\",\n      \"latitude\": 33.516,\n      \"longitude\": 36.271\n    },\n    \"created_at\": \"2026-11-08T10:00:00Z\",\n    \"updated_at\": \"2026-11-08T10:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"جلسة الدخول غير صالحة.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية هذه العملية.\",\n      \"en\": \"This operation is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "ADDRESS_LIMIT_REACHED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ADDRESS_LIMIT_REACHED\",\n    \"message\": {\n      \"ar\": \"وصلت إلى الحد الأقصى للعناوين.\",\n      \"en\": \"The address limit was reached.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"المفتاح مرتبط بطلب مختلف.\",\n      \"en\": \"This key belongs to a different request.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"بيانات العنوان غير صالحة.\",\n      \"en\": \"The address data is invalid.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Too Many Requests",
+          "code": 429,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"انتظر قبل إعادة المحاولة.\",\n      \"en\": \"Wait before retrying.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "INTERNAL_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{operation_id}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"النادي الرياضي\",\n  \"icon\": \"gym\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"تعذر إكمال العملية.\",\n      \"en\": \"The operation could not be completed.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "04 — تعديل اسم/أيقونة/موقع عنوان",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addresses",
+            "{{address_id}}"
+          ]
+        },
+        "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"address-home-001\",\n    \"name\": \"المنزل الجديد\",\n    \"icon\": \"home\",\n    \"location\": {\n      \"label\": \"ساحة الأمويين\",\n      \"latitude\": 33.516,\n      \"longitude\": 36.271\n    },\n    \"created_at\": \"2026-11-07T09:00:00Z\",\n    \"updated_at\": \"2026-11-08T10:00:00Z\"\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"جلسة الدخول غير صالحة.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية هذه العملية.\",\n      \"en\": \"This operation is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "ADDRESS_NOT_FOUND",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ADDRESS_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"العنوان غير موجود.\",\n      \"en\": \"The address was not found.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"بيانات العنوان غير صالحة.\",\n      \"en\": \"The address data is invalid.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"المنزل الجديد\",\n  \"icon\": \"home\",\n  \"location\": {\n    \"label\": \"ساحة الأمويين\",\n    \"latitude\": 33.516,\n    \"longitude\": 36.271\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "05 — حذف عنوان (التكرار204)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addresses",
+            "{{address_id}}"
+          ]
+        },
+        "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "json",
+          "header": [],
+          "body": ""
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"جلسة الدخول غير صالحة.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية هذه العملية.\",\n      \"en\": \"This operation is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/addresses/{{address_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "addresses",
+                "{{address_id}}"
+              ]
+            },
+            "description": "عقد مقترح غير متصل بخادم حي. يتطلب Bearer token؛ guest/localAccess ليسا مصادقة API."
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "06 — بحث الأماكن المعاد استخدامه من عقد الحجز",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/places?q={{query}}&limit=20",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "places"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "{{query}}"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            }
+          ]
+        },
+        "description": "بحث الأماكن العام المعاد استخدامه من عقد ride_request-v1؛ q عربي أو إنجليزي بطول0..100 وlimit افتراضي20. لا يصدر مصادقة أو يؤكد حجزًا.",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": [
+        {
+          "name": "نجاح",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q={{query}}&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{query}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "بحث الأماكن العام المعاد استخدامه من عقد ride_request-v1؛ q عربي أو إنجليزي بطول0..100 وlimit افتراضي20. لا يصدر مصادقة أو يؤكد حجزًا.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"place-mezzeh\",\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25,\n      \"label_en\": \"Mezzeh, Al-Jalaa Street\"\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q={{query}}&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{query}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "بحث الأماكن العام المعاد استخدامه من عقد ride_request-v1؛ q عربي أو إنجليزي بطول0..100 وlimit افتراضي20. لا يصدر مصادقة أو يؤكد حجزًا.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"The service is unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

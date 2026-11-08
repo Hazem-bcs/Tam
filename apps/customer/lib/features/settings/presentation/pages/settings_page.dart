@@ -5,12 +5,12 @@ import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_navigation.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -275,12 +275,10 @@ class _SettingsPageState extends State<SettingsPage> {
           onLanguageTap: _pickLanguage,
         ),
         const SizedBox(height: AppSpacing.xl),
-        Text(
-          t.settingsInfoTitle,
-          style: Theme.of(context).textTheme.titleMedium,
+        SettingsAccountLinks(
+          enabled: !state.isBusy,
+          onAddresses: () => _navigate(widget.navigation.openAddresses),
         ),
-        const SizedBox(height: AppSpacing.sm),
-        TamCard(child: Text(t.settingsMockNotice)),
         const SizedBox(height: AppSpacing.xl),
         TamButton.secondary(
           label: t.settingsLogout,
