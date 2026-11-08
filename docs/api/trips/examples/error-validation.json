@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "قيم الفلتر أو الترقيم غير صالحة.",
+      "en": "Invalid filter or pagination values."
+    }
+  }
+}

@@ -1,0 +1,778 @@
+{
+  "info": {
+    "name": "Tam | Trips v1 — proposed backend contract",
+    "description": "Synthetic saved examples; NOT a live server. Authorize with real test bearer credentials only. 1. List, 2. Detail, 3. Cancel requested/confirmed, 4. Verify details. Rebook is a client action owned by Ride Request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.invalid/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "trip_id",
+      "value": "mock-trip-1"
+    },
+    {
+      "key": "next_cursor",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "List trips (all)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips?filter=all&limit=20",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "all"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - historical trips",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"mock-history-001\",\n      \"pickup\": {\n        \"label\": \"المزة، شارع الجلاء\",\n        \"latitude\": 33.5,\n        \"longitude\": 36.25\n      },\n      \"destination\": {\n        \"label\": \"أبو رمانة، شارع الحمراء\",\n        \"latitude\": 33.519,\n        \"longitude\": 36.283\n      },\n      \"vehicle_class_id\": \"standard\",\n      \"fare\": {\n        \"amount_minor\": 25000,\n        \"currency\": \"SYP\",\n        \"minor_unit\": 0\n      },\n      \"status\": \"completed\",\n      \"created_at\": \"2026-11-01T12:00:00.000Z\"\n    },\n    {\n      \"id\": \"mock-history-002\",\n      \"pickup\": {\n        \"label\": \"المزة، شارع الجلاء\",\n        \"latitude\": 33.5,\n        \"longitude\": 36.25\n      },\n      \"destination\": {\n        \"label\": \"أبو رمانة، شارع الحمراء\",\n        \"latitude\": 33.519,\n        \"longitude\": 36.283\n      },\n      \"vehicle_class_id\": \"standard\",\n      \"fare\": {\n        \"amount_minor\": 28000,\n        \"currency\": \"SYP\",\n        \"minor_unit\": 0\n      },\n      \"status\": \"cancelled\",\n      \"created_at\": \"2026-10-30T09:00:00.000Z\"\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}\n"
+        },
+        {
+          "name": "200 - empty filter",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}\n"
+        },
+        {
+          "name": "401 - authentication required",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "422 - invalid pagination",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"قيم الفلتر أو الترقيم غير صالحة.\",\n      \"en\": \"Invalid filter or pagination values.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "503 - service unavailable",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "Next page (use returned cursor)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips?filter=all&limit=20&cursor={{next_cursor}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips"
+          ],
+          "query": [
+            {
+              "key": "filter",
+              "value": "all"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            },
+            {
+              "key": "cursor",
+              "value": "{{next_cursor}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - no more items",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20&cursor={{next_cursor}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{next_cursor}}"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}\n"
+        },
+        {
+          "name": "422 - bad cursor",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips?filter=all&limit=20&cursor={{next_cursor}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ],
+              "query": [
+                {
+                  "key": "filter",
+                  "value": "all"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{next_cursor}}"
+                }
+              ]
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"قيم الفلتر أو الترقيم غير صالحة.\",\n      \"en\": \"Invalid filter or pagination values.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "Get trip by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips/{{trip_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips",
+            "{{trip_id}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - completed",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-history-001\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 25000,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"status\": \"completed\",\n    \"created_at\": \"2026-11-01T12:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "404 - not found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الرحلة غير موجودة.\",\n      \"en\": \"Trip not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "403 - forbidden",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}"
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"غير مصرح بعرض هذه الرحلة.\",\n      \"en\": \"Not allowed to view this trip.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "Cancel trip (requested / confirmed only)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips",
+            "{{trip_id}}",
+            "cancel"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 - cancelled or repeated cancel",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-trip-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 32000,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"status\": \"cancelled\",\n    \"created_at\": \"2026-11-07T13:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "409 - not cancellable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_CANCELLABLE\",\n    \"message\": {\n      \"ar\": \"لا يمكن إلغاء الرحلة في هذه الحالة.\",\n      \"en\": \"This trip can't be cancelled.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "404 - not found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الرحلة غير موجودة.\",\n      \"en\": \"Trip not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "401 - no session",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "503 - unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "cancel"
+              ]
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        }
+      ]
+    }
+  ]
+}

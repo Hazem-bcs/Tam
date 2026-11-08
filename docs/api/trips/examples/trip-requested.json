@@ -1,0 +1,21 @@
+{
+  "id": "mock-trip-1",
+  "pickup": {
+    "label": "المزة، شارع الجلاء",
+    "latitude": 33.5,
+    "longitude": 36.25
+  },
+  "destination": {
+    "label": "أبو رمانة، شارع الحمراء",
+    "latitude": 33.519,
+    "longitude": 36.283
+  },
+  "vehicle_class_id": "standard",
+  "fare": {
+    "amount_minor": 32000,
+    "currency": "SYP",
+    "minor_unit": 0
+  },
+  "status": "requested",
+  "created_at": "2026-11-07T13:00:00.000Z"
+}
