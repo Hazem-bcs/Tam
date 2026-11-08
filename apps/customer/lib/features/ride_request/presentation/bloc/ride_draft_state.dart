@@ -82,6 +82,12 @@ final class RideDraftState extends Equatable {
   final bool searching;
   final String? searchError;
 
+  // An unanswered confirmation must resolve before a new booking intent.
+  bool get confirmationPending =>
+      status == RideFlowStatus.confirming ||
+      status == RideFlowStatus.booked ||
+      failureStep == RideFailureStep.confirmation;
+
   bool get hasRoute =>
       pickup != null &&
       destination != null &&

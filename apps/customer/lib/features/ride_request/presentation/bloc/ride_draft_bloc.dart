@@ -89,7 +89,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
   int _revision = 0;
   int _searchRevision = 0;
 
-  bool get _locked => _confirming || state.status == RideFlowStatus.booked;
+  bool get _locked => _confirming || state.confirmationPending;
 
   void _resetQuote() {
     _revision++;
@@ -195,7 +195,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     Emitter<RideDraftState> emit,
   ) async {
     // Set the guard before the first await; consecutive taps share one request.
-    if (_locked) return;
+    if (_confirming || state.status == RideFlowStatus.booked) return;
     final retryingUncertainConfirmation =
         _pendingKey != null &&
         state.failureStep == RideFailureStep.confirmation &&

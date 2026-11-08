@@ -43,13 +43,11 @@ class RideRequestPage extends StatelessWidget {
       listener: (context, state) =>
           navigation.openTrip(state.confirmedTrip!.id),
       builder: (context, state) {
-        final locked =
-            state.status == RideFlowStatus.confirming ||
-            state.status == RideFlowStatus.booked;
+        final locked = state.confirmationPending;
         final isConfirming = state.status == RideFlowStatus.confirming;
         final canConfirm =
             state.canConfirmAt(DateTime.now()) ||
-            (!locked &&
+            (state.status == RideFlowStatus.failed &&
                 state.failureStep == RideFailureStep.confirmation &&
                 state.quote != null);
         return Scaffold(

@@ -131,4 +131,26 @@ void main() {
     );
     expect(trips.trips, isEmpty);
   });
+
+  test('a new quote cannot reuse a committed confirmation key', () async {
+    Future<RideQuote> quote() => repository.requestQuote(
+      pickup: mockRidePlaces[0].location,
+      destination: mockRidePlaces[1].location,
+      vehicleClass: RideVehicleClass.standard,
+    );
+    final original = await quote();
+    await repository.confirm(quote: original, idempotencyKey: 'same-key');
+    final replacement = await quote();
+    await expectLater(
+      repository.confirm(quote: replacement, idempotencyKey: 'same-key'),
+      throwsA(
+        isA<RideRequestFailure>().having(
+          (error) => error.code,
+          'code',
+          'IDEMPOTENCY_CONFLICT',
+        ),
+      ),
+    );
+    expect(trips.trips, hasLength(1));
+  });
 }

@@ -194,9 +194,16 @@ void main() {
 
   testWidgets('Small 320, 2x text, keyboard and place search', (tester) async {
     setSize(tester, 320, 740);
-    await pumpRide(tester, locale: const Locale('en'), textScale: 2);
+    final (_, bloc, _) = await pumpRide(
+      tester,
+      locale: const Locale('en'),
+      textScale: 2,
+    );
     await screenshot(tester, 'ride-en-320-scale2.png');
     await tester.tap(find.text('Choose pickup'));
+    await tester.pumpAndSettle();
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    addTearDown(tester.view.resetViewInsets);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField), 'Citadel');
     await tester.pumpAndSettle();
@@ -205,6 +212,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Aleppo Citadel'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    unawaited(bloc.close());
     await tester.pumpWidget(const SizedBox.shrink());
   });
 }

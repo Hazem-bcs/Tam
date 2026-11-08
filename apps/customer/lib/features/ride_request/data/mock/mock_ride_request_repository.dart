@@ -23,7 +23,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
   int _sequence = 0;
   final Map<String, RideQuote> _quotes = {};
   // Tracks successful store writes only, not another trip collection.
-  final Set<String> _committedKeys = {};
+  final Map<String, String> _committedQuotesByKey = {};
 
   @override
   Future<List<RidePlace>> searchPlaces(String query) async {
@@ -84,9 +84,13 @@ final class MockRideRequestRepository implements RideRequestRepository {
     if (issued == null || issued != quote) {
       throw const RideRequestFailure('VALIDATION_ERROR');
     }
+    final committedQuoteId = _committedQuotesByKey[idempotencyKey];
+    if (committedQuoteId != null && committedQuoteId != quote.id) {
+      throw const RideRequestFailure('IDEMPOTENCY_CONFLICT');
+    }
     // A retry after a lost server response must resolve the original booking,
     // even when the quote expired after that booking was committed.
-    if (!quote.isValidAt(_now()) && !_committedKeys.contains(idempotencyKey)) {
+    if (!quote.isValidAt(_now()) && committedQuoteId == null) {
       throw const RideRequestFailure('QUOTE_EXPIRED');
     }
     try {
@@ -99,7 +103,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
         ),
         idempotencyKey: idempotencyKey,
       );
-      _committedKeys.add(idempotencyKey);
+      _committedQuotesByKey[idempotencyKey] = quote.id;
       if (loseFirstConfirmationResponse) {
         loseFirstConfirmationResponse = false;
         throw const RideRequestFailure('SERVICE_UNAVAILABLE');

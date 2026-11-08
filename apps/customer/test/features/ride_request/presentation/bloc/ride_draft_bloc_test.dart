@@ -149,4 +149,41 @@ void main() {
     expect(bloc.state.confirmedTrip!.id, firstId);
     expect(trips.trips, hasLength(1));
   });
+
+  test(
+    'unresolved confirmation cannot be replaced by editing or quoting',
+    () async {
+      repository.loseFirstConfirmationResponse = true;
+      var keys = 0;
+      final bloc = RideDraftBloc(
+        repository: repository,
+        prefill: TripPrefill(
+          pickup: mockRidePlaces[0].location,
+          destination: mockRidePlaces[1].location,
+        ),
+        now: () => now,
+        newIdempotencyKey: () => 'key-${++keys}',
+      );
+      addTearDown(bloc.close);
+      await bloc.stream.firstWhere((s) => s.status == RideFlowStatus.ready);
+      final originalQuote = bloc.state.quote;
+      bloc.add(const RideConfirmationRequested());
+      await bloc.stream.firstWhere(
+        (s) =>
+            s.status == RideFlowStatus.failed &&
+            s.failureStep == RideFailureStep.confirmation,
+      );
+      bloc.add(PickupSelected(mockRidePlaces[2].location));
+      bloc.add(DestinationSelected(mockRidePlaces[3].location));
+      bloc.add(const VehicleClassSelected(RideVehicleClass.van));
+      bloc.add(const RideQuoteRequested());
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(bloc.state.quote, originalQuote);
+      expect(bloc.state.failureStep, RideFailureStep.confirmation);
+      bloc.add(const RideConfirmationRequested());
+      await bloc.stream.firstWhere((s) => s.status == RideFlowStatus.booked);
+      expect(keys, 1);
+      expect(trips.trips, hasLength(1));
+    },
+  );
 }
