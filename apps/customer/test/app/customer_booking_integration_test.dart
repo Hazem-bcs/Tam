@@ -74,14 +74,16 @@ void main() {
     await enterCustomerSession(tester);
     router.go(AppRoutes.trips);
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .element(find.byType(TripsListPage))
-          .read<TripsListCubit>()
-          .state
-          .items,
-      isEmpty,
-    );
+    final afterLogout = tester
+        .element(find.byType(TripsListPage))
+        .read<TripsListCubit>()
+        .state
+        .items;
+    expect(afterLogout.map((trip) => trip.id).toSet(), {
+      'mock-history-001',
+      'mock-history-002',
+    });
+    expect(afterLogout.any((trip) => trip.id == booked.id), false);
     await tester.pumpWidget(const SizedBox.shrink());
     expect(tester.takeException(), isNull);
   });

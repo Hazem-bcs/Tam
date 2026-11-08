@@ -111,6 +111,26 @@ void main() {
     },
   );
 
+  test(
+    'session reset removes operations but restores shared fixture targets',
+    () async {
+      final store = MockTripStore(seed: seedMockTrips());
+      final created = store.create(booking(), idempotencyKey: 'key');
+      final snapshots = <List<Trip>>[];
+      final subscription = store.changes.listen(snapshots.add);
+      store.resetSession();
+      expect(store.find(created.id), isNull);
+      expect(store.find('mock-history-001')!.status, TripStatus.completed);
+      expect(snapshots.single, hasLength(2));
+      expect(
+        store.create(booking(1), idempotencyKey: 'key').id,
+        isNot(created.id),
+      );
+      await subscription.cancel();
+      await store.dispose();
+    },
+  );
+
   test('money rejects ambiguous or invalid fare representations', () {
     expect(() => Money(amountMinor: -1), throwsArgumentError);
     expect(() => Money(amountMinor: 1, currency: 'syp'), throwsArgumentError);

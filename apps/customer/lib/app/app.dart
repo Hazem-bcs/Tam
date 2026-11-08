@@ -90,7 +90,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       ].contains(state.status)) {
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
-        _mockTrips.clear();
+        _mockTrips.resetSession();
         _mockNotifications.resetSession();
         resetSettingsFeatureSession(_locale);
         sessionEntered = false;

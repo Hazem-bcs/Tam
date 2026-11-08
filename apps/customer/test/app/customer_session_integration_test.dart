@@ -61,6 +61,22 @@ void main() {
           .read<SettingsCubit>();
       expect(nextSettings.state.profile!.displayName, 'مستخدم تم');
       expect(nextSettings.state.preferences!.accountNotificationsEnabled, true);
+      await showCustomerHome(tester, router);
+      await tester.tap(find.byKey(const Key('home-notifications')));
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const Key('notification-notice-trip-complete-001')),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .element(find.byType(TripDetailsPage))
+            .read<TripDetailsCubit>()
+            .state
+            .trip
+            ?.id,
+        'mock-history-001',
+      );
       await tester.pumpWidget(const SizedBox.shrink());
       expect(tester.takeException(), isNull);
     });

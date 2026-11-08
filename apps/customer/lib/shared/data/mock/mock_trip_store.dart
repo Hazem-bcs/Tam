@@ -5,9 +5,12 @@ import 'package:tam_customer/shared/domain/trip.dart';
 /// Repositories translate these data failures into their own domain failures.
 final class MockTripStore {
   MockTripStore({Iterable<Trip> seed = const [], DateTime Function()? now})
-    : _trips = {for (final trip in seed) trip.id: trip},
-      _now = now ?? DateTime.now;
-  final Map<String, Trip> _trips;
+    : _seed = {for (final trip in seed) trip.id: trip},
+      _now = now ?? DateTime.now {
+    _trips = Map.of(_seed);
+  }
+  final Map<String, Trip> _seed;
+  late final Map<String, Trip> _trips;
   final DateTime Function() _now;
   final _changes = StreamController<List<Trip>>.broadcast(sync: true);
   final Map<String, Trip> _requests = {};
@@ -65,9 +68,16 @@ final class MockTripStore {
     return updated;
   }
 
-  /// Clear on sign-out; one local customer's data must not leak to the next.
-  void clear() {
-    _trips.clear();
+  void clear() => _reset(const {});
+
+  /// Remove session-created operations and restore only synthetic fixtures.
+  /// Notification fixtures can then resolve their shared historic-trip IDs.
+  void resetSession() => _reset(_seed);
+
+  void _reset(Map<String, Trip> seed) {
+    _trips
+      ..clear()
+      ..addAll(seed);
     _requests.clear();
     _changes.add(trips);
   }
