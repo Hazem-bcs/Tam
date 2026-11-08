@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "UNAUTHENTICATED",
+    "message": {
+      "ar": "تتطلب العملية تسجيل دخول.",
+      "en": "Sign in is required."
+    }
+  }
+}

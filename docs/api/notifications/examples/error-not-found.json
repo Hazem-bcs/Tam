@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "NOTIFICATION_NOT_FOUND",
+    "message": {
+      "ar": "الإشعار غير موجود.",
+      "en": "Notification not found."
+    }
+  }
+}

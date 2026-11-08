@@ -1,0 +1,20 @@
+{
+  "data": {
+    "id": "notice-unknown-001",
+    "kind": "system",
+    "title": {
+      "ar": "تحديث عن خدماتنا",
+      "en": "Service update"
+    },
+    "body": {
+      "ar": "هذه الرسالة للعرض فقط، دون فتح روابط خارجية.",
+      "en": "This message is for reading only. No external links open."
+    },
+    "created_at": "2026-11-06T11:10:00Z",
+    "read_at": "2026-11-06T12:00:00Z",
+    "target": {
+      "type": "external",
+      "url": "https://example.invalid/unsafe"
+    }
+  }
+}

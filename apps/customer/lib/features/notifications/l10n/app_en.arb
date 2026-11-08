@@ -1,3 +1,26 @@
 {
-  "@@locale": "en"
+  "@@locale": "en",
+  "notificationsMarkAll": "Mark all as read",
+  "notificationsUnreadCount": "Unread: {count}",
+  "@notificationsUnreadCount": {"placeholders": {"count": {"type": "int"}}},
+  "notificationsUnknownCount": "Count unavailable",
+  "notificationsToday": "Today",
+  "notificationsYesterday": "Yesterday",
+  "notificationsEarlier": "Earlier",
+  "notificationsLoadMore": "Show more",
+  "notificationsLoadingMore": "Loading more",
+  "notificationsRefresh": "Refresh",
+  "notificationsRetry": "Try again",
+  "notificationsEmptyTitle": "No notifications yet",
+  "notificationsEmptyBody": "Your updates will appear here when available.",
+  "notificationsErrorTitle": "Couldn't load notifications",
+  "notificationsErrorBody": "Check your connection and try again.",
+  "notificationsOfflineBody": "Notifications API is not connected yet.",
+  "notificationsMutationError": "Couldn't save read status. Try again.",
+  "notificationsMoreError": "Couldn't load more notifications.",
+  "notificationsUnavailableTarget": "This notification has no safe destination to open.",
+  "notificationsRead": "Read",
+  "notificationsUnread": "Unread",
+  "notificationsLoading": "Loading notifications",
+  "notificationsOpenNotification": "Open notification"
 }

@@ -1,3 +1,26 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+  "notificationsMarkAll": "تعيين الكل كمقروء",
+  "notificationsUnreadCount": "غير مقروء: {count}",
+  "@notificationsUnreadCount": {"placeholders": {"count": {"type": "int"}}},
+  "notificationsUnknownCount": "العدد غير متاح",
+  "notificationsToday": "اليوم",
+  "notificationsYesterday": "أمس",
+  "notificationsEarlier": "سابقًا",
+  "notificationsLoadMore": "عرض المزيد",
+  "notificationsLoadingMore": "جاري تحميل المزيد",
+  "notificationsRefresh": "تحديث",
+  "notificationsRetry": "إعادة المحاولة",
+  "notificationsEmptyTitle": "لا توجد إشعارات بعد",
+  "notificationsEmptyBody": "ستظهر إشعاراتك هنا عند توفرها.",
+  "notificationsErrorTitle": "تعذر تحميل الإشعارات",
+  "notificationsErrorBody": "تحقق من اتصالك وحاول مجددًا.",
+  "notificationsOfflineBody": "خدمة الإشعارات غير متاحة في وضع API حاليًا.",
+  "notificationsMutationError": "لم يُحفظ تغيير حالة القراءة. حاول مجددًا.",
+  "notificationsMoreError": "تعذر تحميل المزيد.",
+  "notificationsUnavailableTarget": "لا تتوفر وجهة آمنة لفتح هذا الإشعار.",
+  "notificationsRead": "مقروء",
+  "notificationsUnread": "غير مقروء",
+  "notificationsLoading": "جاري تحميل الإشعارات",
+  "notificationsOpenNotification": "فتح الإشعار"
 }

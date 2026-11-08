@@ -1,0 +1,775 @@
+{
+  "info": {
+    "name": "Tam | Customer Notifications API (proposed v1.0)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Proposed Laravel API contract. Mock examples only; no live endpoints or credentials. Order: list, next page, unread count, read one, read all."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.com/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "language",
+      "value": "ar"
+    },
+    {
+      "key": "limit",
+      "value": "2"
+    },
+    {
+      "key": "cursor",
+      "value": "bjE6Mg"
+    },
+    {
+      "key": "notification_id",
+      "value": "notice-trip-complete-001"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET Notifications - first page",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/notifications?limit={{limit}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "notifications"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 — page 1",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"notice-trip-complete-001\",\n      \"kind\": \"trip\",\n      \"title\": {\n        \"ar\": \"اكتملت رحلتك\",\n        \"en\": \"Your trip is complete\"\n      },\n      \"body\": {\n        \"ar\": \"شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.\",\n        \"en\": \"Thanks for choosing Tam. Review your trip details.\"\n      },\n      \"created_at\": \"2026-11-07T12:20:00Z\",\n      \"read_at\": null,\n      \"target\": {\n        \"type\": \"trip\",\n        \"trip_id\": \"mock-history-001\"\n      }\n    },\n    {\n      \"id\": \"notice-offer-001\",\n      \"kind\": \"offer\",\n      \"title\": {\n        \"ar\": \"عرض جديد على رحلاتك\",\n        \"en\": \"A new ride offer\"\n      },\n      \"body\": {\n        \"ar\": \"تعرّف على عروض الرحلات المتاحة داخل التطبيق.\",\n        \"en\": \"Explore available ride offers in the app.\"\n      },\n      \"created_at\": \"2026-11-07T11:40:00Z\",\n      \"read_at\": null,\n      \"target\": {\n        \"type\": \"home\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": \"bjE6Mg\"\n  }\n}"
+        },
+        {
+          "name": "200 — empty",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+        },
+        {
+          "name": "400 — invalid cursor",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"INVALID_CURSOR\",\n    \"message\": {\n      \"ar\": \"مؤشر الصفحة غير صالح أو منتهي الصلاحية.\",\n      \"en\": \"Invalid or expired page cursor.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — unauthenticated",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"تتطلب العملية تسجيل دخول.\",\n      \"en\": \"Sign in is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — unavailable",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الإشعارات غير متاحة حاليًا.\",\n      \"en\": \"Notifications service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET Notifications - next page",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/notifications?limit={{limit}}&cursor={{cursor}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "notifications"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 — page 2",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}&cursor={{cursor}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"notice-trips-001\",\n      \"kind\": \"trip\",\n      \"title\": {\n        \"ar\": \"راجع رحلاتك السابقة\",\n        \"en\": \"Review your past trips\"\n      },\n      \"body\": {\n        \"ar\": \"تجد سجل رحلاتك السابقة في قسم طلباتي.\",\n        \"en\": \"Your ride history is available under My trips.\"\n      },\n      \"created_at\": \"2026-11-07T10:10:00Z\",\n      \"read_at\": null,\n      \"target\": {\n        \"type\": \"trips\"\n      }\n    },\n    {\n      \"id\": \"notice-account-001\",\n      \"kind\": \"account\",\n      \"title\": {\n        \"ar\": \"مرحبًا بك في تم\",\n        \"en\": \"Welcome to Tam\"\n      },\n      \"body\": {\n        \"ar\": \"استكشف الخدمات من الصفحة الرئيسية.\",\n        \"en\": \"Discover our services on the home screen.\"\n      },\n      \"created_at\": \"2026-11-06T18:00:00Z\",\n      \"read_at\": \"2026-11-06T18:10:00Z\",\n      \"target\": {\n        \"type\": \"home\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": \"bjE6NA\"\n  }\n}"
+        },
+        {
+          "name": "422 — validation",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications?limit={{limit}}&cursor={{cursor}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"حقول الطلب غير صالحة.\",\n      \"en\": \"Invalid request fields.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "GET Unread count",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/notifications/unread-count",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "notifications",
+            "unread-count"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 — unread count",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/unread-count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "unread-count"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"unread_count\": 4\n  }\n}"
+        },
+        {
+          "name": "403 — forbidden",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/unread-count",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "unread-count"
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا يسمح لك بالوصول إلى المورد.\",\n      \"en\": \"You cannot access this resource.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST Mark notification read",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "notifications",
+            "{{notification_id}}",
+            "read"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — marked as read",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}",
+                "read"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"notice-trip-complete-001\",\n    \"kind\": \"trip\",\n    \"title\": {\n      \"ar\": \"اكتملت رحلتك\",\n      \"en\": \"Your trip is complete\"\n    },\n    \"body\": {\n      \"ar\": \"شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.\",\n      \"en\": \"Thanks for choosing Tam. Review your trip details.\"\n    },\n    \"created_at\": \"2026-11-07T12:20:00Z\",\n    \"read_at\": \"2026-11-07T15:00:00Z\",\n    \"target\": {\n      \"type\": \"trip\",\n      \"trip_id\": \"mock-history-001\"\n    }\n  }\n}"
+        },
+        {
+          "name": "404 — not found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}",
+                "read"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"NOTIFICATION_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الإشعار غير موجود.\",\n      \"en\": \"Notification not found.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/read",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}",
+                "read"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الإشعارات غير متاحة حاليًا.\",\n      \"en\": \"Notifications service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST Mark all read",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/notifications/read-all",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "notifications",
+            "read-all"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200 — all read",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/read-all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "read-all"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"read_at\": \"2026-11-07T15:00:00Z\",\n    \"unread_count\": 0\n  }\n}"
+        },
+        {
+          "name": "503 — unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/read-all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "read-all"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الإشعارات غير متاحة حاليًا.\",\n      \"en\": \"Notifications service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}
