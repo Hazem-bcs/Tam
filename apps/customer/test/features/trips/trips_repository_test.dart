@@ -190,6 +190,24 @@ void main() {
     expect(() => TripWireCodec.fromJson(badMoney), throwsFormatException);
     final badDate = copy()..['created_at'] = '2026-11-01T12:00:00+03:00';
     expect(() => TripWireCodec.fromJson(badDate), throwsFormatException);
+    for (final date in ['2026-02-30T12:00:00Z', '2026-11-01T25:00:00Z']) {
+      expect(
+        () => TripWireCodec.fromJson(copy()..['created_at'] = date),
+        throwsFormatException,
+      );
+    }
+    expect(
+      () => TripWireCodec.fromJson(copy()..['pickup']['latitude'] = 91),
+      throwsFormatException,
+    );
+    expect(
+      () => TripWireCodec.fromJson(copy()..['fare']['amount_minor'] = -1),
+      throwsFormatException,
+    );
+    expect(
+      () => TripWireCodec.fromJson(copy()..['id'] = '   '),
+      throwsFormatException,
+    );
     final badStatus = copy()..['status'] = 'driver_here';
     expect(() => TripWireCodec.fromJson(badStatus), throwsFormatException);
   });

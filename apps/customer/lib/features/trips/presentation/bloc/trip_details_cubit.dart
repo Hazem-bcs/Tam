@@ -95,13 +95,20 @@ final class TripDetailsCubit extends Cubit<TripDetailsState> {
   Future<bool> cancel() async {
     final trip = state.trip;
     if (state.isCancelling || trip == null || !trip.canCancel) return false;
+    // Reads started before the mutation must not restore the old status.
+    _revision++;
     emit(state.copyWith(isCancelling: true, actionErrorCode: null));
     try {
       final updated = await _repository.cancel(trip.id);
       if (isClosed) return false;
+      // Invalidate reads triggered by a change event while cancel was pending.
+      _revision++;
       emit(
         state.copyWith(
           trip: updated,
+          isLoading: false,
+          isNotFound: false,
+          errorCode: null,
           isCancelling: false,
           actionErrorCode: null,
         ),

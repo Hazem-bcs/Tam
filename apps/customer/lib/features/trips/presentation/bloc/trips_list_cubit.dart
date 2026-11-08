@@ -97,7 +97,11 @@ final class TripsListCubit extends Cubit<TripsListState> {
     final revision = ++_revision;
     final pages = preservePages ? _pages : 1;
     if (!preservePages) _pages = 1;
-    if (!silent) {
+    if (silent) {
+      // Keep cached content visible, but never page through an invalid cursor
+      // while its replacement snapshot is still loading.
+      emit(state.copyWith(isRefreshing: true, isLoadingMore: false));
+    } else {
       emit(
         state.copyWith(
           isLoading: state.items.isEmpty,

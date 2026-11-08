@@ -31,6 +31,7 @@ Widget buildTripsFeature(
             child: TripsListPage(navigation: navigation),
           )
         : BlocProvider(
+            key: ValueKey(tripId),
             create: (_) => TripDetailsCubit(repository, tripId),
             child: TripDetailsPage(navigation: navigation),
           ),

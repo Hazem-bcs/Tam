@@ -6,6 +6,7 @@ import 'package:tam_customer/features/trips/domain/trips_repository.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trips_list_cubit.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_card.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_display.dart';
+import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
@@ -116,7 +117,7 @@ class _TripResults extends StatelessWidget {
     if (state.isLoading && state.items.isEmpty) {
       return Center(child: TamLoadingIndicator(semanticLabel: l.tripsLoading));
     }
-    return RefreshIndicator(
+    final results = RefreshIndicator(
       onRefresh: () => cubit.refresh(),
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
@@ -130,9 +131,7 @@ class _TripResults extends StatelessWidget {
             ? ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(AppSpacing.xl),
-                children: [
-                  SizedBox(height: 250, child: _EmptyOrError(state: state)),
-                ],
+                children: [_EmptyOrError(state: state)],
               )
             : ListView.separated(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -176,6 +175,16 @@ class _TripResults extends StatelessWidget {
                 },
               ),
       ),
+    );
+    if (state.errorCode == null || state.items.isEmpty) return results;
+    return Column(
+      children: [
+        TripsFailureBanner(
+          errorCode: state.errorCode!,
+          onRetry: () => cubit.refresh(),
+        ),
+        Expanded(child: results),
+      ],
     );
   }
 }
