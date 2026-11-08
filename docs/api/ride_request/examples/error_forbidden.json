@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "لا تملك صلاحية تنفيذ العملية.",
+      "en": "You are not permitted to perform this action."
+    }
+  }
+}
