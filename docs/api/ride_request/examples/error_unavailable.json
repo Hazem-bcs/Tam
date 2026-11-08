@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SERVICE_UNAVAILABLE",
+    "message": {
+      "ar": "خدمة الرحلات غير متاحة مؤقتًا.",
+      "en": "Ride service is temporarily unavailable."
+    }
+  }
+}

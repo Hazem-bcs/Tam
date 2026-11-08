@@ -1,0 +1,997 @@
+{
+  "info": {
+    "name": "Tam | Ride Request v1 — proposed backend",
+    "_postman_id": "0ba796ef-9d42-43ef-9877-620948ac7f03",
+    "description": "AR/EN mock-first proposed API. No live backend. Run places -> quotes -> trips; keep Idempotency-Key unchanged on uncertain retries. Quotes expire; trips are stored once.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.invalid/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "description": "A real authenticated bearer token only when backend is available"
+    },
+    {
+      "key": "idempotency_key",
+      "value": "550e8400-e29b-41d4-a716-446655440000",
+      "description": "Replace for every new booking intention; reuse on retries"
+    },
+    {
+      "key": "quote_id",
+      "value": "mock-quote-1",
+      "description": "Replace with POST ride-quotes response quote_id"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET /places — Search places",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/places?q=Mezzeh&limit=20",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "places"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "Mezzeh"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            },
+            {
+              "key": "cursor",
+              "value": "",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Synthetic example; requires backend implementation before sending."
+      },
+      "response": [
+        {
+          "name": "200 — Results",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q=Mezzeh&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Mezzeh"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"place-mezzeh\",\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25,\n      \"label_en\": \"Mezzeh, Al-Jalaa Street\"\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+        },
+        {
+          "name": "200 — Empty",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q=Mezzeh&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Mezzeh"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending."
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+        },
+        {
+          "name": "422 — Validation",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q=Mezzeh&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Mezzeh"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending."
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"الموقعان غير صالحين أو متماثلان.\",\n      \"en\": \"Pickup and destination must be valid and distinct.\"\n    },\n    \"details\": {\n      \"field\": \"destination\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — Unavailable",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/places?q=Mezzeh&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Mezzeh"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending."
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الرحلات غير متاحة مؤقتًا.\",\n      \"en\": \"Ride service is temporarily unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /ride-quotes — Estimate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/ride-quotes",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ride-quotes"
+          ]
+        },
+        "description": "Synthetic example; requires backend implementation before sending.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "201 — Quote with expiry",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ride-quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ride-quotes"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"quote_id\": \"mock-quote-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 27000,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"distance_meters\": 5019,\n    \"duration_minutes\": 18,\n    \"expires_at\": \"2026-11-07T12:01:30Z\"\n  }\n}"
+        },
+        {
+          "name": "422 — Invalid route",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ride-quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ride-quotes"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"الموقعان غير صالحين أو متماثلان.\",\n      \"en\": \"Pickup and destination must be valid and distinct.\"\n    },\n    \"details\": {\n      \"field\": \"destination\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — Authentication",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ride-quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ride-quotes"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"مطلوب تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — Unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/ride-quotes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ride-quotes"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الرحلات غير متاحة مؤقتًا.\",\n      \"en\": \"Ride service is temporarily unavailable.\"\n    }\n  }\n}"
+        }
+      ],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code === 201 || pm.response.code === 200) {",
+              "  const json = pm.response.json();",
+              "  if (json.data && json.data.quote_id) pm.collectionVariables.set(\"quote_id\", json.data.quote_id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /trips — Confirm idempotently",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "ar"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotency_key}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips"
+          ]
+        },
+        "description": "Synthetic example; requires backend implementation before sending.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quote_id\": \"{{quote_id}}\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "201 — Confirmed request",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-trip-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 27000,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"status\": \"requested\",\n    \"created_at\": \"2026-11-07T12:00:30Z\"\n  }\n}"
+        },
+        {
+          "name": "201 — Retry same key, same trip",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-trip-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 27000,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"status\": \"requested\",\n    \"created_at\": \"2026-11-07T12:00:30Z\"\n  }\n}"
+        },
+        {
+          "name": "409 — Idempotency conflict",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"استُخدم المفتاح لطلب مختلف.\",\n      \"en\": \"The key was used for another request.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "410 — Quote expired",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Gone",
+          "code": 410,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"QUOTE_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية عرض السعر.\",\n      \"en\": \"The quote has expired.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "422 — Validation",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"الموقعان غير صالحين أو متماثلان.\",\n      \"en\": \"Pickup and destination must be valid and distinct.\"\n    },\n    \"details\": {\n      \"field\": \"destination\"\n    }\n  }\n}"
+        },
+        {
+          "name": "401 — Authentication",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"مطلوب تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503 — Unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "ar"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{idempotency_key}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips"
+              ]
+            },
+            "description": "Synthetic example; requires backend implementation before sending.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"mock-quote-1\",\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"cash\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Service Unavailable",
+          "code": 503,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"خدمة الرحلات غير متاحة مؤقتًا.\",\n      \"en\": \"Ride service is temporarily unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

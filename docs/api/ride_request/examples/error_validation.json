@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "الموقعان غير صالحين أو متماثلان.",
+      "en": "Pickup and destination must be valid and distinct."
+    },
+    "details": {
+      "field": "destination"
+    }
+  }
+}
