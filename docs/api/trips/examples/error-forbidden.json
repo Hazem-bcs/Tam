@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "غير مصرح بعرض هذه الرحلة.",
+      "en": "Not allowed to view this trip."
+    }
+  }
+}

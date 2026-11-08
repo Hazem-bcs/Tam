@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "TRIP_NOT_CANCELLABLE",
+    "message": {
+      "ar": "لا يمكن إلغاء الرحلة في هذه الحالة.",
+      "en": "This trip can't be cancelled."
+    }
+  }
+}
