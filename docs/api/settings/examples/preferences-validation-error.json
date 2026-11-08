@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "يجب أن يكون تفضيل الإشعارات قيمة منطقية",
+      "en": "Notification preference must be a boolean"
+    }
+  }
+}

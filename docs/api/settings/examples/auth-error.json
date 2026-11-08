@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "AUTH_REQUIRED",
+    "message": {
+      "ar": "يرجى تسجيل الدخول",
+      "en": "Authentication required"
+    }
+  }
+}

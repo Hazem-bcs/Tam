@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "الاسم غير صالح",
+      "en": "Invalid display name"
+    }
+  }
+}
