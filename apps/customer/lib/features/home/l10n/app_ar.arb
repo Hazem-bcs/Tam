@@ -11,5 +11,13 @@
   "homeLoading": "جارٍ تحميل الرئيسية",
   "homeEmpty": "لا يوجد محتوى متاح حاليًا.",
   "homeUnavailable": "خدمة الرئيسية غير متاحة في وضع API حاليًا.",
-  "homeError": "تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا."
+  "homeError": "تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا.",
+  "homeUnreadNotifications": "الإشعارات، غير المقروء: {count}",
+  "@homeUnreadNotifications": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

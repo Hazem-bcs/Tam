@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
     this.phoneE164,
     this.isAuthenticated = false,
     this.isGuest = false,
+    this.notificationsButton,
   });
 
   final CustomerNavigation navigation;
@@ -30,6 +31,7 @@ class HomePage extends StatelessWidget {
   final String? phoneE164;
   final bool isAuthenticated;
   final bool isGuest;
+  final Widget? notificationsButton;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +79,7 @@ class HomePage extends StatelessWidget {
                     phoneE164: phoneE164,
                     isAuthenticated: isAuthenticated,
                     isGuest: isGuest,
+                    notificationsButton: notificationsButton,
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   BlocBuilder<HomeCubit, HomeState>(

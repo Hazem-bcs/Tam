@@ -13,6 +13,13 @@ For the current five-owner wave, follow the [team plan](wave-one-plan.md),
 isolated mock-backed development until the backend is ready; Auth remains
 on its existing temporary phone-entry flow.
 
+The user adopted a [two-phase delivery plan](development-phases.md) on
+2026-11-08: complete architecture, Domain/Data, working flows, integration and
+API contracts with usable preliminary UI first; refine every screen visually
+after the agreed application flows are complete. Record visual follow-ups,
+but do not block phase-one integration on polish alone. Correct behavior,
+session isolation, shared theme, responsiveness and accessibility still apply.
+
 - Default branch: `main`; use short-lived branches with the repository/tool's configured prefix. The current wave proposes `codex/w1-*`, independently of the agent provider. Start from the supervisor's exact baseline, not necessarily `main`.
 - Pull request should state scope, before/after images for UI, risks, test evidence and rollback plan.
 - Review requirements: `dart format`, `flutter analyze`, `flutter test` on touched project.

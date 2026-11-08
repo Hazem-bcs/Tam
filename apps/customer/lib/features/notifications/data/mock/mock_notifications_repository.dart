@@ -12,21 +12,37 @@ final class MockNotificationsRepository implements NotificationsRepository {
   MockNotificationsRepository({
     List<CustomerNotification>? seed,
     DateTime Function()? clock,
-  }) : _items = List.of(seed ?? seededNotifications()),
+  }) : _seed = List.unmodifiable(seed ?? seededNotifications()),
        _clock = clock ?? DateTime.now {
+    _items = List.of(_seed);
     _items.sort((a, b) {
       final date = b.createdAt.compareTo(a.createdAt);
       return date == 0 ? a.id.compareTo(b.id) : date;
     });
   }
 
-  final List<CustomerNotification> _items;
+  final List<CustomerNotification> _seed;
+  late final List<CustomerNotification> _items;
   final DateTime Function() _clock;
   final _changes = StreamController<int>.broadcast(sync: true);
   final Set<MockNotificationsOperation> _failurePlan = {};
   bool _disposed = false;
 
   bool get hasUnreadListeners => _changes.hasListener;
+
+  /// Session data is local to one entered account/guest session.
+  void resetSession() {
+    if (_disposed) return;
+    _items
+      ..clear()
+      ..addAll(_seed);
+    _items.sort((a, b) {
+      final date = b.createdAt.compareTo(a.createdAt);
+      return date == 0 ? a.id.compareTo(b.id) : date;
+    });
+    _failurePlan.clear();
+    _broadcast();
+  }
 
   /// Test-only fault switch; never accessed by UI or feature state.
   void failOnce(MockNotificationsOperation operation) =>

@@ -6,6 +6,8 @@ These instructions are provider-neutral: they apply to Codex, Claude, Gemini and
 
 ## Architecture and code quality
 
+- Follow the agreed [two-phase delivery plan](docs/engineering/development-phases.md). Phase one completes feature boundaries, Domain/Data, behavior, integration, mock/API contracts and a usable preliminary UI close to the intended flows. Phase two revisits every page for final visual refinement against the references. Visual polish differences alone do not block phase-one integration; correctness, session isolation, central theming, localization, accessibility and responsive usability remain required. Record deferred visual work explicitly; never describe phase-one UI as visually final or release-ready.
+
 - Follow Clean Architecture, Clean Code, SOLID, DRY and KISS in practical terms: clear responsibilities, explicit dependencies, readable names and cohesive, testable functions/classes.
 - Keep Flutter feature-first under `lib/features/<feature>/`, adding `presentation`, `domain` and `data` only where needed. Follow `presentation -> domain <- data`; domain must not import Flutter, transport, storage or platform SDKs.
 - Put business rules and asynchronous orchestration outside widgets. Repositories expose domain models and failures, not JSON, DTOs, Dio exceptions or SDK objects. Keep mapping and persistence in data implementations.

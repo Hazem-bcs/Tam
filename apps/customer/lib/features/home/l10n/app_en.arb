@@ -11,5 +11,13 @@
   "homeLoading": "Loading home",
   "homeEmpty": "There's no home content available right now.",
   "homeUnavailable": "Home is not yet available in API mode.",
-  "homeError": "Couldn't load Home. Check your connection and try again."
+  "homeError": "Couldn't load Home. Check your connection and try again.",
+  "homeUnreadNotifications": "Notifications, unread: {count}",
+  "@homeUnreadNotifications": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

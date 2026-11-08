@@ -475,6 +475,906 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر تحميل المحتوى. تحقق من اتصالك وحاول مجددًا.'**
   String get homeError;
+
+  /// No description provided for @homeUnreadNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات، غير المقروء: {count}'**
+  String homeUnreadNotifications(int count);
+
+  /// No description provided for @rideRequestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز مشوارك'**
+  String get rideRequestTitle;
+
+  /// No description provided for @rideRequestPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة الانطلاق'**
+  String get rideRequestPickup;
+
+  /// No description provided for @rideRequestPickupHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد مكان الانطلاق'**
+  String get rideRequestPickupHint;
+
+  /// No description provided for @rideRequestDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجهة'**
+  String get rideRequestDestination;
+
+  /// No description provided for @rideRequestDestinationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى أين تريد الذهاب؟'**
+  String get rideRequestDestinationHint;
+
+  /// No description provided for @rideRequestSearchPlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن موقع'**
+  String get rideRequestSearchPlaces;
+
+  /// No description provided for @rideRequestNoPlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مواقع مطابقة. جرّب اسمًا آخر.'**
+  String get rideRequestNoPlaces;
+
+  /// No description provided for @rideRequestMockMap.
+  ///
+  /// In ar, this message translates to:
+  /// **'خريطة توضيحية • المواقع محاكاة وليست GPS'**
+  String get rideRequestMockMap;
+
+  /// No description provided for @rideRequestRouteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الانطلاق والوجهة لعرض السعر التقريبي.'**
+  String get rideRequestRouteHint;
+
+  /// No description provided for @rideRequestChooseClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد نوع الرحلة'**
+  String get rideRequestChooseClass;
+
+  /// No description provided for @rideRequestStandard.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادية'**
+  String get rideRequestStandard;
+
+  /// No description provided for @rideRequestStandardDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'لمشاويرك اليومية'**
+  String get rideRequestStandardDescription;
+
+  /// No description provided for @rideRequestComfort.
+  ///
+  /// In ar, this message translates to:
+  /// **'مريحة'**
+  String get rideRequestComfort;
+
+  /// No description provided for @rideRequestComfortDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساحة وراحة أكثر'**
+  String get rideRequestComfortDescription;
+
+  /// No description provided for @rideRequestVan.
+  ///
+  /// In ar, this message translates to:
+  /// **'فان'**
+  String get rideRequestVan;
+
+  /// No description provided for @rideRequestVanDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمجموعات والعائلة'**
+  String get rideRequestVanDescription;
+
+  /// No description provided for @rideRequestMotorbike.
+  ///
+  /// In ar, this message translates to:
+  /// **'موتور'**
+  String get rideRequestMotorbike;
+
+  /// No description provided for @rideRequestMotorbikeDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمستندات والطرود'**
+  String get rideRequestMotorbikeDescription;
+
+  /// No description provided for @rideRequestQuoteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الرحلة'**
+  String get rideRequestQuoteTitle;
+
+  /// No description provided for @rideRequestDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة'**
+  String get rideRequestDistance;
+
+  /// No description provided for @rideRequestDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة'**
+  String get rideRequestDuration;
+
+  /// No description provided for @rideRequestFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get rideRequestFare;
+
+  /// No description provided for @rideRequestCurrencySyp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ل.س'**
+  String get rideRequestCurrencySyp;
+
+  /// No description provided for @rideRequestKm.
+  ///
+  /// In ar, this message translates to:
+  /// **'كم'**
+  String get rideRequestKm;
+
+  /// No description provided for @rideRequestMinute.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقيقة'**
+  String get rideRequestMinute;
+
+  /// No description provided for @rideRequestPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get rideRequestPayment;
+
+  /// No description provided for @rideRequestCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا'**
+  String get rideRequestCash;
+
+  /// No description provided for @rideRequestCashOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع النقدي متاح حاليًا في المحاكاة فقط.'**
+  String get rideRequestCashOnly;
+
+  /// No description provided for @rideRequestReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة الطلب'**
+  String get rideRequestReview;
+
+  /// No description provided for @rideRequestConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد طلب الرحلة'**
+  String get rideRequestConfirm;
+
+  /// No description provided for @rideRequestConfirming.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تأكيد الطلب'**
+  String get rideRequestConfirming;
+
+  /// No description provided for @rideRequestQuoteLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ احتساب السعر'**
+  String get rideRequestQuoteLoading;
+
+  /// No description provided for @rideRequestRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get rideRequestRetry;
+
+  /// No description provided for @rideRequestRefreshQuote.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تسعير الرحلة'**
+  String get rideRequestRefreshQuote;
+
+  /// No description provided for @rideRequestErrorValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من اختيار موقعين مختلفين وفئة صالحة.'**
+  String get rideRequestErrorValidation;
+
+  /// No description provided for @rideRequestErrorExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت صلاحية السعر. اطلب سعرًا جديدًا.'**
+  String get rideRequestErrorExpired;
+
+  /// No description provided for @rideRequestErrorUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة غير متاحة الآن. حاول مجددًا.'**
+  String get rideRequestErrorUnavailable;
+
+  /// No description provided for @rideRequestErrorConflict.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر التأكيد بسبب تعارض في الطلب.'**
+  String get rideRequestErrorConflict;
+
+  /// No description provided for @rideRequestErrorGeneric.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إكمال العملية. حاول مجددًا.'**
+  String get rideRequestErrorGeneric;
+
+  /// No description provided for @rideRequestSimulationNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة محلية فقط: لا تُرسل رحلة حقيقية ولا تُخصم مبالغ.'**
+  String get rideRequestSimulationNotice;
+
+  /// No description provided for @rideRequestSelected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاختيار'**
+  String get rideRequestSelected;
+
+  /// No description provided for @rideRequestPlaceSearchLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ البحث عن المواقع'**
+  String get rideRequestPlaceSearchLoading;
+
+  /// No description provided for @rideRequestEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get rideRequestEdit;
+
+  /// No description provided for @tripsAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get tripsAll;
+
+  /// No description provided for @tripsActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجارية'**
+  String get tripsActive;
+
+  /// No description provided for @tripsCompletedFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكتملة'**
+  String get tripsCompletedFilter;
+
+  /// No description provided for @tripsCancelledFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملغاة'**
+  String get tripsCancelledFilter;
+
+  /// No description provided for @tripsStatusRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار التأكيد'**
+  String get tripsStatusRequested;
+
+  /// No description provided for @tripsStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكدة'**
+  String get tripsStatusConfirmed;
+
+  /// No description provided for @tripsStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التنفيذ'**
+  String get tripsStatusInProgress;
+
+  /// No description provided for @tripsStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get tripsStatusCompleted;
+
+  /// No description provided for @tripsStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get tripsStatusCancelled;
+
+  /// No description provided for @tripsFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get tripsFrom;
+
+  /// No description provided for @tripsTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get tripsTo;
+
+  /// No description provided for @tripsDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفاصيل'**
+  String get tripsDetails;
+
+  /// No description provided for @tripsDetailsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الرحلة'**
+  String get tripsDetailsTitle;
+
+  /// No description provided for @tripsTripNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة رقم {id}'**
+  String tripsTripNumber(String id);
+
+  /// No description provided for @tripsCreatedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الطلب'**
+  String get tripsCreatedAt;
+
+  /// No description provided for @tripsFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجرة'**
+  String get tripsFare;
+
+  /// No description provided for @tripsVehicleClass.
+  ///
+  /// In ar, this message translates to:
+  /// **'فئة المركبة'**
+  String get tripsVehicleClass;
+
+  /// No description provided for @tripsVehicleStandard.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادية'**
+  String get tripsVehicleStandard;
+
+  /// No description provided for @tripsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلات هنا'**
+  String get tripsEmptyTitle;
+
+  /// No description provided for @tripsEmptyDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر رحلاتك في هذا القسم عندما تتوفر.'**
+  String get tripsEmptyDescription;
+
+  /// No description provided for @tripsErrorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل الرحلات'**
+  String get tripsErrorTitle;
+
+  /// No description provided for @tripsErrorDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من اتصالك وأعد المحاولة.'**
+  String get tripsErrorDescription;
+
+  /// No description provided for @tripsRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get tripsRetry;
+
+  /// No description provided for @tripsRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get tripsRefresh;
+
+  /// No description provided for @tripsLoadMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض المزيد'**
+  String get tripsLoadMore;
+
+  /// No description provided for @tripsCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الرحلة'**
+  String get tripsCancel;
+
+  /// No description provided for @tripsCancelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء الرحلة؟'**
+  String get tripsCancelTitle;
+
+  /// No description provided for @tripsCancelPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن التراجع عن الإلغاء بعد تأكيده.'**
+  String get tripsCancelPrompt;
+
+  /// No description provided for @tripsConfirmCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الإلغاء'**
+  String get tripsConfirmCancel;
+
+  /// No description provided for @tripsKeepTrip.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاحتفاظ بالرحلة'**
+  String get tripsKeepTrip;
+
+  /// No description provided for @tripsCancelledSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الرحلة.'**
+  String get tripsCancelledSuccess;
+
+  /// No description provided for @tripsCannotCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن إلغاء الرحلة في حالتها الحالية.'**
+  String get tripsCannotCancel;
+
+  /// No description provided for @tripsRebook.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب مجددًا'**
+  String get tripsRebook;
+
+  /// No description provided for @tripsNotFoundTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة غير موجودة'**
+  String get tripsNotFoundTitle;
+
+  /// No description provided for @tripsNotFoundDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربما حُذفت هذه الرحلة أو لم يعد الوصول إليها متاحًا.'**
+  String get tripsNotFoundDescription;
+
+  /// No description provided for @tripsBackToList.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى طلباتي'**
+  String get tripsBackToList;
+
+  /// No description provided for @tripsFareNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه أجرة محفوظة للرحلة السابقة، ولا تُستخدم عند إعادة الطلب.'**
+  String get tripsFareNote;
+
+  /// No description provided for @tripsServiceUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الرحلات غير متاحة حاليًا.'**
+  String get tripsServiceUnavailable;
+
+  /// No description provided for @tripsValidationError.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب غير صالح. أعد المحاولة.'**
+  String get tripsValidationError;
+
+  /// No description provided for @tripsUnknownError.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ غير متوقع. أعد المحاولة.'**
+  String get tripsUnknownError;
+
+  /// No description provided for @tripsPaginationError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل المزيد من الرحلات.'**
+  String get tripsPaginationError;
+
+  /// No description provided for @tripsRoute.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسار الرحلة'**
+  String get tripsRoute;
+
+  /// No description provided for @tripsInformation.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات الرحلة'**
+  String get tripsInformation;
+
+  /// No description provided for @tripsNoLiveTracking.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يتوفر تتبع مباشر للرحلة في هذا الإصدار.'**
+  String get tripsNoLiveTracking;
+
+  /// No description provided for @tripsLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل الرحلات'**
+  String get tripsLoading;
+
+  /// No description provided for @tripsLoadingDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل تفاصيل الرحلة'**
+  String get tripsLoadingDetails;
+
+  /// No description provided for @tripsCancelling.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الإلغاء'**
+  String get tripsCancelling;
+
+  /// No description provided for @tripsTripList.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة الرحلات'**
+  String get tripsTripList;
+
+  /// No description provided for @notificationsMarkAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعيين الكل كمقروء'**
+  String get notificationsMarkAll;
+
+  /// No description provided for @notificationsUnreadCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مقروء: {count}'**
+  String notificationsUnreadCount(int count);
+
+  /// No description provided for @notificationsUnknownCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'العدد غير متاح'**
+  String get notificationsUnknownCount;
+
+  /// No description provided for @notificationsToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get notificationsToday;
+
+  /// No description provided for @notificationsYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get notificationsYesterday;
+
+  /// No description provided for @notificationsEarlier.
+  ///
+  /// In ar, this message translates to:
+  /// **'سابقًا'**
+  String get notificationsEarlier;
+
+  /// No description provided for @notificationsLoadMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض المزيد'**
+  String get notificationsLoadMore;
+
+  /// No description provided for @notificationsLoadingMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل المزيد'**
+  String get notificationsLoadingMore;
+
+  /// No description provided for @notificationsRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get notificationsRefresh;
+
+  /// No description provided for @notificationsRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get notificationsRetry;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إشعارات بعد'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستظهر إشعاراتك هنا عند توفرها.'**
+  String get notificationsEmptyBody;
+
+  /// No description provided for @notificationsErrorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الإشعارات'**
+  String get notificationsErrorTitle;
+
+  /// No description provided for @notificationsErrorBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من اتصالك وحاول مجددًا.'**
+  String get notificationsErrorBody;
+
+  /// No description provided for @notificationsOfflineBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الإشعارات غير متاحة في وضع API حاليًا.'**
+  String get notificationsOfflineBody;
+
+  /// No description provided for @notificationsMutationError.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُحفظ تغيير حالة القراءة. حاول مجددًا.'**
+  String get notificationsMutationError;
+
+  /// No description provided for @notificationsMoreError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل المزيد.'**
+  String get notificationsMoreError;
+
+  /// No description provided for @notificationsUnavailableTarget.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تتوفر وجهة آمنة لفتح هذا الإشعار.'**
+  String get notificationsUnavailableTarget;
+
+  /// No description provided for @notificationsRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقروء'**
+  String get notificationsRead;
+
+  /// No description provided for @notificationsUnread.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مقروء'**
+  String get notificationsUnread;
+
+  /// No description provided for @notificationsLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاري تحميل الإشعارات'**
+  String get notificationsLoading;
+
+  /// No description provided for @notificationsOpenNotification.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الإشعار'**
+  String get notificationsOpenNotification;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsProfileSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة بيانات حسابك'**
+  String get settingsProfileSubtitle;
+
+  /// No description provided for @settingsEditName.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الاسم'**
+  String get settingsEditName;
+
+  /// No description provided for @settingsName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم الظاهر'**
+  String get settingsName;
+
+  /// No description provided for @settingsNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'من حرفين إلى 60 حرفًا'**
+  String get settingsNameHint;
+
+  /// No description provided for @settingsNameValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمًا من حرفين إلى 60 حرفًا دون رموز تحكم'**
+  String get settingsNameValidation;
+
+  /// No description provided for @settingsPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف'**
+  String get settingsPhone;
+
+  /// No description provided for @settingsPhoneReadOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف مأخوذ من تسجيل الدخول ولا يمكن تغييره هنا'**
+  String get settingsPhoneReadOnly;
+
+  /// No description provided for @settingsPhoneUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد رقم هاتف لهذه الجلسة'**
+  String get settingsPhoneUnavailable;
+
+  /// No description provided for @settingsSaveName.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الاسم'**
+  String get settingsSaveName;
+
+  /// No description provided for @settingsPreferencesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get settingsPreferencesTitle;
+
+  /// No description provided for @settingsAccountNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات الحساب'**
+  String get settingsAccountNotifications;
+
+  /// No description provided for @settingsNotificationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفضيل محلي تجريبي للإشعارات داخل التطبيق؛ لا يطلب صلاحية Push'**
+  String get settingsNotificationHint;
+
+  /// No description provided for @settingsSavePreferences.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ تفضيل الإشعارات'**
+  String get settingsSavePreferences;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get settingsArabic;
+
+  /// No description provided for @settingsEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get settingsEnglish;
+
+  /// No description provided for @settingsUnsaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغييرات غير محفوظة'**
+  String get settingsUnsaved;
+
+  /// No description provided for @settingsUnsavedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغييرات غير محفوظة'**
+  String get settingsUnsavedTitle;
+
+  /// No description provided for @settingsUnsavedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا غادرت الآن فستفقد التغييرات التي لم تحفظها.'**
+  String get settingsUnsavedMessage;
+
+  /// No description provided for @settingsKeepEditing.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة التعديل'**
+  String get settingsKeepEditing;
+
+  /// No description provided for @settingsDiscard.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجاهل التغييرات'**
+  String get settingsDiscard;
+
+  /// No description provided for @settingsInfoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم والمعلومات'**
+  String get settingsInfoTitle;
+
+  /// No description provided for @settingsMockNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب والتفضيلات هنا محاكاة للتطوير، وليسا متصلين بخادم. حفظ اللغة يعمل فورًا طوال هذه الجلسة فقط.'**
+  String get settingsMockNotice;
+
+  /// No description provided for @settingsLogout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get settingsLogout;
+
+  /// No description provided for @settingsLogoutConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد تسجيل الخروج من الجلسة الحالية؟'**
+  String get settingsLogoutConfirm;
+
+  /// No description provided for @settingsCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get settingsCancel;
+
+  /// No description provided for @settingsLogoutError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تسجيل الخروج. حاول مجددًا.'**
+  String get settingsLogoutError;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الإشعارات'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل الإعدادات'**
+  String get settingsLoading;
+
+  /// No description provided for @settingsServiceUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل بيانات الحساب. الخدمة غير متاحة حاليًا.'**
+  String get settingsServiceUnavailable;
+
+  /// No description provided for @settingsRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get settingsRetry;
+
+  /// No description provided for @settingsSaveError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ التغييرات. لم يتم تعديل البيانات المحفوظة؛ يمكنك المحاولة مجددًا.'**
+  String get settingsSaveError;
+
+  /// No description provided for @settingsSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ التغييرات التجريبية'**
+  String get settingsSaved;
+
+  /// No description provided for @settingsSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الحفظ'**
+  String get settingsSaving;
+
+  /// No description provided for @settingsLoggingOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تسجيل الخروج'**
+  String get settingsLoggingOut;
 }
 
 class _AppLocalizationsDelegate

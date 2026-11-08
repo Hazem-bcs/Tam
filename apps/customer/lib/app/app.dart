@@ -13,6 +13,10 @@ import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/auth/auth_dependencies.dart';
 import 'package:tam_customer/features/auth/domain/auth_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
+import 'package:tam_customer/features/notifications/data/mock/mock_notifications_repository.dart';
+import 'package:tam_customer/features/notifications/data/unavailable_notifications_repository.dart';
+import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
+import 'package:tam_customer/features/settings/settings_entry.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/data/mock/seed_trips.dart';
@@ -43,6 +47,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final GoRouter _router;
   late final AppLocaleController _locale;
   late final MockTripStore _mockTrips;
+  late final MockNotificationsRepository _mockNotifications;
   late final StreamSubscription<AuthState> _sessionChanges;
 
   @override
@@ -62,10 +67,17 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _refresh = AuthRouterRefresh(_auth);
     _locale = AppLocaleController(widget.locale);
     _mockTrips = MockTripStore(seed: seedMockTrips());
+    final modes = widget.dataModes ?? AppConfig.featureDataModes;
+    _mockNotifications = MockNotificationsRepository();
+    final NotificationsRepository notifications =
+        modes.forFeature(CustomerFeature.notifications) == FeatureDataMode.mock
+        ? _mockNotifications
+        : const UnavailableNotificationsRepository();
     _router = createAppRouter(
       _auth,
       _refresh,
-      dataModes: widget.dataModes ?? AppConfig.featureDataModes,
+      dataModes: modes,
+      notifications: notifications,
       mockTrips: _mockTrips,
       locale: _locale,
     );
@@ -79,6 +91,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
         _mockTrips.clear();
+        _mockNotifications.resetSession();
+        resetSettingsFeatureSession(_locale);
         sessionEntered = false;
       }
     });
@@ -106,6 +120,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _refresh.dispose();
     unawaited(_sessionChanges.cancel());
     unawaited(_mockTrips.dispose());
+    unawaited(_mockNotifications.dispose());
+    resetSettingsFeatureSession(_locale);
     _locale.dispose();
     unawaited(_auth.close());
     super.dispose();

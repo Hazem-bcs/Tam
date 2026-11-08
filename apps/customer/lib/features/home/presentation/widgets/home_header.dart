@@ -9,12 +9,14 @@ class HomeHeader extends StatelessWidget {
     this.phoneE164,
     this.isAuthenticated = false,
     this.isGuest = false,
+    this.notificationsButton,
   });
 
   final VoidCallback onNotifications;
   final String? phoneE164;
   final bool isAuthenticated;
   final bool isGuest;
+  final Widget? notificationsButton;
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +61,13 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          key: const Key('home-notifications'),
-          onPressed: onNotifications,
-          tooltip: t.navNotifications,
-          icon: const Icon(Icons.notifications_none_outlined),
-        ),
+        notificationsButton ??
+            IconButton(
+              key: const Key('home-notifications'),
+              onPressed: onNotifications,
+              tooltip: t.navNotifications,
+              icon: const Icon(Icons.notifications_none_outlined),
+            ),
       ],
     );
   }
