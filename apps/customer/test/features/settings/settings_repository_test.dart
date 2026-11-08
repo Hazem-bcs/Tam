@@ -103,6 +103,20 @@ void main() {
       expect((await repository.loadProfile()).displayName, 'مستخدم تم');
     });
 
+    test('required nullable avatar must be present in profile payload', () {
+      expect(
+        () => SettingsWireMapper.profile({'display_name': 'Valid Name'}),
+        throwsFormatException,
+      );
+      expect(
+        SettingsWireMapper.profile({
+          'display_name': 'Valid Name',
+          'avatar_url': null,
+        }).avatarUrl,
+        isNull,
+      );
+    });
+
     test('invalid wire payload rejects unexpected types', () {
       expect(
         () => SettingsWireMapper.profile({'display_name': 15}),

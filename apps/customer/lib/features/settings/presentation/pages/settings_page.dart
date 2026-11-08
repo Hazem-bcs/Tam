@@ -67,8 +67,14 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _navigate(VoidCallback action) async {
-    final dirty = context.read<SettingsCubit>().state.hasUnsavedChanges;
-    if (dirty && !await _confirmDiscard()) return;
+    if (_loggingOut) return;
+    final cubit = context.read<SettingsCubit>();
+    if (cubit.state.isBusy) return;
+    if (cubit.state.hasUnsavedChanges) {
+      if (!await _confirmDiscard() || !mounted) return;
+      cubit.discardChanges();
+      _name.text = cubit.state.draftName;
+    }
     if (mounted) action();
   }
 
@@ -202,7 +208,10 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 640),
-                child: _body(state),
+                child: AbsorbPointer(
+                  absorbing: _loggingOut,
+                  child: _body(state),
+                ),
               ),
             ),
           ),

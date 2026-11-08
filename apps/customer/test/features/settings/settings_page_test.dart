@@ -244,6 +244,12 @@ void main() {
     await tester.tap(find.text('تجاهل التغييرات'));
     await tester.pumpAndSettle();
     expect(navigation.notifications, 1);
+    expect(find.text('New Display Name'), findsNothing);
+    final cubit = tester
+        .element(find.byType(SettingsPage))
+        .read<SettingsCubit>();
+    expect(cubit.state.hasUnsavedChanges, false);
+    expect(cubit.state.draftName, 'مستخدم تم');
   });
 
   testWidgets('profile validation, failure and successful retry feedback', (

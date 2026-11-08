@@ -5,7 +5,8 @@ abstract final class SettingsWireMapper {
   static SettingsProfile profile(Map<String, Object?> json) {
     final name = json['display_name'];
     final avatar = json['avatar_url'];
-    if (name is! String ||
+    if (!json.containsKey('avatar_url') ||
+        name is! String ||
         !SettingsNameRules.isValid(name) ||
         (avatar != null && avatar is! String)) {
       throw const FormatException('Invalid settings profile');

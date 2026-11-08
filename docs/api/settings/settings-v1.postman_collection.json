@@ -170,6 +170,80 @@
                 }
               ],
               "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "profile"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess."
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول\",\n      \"en\": \"Access forbidden\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "profile"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess."
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"تعذر إتمام العملية\",\n      \"en\": \"Unable to complete operation\"\n    }\n  }\n}"
             }
           ]
         },
@@ -412,6 +486,106 @@
                 }
               ],
               "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "profile"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"display_name\": \"سارة أحمد\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول\",\n      \"en\": \"Access forbidden\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "profile"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"display_name\": \"سارة أحمد\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"تعذر إتمام العملية\",\n      \"en\": \"Unable to complete operation\"\n    }\n  }\n}"
             }
           ]
         }
@@ -557,6 +731,80 @@
                 }
               ],
               "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/preferences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "preferences"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess."
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول\",\n      \"en\": \"Access forbidden\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/preferences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "preferences"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess."
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"تعذر إتمام العملية\",\n      \"en\": \"Unable to complete operation\"\n    }\n  }\n}"
             }
           ]
         },
@@ -748,7 +996,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"الاسم غير صالح\",\n      \"en\": \"Invalid display name\"\n    }\n  }\n}"
+              "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"يجب أن يكون تفضيل الإشعارات قيمة منطقية\",\n      \"en\": \"Notification preference must be a boolean\"\n    }\n  }\n}"
             },
             {
               "name": "503 SERVICE_UNAVAILABLE",
@@ -799,6 +1047,106 @@
                 }
               ],
               "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Forbidden",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/preferences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "preferences"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_notifications_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول\",\n      \"en\": \"Access forbidden\"\n    }\n  }\n}"
+            },
+            {
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/me/preferences",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "me",
+                    "preferences"
+                  ]
+                },
+                "description": "Proposed v1 contract. Requires authenticated session; no guest/localAccess.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"account_notifications_enabled\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"INTERNAL_ERROR\",\n    \"message\": {\n      \"ar\": \"تعذر إتمام العملية\",\n      \"en\": \"Unable to complete operation\"\n    }\n  }\n}"
             }
           ]
         }

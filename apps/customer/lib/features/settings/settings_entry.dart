@@ -15,9 +15,16 @@ final Expando<_RepositorySelection> _repositories =
     Expando<_RepositorySelection>('settings repositories');
 
 final class _RepositorySelection {
-  const _RepositorySelection(this.mode, this.repository);
+  const _RepositorySelection(this.mode, this.phoneE164, this.repository);
   final FeatureDataMode mode;
+  final String? phoneE164;
   final SettingsRepository repository;
+}
+
+/// Called by the app session owner whenever an entered session ends.
+/// Locale belongs to the device; account mock data belongs to the session.
+void resetSettingsFeatureSession(AppLocaleController locale) {
+  _repositories[locale] = null;
 }
 
 Widget buildSettingsFeature(
@@ -29,8 +36,10 @@ Widget buildSettingsFeature(
   String? phoneE164,
 }) {
   var selected = _repositories[locale];
-  if (selected == null || selected.mode != dataMode) {
-    selected = _RepositorySelection(dataMode, switch (dataMode) {
+  if (selected == null ||
+      selected.mode != dataMode ||
+      selected.phoneE164 != phoneE164) {
+    selected = _RepositorySelection(dataMode, phoneE164, switch (dataMode) {
       FeatureDataMode.mock => MockSettingsRepository(),
       FeatureDataMode.api => const UnavailableSettingsRepository(),
     });
@@ -38,11 +47,15 @@ Widget buildSettingsFeature(
   }
 
   return BlocProvider(
+    key: ObjectKey(selected.repository),
     create: (_) => SettingsCubit(selected!.repository)..load(),
     child: SettingsPage(
       navigation: navigation,
       locale: locale,
-      logout: logout,
+      logout: () async {
+        await logout();
+        resetSettingsFeatureSession(locale);
+      },
       phoneE164: phoneE164,
     ),
   );

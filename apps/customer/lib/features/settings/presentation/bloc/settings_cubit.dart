@@ -8,9 +8,17 @@ final class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit(this._repository) : super(const SettingsState());
 
   final SettingsRepository _repository;
+  bool _loading = false;
 
   Future<void> load() async {
-    if (isClosed) return;
+    if (isClosed ||
+        _loading ||
+        state.hasUnsavedChanges ||
+        state.activity == SettingsActivity.savingName ||
+        state.activity == SettingsActivity.savingPreferences) {
+      return;
+    }
+    _loading = true;
     emit(
       state.copyWith(
         activity: SettingsActivity.loading,
@@ -52,7 +60,24 @@ final class SettingsCubit extends Cubit<SettingsState> {
           ),
         );
       }
+    } finally {
+      _loading = false;
     }
+  }
+
+  void discardChanges() {
+    if (isClosed || !state.isReady || state.isBusy) return;
+    emit(
+      state.copyWith(
+        draftName: state.profile!.displayName,
+        draftNotificationsEnabled:
+            state.preferences!.accountNotificationsEnabled,
+        validationError: false,
+        error: null,
+        errorTarget: null,
+        successAction: null,
+      ),
+    );
   }
 
   void nameChanged(String name) {
