@@ -73,7 +73,8 @@ class NotificationsPage extends StatelessWidget {
         child: TamLoadingIndicator(semanticLabel: l10n.notificationsLoading),
       );
     }
-    if (state.status == NotificationsLoadStatus.error) {
+    if (state.status == NotificationsLoadStatus.error ||
+        (state.items.isEmpty && state.error != null)) {
       return _MessageState(
         icon: Icons.wifi_off_outlined,
         title: l10n.notificationsErrorTitle,

@@ -33,6 +33,22 @@ class _NavigationSpy implements CustomerNavigation {
   void openRideRequest({TripPrefill? prefill}) {}
 }
 
+ThemeData _reviewTheme() {
+  final base = AppTheme.light;
+  return base.copyWith(
+    appBarTheme: base.appBarTheme.copyWith(
+      titleTextStyle: base.appBarTheme.titleTextStyle?.copyWith(
+        fontFamily: 'NotificationsArabic',
+        fontFamilyFallback: const ['NotificationsLatin'],
+      ),
+    ),
+    textTheme: base.textTheme.apply(
+      fontFamily: 'NotificationsArabic',
+      fontFamilyFallback: const ['NotificationsLatin'],
+    ),
+  );
+}
+
 Future<NotificationsCubit> _pumpInbox(
   WidgetTester tester,
   NotificationsRepository repository,
@@ -45,7 +61,9 @@ Future<NotificationsCubit> _pumpInbox(
     BlocProvider.value(
       value: cubit,
       child: MaterialApp(
-        theme: AppTheme.light,
+        theme: Platform.environment['TAM_NOTIFICATIONS_GOLDEN'] == '1'
+            ? _reviewTheme()
+            : AppTheme.light,
         locale: Locale(locale),
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -86,9 +104,11 @@ void main() {
     final latinFont = File(
       '/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf',
     );
-    final loader = FontLoader('Roboto');
+    final loader = FontLoader('NotificationsArabic');
     if (latinFont.existsSync()) {
-      loader.addFont(latinFont.readAsBytes().then(ByteData.sublistView));
+      await (FontLoader(
+        'NotificationsLatin',
+      )..addFont(latinFont.readAsBytes().then(ByteData.sublistView))).load();
     }
     loader.addFont(file.readAsBytes().then(ByteData.sublistView));
     await loader.load();
@@ -204,13 +224,32 @@ void main() {
     expect(find.byKey(const Key('notifications-list')), findsNothing);
   });
 
+  testWidgets('failed refresh of an empty inbox is visible and retryable', (
+    tester,
+  ) async {
+    final repository = MockNotificationsRepository(seed: []);
+    final cubit = await _pumpInbox(tester, repository, _NavigationSpy());
+    addTearDown(() async {
+      await cubit.close();
+      await repository.dispose();
+    });
+    repository.failOnce(MockNotificationsOperation.page);
+    await tester.tap(find.text('تحديث'));
+    await tester.pumpAndSettle();
+    expect(find.text('تعذر تحميل الإشعارات'), findsOneWidget);
+    await tester.tap(find.text('إعادة المحاولة'));
+    await tester.pumpAndSettle();
+    expect(find.text('لا توجد إشعارات بعد'), findsOneWidget);
+    expect(find.text('تعذر تحميل الإشعارات'), findsNothing);
+  });
+
   for (final caseItem in [
     ('ar', 390.0, 844.0, 1.0, 'notifications_ar_390.png'),
     ('en', 390.0, 844.0, 1.0, 'notifications_en_390.png'),
     ('ar', 800.0, 1080.0, 1.0, 'notifications_ar_tablet_800.png'),
     ('ar', 320.0, 780.0, 2.0, 'notifications_ar_320_large_text.png'),
   ]) {
-    testWidgets('rendered UI golden ${caseItem.$5}', (tester) async {
+    testWidgets('responsive inbox ${caseItem.$5}', (tester) async {
       tester.view.devicePixelRatio = 1.0;
       tester.view.physicalSize = Size(caseItem.$2, caseItem.$3);
       addTearDown(tester.view.resetPhysicalSize);
@@ -228,10 +267,12 @@ void main() {
         await repository.dispose();
       });
       expect(tester.takeException(), isNull);
-      await expectLater(
-        find.byType(Scaffold),
-        matchesGoldenFile('goldens/${caseItem.$5}'),
-      );
-    }, skip: !goldenEnabled);
+      if (goldenEnabled) {
+        await expectLater(
+          find.byType(Scaffold),
+          matchesGoldenFile('goldens/${caseItem.$5}'),
+        );
+      }
+    });
   }
 }

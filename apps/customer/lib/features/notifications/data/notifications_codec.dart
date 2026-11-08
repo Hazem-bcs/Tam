@@ -8,7 +8,7 @@ abstract final class NotificationsCodec {
   static CustomerNotification item(Map<String, dynamic> json) {
     String requiredString(String key) {
       final value = json[key];
-      if (value is! String || value.isEmpty) {
+      if (value is! String || value.trim().isEmpty) {
         throw FormatException('Missing/invalid $key');
       }
       return value;
@@ -17,17 +17,16 @@ abstract final class NotificationsCodec {
     NotificationCopy copy(Object? raw) {
       if (raw is! Map<String, dynamic> ||
           raw['ar'] is! String ||
-          raw['en'] is! String) {
+          raw['en'] is! String ||
+          (raw['ar'] as String).trim().isEmpty ||
+          (raw['en'] as String).trim().isEmpty) {
         throw const FormatException('Expected bilingual notification text');
       }
       return NotificationCopy(ar: raw['ar'] as String, en: raw['en'] as String);
     }
 
-    DateTime utc(Object? raw) {
-      if (raw is! String || !raw.endsWith('Z')) {
-        throw const FormatException('Expected UTC ISO-8601 timestamp');
-      }
-      return DateTime.parse(raw).toUtc();
+    if (!json.containsKey('read_at')) {
+      throw const FormatException('Missing read_at');
     }
 
     final rawTarget = json['target'];
@@ -52,8 +51,8 @@ abstract final class NotificationsCodec {
       },
       title: copy(json['title']),
       body: copy(json['body']),
-      createdAt: utc(json['created_at']),
-      readAt: json['read_at'] == null ? null : utc(json['read_at']),
+      createdAt: _utc(json['created_at']),
+      readAt: json['read_at'] == null ? null : _utc(json['read_at']),
       target: NotificationTarget(
         destination: targetType,
         tripId:
@@ -70,6 +69,7 @@ abstract final class NotificationsCodec {
     final data = json['data'], meta = json['meta'];
     if (data is! List ||
         meta is! Map<String, dynamic> ||
+        !meta.containsKey('next_cursor') ||
         (meta['next_cursor'] != null && meta['next_cursor'] is! String)) {
       throw const FormatException('Invalid notification page');
     }
@@ -101,12 +101,8 @@ abstract final class NotificationsCodec {
   static NotificationsReadAllResult readAll(Map<String, dynamic> json) {
     final count = unreadCount(json);
     final data = json['data'] as Map<String, dynamic>;
-    final raw = data['read_at'];
-    if (raw is! String || !raw.endsWith('Z')) {
-      throw const FormatException('Invalid read_all read_at');
-    }
     return NotificationsReadAllResult(
-      readAt: DateTime.parse(raw).toUtc(),
+      readAt: _utc(data['read_at']),
       unreadCount: count,
     );
   }
@@ -117,6 +113,35 @@ abstract final class NotificationsCodec {
       throw const FormatException('Invalid notification envelope');
     }
     return item(data);
+  }
+
+  // DateTime.parse normalizes impossible dates (e.g. February 30). Reject
+  // those at the transport boundary rather than displaying a different date.
+  static DateTime _utc(Object? raw) {
+    if (raw is! String) {
+      throw const FormatException('Expected UTC ISO-8601 timestamp');
+    }
+    final match = RegExp(
+      r'^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?Z$',
+    ).firstMatch(raw);
+    if (match == null) {
+      throw const FormatException('Expected UTC ISO-8601 timestamp');
+    }
+    final parsed = DateTime.parse(raw);
+    final components = [
+      parsed.year,
+      parsed.month,
+      parsed.day,
+      parsed.hour,
+      parsed.minute,
+      parsed.second,
+    ];
+    for (var index = 0; index < components.length; index++) {
+      if (components[index] != int.parse(match.group(index + 1)!)) {
+        throw const FormatException('Invalid calendar timestamp');
+      }
+    }
+    return parsed;
   }
 
   static Map<String, dynamic> decode(String source) =>
