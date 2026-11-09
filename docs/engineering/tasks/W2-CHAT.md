@@ -83,3 +83,15 @@ readonly/driver identity/session isolation/late read-vs-send/close، والعق�
 مفحوصة فعليًا وفقUI-13، لا ادعاءAndroid أو مطابقة نهائية. format/analyze/full
 flutter test وl10n/JSON/diff؛ ثم مراجع مستقل علىSHA نهائي وفحص التكامل.
 الصقل النهائي مرحلة ثانية. لا push/main/Actions أوAndroid build/محاكي.
+
+## الإغلاق والتكامل المحلي
+
+الحالة INTEGRATED للمرحلة الأولى في2026-11-09. المنفذ implement_chat سلّم
+كوده8bf7964 وتقريره30b2866؛ جمع المشرف الربط والترجمة واختباراتApp عند99b3644.
+راجع review_chat المجموع مستقلاً واعتمد `5eb9d0eb2800d9152b508857469e9365b8ae8c8a`
+بعد إصلاح خمسة عيوب سلوكية واتساق Postman. رأس التقرير `2539f9b8e1fe46e0a01c279dce914e3fe1b71562` توثيق فقط.
+مرشح الدمج المحلي `57fa0b4b1a03563462d3895cd3fbc3ba1df47778` مطابق للكود/الاختبارات/API المعتمدة؛
+تقرير المراجعة أضيف عند `83d46a8f8478cb7a02866f6fc954c2006a03162a`، ثم جُمع إلى feat/auth-contract.
+468 اختبارات ناجحة بعد الدمج، format257/0 وanalyze وl10n/JSON21/diff سليمة.
+[التسليم](../deliveries/W2-CHAT/HANDOFF.md) و[المراجعة](../deliveries/W2-CHAT/REVIEW.md).
+الواجهة مرحلة أولى ومحاكاة جلسة دون حفظ دائم؛ لا رفع أو main أو Actions أو Android build.
