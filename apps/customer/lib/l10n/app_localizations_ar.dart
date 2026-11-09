@@ -1133,4 +1133,211 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatSimulation => 'محاكاة تطوير';
+
+  @override
+  String get completionTitle => 'ملخص الرحلة والتقييم';
+
+  @override
+  String get completionLoading => 'جارٍ تحميل ملخص الرحلة';
+
+  @override
+  String get completionSessionEnded =>
+      'انتهت الجلسة. عد إلى الرئيسية للمتابعة.';
+
+  @override
+  String get completionThankYou => 'شكرًا لرحلتك مع تم';
+
+  @override
+  String completionTripId(String id) {
+    return 'رقم الطلب: $id';
+  }
+
+  @override
+  String get completionRecordedFare => 'مبلغ الطلب المسجل';
+
+  @override
+  String get completionFareNote =>
+      'المبلغ المسجل عند الطلب، وليس تأكيدًا للدفع أو إيصالًا.';
+
+  @override
+  String completionDriver(String name) {
+    return 'السائق: $name';
+  }
+
+  @override
+  String get completionRateTrip => 'كيف كانت تجربة رحلتك؟';
+
+  @override
+  String completionStars(int count) {
+    return '$count من ٥ نجوم';
+  }
+
+  @override
+  String get completionComment => 'تعليق اختياري';
+
+  @override
+  String completionCommentLimit(int count) {
+    return 'حتى $count حرف بعد إزالة الفراغات الطرفية.';
+  }
+
+  @override
+  String get completionSubmit => 'إرسال التقييم';
+
+  @override
+  String get completionSubmitting => 'جارٍ إرسال التقييم';
+
+  @override
+  String get completionSaved => 'تم حفظ تقييمك، شكرًا لك';
+
+  @override
+  String get completionImmutable =>
+      'يُسجل تقييم واحد لكل رحلة ولا يمكن تعديله.';
+
+  @override
+  String get completionUncertain =>
+      'لم نتمكن من تأكيد الحفظ. أبقينا تقييمك كما هو؛ أعد المحاولة للتحقق دون تكراره.';
+
+  @override
+  String get completionRetry => 'تحقق وأعد المحاولة';
+
+  @override
+  String get completionSupport => 'التواصل مع دعم هذه الرحلة';
+
+  @override
+  String get completionHome => 'العودة إلى الرئيسية';
+
+  @override
+  String get completionValidation =>
+      'اختر من نجمة إلى خمس نجوم، والتزم بالحد المسموح للتعليق.';
+
+  @override
+  String get completionNotFound => 'لم نعثر على هذه الرحلة.';
+
+  @override
+  String get completionNotCompleted =>
+      'يتاح الملخص والتقييم بعد اكتمال الرحلة فقط.';
+
+  @override
+  String get completionUnavailable => 'ربط خدمة التقييم غير متاح حاليًا.';
+
+  @override
+  String get completionAlreadyRated =>
+      'سبق تقييم هذه الرحلة. جارٍ التحقق من التقييم المحفوظ.';
+
+  @override
+  String get completionInvalidResponse =>
+      'تعذر التحقق من نتيجة العملية. أعد المحاولة للتحقق أو تواصل مع الدعم.';
+
+  @override
+  String get completionOffline => 'تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.';
+
+  @override
+  String get supportTitle => 'المساعدة والدعم';
+
+  @override
+  String get supportIntro => 'أنشئ طلب دعم عام أو اختر رحلة لإرسال بلاغ عنها.';
+
+  @override
+  String get supportNewTicket => 'طلب دعم جديد';
+
+  @override
+  String get supportChooseTrip => 'اختيار رحلة للإبلاغ عنها';
+
+  @override
+  String get supportMyTickets => 'طلبات الدعم';
+
+  @override
+  String get supportEmpty => 'لا توجد طلبات دعم بعد.';
+
+  @override
+  String get supportLoading => 'جارٍ التحميل';
+
+  @override
+  String get supportLoadMore => 'عرض المزيد';
+
+  @override
+  String get supportCategory => 'الفئة';
+
+  @override
+  String get supportBody => 'تفاصيل الطلب';
+
+  @override
+  String get supportBodyHint => 'اكتب من 10 إلى 2000 حرف دون المسافات المحيطة.';
+
+  @override
+  String get supportSubmit => 'إرسال الطلب';
+
+  @override
+  String get supportSending => 'جارٍ الإرسال';
+
+  @override
+  String get supportCreated => 'تم إنشاء طلب الدعم';
+
+  @override
+  String get supportRetry => 'إعادة المحاولة';
+
+  @override
+  String get supportUncertain =>
+      'تعذر تأكيد الإرسال. احتفظنا بالتفاصيل كما هي؛ أعد المحاولة للتحقق بنفس معرّف الطلب دون تكراره.';
+
+  @override
+  String get supportBodyValidation =>
+      'يجب أن يتكون النص من 10 إلى 2000 حرف بعد حذف المسافات المحيطة.';
+
+  @override
+  String get supportInvalidCategory => 'اختر فئة صالحة لسياق الطلب.';
+
+  @override
+  String get supportNotFound => 'الطلب أو الرحلة غير متاحين لهذا الحساب.';
+
+  @override
+  String get supportSessionEnded =>
+      'انتهت الجلسة. أُزيلت بيانات الدعم من هذه الصفحة.';
+
+  @override
+  String get supportConflict =>
+      'معرّف الطلب مستخدم لتفاصيل مختلفة. تعذر تأكيد هذا الطلب.';
+
+  @override
+  String get supportOffline => 'تعذر الاتصال. حاول مجددًا عند توفر الشبكة.';
+
+  @override
+  String get supportUnavailable => 'الدعم غير متاح حاليًا. حاول لاحقًا.';
+
+  @override
+  String get supportStatusOpen => 'مفتوح';
+
+  @override
+  String get supportStatusInProgress => 'قيد المعالجة';
+
+  @override
+  String get supportStatusResolved => 'تم الحل';
+
+  @override
+  String get supportTicketDetails => 'تفاصيل طلب الدعم';
+
+  @override
+  String get supportTerms => 'الشروط والأحكام';
+
+  @override
+  String get supportPrivacy => 'سياسة الخصوصية';
+
+  @override
+  String get supportLegalUnpublished =>
+      'المحتوى المعتمد غير منشور بعد. سيظهر هنا بعد توفيره واعتماده.';
+
+  @override
+  String supportTicketReference(String id) {
+    return 'طلب الدعم: $id';
+  }
+
+  @override
+  String supportTripReference(String id) {
+    return 'الرحلة: $id';
+  }
+
+  @override
+  String supportLegalVersion(String version, String date) {
+    return 'الإصدار $version · نُشر $date';
+  }
 }

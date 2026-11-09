@@ -491,5 +491,117 @@
       }
     }
   },
-  "chatSimulation": "Simulation"
+  "chatSimulation": "Simulation",
+  "completionTitle": "Trip summary and rating",
+  "completionLoading": "Loading trip summary",
+  "completionSessionEnded": "Your session ended. Return home to continue.",
+  "completionThankYou": "Thank you for riding with Tam",
+  "completionTripId": "Trip ID: {id}",
+  "@completionTripId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRecordedFare": "Recorded booking amount",
+  "completionFareNote": "The amount recorded at booking; this does not confirm payment or provide a receipt.",
+  "completionDriver": "Driver: {name}",
+  "@completionDriver": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateTrip": "How was your trip?",
+  "completionStars": "{count} of 5 stars",
+  "@completionStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionComment": "Optional comment",
+  "completionCommentLimit": "Up to {count} code points after trimming surrounding whitespace.",
+  "@completionCommentLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionSubmit": "Submit rating",
+  "completionSubmitting": "Submitting rating",
+  "completionSaved": "Your rating is saved. Thank you",
+  "completionImmutable": "Each trip has one rating, which cannot be edited.",
+  "completionUncertain": "We could not confirm the save. Your rating is kept unchanged; retry to check without duplicating it.",
+  "completionRetry": "Check and retry",
+  "completionSupport": "Contact support for this trip",
+  "completionHome": "Return home",
+  "completionValidation": "Choose 1–5 stars and keep the comment within the allowed limit.",
+  "completionNotFound": "This trip could not be found.",
+  "completionNotCompleted": "Summary and rating are available after the trip is completed.",
+  "completionUnavailable": "The rating service integration is currently unavailable.",
+  "completionAlreadyRated": "This trip was already rated. Checking the saved rating.",
+  "completionInvalidResponse": "The result could not be verified. Retry to check or contact support.",
+  "completionOffline": "Could not connect. Check your network and retry.",
+  "supportTitle": "Help and support",
+  "supportIntro": "Create a general support request or choose a trip to report an issue.",
+  "supportNewTicket": "New support request",
+  "supportChooseTrip": "Choose a trip to report",
+  "supportMyTickets": "My support requests",
+  "supportEmpty": "No support requests yet.",
+  "supportLoading": "Loading",
+  "supportLoadMore": "Load more",
+  "supportCategory": "Category",
+  "supportBody": "Request details",
+  "supportBodyHint": "Enter 10 to 2000 characters, excluding surrounding whitespace.",
+  "supportSubmit": "Send request",
+  "supportSending": "Sending",
+  "supportCreated": "Support request created",
+  "supportRetry": "Retry",
+  "supportUncertain": "Delivery could not be confirmed. Your details are locked; retry with the same request ID to avoid a duplicate.",
+  "supportBodyValidation": "The text must contain 10 to 2000 characters after trimming whitespace.",
+  "supportInvalidCategory": "Choose a valid category for this request.",
+  "supportNotFound": "This request or trip is unavailable for this account.",
+  "supportSessionEnded": "The session ended. Support data has been removed from this page.",
+  "supportConflict": "This request ID was used with different details. This request could not be confirmed.",
+  "supportOffline": "Unable to connect. Try again when the network is available.",
+  "supportUnavailable": "Support is currently unavailable. Try again later.",
+  "supportStatusOpen": "Open",
+  "supportStatusInProgress": "In progress",
+  "supportStatusResolved": "Resolved",
+  "supportTicketDetails": "Support request details",
+  "supportTerms": "Terms and conditions",
+  "supportPrivacy": "Privacy policy",
+  "supportLegalUnpublished": "Approved content has not been published yet. It will appear here once supplied and approved.",
+  "supportTicketReference": "Support request: {id}",
+  "@supportTicketReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportTripReference": "Trip: {id}",
+  "@supportTripReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportLegalVersion": "Version {version} · Published {date}",
+  "@supportLegalVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

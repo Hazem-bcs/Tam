@@ -2197,6 +2197,366 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'محاكاة تطوير'**
   String get chatSimulation;
+
+  /// No description provided for @completionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص الرحلة والتقييم'**
+  String get completionTitle;
+
+  /// No description provided for @completionLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل ملخص الرحلة'**
+  String get completionLoading;
+
+  /// No description provided for @completionSessionEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الجلسة. عد إلى الرئيسية للمتابعة.'**
+  String get completionSessionEnded;
+
+  /// No description provided for @completionThankYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكرًا لرحلتك مع تم'**
+  String get completionThankYou;
+
+  /// No description provided for @completionTripId.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الطلب: {id}'**
+  String completionTripId(String id);
+
+  /// No description provided for @completionRecordedFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الطلب المسجل'**
+  String get completionRecordedFare;
+
+  /// No description provided for @completionFareNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المسجل عند الطلب، وليس تأكيدًا للدفع أو إيصالًا.'**
+  String get completionFareNote;
+
+  /// No description provided for @completionDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق: {name}'**
+  String completionDriver(String name);
+
+  /// No description provided for @completionRateTrip.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف كانت تجربة رحلتك؟'**
+  String get completionRateTrip;
+
+  /// No description provided for @completionStars.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} من ٥ نجوم'**
+  String completionStars(int count);
+
+  /// No description provided for @completionComment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليق اختياري'**
+  String get completionComment;
+
+  /// No description provided for @completionCommentLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى {count} حرف بعد إزالة الفراغات الطرفية.'**
+  String completionCommentLimit(int count);
+
+  /// No description provided for @completionSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التقييم'**
+  String get completionSubmit;
+
+  /// No description provided for @completionSubmitting.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ إرسال التقييم'**
+  String get completionSubmitting;
+
+  /// No description provided for @completionSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ تقييمك، شكرًا لك'**
+  String get completionSaved;
+
+  /// No description provided for @completionImmutable.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُسجل تقييم واحد لكل رحلة ولا يمكن تعديله.'**
+  String get completionImmutable;
+
+  /// No description provided for @completionUncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نتمكن من تأكيد الحفظ. أبقينا تقييمك كما هو؛ أعد المحاولة للتحقق دون تكراره.'**
+  String get completionUncertain;
+
+  /// No description provided for @completionRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق وأعد المحاولة'**
+  String get completionRetry;
+
+  /// No description provided for @completionSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'التواصل مع دعم هذه الرحلة'**
+  String get completionSupport;
+
+  /// No description provided for @completionHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى الرئيسية'**
+  String get completionHome;
+
+  /// No description provided for @completionValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر من نجمة إلى خمس نجوم، والتزم بالحد المسموح للتعليق.'**
+  String get completionValidation;
+
+  /// No description provided for @completionNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نعثر على هذه الرحلة.'**
+  String get completionNotFound;
+
+  /// No description provided for @completionNotCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتاح الملخص والتقييم بعد اكتمال الرحلة فقط.'**
+  String get completionNotCompleted;
+
+  /// No description provided for @completionUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط خدمة التقييم غير متاح حاليًا.'**
+  String get completionUnavailable;
+
+  /// No description provided for @completionAlreadyRated.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبق تقييم هذه الرحلة. جارٍ التحقق من التقييم المحفوظ.'**
+  String get completionAlreadyRated;
+
+  /// No description provided for @completionInvalidResponse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر التحقق من نتيجة العملية. أعد المحاولة للتحقق أو تواصل مع الدعم.'**
+  String get completionInvalidResponse;
+
+  /// No description provided for @completionOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.'**
+  String get completionOffline;
+
+  /// No description provided for @supportTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get supportTitle;
+
+  /// No description provided for @supportIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشئ طلب دعم عام أو اختر رحلة لإرسال بلاغ عنها.'**
+  String get supportIntro;
+
+  /// No description provided for @supportNewTicket.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب دعم جديد'**
+  String get supportNewTicket;
+
+  /// No description provided for @supportChooseTrip.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار رحلة للإبلاغ عنها'**
+  String get supportChooseTrip;
+
+  /// No description provided for @supportMyTickets.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الدعم'**
+  String get supportMyTickets;
+
+  /// No description provided for @supportEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات دعم بعد.'**
+  String get supportEmpty;
+
+  /// No description provided for @supportLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل'**
+  String get supportLoading;
+
+  /// No description provided for @supportLoadMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض المزيد'**
+  String get supportLoadMore;
+
+  /// No description provided for @supportCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفئة'**
+  String get supportCategory;
+
+  /// No description provided for @supportBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الطلب'**
+  String get supportBody;
+
+  /// No description provided for @supportBodyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب من 10 إلى 2000 حرف دون المسافات المحيطة.'**
+  String get supportBodyHint;
+
+  /// No description provided for @supportSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
+  String get supportSubmit;
+
+  /// No description provided for @supportSending.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الإرسال'**
+  String get supportSending;
+
+  /// No description provided for @supportCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء طلب الدعم'**
+  String get supportCreated;
+
+  /// No description provided for @supportRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get supportRetry;
+
+  /// No description provided for @supportUncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تأكيد الإرسال. احتفظنا بالتفاصيل كما هي؛ أعد المحاولة للتحقق بنفس معرّف الطلب دون تكراره.'**
+  String get supportUncertain;
+
+  /// No description provided for @supportBodyValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن يتكون النص من 10 إلى 2000 حرف بعد حذف المسافات المحيطة.'**
+  String get supportBodyValidation;
+
+  /// No description provided for @supportInvalidCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر فئة صالحة لسياق الطلب.'**
+  String get supportInvalidCategory;
+
+  /// No description provided for @supportNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب أو الرحلة غير متاحين لهذا الحساب.'**
+  String get supportNotFound;
+
+  /// No description provided for @supportSessionEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الجلسة. أُزيلت بيانات الدعم من هذه الصفحة.'**
+  String get supportSessionEnded;
+
+  /// No description provided for @supportConflict.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرّف الطلب مستخدم لتفاصيل مختلفة. تعذر تأكيد هذا الطلب.'**
+  String get supportConflict;
+
+  /// No description provided for @supportOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الاتصال. حاول مجددًا عند توفر الشبكة.'**
+  String get supportOffline;
+
+  /// No description provided for @supportUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم غير متاح حاليًا. حاول لاحقًا.'**
+  String get supportUnavailable;
+
+  /// No description provided for @supportStatusOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح'**
+  String get supportStatusOpen;
+
+  /// No description provided for @supportStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد المعالجة'**
+  String get supportStatusInProgress;
+
+  /// No description provided for @supportStatusResolved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحل'**
+  String get supportStatusResolved;
+
+  /// No description provided for @supportTicketDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل طلب الدعم'**
+  String get supportTicketDetails;
+
+  /// No description provided for @supportTerms.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروط والأحكام'**
+  String get supportTerms;
+
+  /// No description provided for @supportPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
+  String get supportPrivacy;
+
+  /// No description provided for @supportLegalUnpublished.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحتوى المعتمد غير منشور بعد. سيظهر هنا بعد توفيره واعتماده.'**
+  String get supportLegalUnpublished;
+
+  /// No description provided for @supportTicketReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب الدعم: {id}'**
+  String supportTicketReference(String id);
+
+  /// No description provided for @supportTripReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة: {id}'**
+  String supportTripReference(String id);
+
+  /// No description provided for @supportLegalVersion.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإصدار {version} · نُشر {date}'**
+  String supportLegalVersion(String version, String date);
 }
 
 class _AppLocalizationsDelegate

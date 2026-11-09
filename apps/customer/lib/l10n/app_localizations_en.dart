@@ -1155,4 +1155,219 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatSimulation => 'Simulation';
+
+  @override
+  String get completionTitle => 'Trip summary and rating';
+
+  @override
+  String get completionLoading => 'Loading trip summary';
+
+  @override
+  String get completionSessionEnded =>
+      'Your session ended. Return home to continue.';
+
+  @override
+  String get completionThankYou => 'Thank you for riding with Tam';
+
+  @override
+  String completionTripId(String id) {
+    return 'Trip ID: $id';
+  }
+
+  @override
+  String get completionRecordedFare => 'Recorded booking amount';
+
+  @override
+  String get completionFareNote =>
+      'The amount recorded at booking; this does not confirm payment or provide a receipt.';
+
+  @override
+  String completionDriver(String name) {
+    return 'Driver: $name';
+  }
+
+  @override
+  String get completionRateTrip => 'How was your trip?';
+
+  @override
+  String completionStars(int count) {
+    return '$count of 5 stars';
+  }
+
+  @override
+  String get completionComment => 'Optional comment';
+
+  @override
+  String completionCommentLimit(int count) {
+    return 'Up to $count code points after trimming surrounding whitespace.';
+  }
+
+  @override
+  String get completionSubmit => 'Submit rating';
+
+  @override
+  String get completionSubmitting => 'Submitting rating';
+
+  @override
+  String get completionSaved => 'Your rating is saved. Thank you';
+
+  @override
+  String get completionImmutable =>
+      'Each trip has one rating, which cannot be edited.';
+
+  @override
+  String get completionUncertain =>
+      'We could not confirm the save. Your rating is kept unchanged; retry to check without duplicating it.';
+
+  @override
+  String get completionRetry => 'Check and retry';
+
+  @override
+  String get completionSupport => 'Contact support for this trip';
+
+  @override
+  String get completionHome => 'Return home';
+
+  @override
+  String get completionValidation =>
+      'Choose 1–5 stars and keep the comment within the allowed limit.';
+
+  @override
+  String get completionNotFound => 'This trip could not be found.';
+
+  @override
+  String get completionNotCompleted =>
+      'Summary and rating are available after the trip is completed.';
+
+  @override
+  String get completionUnavailable =>
+      'The rating service integration is currently unavailable.';
+
+  @override
+  String get completionAlreadyRated =>
+      'This trip was already rated. Checking the saved rating.';
+
+  @override
+  String get completionInvalidResponse =>
+      'The result could not be verified. Retry to check or contact support.';
+
+  @override
+  String get completionOffline =>
+      'Could not connect. Check your network and retry.';
+
+  @override
+  String get supportTitle => 'Help and support';
+
+  @override
+  String get supportIntro =>
+      'Create a general support request or choose a trip to report an issue.';
+
+  @override
+  String get supportNewTicket => 'New support request';
+
+  @override
+  String get supportChooseTrip => 'Choose a trip to report';
+
+  @override
+  String get supportMyTickets => 'My support requests';
+
+  @override
+  String get supportEmpty => 'No support requests yet.';
+
+  @override
+  String get supportLoading => 'Loading';
+
+  @override
+  String get supportLoadMore => 'Load more';
+
+  @override
+  String get supportCategory => 'Category';
+
+  @override
+  String get supportBody => 'Request details';
+
+  @override
+  String get supportBodyHint =>
+      'Enter 10 to 2000 characters, excluding surrounding whitespace.';
+
+  @override
+  String get supportSubmit => 'Send request';
+
+  @override
+  String get supportSending => 'Sending';
+
+  @override
+  String get supportCreated => 'Support request created';
+
+  @override
+  String get supportRetry => 'Retry';
+
+  @override
+  String get supportUncertain =>
+      'Delivery could not be confirmed. Your details are locked; retry with the same request ID to avoid a duplicate.';
+
+  @override
+  String get supportBodyValidation =>
+      'The text must contain 10 to 2000 characters after trimming whitespace.';
+
+  @override
+  String get supportInvalidCategory =>
+      'Choose a valid category for this request.';
+
+  @override
+  String get supportNotFound =>
+      'This request or trip is unavailable for this account.';
+
+  @override
+  String get supportSessionEnded =>
+      'The session ended. Support data has been removed from this page.';
+
+  @override
+  String get supportConflict =>
+      'This request ID was used with different details. This request could not be confirmed.';
+
+  @override
+  String get supportOffline =>
+      'Unable to connect. Try again when the network is available.';
+
+  @override
+  String get supportUnavailable =>
+      'Support is currently unavailable. Try again later.';
+
+  @override
+  String get supportStatusOpen => 'Open';
+
+  @override
+  String get supportStatusInProgress => 'In progress';
+
+  @override
+  String get supportStatusResolved => 'Resolved';
+
+  @override
+  String get supportTicketDetails => 'Support request details';
+
+  @override
+  String get supportTerms => 'Terms and conditions';
+
+  @override
+  String get supportPrivacy => 'Privacy policy';
+
+  @override
+  String get supportLegalUnpublished =>
+      'Approved content has not been published yet. It will appear here once supplied and approved.';
+
+  @override
+  String supportTicketReference(String id) {
+    return 'Support request: $id';
+  }
+
+  @override
+  String supportTripReference(String id) {
+    return 'Trip: $id';
+  }
+
+  @override
+  String supportLegalVersion(String version, String date) {
+    return 'Version $version · Published $date';
+  }
 }

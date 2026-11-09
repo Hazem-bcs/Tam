@@ -491,5 +491,117 @@
       }
     }
   },
-  "chatSimulation": "محاكاة تطوير"
+  "chatSimulation": "محاكاة تطوير",
+  "completionTitle": "ملخص الرحلة والتقييم",
+  "completionLoading": "جارٍ تحميل ملخص الرحلة",
+  "completionSessionEnded": "انتهت الجلسة. عد إلى الرئيسية للمتابعة.",
+  "completionThankYou": "شكرًا لرحلتك مع تم",
+  "completionTripId": "رقم الطلب: {id}",
+  "@completionTripId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRecordedFare": "مبلغ الطلب المسجل",
+  "completionFareNote": "المبلغ المسجل عند الطلب، وليس تأكيدًا للدفع أو إيصالًا.",
+  "completionDriver": "السائق: {name}",
+  "@completionDriver": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateTrip": "كيف كانت تجربة رحلتك؟",
+  "completionStars": "{count} من ٥ نجوم",
+  "@completionStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionComment": "تعليق اختياري",
+  "completionCommentLimit": "حتى {count} حرف بعد إزالة الفراغات الطرفية.",
+  "@completionCommentLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionSubmit": "إرسال التقييم",
+  "completionSubmitting": "جارٍ إرسال التقييم",
+  "completionSaved": "تم حفظ تقييمك، شكرًا لك",
+  "completionImmutable": "يُسجل تقييم واحد لكل رحلة ولا يمكن تعديله.",
+  "completionUncertain": "لم نتمكن من تأكيد الحفظ. أبقينا تقييمك كما هو؛ أعد المحاولة للتحقق دون تكراره.",
+  "completionRetry": "تحقق وأعد المحاولة",
+  "completionSupport": "التواصل مع دعم هذه الرحلة",
+  "completionHome": "العودة إلى الرئيسية",
+  "completionValidation": "اختر من نجمة إلى خمس نجوم، والتزم بالحد المسموح للتعليق.",
+  "completionNotFound": "لم نعثر على هذه الرحلة.",
+  "completionNotCompleted": "يتاح الملخص والتقييم بعد اكتمال الرحلة فقط.",
+  "completionUnavailable": "ربط خدمة التقييم غير متاح حاليًا.",
+  "completionAlreadyRated": "سبق تقييم هذه الرحلة. جارٍ التحقق من التقييم المحفوظ.",
+  "completionInvalidResponse": "تعذر التحقق من نتيجة العملية. أعد المحاولة للتحقق أو تواصل مع الدعم.",
+  "completionOffline": "تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.",
+  "supportTitle": "المساعدة والدعم",
+  "supportIntro": "أنشئ طلب دعم عام أو اختر رحلة لإرسال بلاغ عنها.",
+  "supportNewTicket": "طلب دعم جديد",
+  "supportChooseTrip": "اختيار رحلة للإبلاغ عنها",
+  "supportMyTickets": "طلبات الدعم",
+  "supportEmpty": "لا توجد طلبات دعم بعد.",
+  "supportLoading": "جارٍ التحميل",
+  "supportLoadMore": "عرض المزيد",
+  "supportCategory": "الفئة",
+  "supportBody": "تفاصيل الطلب",
+  "supportBodyHint": "اكتب من 10 إلى 2000 حرف دون المسافات المحيطة.",
+  "supportSubmit": "إرسال الطلب",
+  "supportSending": "جارٍ الإرسال",
+  "supportCreated": "تم إنشاء طلب الدعم",
+  "supportRetry": "إعادة المحاولة",
+  "supportUncertain": "تعذر تأكيد الإرسال. احتفظنا بالتفاصيل كما هي؛ أعد المحاولة للتحقق بنفس معرّف الطلب دون تكراره.",
+  "supportBodyValidation": "يجب أن يتكون النص من 10 إلى 2000 حرف بعد حذف المسافات المحيطة.",
+  "supportInvalidCategory": "اختر فئة صالحة لسياق الطلب.",
+  "supportNotFound": "الطلب أو الرحلة غير متاحين لهذا الحساب.",
+  "supportSessionEnded": "انتهت الجلسة. أُزيلت بيانات الدعم من هذه الصفحة.",
+  "supportConflict": "معرّف الطلب مستخدم لتفاصيل مختلفة. تعذر تأكيد هذا الطلب.",
+  "supportOffline": "تعذر الاتصال. حاول مجددًا عند توفر الشبكة.",
+  "supportUnavailable": "الدعم غير متاح حاليًا. حاول لاحقًا.",
+  "supportStatusOpen": "مفتوح",
+  "supportStatusInProgress": "قيد المعالجة",
+  "supportStatusResolved": "تم الحل",
+  "supportTicketDetails": "تفاصيل طلب الدعم",
+  "supportTerms": "الشروط والأحكام",
+  "supportPrivacy": "سياسة الخصوصية",
+  "supportLegalUnpublished": "المحتوى المعتمد غير منشور بعد. سيظهر هنا بعد توفيره واعتماده.",
+  "supportTicketReference": "طلب الدعم: {id}",
+  "@supportTicketReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportTripReference": "الرحلة: {id}",
+  "@supportTripReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportLegalVersion": "الإصدار {version} · نُشر {date}",
+  "@supportLegalVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

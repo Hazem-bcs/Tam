@@ -8,6 +8,7 @@ PREFIXES = {
     'home': 'home', 'ride_request': 'rideRequest', 'trips': 'trips',
     'notifications': 'notifications', 'settings': 'settings', 'addresses': 'addresses',
     'active_trip': 'activeTrip', 'chat': 'chat',
+    'completion': 'completion', 'support': 'support',
 }
 
 

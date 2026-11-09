@@ -37,7 +37,6 @@ import 'package:tam_customer/features/ride_request/data/repositories/unavailable
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/settings/settings_entry.dart';
 import 'package:tam_customer/features/support/data/mock/mock_support_repository.dart';
-import 'package:tam_customer/features/support/data/mock/support_mock_scenario.dart';
 import 'package:tam_customer/features/support/data/unavailable_support_repository.dart';
 import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
