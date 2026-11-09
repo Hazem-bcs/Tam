@@ -47,6 +47,7 @@ void main() {
       expect(bloc.state.quote!.scheduledAt, bloc.state.scheduledAt);
       await tester.tap(find.text('تأكيد طلب الرحلة'));
       await tester.pumpAndSettle();
+      await openBookedTripDetails(tester);
       final details = tester
           .element(find.byType(TripDetailsPage))
           .read<TripDetailsCubit>();

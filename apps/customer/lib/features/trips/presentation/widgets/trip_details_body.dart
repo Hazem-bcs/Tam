@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trip_display.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trip_route.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
+import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
+import 'package:tam_customer/shared/widgets/trip_route.dart';
 
 class TripDetailsBody extends StatelessWidget {
   const TripDetailsBody({super.key, required this.trip});

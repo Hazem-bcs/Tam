@@ -1142,6 +1142,24 @@ abstract class AppLocalizations {
   /// **'الموعد: {time}'**
   String tripsScheduledAt(String time);
 
+  /// No description provided for @tripsStatusDriverEnRoute.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق في الطريق'**
+  String get tripsStatusDriverEnRoute;
+
+  /// No description provided for @tripsStatusDriverArrived.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق ينتظرك'**
+  String get tripsStatusDriverArrived;
+
+  /// No description provided for @tripsStatusNoDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد سائق'**
+  String get tripsStatusNoDriver;
+
   /// No description provided for @notificationsMarkAll.
   ///
   /// In ar, this message translates to:
@@ -1747,6 +1765,258 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'البحث'**
   String get addressesSearchTab;
+
+  /// No description provided for @activeTripTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الرحلة'**
+  String get activeTripTitle;
+
+  /// No description provided for @activeTripHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get activeTripHome;
+
+  /// No description provided for @activeTripFollow.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة رحلتي'**
+  String get activeTripFollow;
+
+  /// No description provided for @activeTripLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحديث الرحلة…'**
+  String get activeTripLoading;
+
+  /// No description provided for @activeTripRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث الحالة'**
+  String get activeTripRefresh;
+
+  /// No description provided for @activeTripEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلة متاحة للمتابعة الآن.'**
+  String get activeTripEmpty;
+
+  /// No description provided for @activeTripNewBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب رحلة'**
+  String get activeTripNewBooking;
+
+  /// No description provided for @activeTripScheduledHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتك محفوظة للموعد المحدد. يبدأ البحث عند الموعد.'**
+  String get activeTripScheduledHint;
+
+  /// No description provided for @activeTripSearchingHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نبحث عن سائق مناسب لرحلتك.'**
+  String get activeTripSearchingHint;
+
+  /// No description provided for @activeTripAssignedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم قبول الرحلة. يتجهز السائق للانطلاق إليك.'**
+  String get activeTripAssignedHint;
+
+  /// No description provided for @activeTripEnRouteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق في الطريق إلى نقطة الانطلاق.'**
+  String get activeTripEnRouteHint;
+
+  /// No description provided for @activeTripArrivedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل السائق وينتظرك عند نقطة الانطلاق.'**
+  String get activeTripArrivedHint;
+
+  /// No description provided for @activeTripJourneyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت في الطريق إلى وجهتك.'**
+  String get activeTripJourneyHint;
+
+  /// No description provided for @activeTripCompletedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت إلى وجهتك. اكتملت الرحلة.'**
+  String get activeTripCompletedHint;
+
+  /// No description provided for @activeTripCancelledHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُلغيت هذه الرحلة.'**
+  String get activeTripCancelledHint;
+
+  /// No description provided for @activeTripNoDriverHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نجد سائقًا لهذه الرحلة. يمكنك طلب رحلة جديدة بسعر محدث.'**
+  String get activeTripNoDriverHint;
+
+  /// No description provided for @activeTripPlate.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم السيارة: {plate}'**
+  String activeTripPlate(String plate);
+
+  /// No description provided for @activeTripRating.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييم: {rating} من 5'**
+  String activeTripRating(String rating);
+
+  /// No description provided for @activeTripDriverDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض بيانات السائق والسيارة'**
+  String get activeTripDriverDetails;
+
+  /// No description provided for @activeTripContactPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتصال والمحادثة غير مربوطين حاليًا.'**
+  String get activeTripContactPending;
+
+  /// No description provided for @activeTripClose.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق'**
+  String get activeTripClose;
+
+  /// No description provided for @activeTripRouteSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسار من {pickup} إلى {destination}'**
+  String activeTripRouteSemantics(String pickup, String destination);
+
+  /// No description provided for @activeTripPositionStale.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع السائق غير محدث؛ لا تعتمد على موضعه أو وقت الوصول السابق.'**
+  String get activeTripPositionStale;
+
+  /// No description provided for @activeTripSchematic.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسار توضيحي؛ ليس خريطة ملاحة.'**
+  String get activeTripSchematic;
+
+  /// No description provided for @activeTripCancelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الرحلة'**
+  String get activeTripCancelTitle;
+
+  /// No description provided for @activeTripCancelPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذه الرحلة؟'**
+  String get activeTripCancelPrompt;
+
+  /// No description provided for @activeTripKeep.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الرحلة'**
+  String get activeTripKeep;
+
+  /// No description provided for @activeTripConfirmCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الإلغاء'**
+  String get activeTripConfirmCancel;
+
+  /// No description provided for @activeTripCancelUncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نتأكد من نتيجة الإلغاء. أعد المحاولة للرحلة نفسها قبل طلب بديل.'**
+  String get activeTripCancelUncertain;
+
+  /// No description provided for @activeTripRetryCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة محاولة الإلغاء'**
+  String get activeTripRetryCancel;
+
+  /// No description provided for @activeTripCancelling.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الإلغاء…'**
+  String get activeTripCancelling;
+
+  /// No description provided for @activeTripRebook.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب رحلة جديدة'**
+  String get activeTripRebook;
+
+  /// No description provided for @activeTripDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الطلب'**
+  String get activeTripDetails;
+
+  /// No description provided for @activeTripCannotCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأت الرحلة أو تغيرت حالتها؛ لا يمكن إلغاؤها الآن.'**
+  String get activeTripCannotCancel;
+
+  /// No description provided for @activeTripNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تعد هذه الرحلة متاحة.'**
+  String get activeTripNotFound;
+
+  /// No description provided for @activeTripInvalidResponse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر التحقق من تحديث الرحلة. حاول التحديث مجددًا.'**
+  String get activeTripInvalidResponse;
+
+  /// No description provided for @activeTripAccessDenied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج هذه العملية إلى جلسة مصرح بها.'**
+  String get activeTripAccessDenied;
+
+  /// No description provided for @activeTripUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة متابعة الرحلة غير متاحة حاليًا.'**
+  String get activeTripUnavailable;
+
+  /// No description provided for @activeTripConnectionLost.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث الرحلة. تحقق من الاتصال وأعد المحاولة.'**
+  String get activeTripConnectionLost;
+
+  /// No description provided for @activeTripCached.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه آخر حالة وصلت؛ قد تكون الرحلة تغيرت أثناء الانقطاع.'**
+  String get activeTripCached;
+
+  /// No description provided for @activeTripEta.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول المتوقع خلال {minutes} دقيقة'**
+  String activeTripEta(int minutes);
+
+  /// No description provided for @activeTripSimulationNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعمل الرحلة حاليًا بمحاكاة محلية حتى ربط الخدمة.'**
+  String get activeTripSimulationNotice;
 }
 
 class _AppLocalizationsDelegate

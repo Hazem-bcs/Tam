@@ -8,13 +8,7 @@ enum TripsFilter { all, active, completed, cancelled }
 extension TripsFilterRules on TripsFilter {
   bool includes(Trip trip) => switch (this) {
     TripsFilter.all => true,
-    TripsFilter.active => switch (trip.status) {
-      TripStatus.scheduled ||
-      TripStatus.requested ||
-      TripStatus.confirmed ||
-      TripStatus.inProgress => true,
-      _ => false,
-    },
+    TripsFilter.active => trip.status.isActive,
     TripsFilter.completed => trip.status == TripStatus.completed,
     TripsFilter.cancelled => trip.status == TripStatus.cancelled,
   };

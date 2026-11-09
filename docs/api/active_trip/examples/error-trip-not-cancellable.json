@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "TRIP_NOT_CANCELLABLE",
+    "message": {
+      "ar": "بدأت الرحلة ولا يمكن إلغاؤها.",
+      "en": "The trip can no longer be cancelled."
+    }
+  }
+}

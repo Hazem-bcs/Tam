@@ -6,7 +6,10 @@ import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
+import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
+import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
@@ -29,10 +32,12 @@ GoRouter createAppRouter(
   Listenable refresh, {
   required NotificationsRepository notifications,
   required AddressesRepository addresses,
+  required ActiveTripRepository activeTrips,
   required AddressPlaceSearch Function(String languageCode) addressPlaceSearch,
   FeatureDataModes dataModes = const FeatureDataModes(),
   MockTripStore? mockTrips,
   AppLocaleController? locale,
+  DateTime Function()? clock,
 }) {
   final trips = mockTrips ?? MockTripStore();
   final language = locale ?? AppLocaleController();
@@ -47,6 +52,17 @@ GoRouter createAppRouter(
       policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
     routes: [
+      for (final path in [AppRoutes.activeTrip, AppRoutes.activeTripDetails])
+        GoRoute(
+          path: path,
+          builder: (context, state) => buildActiveTripFeature(
+            repository: activeTrips,
+            navigation: navigation(context),
+            policy: AppConfig.activeTripPolicy,
+            now: clock,
+            tripId: state.pathParameters['tripId'],
+          ),
+        ),
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => buildHomeFeature(

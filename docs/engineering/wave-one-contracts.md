@@ -148,3 +148,19 @@ RideSchedulePolicy في shared/domain، والتركيب المركزي AppConfi
 لنفس المورد، مع UTC parser مشترك صارم؛ لا نقل JSON إلى Domain.
 حزمة docs/api/scheduling/ امتداد معلن لعقود Ride/Trips القديمة مع Postman.
 نفس RIDE_REQUEST_DATA_MODE وحماية الوصول؛ لا API أو dispatch محلي جديد.
+# امتداد W2-ACTIVE-TRIP — 2026-11-09
+
+الرحلة الجارية ميزة مستقلة في active_trip، تستخدم Trip وMockTripStore نفسيهما.
+Trip يملك live:TripLiveDetails? بإصدار وتواريخ وسائق وموقع وETA؛ لا مخزن رحلات
+آخر. الإصدارات والحالة تتغير ذريًا بـcompare-and-set، والإلغاء من طلباتي
+يرفع الإصدار ويمسح الموقع وETA. الحالات الجديدة driverEnRoute/driverArrived/noDriver؛
+active يشمل الأوليين، ولا يشمل noDriver النهائية. الإلغاء مسموح حتى وصول
+السائق وينتهي عند بدء الرحلة؛ لا أوامر بدء/إنهاء/تعيين سائق في عميل الراكب.
+المحرك في data/mock، مملوك للتطبيق، يراقب المصدر نفسه ويتابع الجلسة عند
+مغادرة الصفحة؛ يبدأ scheduled عند الموعد ويستدرك عند الاستئناف.
+لا تخزين دائم أو عمل خلفي بعد إغلاق التطبيق، ولا ربط خرائط/هاتف/دردشة حي.
+الحجز يفتح /active-trip/:tripId، والرئيسية تفتح /active-trip للاستعادة،
+وطلباتي توفر مدخلًا للمتابعة. جميعها تحرس وفق ACTIVE_TRIP_DATA_MODE.
+المسار والسائق UI مشترك اللغة والثيم؛ رُفع TripRoute وtrip_display إلى
+shared للمسؤولية المشتركة، وفُصلت أفعال تفاصيل الطلب في ملف مركز.
+حزمة docs/api/active_trip/ تمد العقود السابقة صراحة: current/live وcancel نفسه.

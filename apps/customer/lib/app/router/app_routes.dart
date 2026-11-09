@@ -12,6 +12,12 @@ abstract final class AppRoutes {
   static const addresses = '/addresses';
   static const addAddress = '/addresses/new';
   static const editAddress = '/addresses/:addressId/edit';
+  static const activeTrip = '/active-trip';
+  static const activeTripDetails = '/active-trip/:tripId';
+  static String activeTripLocation(String id) {
+    if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');
+    return Uri(pathSegments: ['', 'active-trip', id]).toString();
+  }
 
   static String addressEditLocation(String id) {
     if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');

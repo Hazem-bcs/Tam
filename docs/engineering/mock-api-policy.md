@@ -37,6 +37,9 @@ Page -> Cubit/Bloc -> Domain Repository
 لكل ميزة عند الربط التدريجي: `HOME_DATA_MODE` و`RIDE_REQUEST_DATA_MODE`
 و`TRIPS_DATA_MODE` و`NOTIFICATIONS_DATA_MODE` و`SETTINGS_DATA_MODE`
 و`ADDRESSES_DATA_MODE` للعناوين المحفوظة.
+متابعة الرحلة تستخدم `ACTIVE_TRIP_DATA_MODE`، وسيناريو محاكاتها المركزي
+`ACTIVE_TRIP_MOCK_SCENARIO=success|no_driver|disconnect`. المحرك مملوك
+للتطبيق ويحدث Trip نفسه حتى عند مغادرة الصفحة؛ لا تنفيذ خلفي بعد إغلاقه.
 يرث خيار الميزة الوضع العام إذا لم يحدد؛ القيم غير المعروفة خطأ إعداد واضح.
 الخيارات منفذة عبر AppConfig وFeatureDataModes، وتُحقن قيمتها في نقاط دخول الميزات المسجلة؛ لا يختارها Widget أو Cubit.
 

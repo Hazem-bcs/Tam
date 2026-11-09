@@ -91,6 +91,12 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
+                  TextButton.icon(
+                    key: const Key('home-active-trip'),
+                    onPressed: () => navigation.openActiveTrip(),
+                    icon: const Icon(Icons.route_outlined),
+                    label: Text(t.activeTripFollow),
+                  ),
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) => _body(context, state),
                   ),

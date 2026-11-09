@@ -20,6 +20,8 @@ class _NavigationSpy implements CustomerNavigation {
   var tripsCount = 0;
   final openedTrips = <String>[];
   @override
+  void openActiveTrip({String? id}) {}
+  @override
   void openHome() => homeCount++;
   @override
   void openTrips() => tripsCount++;

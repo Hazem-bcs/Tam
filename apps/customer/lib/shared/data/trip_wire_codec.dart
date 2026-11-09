@@ -1,3 +1,4 @@
+import 'package:tam_customer/shared/data/trip_live_codec.dart';
 import 'package:tam_customer/shared/data/utc_timestamp.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -9,6 +10,9 @@ abstract final class TripWireCodec {
       'scheduled' => TripStatus.scheduled,
       'requested' => TripStatus.requested,
       'confirmed' => TripStatus.confirmed,
+      'driver_en_route' => TripStatus.driverEnRoute,
+      'driver_arrived' => TripStatus.driverArrived,
+      'no_driver' => TripStatus.noDriver,
       'in_progress' => TripStatus.inProgress,
       'completed' => TripStatus.completed,
       'cancelled' => TripStatus.cancelled,
@@ -26,6 +30,7 @@ abstract final class TripWireCodec {
       id: _string(value, 'id'),
       createdAt: timestamp,
       status: status,
+      live: value['live'] == null ? null : TripLiveCodec.parse(value['live']),
       booking: TripBookingInput(
         pickup: _location(value['pickup']),
         destination: _location(value['destination']),
@@ -50,11 +55,15 @@ abstract final class TripWireCodec {
       TripStatus.scheduled => 'scheduled',
       TripStatus.requested => 'requested',
       TripStatus.confirmed => 'confirmed',
+      TripStatus.driverEnRoute => 'driver_en_route',
+      TripStatus.driverArrived => 'driver_arrived',
+      TripStatus.noDriver => 'no_driver',
       TripStatus.inProgress => 'in_progress',
       TripStatus.completed => 'completed',
       TripStatus.cancelled => 'cancelled',
     },
     'created_at': trip.createdAt.toUtc().toIso8601String(),
+    if (trip.live != null) 'live': TripLiveCodec.encode(trip.live!),
     if (trip.booking.scheduledAt != null)
       'scheduled_at': trip.booking.scheduledAt!.toUtc().toIso8601String(),
   };

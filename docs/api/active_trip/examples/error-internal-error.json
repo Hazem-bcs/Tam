@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "INTERNAL_ERROR",
+    "message": {
+      "ar": "تعذر إتمام الطلب.",
+      "en": "The request could not be completed."
+    }
+  }
+}

@@ -10,6 +10,10 @@ import 'package:tam_customer/app/router/app_router.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
+import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
+import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
+import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/data/mock/mock_addresses_repository.dart';
 import 'package:tam_customer/features/addresses/data/ride_address_place_search.dart';
 import 'package:tam_customer/features/addresses/data/unavailable_addresses_repository.dart';
@@ -35,6 +39,7 @@ class TamApp extends StatefulWidget {
     this.sessionStore,
     this.temporaryPhoneEntryEnabled,
     this.dataModes,
+    this.clock,
     this.locale = const Locale('ar'),
   }) : assert((authRepository == null) == (sessionStore == null));
 
@@ -42,6 +47,7 @@ class TamApp extends StatefulWidget {
   final AuthSessionStore? sessionStore;
   final bool? temporaryPhoneEntryEnabled;
   final FeatureDataModes? dataModes;
+  final DateTime Function()? clock;
   final Locale locale;
 
   @override
@@ -56,6 +62,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final MockTripStore _mockTrips;
   late final MockNotificationsRepository _mockNotifications;
   late final MockAddressesRepository _mockAddresses;
+  MockActiveTripRepository? _mockActiveTrips;
   late final StreamSubscription<AuthState> _sessionChanges;
 
   @override
@@ -74,8 +81,18 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     );
     _refresh = AuthRouterRefresh(_auth);
     _locale = AppLocaleController(widget.locale);
-    _mockTrips = MockTripStore(seed: seedMockTrips());
+    _mockTrips = MockTripStore(seed: seedMockTrips(), now: widget.clock);
     final modes = widget.dataModes ?? AppConfig.featureDataModes;
+    final ActiveTripRepository activeTrips =
+        modes.forFeature(CustomerFeature.activeTrip) == FeatureDataMode.mock
+        ? (_mockActiveTrips = MockActiveTripRepository(
+            _mockTrips,
+            now: widget.clock,
+            scenario: ActiveTripScenario.parse(
+              AppConfig.activeTripMockScenario,
+            ),
+          ))
+        : const UnavailableActiveTripRepository();
     _mockNotifications = MockNotificationsRepository();
     _mockAddresses = MockAddressesRepository();
     final addressesMode = modes.forFeature(CustomerFeature.addresses);
@@ -96,6 +113,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       dataModes: modes,
       notifications: notifications,
       addresses: addresses,
+      activeTrips: activeTrips,
+      clock: widget.clock,
       addressPlaceSearch: (language) =>
           RideAddressPlaceSearch(placeSource, languageCode: language),
       mockTrips: _mockTrips,
@@ -111,6 +130,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
         _mockTrips.resetSession();
+        _mockActiveTrips?.resetSession();
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
         resetSettingsFeatureSession(_locale);
@@ -128,6 +148,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _mockActiveTrips?.advance();
     if (state == AppLifecycleState.resumed &&
         _auth.state.status == AuthStatus.authenticated) {
       unawaited(_auth.restoreSession());
@@ -140,6 +161,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _router.dispose();
     _refresh.dispose();
     unawaited(_sessionChanges.cancel());
+    if (_mockActiveTrips != null) unawaited(_mockActiveTrips!.dispose());
     unawaited(_mockTrips.dispose());
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());

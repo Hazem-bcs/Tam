@@ -578,6 +578,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get tripsStatusDriverEnRoute => 'Driver on the way';
+
+  @override
+  String get tripsStatusDriverArrived => 'Driver waiting';
+
+  @override
+  String get tripsStatusNoDriver => 'No driver found';
+
+  @override
   String get notificationsMarkAll => 'Mark all as read';
 
   @override
@@ -901,4 +910,155 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressesSearchTab => 'Search';
+
+  @override
+  String get activeTripTitle => 'Trip tracking';
+
+  @override
+  String get activeTripHome => 'Home';
+
+  @override
+  String get activeTripFollow => 'Follow my trip';
+
+  @override
+  String get activeTripLoading => 'Updating trip…';
+
+  @override
+  String get activeTripRefresh => 'Refresh status';
+
+  @override
+  String get activeTripEmpty =>
+      'There is no trip available to follow right now.';
+
+  @override
+  String get activeTripNewBooking => 'Request a ride';
+
+  @override
+  String get activeTripScheduledHint =>
+      'Your trip is reserved. Driver search starts at the scheduled time.';
+
+  @override
+  String get activeTripSearchingHint =>
+      'We are looking for a driver for your trip.';
+
+  @override
+  String get activeTripAssignedHint =>
+      'Your ride was accepted. The driver is preparing to head your way.';
+
+  @override
+  String get activeTripEnRouteHint =>
+      'Your driver is on the way to the pickup.';
+
+  @override
+  String get activeTripArrivedHint =>
+      'Your driver has arrived and is waiting at the pickup.';
+
+  @override
+  String get activeTripJourneyHint => 'You are on the way to your destination.';
+
+  @override
+  String get activeTripCompletedHint =>
+      'You have arrived. Your trip is complete.';
+
+  @override
+  String get activeTripCancelledHint => 'This trip was cancelled.';
+
+  @override
+  String get activeTripNoDriverHint =>
+      'No driver was found. You can request another ride with a new quote.';
+
+  @override
+  String activeTripPlate(String plate) {
+    return 'Plate: $plate';
+  }
+
+  @override
+  String activeTripRating(String rating) {
+    return 'Rating: $rating out of 5';
+  }
+
+  @override
+  String get activeTripDriverDetails => 'View driver and vehicle details';
+
+  @override
+  String get activeTripContactPending =>
+      'Calls and chat are not connected yet.';
+
+  @override
+  String get activeTripClose => 'Close';
+
+  @override
+  String activeTripRouteSemantics(String pickup, String destination) {
+    return 'Route from $pickup to $destination';
+  }
+
+  @override
+  String get activeTripPositionStale =>
+      'The driver location is outdated. Do not rely on its previous position or ETA.';
+
+  @override
+  String get activeTripSchematic => 'Schematic route, not a navigation map.';
+
+  @override
+  String get activeTripCancelTitle => 'Cancel trip';
+
+  @override
+  String get activeTripCancelPrompt => 'Do you want to cancel this trip?';
+
+  @override
+  String get activeTripKeep => 'Keep trip';
+
+  @override
+  String get activeTripConfirmCancel => 'Confirm cancellation';
+
+  @override
+  String get activeTripCancelUncertain =>
+      'The cancellation result is uncertain. Retry for the same trip before requesting another.';
+
+  @override
+  String get activeTripRetryCancel => 'Retry cancellation';
+
+  @override
+  String get activeTripCancelling => 'Cancelling…';
+
+  @override
+  String get activeTripRebook => 'Request another ride';
+
+  @override
+  String get activeTripDetails => 'Order details';
+
+  @override
+  String get activeTripCannotCancel =>
+      'The trip has started or changed state and can no longer be cancelled.';
+
+  @override
+  String get activeTripNotFound => 'This trip is no longer available.';
+
+  @override
+  String get activeTripInvalidResponse =>
+      'The trip update could not be verified. Please refresh again.';
+
+  @override
+  String get activeTripAccessDenied =>
+      'This action requires an authorized session.';
+
+  @override
+  String get activeTripUnavailable => 'Trip tracking is currently unavailable.';
+
+  @override
+  String get activeTripConnectionLost =>
+      'The trip could not be updated. Check your connection and retry.';
+
+  @override
+  String get activeTripCached =>
+      'This is the last received status. The trip may have changed while disconnected.';
+
+  @override
+  String activeTripEta(int minutes) {
+    return 'Estimated arrival in $minutes minutes';
+  }
+
+  @override
+  String get activeTripSimulationNotice =>
+      'Trips currently use local simulation until the service is connected.';
 }

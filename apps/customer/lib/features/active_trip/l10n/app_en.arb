@@ -1,0 +1,76 @@
+{
+  "@@locale": "en",
+  "activeTripTitle": "Trip tracking",
+  "activeTripHome": "Home",
+  "activeTripFollow": "Follow my trip",
+  "activeTripLoading": "Updating trip…",
+  "activeTripRefresh": "Refresh status",
+  "activeTripEmpty": "There is no trip available to follow right now.",
+  "activeTripNewBooking": "Request a ride",
+  "activeTripScheduledHint": "Your trip is reserved. Driver search starts at the scheduled time.",
+  "activeTripSearchingHint": "We are looking for a driver for your trip.",
+  "activeTripAssignedHint": "Your ride was accepted. The driver is preparing to head your way.",
+  "activeTripEnRouteHint": "Your driver is on the way to the pickup.",
+  "activeTripArrivedHint": "Your driver has arrived and is waiting at the pickup.",
+  "activeTripJourneyHint": "You are on the way to your destination.",
+  "activeTripCompletedHint": "You have arrived. Your trip is complete.",
+  "activeTripCancelledHint": "This trip was cancelled.",
+  "activeTripNoDriverHint": "No driver was found. You can request another ride with a new quote.",
+  "activeTripPlate": "Plate: {plate}",
+  "activeTripRating": "Rating: {rating} out of 5",
+  "activeTripDriverDetails": "View driver and vehicle details",
+  "activeTripContactPending": "Calls and chat are not connected yet.",
+  "activeTripClose": "Close",
+  "activeTripRouteSemantics": "Route from {pickup} to {destination}",
+  "activeTripPositionStale": "The driver location is outdated. Do not rely on its previous position or ETA.",
+  "activeTripSchematic": "Schematic route, not a navigation map.",
+  "activeTripCancelTitle": "Cancel trip",
+  "activeTripCancelPrompt": "Do you want to cancel this trip?",
+  "activeTripKeep": "Keep trip",
+  "activeTripConfirmCancel": "Confirm cancellation",
+  "activeTripCancelUncertain": "The cancellation result is uncertain. Retry for the same trip before requesting another.",
+  "activeTripRetryCancel": "Retry cancellation",
+  "activeTripCancelling": "Cancelling…",
+  "activeTripRebook": "Request another ride",
+  "activeTripDetails": "Order details",
+  "activeTripCannotCancel": "The trip has started or changed state and can no longer be cancelled.",
+  "activeTripNotFound": "This trip is no longer available.",
+  "activeTripInvalidResponse": "The trip update could not be verified. Please refresh again.",
+  "activeTripAccessDenied": "This action requires an authorized session.",
+  "activeTripUnavailable": "Trip tracking is currently unavailable.",
+  "activeTripConnectionLost": "The trip could not be updated. Check your connection and retry.",
+  "activeTripCached": "This is the last received status. The trip may have changed while disconnected.",
+  "activeTripEta": "Estimated arrival in {minutes} minutes",
+  "activeTripSimulationNotice": "Trips currently use local simulation until the service is connected.",
+  "@activeTripPlate": {
+    "placeholders": {
+      "plate": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripRating": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripRouteSemantics": {
+    "placeholders": {
+      "pickup": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripEta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
+}

@@ -64,6 +64,8 @@ Future<RideDraftBloc> pumpSchedule(
 final class ScheduleTestNavigation implements CustomerNavigation {
   const ScheduleTestNavigation();
   @override
+  void openActiveTrip({String? id}) {}
+  @override
   void openAddresses() {}
   @override
   void openHome() {}

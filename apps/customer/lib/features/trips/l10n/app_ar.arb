@@ -64,5 +64,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tripsStatusDriverEnRoute": "السائق في الطريق",
+  "tripsStatusDriverArrived": "السائق ينتظرك",
+  "tripsStatusNoDriver": "لا يوجد سائق"
 }

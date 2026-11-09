@@ -5,9 +5,9 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/trips/domain/trips_repository.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trips_list_cubit.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_card.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trip_display.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 

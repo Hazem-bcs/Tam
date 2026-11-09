@@ -10,12 +10,17 @@ import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
 import '../../support/fake_auth_repository.dart';
 
-Future<void> launchCustomerApp(WidgetTester tester) async {
+Future<void> launchCustomerApp(
+  WidgetTester tester, {
+  DateTime Function()? clock,
+}) async {
+  final testNow = DateTime.now().toUtc();
   await tester.pumpWidget(
     TamApp(
       authRepository: FakeAuthRepository(latency: Duration.zero),
       sessionStore: MemoryAuthSessionStore(),
       temporaryPhoneEntryEnabled: true,
+      clock: clock ?? () => testNow,
     ),
   );
   await tester.pumpAndSettle();
@@ -50,4 +55,18 @@ Future<void> dismissCustomerMessages(WidgetTester tester) async {
     await tester.fling(find.byType(SnackBar), const Offset(0, 300), 1000);
     await tester.pumpAndSettle();
   }
+}
+
+/// Booking now opens live tracking; historical checks still use order details.
+Future<void> openBookedTripDetails(WidgetTester tester) async {
+  final details = find.text('تفاصيل الطلب');
+  await tester.scrollUntilVisible(
+    details,
+    220,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.ensureVisible(details);
+  await tester.pumpAndSettle();
+  await tester.tap(details);
+  await tester.pumpAndSettle();
 }

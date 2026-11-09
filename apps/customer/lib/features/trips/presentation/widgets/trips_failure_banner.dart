@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trip_display.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/presentation/trip_display.dart';
 
 /// Makes a failed refresh visible even when older content remains available.
 class TripsFailureBanner extends StatelessWidget {

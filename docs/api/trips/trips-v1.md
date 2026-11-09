@@ -1,5 +1,8 @@
 # Trip history API — عقد مقترح v1
 
+> [الرحلة الجارية v1](../active_trip/active_trip-v1.md) تضيف الحالات
+> driver_en_route/driver_arrived/no_driver وlive، وتحدث تصنيف active والإلغاء.
+
 > التنفيذ الحالي يضيف [امتداد الجدولة v1](../scheduling/scheduling-v1.md)
 > لحالة scheduled وموعد الرحلة وتصنيف active والإلغاء، مع توحيد401 كما في Auth.
 

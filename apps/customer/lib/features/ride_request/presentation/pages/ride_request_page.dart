@@ -51,7 +51,7 @@ class RideRequestPage extends StatelessWidget {
           previous.confirmedTrip?.id != current.confirmedTrip?.id &&
           current.confirmedTrip != null,
       listener: (context, state) =>
-          navigation.openTrip(state.confirmedTrip!.id),
+          navigation.openActiveTrip(id: state.confirmedTrip!.id),
       builder: (context, state) {
         final locked = state.confirmationPending;
         final isConfirming = state.status == RideFlowStatus.confirming;

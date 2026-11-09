@@ -1,0 +1,76 @@
+{
+  "@@locale": "ar",
+  "activeTripTitle": "متابعة الرحلة",
+  "activeTripHome": "الرئيسية",
+  "activeTripFollow": "متابعة رحلتي",
+  "activeTripLoading": "جارٍ تحديث الرحلة…",
+  "activeTripRefresh": "تحديث الحالة",
+  "activeTripEmpty": "لا توجد رحلة متاحة للمتابعة الآن.",
+  "activeTripNewBooking": "اطلب رحلة",
+  "activeTripScheduledHint": "رحلتك محفوظة للموعد المحدد. يبدأ البحث عند الموعد.",
+  "activeTripSearchingHint": "نبحث عن سائق مناسب لرحلتك.",
+  "activeTripAssignedHint": "تم قبول الرحلة. يتجهز السائق للانطلاق إليك.",
+  "activeTripEnRouteHint": "السائق في الطريق إلى نقطة الانطلاق.",
+  "activeTripArrivedHint": "وصل السائق وينتظرك عند نقطة الانطلاق.",
+  "activeTripJourneyHint": "أنت في الطريق إلى وجهتك.",
+  "activeTripCompletedHint": "وصلت إلى وجهتك. اكتملت الرحلة.",
+  "activeTripCancelledHint": "أُلغيت هذه الرحلة.",
+  "activeTripNoDriverHint": "لم نجد سائقًا لهذه الرحلة. يمكنك طلب رحلة جديدة بسعر محدث.",
+  "activeTripPlate": "رقم السيارة: {plate}",
+  "activeTripRating": "التقييم: {rating} من 5",
+  "activeTripDriverDetails": "عرض بيانات السائق والسيارة",
+  "activeTripContactPending": "الاتصال والمحادثة غير مربوطين حاليًا.",
+  "activeTripClose": "إغلاق",
+  "activeTripRouteSemantics": "المسار من {pickup} إلى {destination}",
+  "activeTripPositionStale": "موقع السائق غير محدث؛ لا تعتمد على موضعه أو وقت الوصول السابق.",
+  "activeTripSchematic": "مسار توضيحي؛ ليس خريطة ملاحة.",
+  "activeTripCancelTitle": "إلغاء الرحلة",
+  "activeTripCancelPrompt": "هل تريد إلغاء هذه الرحلة؟",
+  "activeTripKeep": "متابعة الرحلة",
+  "activeTripConfirmCancel": "تأكيد الإلغاء",
+  "activeTripCancelUncertain": "لم نتأكد من نتيجة الإلغاء. أعد المحاولة للرحلة نفسها قبل طلب بديل.",
+  "activeTripRetryCancel": "إعادة محاولة الإلغاء",
+  "activeTripCancelling": "جارٍ الإلغاء…",
+  "activeTripRebook": "طلب رحلة جديدة",
+  "activeTripDetails": "تفاصيل الطلب",
+  "activeTripCannotCancel": "بدأت الرحلة أو تغيرت حالتها؛ لا يمكن إلغاؤها الآن.",
+  "activeTripNotFound": "لم تعد هذه الرحلة متاحة.",
+  "activeTripInvalidResponse": "تعذر التحقق من تحديث الرحلة. حاول التحديث مجددًا.",
+  "activeTripAccessDenied": "تحتاج هذه العملية إلى جلسة مصرح بها.",
+  "activeTripUnavailable": "خدمة متابعة الرحلة غير متاحة حاليًا.",
+  "activeTripConnectionLost": "تعذر تحديث الرحلة. تحقق من الاتصال وأعد المحاولة.",
+  "activeTripCached": "هذه آخر حالة وصلت؛ قد تكون الرحلة تغيرت أثناء الانقطاع.",
+  "activeTripEta": "الوصول المتوقع خلال {minutes} دقيقة",
+  "activeTripSimulationNotice": "تعمل الرحلة حاليًا بمحاكاة محلية حتى ربط الخدمة.",
+  "@activeTripPlate": {
+    "placeholders": {
+      "plate": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripRating": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripRouteSemantics": {
+    "placeholders": {
+      "pickup": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "@activeTripEta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
+}

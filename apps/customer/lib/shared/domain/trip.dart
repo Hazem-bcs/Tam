@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/domain/trip_live_details.dart';
 
 final class Money extends Equatable {
   Money({
@@ -42,9 +43,40 @@ enum TripStatus {
   scheduled,
   requested,
   confirmed,
+  driverEnRoute,
+  driverArrived,
   inProgress,
   completed,
   cancelled,
+  noDriver,
+}
+
+extension TripStatusRules on TripStatus {
+  bool get isActive => !{
+    TripStatus.completed,
+    TripStatus.cancelled,
+    TripStatus.noDriver,
+  }.contains(this);
+  bool get canCancel => {
+    TripStatus.scheduled,
+    TripStatus.requested,
+    TripStatus.confirmed,
+    TripStatus.driverEnRoute,
+    TripStatus.driverArrived,
+  }.contains(this);
+  bool canTransitionTo(TripStatus next) =>
+      this == next ||
+      (next == TripStatus.cancelled && canCancel) ||
+      switch (this) {
+        TripStatus.scheduled => next == TripStatus.requested,
+        TripStatus.requested =>
+          next == TripStatus.confirmed || next == TripStatus.noDriver,
+        TripStatus.confirmed => next == TripStatus.driverEnRoute,
+        TripStatus.driverEnRoute => next == TripStatus.driverArrived,
+        TripStatus.driverArrived => next == TripStatus.inProgress,
+        TripStatus.inProgress => next == TripStatus.completed,
+        _ => false,
+      };
 }
 
 final class TripBookingInput extends Equatable {
@@ -76,17 +108,28 @@ final class Trip extends Equatable {
     required this.booking,
     required this.createdAt,
     required this.status,
+    this.live,
   });
   final String id;
   final TripBookingInput booking;
   final DateTime createdAt;
   final TripStatus status;
-  bool get canCancel =>
-      status == TripStatus.scheduled ||
-      status == TripStatus.requested ||
-      status == TripStatus.confirmed;
-  Trip withStatus(TripStatus value) =>
-      Trip(id: id, booking: booking, createdAt: createdAt, status: value);
+  final TripLiveDetails? live;
+  bool get canCancel => status.canCancel;
+  Trip withStatus(TripStatus value) => Trip(
+    id: id,
+    booking: booking,
+    createdAt: createdAt,
+    status: value,
+    live: live,
+  );
+  Trip withLive(TripStatus status, TripLiveDetails details) => Trip(
+    id: id,
+    booking: booking,
+    createdAt: createdAt,
+    status: status,
+    live: details,
+  );
   @override
-  List<Object?> get props => [id, booking, createdAt, status];
+  List<Object?> get props => [id, booking, createdAt, status, live];
 }

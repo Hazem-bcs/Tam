@@ -37,6 +37,7 @@ void main() {
     await tester.ensureVisible(confirm);
     await tester.tap(confirm);
     await tester.pumpAndSettle();
+    await openBookedTripDetails(tester);
     final details = tester
         .element(find.byType(TripDetailsPage))
         .read<TripDetailsCubit>();

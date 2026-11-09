@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "بيانات الطلب غير صالحة.",
+      "en": "The request is invalid."
+    }
+  }
+}

@@ -67,3 +67,10 @@ commit their fragments, while the supervisor regenerates and commits shared
 UTC+03:00 ونقل UTC، مع نفس مصدر طلباتي ومحاكاة الجلسة. الحزمة المقترحة
 للباكند: [جدولة الرحلات](docs/api/scheduling/README.ar.md).
 يستخدم RIDE_REQUEST_DATA_MODE نفسه، ولا يفعّل GPS أو dispatch أو API حيًا.
+## الرحلة الجارية — W2
+
+الحجز يفتح شاشة المتابعة، وتُستعاد الرحلة من الرئيسية أو تفاصيل طلباتي.
+المصدر المشترك يحاكي البحث والسائق والوصول والانتظار والسير والانتهاء،
+بـACTIVE_TRIP_DATA_MODE وACTIVE_TRIP_MOCK_SCENARIO=success|no_driver|disconnect.
+المحاكاة مؤقتة داخل عملية التطبيق؛ لا GPS أو dispatch خلفي حقيقي.
+راجع [حزمة الباكند](docs/api/active_trip/README.ar.md) للعقد وPostman والأمثلة.

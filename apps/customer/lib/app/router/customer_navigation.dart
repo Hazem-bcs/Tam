@@ -12,11 +12,18 @@ abstract interface class CustomerNavigation {
   void openNotifications();
   void openSettings();
   void openAddresses();
+  void openActiveTrip({String? id});
 }
 
 final class RouterCustomerNavigation implements CustomerNavigation {
   const RouterCustomerNavigation(this.router);
   final GoRouter router;
+  @override
+  void openActiveTrip({String? id}) => unawaited(
+    router.push<void>(
+      id == null ? AppRoutes.activeTrip : AppRoutes.activeTripLocation(id),
+    ),
+  );
   @override
   void openHome() => router.go(AppRoutes.home);
   @override

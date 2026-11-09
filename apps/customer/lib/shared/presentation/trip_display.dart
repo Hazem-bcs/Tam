@@ -9,6 +9,9 @@ String tripStatusLabel(AppLocalizations l, TripStatus status) =>
       TripStatus.scheduled => l.tripsStatusScheduled,
       TripStatus.requested => l.tripsStatusRequested,
       TripStatus.confirmed => l.tripsStatusConfirmed,
+      TripStatus.driverEnRoute => l.tripsStatusDriverEnRoute,
+      TripStatus.driverArrived => l.tripsStatusDriverArrived,
+      TripStatus.noDriver => l.tripsStatusNoDriver,
       TripStatus.inProgress => l.tripsStatusInProgress,
       TripStatus.completed => l.tripsStatusCompleted,
       TripStatus.cancelled => l.tripsStatusCancelled,
@@ -52,11 +55,13 @@ String tripVehicleLabel(AppLocalizations l, String classId) =>
       background: custom.successContainer,
       icon: Icons.check_circle_outline,
     ),
-    TripStatus.cancelled => (
+    TripStatus.cancelled || TripStatus.noDriver => (
       foreground: scheme.onErrorContainer,
       background: scheme.errorContainer,
       icon: Icons.cancel_outlined,
     ),
+    TripStatus.driverEnRoute ||
+    TripStatus.driverArrived ||
     TripStatus.inProgress => (
       foreground: scheme.onPrimaryContainer,
       background: scheme.primaryContainer,

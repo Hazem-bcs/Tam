@@ -567,6 +567,15 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get tripsStatusDriverEnRoute => 'السائق في الطريق';
+
+  @override
+  String get tripsStatusDriverArrived => 'السائق ينتظرك';
+
+  @override
+  String get tripsStatusNoDriver => 'لا يوجد سائق';
+
+  @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';
 
   @override
@@ -887,4 +896,149 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addressesSearchTab => 'البحث';
+
+  @override
+  String get activeTripTitle => 'متابعة الرحلة';
+
+  @override
+  String get activeTripHome => 'الرئيسية';
+
+  @override
+  String get activeTripFollow => 'متابعة رحلتي';
+
+  @override
+  String get activeTripLoading => 'جارٍ تحديث الرحلة…';
+
+  @override
+  String get activeTripRefresh => 'تحديث الحالة';
+
+  @override
+  String get activeTripEmpty => 'لا توجد رحلة متاحة للمتابعة الآن.';
+
+  @override
+  String get activeTripNewBooking => 'اطلب رحلة';
+
+  @override
+  String get activeTripScheduledHint =>
+      'رحلتك محفوظة للموعد المحدد. يبدأ البحث عند الموعد.';
+
+  @override
+  String get activeTripSearchingHint => 'نبحث عن سائق مناسب لرحلتك.';
+
+  @override
+  String get activeTripAssignedHint =>
+      'تم قبول الرحلة. يتجهز السائق للانطلاق إليك.';
+
+  @override
+  String get activeTripEnRouteHint => 'السائق في الطريق إلى نقطة الانطلاق.';
+
+  @override
+  String get activeTripArrivedHint => 'وصل السائق وينتظرك عند نقطة الانطلاق.';
+
+  @override
+  String get activeTripJourneyHint => 'أنت في الطريق إلى وجهتك.';
+
+  @override
+  String get activeTripCompletedHint => 'وصلت إلى وجهتك. اكتملت الرحلة.';
+
+  @override
+  String get activeTripCancelledHint => 'أُلغيت هذه الرحلة.';
+
+  @override
+  String get activeTripNoDriverHint =>
+      'لم نجد سائقًا لهذه الرحلة. يمكنك طلب رحلة جديدة بسعر محدث.';
+
+  @override
+  String activeTripPlate(String plate) {
+    return 'رقم السيارة: $plate';
+  }
+
+  @override
+  String activeTripRating(String rating) {
+    return 'التقييم: $rating من 5';
+  }
+
+  @override
+  String get activeTripDriverDetails => 'عرض بيانات السائق والسيارة';
+
+  @override
+  String get activeTripContactPending =>
+      'الاتصال والمحادثة غير مربوطين حاليًا.';
+
+  @override
+  String get activeTripClose => 'إغلاق';
+
+  @override
+  String activeTripRouteSemantics(String pickup, String destination) {
+    return 'المسار من $pickup إلى $destination';
+  }
+
+  @override
+  String get activeTripPositionStale =>
+      'موقع السائق غير محدث؛ لا تعتمد على موضعه أو وقت الوصول السابق.';
+
+  @override
+  String get activeTripSchematic => 'مسار توضيحي؛ ليس خريطة ملاحة.';
+
+  @override
+  String get activeTripCancelTitle => 'إلغاء الرحلة';
+
+  @override
+  String get activeTripCancelPrompt => 'هل تريد إلغاء هذه الرحلة؟';
+
+  @override
+  String get activeTripKeep => 'متابعة الرحلة';
+
+  @override
+  String get activeTripConfirmCancel => 'تأكيد الإلغاء';
+
+  @override
+  String get activeTripCancelUncertain =>
+      'لم نتأكد من نتيجة الإلغاء. أعد المحاولة للرحلة نفسها قبل طلب بديل.';
+
+  @override
+  String get activeTripRetryCancel => 'إعادة محاولة الإلغاء';
+
+  @override
+  String get activeTripCancelling => 'جارٍ الإلغاء…';
+
+  @override
+  String get activeTripRebook => 'طلب رحلة جديدة';
+
+  @override
+  String get activeTripDetails => 'تفاصيل الطلب';
+
+  @override
+  String get activeTripCannotCancel =>
+      'بدأت الرحلة أو تغيرت حالتها؛ لا يمكن إلغاؤها الآن.';
+
+  @override
+  String get activeTripNotFound => 'لم تعد هذه الرحلة متاحة.';
+
+  @override
+  String get activeTripInvalidResponse =>
+      'تعذر التحقق من تحديث الرحلة. حاول التحديث مجددًا.';
+
+  @override
+  String get activeTripAccessDenied => 'تحتاج هذه العملية إلى جلسة مصرح بها.';
+
+  @override
+  String get activeTripUnavailable => 'خدمة متابعة الرحلة غير متاحة حاليًا.';
+
+  @override
+  String get activeTripConnectionLost =>
+      'تعذر تحديث الرحلة. تحقق من الاتصال وأعد المحاولة.';
+
+  @override
+  String get activeTripCached =>
+      'هذه آخر حالة وصلت؛ قد تكون الرحلة تغيرت أثناء الانقطاع.';
+
+  @override
+  String activeTripEta(int minutes) {
+    return 'الوصول المتوقع خلال $minutes دقيقة';
+  }
+
+  @override
+  String get activeTripSimulationNotice =>
+      'تعمل الرحلة حاليًا بمحاكاة محلية حتى ربط الخدمة.';
 }
