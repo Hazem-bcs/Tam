@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "status": "REVIEW_REQUIRED",
+  "status": "BACKEND_HANDOFF_PROPOSAL",
   "request_examples": 58,
   "scope": "Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons",
-  "overview_sha256": "3b371d4d5bb8a1d19efebe69b7e5528cbac807845cc4528d4907a4fca89ea148",
+  "overview_sha256": "4c213c269db0713e8afe47800558b0a219718301f6633d6f1e383e2179bf74ee",
   "sources": [
     {
       "namespace": "auth",
