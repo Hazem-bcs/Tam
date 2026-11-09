@@ -11,9 +11,12 @@ final class ActiveTripSimulation {
   final ActiveTripTimings timings;
   final ActiveTripScenario scenario;
 
-  Trip? next(Trip trip, DateTime now) {
+  Trip? next(Trip trip, DateTime timestamp) {
     if (!trip.status.isActive) return null;
     final live = trip.live;
+    // A clock correction between booking and the first engine tick must not
+    // produce a snapshot older than the resource itself.
+    final now = timestamp.isBefore(trip.createdAt) ? trip.createdAt : timestamp;
     if (live != null && now.isBefore(live.updatedAt)) return null;
     final changedAt = live?.statusChangedAt ?? trip.createdAt;
     var nextStatus = trip.status;
