@@ -1,0 +1,58 @@
+{
+  "@@locale": "en",
+  "completionTitle": "Trip summary and rating",
+  "completionLoading": "Loading trip summary",
+  "completionSessionEnded": "Your session ended. Return home to continue.",
+  "completionThankYou": "Thank you for riding with Tam",
+  "completionTripId": "Trip ID: {id}",
+  "@completionTripId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRecordedFare": "Recorded booking amount",
+  "completionFareNote": "The amount recorded at booking; this does not confirm payment or provide a receipt.",
+  "completionDriver": "Driver: {name}",
+  "@completionDriver": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateTrip": "How was your trip?",
+  "completionStars": "{count} of 5 stars",
+  "@completionStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionComment": "Optional comment",
+  "completionCommentLimit": "Up to {count} code points after trimming surrounding whitespace.",
+  "@completionCommentLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionSubmit": "Submit rating",
+  "completionSubmitting": "Submitting rating",
+  "completionSaved": "Your rating is saved. Thank you",
+  "completionImmutable": "Each trip has one rating, which cannot be edited.",
+  "completionUncertain": "We could not confirm the save. Your rating is kept unchanged; retry to check without duplicating it.",
+  "completionRetry": "Check and retry",
+  "completionSupport": "Contact support for this trip",
+  "completionHome": "Return home",
+  "completionValidation": "Choose 1–5 stars and keep the comment within the allowed limit.",
+  "completionNotFound": "This trip could not be found.",
+  "completionNotCompleted": "Summary and rating are available after the trip is completed.",
+  "completionUnavailable": "The rating service integration is currently unavailable.",
+  "completionAlreadyRated": "This trip was already rated. Checking the saved rating.",
+  "completionInvalidResponse": "The result could not be verified. Retry to check or contact support.",
+  "completionOffline": "Could not connect. Check your network and retry."
+}
