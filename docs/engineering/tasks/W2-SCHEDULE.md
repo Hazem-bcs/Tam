@@ -44,3 +44,13 @@ guest/localAccess وAuth المؤقت كما هي. لا push/main/Actions أو �
 والفشل والتكامل مع طلباتي/العناوين والخروج، وRTL/LTR و320/390/800 وlandscape
 و2x والكيبورد؛ صور widget renders مفحوصة، ثم format/analyze/full tests
 وl10n --check وJSON وdiff --check، ومراجعة مستقلة عند SHA محدد قبل الدمج.
+
+## التسليم النهائي
+
+INTEGRATED للمرحلة الأولى في 2026-11-09. اعتمد review_schedule الكود عند
+`d5e55034fc1b29f2fe02fd5bad71ac5afe781a6a`، وأضاف اختبار حفظ التاريخ النصي
+مع الكيبورد والخط2x دون تغيير إنتاج. دُمج رأس المراجعة في
+codex/w2-schedule-integration عند `10e00a57527387e88b3cd94dcc963e9fe946e70c`
+ثم إلى feat/auth-contract المحلي. فحص المشرف للمرشح:363 اختبارًا ناجحًا،
+format208/0 وanalyze وl10n وdiff سليمة. [التسليم](../deliveries/W2-SCHEDULE/HANDOFF.md)
+و[المراجعة](../deliveries/W2-SCHEDULE/REVIEW.md). لا push/main/Actions.
