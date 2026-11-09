@@ -14,6 +14,10 @@ import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario
 import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
+import 'package:tam_customer/features/chat/domain/chat_repository.dart';
+import 'package:tam_customer/features/chat/data/mock/mock_chat_repository.dart';
+import 'package:tam_customer/features/chat/data/mock/chat_mock_scenario.dart';
+import 'package:tam_customer/features/chat/data/unavailable_chat_repository.dart';
 import 'package:tam_customer/features/addresses/data/mock/mock_addresses_repository.dart';
 import 'package:tam_customer/features/addresses/data/ride_address_place_search.dart';
 import 'package:tam_customer/features/addresses/data/unavailable_addresses_repository.dart';
@@ -63,6 +67,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final MockNotificationsRepository _mockNotifications;
   late final MockAddressesRepository _mockAddresses;
   MockActiveTripRepository? _mockActiveTrips;
+  MockChatRepository? _mockChat;
   late final StreamSubscription<AuthState> _sessionChanges;
 
   @override
@@ -93,6 +98,15 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
             ),
           ))
         : const UnavailableActiveTripRepository();
+    final ChatRepository chat =
+        modes.forFeature(CustomerFeature.chat) == FeatureDataMode.mock
+        ? (_mockChat = MockChatRepository(
+            _mockTrips,
+            now: widget.clock,
+            scenario: ChatMockScenario.parse(AppConfig.chatMockScenario),
+            policy: AppConfig.chatPolicy,
+          ))
+        : const UnavailableChatRepository();
     _mockNotifications = MockNotificationsRepository();
     _mockAddresses = MockAddressesRepository();
     final addressesMode = modes.forFeature(CustomerFeature.addresses);
@@ -114,6 +128,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       notifications: notifications,
       addresses: addresses,
       activeTrips: activeTrips,
+      chat: chat,
       clock: widget.clock,
       addressPlaceSearch: (language) =>
           RideAddressPlaceSearch(placeSource, languageCode: language),
@@ -131,6 +146,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
         _mockTrips.resetSession();
         _mockActiveTrips?.resetSession();
+        _mockChat?.resetSession();
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
         resetSettingsFeatureSession(_locale);
@@ -162,6 +178,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _refresh.dispose();
     unawaited(_sessionChanges.cancel());
     if (_mockActiveTrips != null) unawaited(_mockActiveTrips!.dispose());
+    if (_mockChat != null) unawaited(_mockChat!.dispose());
     unawaited(_mockTrips.dispose());
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());

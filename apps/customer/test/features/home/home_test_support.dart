@@ -17,6 +17,8 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   int notifications = 0;
   int home = 0;
   @override
+  void openChat(String tripId) {}
+  @override
   void openActiveTrip({String? id}) {}
   @override
   void openHome() => home++;

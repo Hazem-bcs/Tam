@@ -398,7 +398,7 @@
   "activeTripPlate": "رقم السيارة: {plate}",
   "activeTripRating": "التقييم: {rating} من 5",
   "activeTripDriverDetails": "عرض بيانات السائق والسيارة",
-  "activeTripContactPending": "الاتصال والمحادثة غير مربوطين حاليًا.",
+  "activeTripContactPending": "المكالمات غير مربوطة حاليًا.",
   "activeTripClose": "إغلاق",
   "activeTripRouteSemantics": "المسار من {pickup} إلى {destination}",
   "activeTripPositionStale": "موقع السائق غير محدث؛ لا تعتمد على موضعه أو وقت الوصول السابق.",
@@ -451,5 +451,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "activeTripChat": "محادثة السائق"
 }

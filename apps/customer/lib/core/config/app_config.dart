@@ -1,10 +1,16 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
+import 'package:tam_customer/features/chat/domain/chat_repository.dart';
 
 abstract final class AppConfig {
   static const rideSchedulePolicy = RideSchedulePolicy();
   static const activeTripPolicy = ActiveTripPolicy();
+  static const chatPolicy = ChatPolicy();
+  static const chatMockScenario = String.fromEnvironment(
+    'CHAT_MOCK_SCENARIO',
+    defaultValue: 'success',
+  );
   static const activeTripMockScenario = String.fromEnvironment(
     'ACTIVE_TRIP_MOCK_SCENARIO',
     defaultValue: 'success',
@@ -30,6 +36,7 @@ abstract final class AppConfig {
       ),
       CustomerFeature.settings: String.fromEnvironment('SETTINGS_DATA_MODE'),
       CustomerFeature.addresses: String.fromEnvironment('ADDRESSES_DATA_MODE'),
+      CustomerFeature.chat: String.fromEnvironment('CHAT_DATA_MODE'),
       CustomerFeature.activeTrip: String.fromEnvironment(
         'ACTIVE_TRIP_DATA_MODE',
       ),

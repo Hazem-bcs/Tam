@@ -981,8 +981,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeTripDriverDetails => 'View driver and vehicle details';
 
   @override
-  String get activeTripContactPending =>
-      'Calls and chat are not connected yet.';
+  String get activeTripContactPending => 'Calls are not connected yet.';
 
   @override
   String get activeTripClose => 'Close';
@@ -1061,4 +1060,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get activeTripSimulationNotice =>
       'Trips currently use local simulation until the service is connected.';
+
+  @override
+  String get activeTripChat => 'Chat with driver';
 }

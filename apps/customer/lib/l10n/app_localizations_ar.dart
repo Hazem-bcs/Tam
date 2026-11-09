@@ -962,8 +962,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeTripDriverDetails => 'عرض بيانات السائق والسيارة';
 
   @override
-  String get activeTripContactPending =>
-      'الاتصال والمحادثة غير مربوطين حاليًا.';
+  String get activeTripContactPending => 'المكالمات غير مربوطة حاليًا.';
 
   @override
   String get activeTripClose => 'إغلاق';
@@ -1041,4 +1040,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get activeTripSimulationNotice =>
       'تعمل الرحلة حاليًا بمحاكاة محلية حتى ربط الخدمة.';
+
+  @override
+  String get activeTripChat => 'محادثة السائق';
 }

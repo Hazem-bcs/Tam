@@ -74,3 +74,12 @@ UTC+03:00 ونقل UTC، مع نفس مصدر طلباتي ومحاكاة الج
 بـACTIVE_TRIP_DATA_MODE وACTIVE_TRIP_MOCK_SCENARIO=success|no_driver|disconnect.
 المحاكاة مؤقتة داخل عملية التطبيق؛ لا GPS أو dispatch خلفي حقيقي.
 راجع [حزمة الباكند](docs/api/active_trip/README.ar.md) للعقد وPostman والأمثلة.
+
+## محادثة العميل — W2
+
+من متابعة الرحلة يمكن فتح محادثة نصية مع السائق المعيّن، مع توقيت وحالات
+إرسال/تسليم/قراءة وإعادة محاولة بالمعرف نفسه. بعد انتهاء/إلغاء الرحلة تصبح
+للقراءة فقط. CHAT_DATA_MODE يرث DATA_MODE، وCHAT_MOCK_SCENARIO يدعم
+success|empty|disconnect|send_failure|lost_response. إعداد api دون ربط جاهز
+يفشل بوضوح؛ لا fallback أو إرسال حي. الرسائل داخل عمر عملية التطبيق وتمسح
+عند الخروج. راجع [حزمة الباكند](docs/api/chat/README.ar.md) للعقد وPostman.

@@ -1883,7 +1883,7 @@ abstract class AppLocalizations {
   /// No description provided for @activeTripContactPending.
   ///
   /// In ar, this message translates to:
-  /// **'الاتصال والمحادثة غير مربوطين حاليًا.'**
+  /// **'المكالمات غير مربوطة حاليًا.'**
   String get activeTripContactPending;
 
   /// No description provided for @activeTripClose.
@@ -2017,6 +2017,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعمل الرحلة حاليًا بمحاكاة محلية حتى ربط الخدمة.'**
   String get activeTripSimulationNotice;
+
+  /// No description provided for @activeTripChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة السائق'**
+  String get activeTripChat;
 }
 
 class _AppLocalizationsDelegate

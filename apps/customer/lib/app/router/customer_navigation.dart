@@ -13,11 +13,15 @@ abstract interface class CustomerNavigation {
   void openSettings();
   void openAddresses();
   void openActiveTrip({String? id});
+  void openChat(String tripId);
 }
 
 final class RouterCustomerNavigation implements CustomerNavigation {
   const RouterCustomerNavigation(this.router);
   final GoRouter router;
+  @override
+  void openChat(String tripId) =>
+      unawaited(router.push<void>(AppRoutes.chatLocation(tripId)));
   @override
   void openActiveTrip({String? id}) => unawaited(
     router.push<void>(

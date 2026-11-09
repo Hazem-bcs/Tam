@@ -5,6 +5,7 @@ import 'package:tam_customer/core/cache/sqlite_cache_store.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/network/api_client.dart';
 import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
+import 'package:tam_customer/features/chat/chat_entry.dart';
 import 'package:tam_customer/features/addresses/addresses_dependencies.dart';
 import 'package:tam_customer/features/auth/auth_dependencies.dart';
 import 'package:tam_customer/features/ride_request/ride_request_dependencies.dart';
@@ -20,4 +21,5 @@ void configureDependencies() {
   registerRideRequestDependencies(locator);
   registerAddressesDependencies(locator);
   registerActiveTripDependencies(locator);
+  registerChatDependencies(locator);
 }

@@ -9,6 +9,7 @@ import 'package:tam_customer/app/router/route_access_policy.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
+import 'package:tam_customer/features/chat/chat_entry.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
@@ -33,6 +34,7 @@ GoRouter createAppRouter(
   required NotificationsRepository notifications,
   required AddressesRepository addresses,
   required ActiveTripRepository activeTrips,
+  required ChatRepository chat,
   required AddressPlaceSearch Function(String languageCode) addressPlaceSearch,
   FeatureDataModes dataModes = const FeatureDataModes(),
   MockTripStore? mockTrips,
@@ -52,6 +54,25 @@ GoRouter createAppRouter(
       policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
     routes: [
+      GoRoute(
+        path: AppRoutes.chat,
+        builder: (context, state) => buildChatFeature(
+          repository: chat,
+          tripId: state.pathParameters['tripId']!,
+          policy: AppConfig.chatPolicy,
+          now: clock ?? DateTime.now,
+          onBack: () {
+            final router = GoRouter.of(context);
+            if (router.canPop()) {
+              router.pop();
+            } else {
+              router.go(
+                AppRoutes.activeTripLocation(state.pathParameters['tripId']!),
+              );
+            }
+          },
+        ),
+      ),
       for (final path in [AppRoutes.activeTrip, AppRoutes.activeTripDetails])
         GoRoute(
           path: path,

@@ -59,6 +59,8 @@ final class ActiveNavigationSpy implements CustomerNavigation {
   TripPrefill? prefill;
   String? detailsId;
   @override
+  void openChat(String tripId) {}
+  @override
   void openActiveTrip({String? id}) {}
   @override
   void openAddresses() {}

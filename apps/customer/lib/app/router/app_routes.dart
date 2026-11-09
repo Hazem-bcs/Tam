@@ -12,6 +12,12 @@ abstract final class AppRoutes {
   static const addresses = '/addresses';
   static const addAddress = '/addresses/new';
   static const editAddress = '/addresses/:addressId/edit';
+  static const chat = '/trips/:tripId/chat';
+  static String chatLocation(String id) {
+    if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');
+    return Uri(pathSegments: ['', 'trips', id, 'chat']).toString();
+  }
+
   static const activeTrip = '/active-trip';
   static const activeTripDetails = '/active-trip/:tripId';
   static String activeTripLocation(String id) {

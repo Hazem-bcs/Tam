@@ -40,6 +40,9 @@ Page -> Cubit/Bloc -> Domain Repository
 متابعة الرحلة تستخدم `ACTIVE_TRIP_DATA_MODE`، وسيناريو محاكاتها المركزي
 `ACTIVE_TRIP_MOCK_SCENARIO=success|no_driver|disconnect`. المحرك مملوك
 للتطبيق ويحدث Trip نفسه حتى عند مغادرة الصفحة؛ لا تنفيذ خلفي بعد إغلاقه.
+المحادثة تستخدم CHAT_DATA_MODE، مع CHAT_MOCK_SCENARIO=success|empty|disconnect|send_failure|lost_response.
+مستودعها مملوك للتطبيق ويستمد أهلية المحادثة من الرحلة نفسها؛ تصفر الرسائل
+ومفاتيح الإرسال عند الخروج. لا إرسال فعلي أو حفظ دائم أو fallback إلى محاكاة.
 يرث خيار الميزة الوضع العام إذا لم يحدد؛ القيم غير المعروفة خطأ إعداد واضح.
 الخيارات منفذة عبر AppConfig وFeatureDataModes، وتُحقن قيمتها في نقاط دخول الميزات المسجلة؛ لا يختارها Widget أو Cubit.
 

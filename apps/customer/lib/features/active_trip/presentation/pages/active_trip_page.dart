@@ -143,6 +143,13 @@ class _ActiveTripPageState extends State<ActiveTripPage>
                       if (trip.live?.driver != null) ...[
                         const SizedBox(height: AppSpacing.lg),
                         ActiveDriverCard(driver: trip.live!.driver!),
+                        const SizedBox(height: AppSpacing.md),
+                        TamButton.secondary(
+                          key: const Key('active-chat'),
+                          label: l.activeTripChat,
+                          icon: Icons.chat_bubble_outline,
+                          onPressed: () => widget.navigation.openChat(trip.id),
+                        ),
                       ],
                       if (!state.offline &&
                           !state.positionStale &&

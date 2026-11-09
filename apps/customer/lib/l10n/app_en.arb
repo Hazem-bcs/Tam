@@ -398,7 +398,7 @@
   "activeTripPlate": "Plate: {plate}",
   "activeTripRating": "Rating: {rating} out of 5",
   "activeTripDriverDetails": "View driver and vehicle details",
-  "activeTripContactPending": "Calls and chat are not connected yet.",
+  "activeTripContactPending": "Calls are not connected yet.",
   "activeTripClose": "Close",
   "activeTripRouteSemantics": "Route from {pickup} to {destination}",
   "activeTripPositionStale": "The driver location is outdated. Do not rely on its previous position or ETA.",
@@ -451,5 +451,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "activeTripChat": "Chat with driver"
 }
