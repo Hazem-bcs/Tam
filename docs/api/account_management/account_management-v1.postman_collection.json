@@ -1,0 +1,3579 @@
+{
+  "info": {
+    "name": "TAM | تم — account_management v1 (proposed)",
+    "description": "# تم — إدارة رقم الحساب وحذفه، عقد v1\n\nالحالة: مقترح للتنفيذ، غير متصل بخادم حي. هذا امتداد مستقل عن مسارات Auth\nالستة؛ لا يستخدم تحقق عملية حساسة لتسجيل دخول أو إصدار جلسة جديدة.\nbase_url يشمل /api/v1. النجاح data، والفشل error.code وmessage.ar/en.\nكل الأوقات ISO8601 UTC Z بتقويم صحيح. المعرفات opaque وغير فارغة.\n\n## التدفقات والقرارات\n\nتغيير رقم سوري: إدخال الجديد، OTP للرقم الجديد، تأكيد ثم إنهاء الجلسة.\nالحذف: تأكيد صريح من المستخدم، OTP لرقمه الحالي، تنفيذ الحذف ثم إنهاء\nالجلسة. لا دمج حسابين ولا تغيير رقم دون تحقق. المحفظة والدفع والكوبونات\nمؤجلة. ليست هذه سياسة احتفاظ قانونية؛ النصوص المعتمدة مسؤولية صاحب المنتج.\n\nيمنع الخادم العمليتين أثناء أي رحلة غير منتهية، بما فيها scheduled.\nيفحص ذلك عند إنشاء التحقق ومجددًا داخل معاملة التنفيذ؛ لا يعتمد على UI.\nهذه سياسة الإصدار الأول المتبعة في المحاكاة، وقابلة للتعديل بالتنسيق.\nالضيف والدخول المؤقت ليسا جلسة API. المحاكاة تحاكي ملكية الرقم المدخل محليًا\nولا تنشئ حسابًا أو توكنًا موثقًا. تجاوز OTP الدخول المؤقت لا ينطبق على هذه العمليات.\n\n## العمليات\n\n| الفعل | Repository | HTTP |\n|---|---|---|\n| أهلية الإدارة | eligibility | GET /me/account/eligibility |\n| بدء تحقق تغيير أو حذف | start | POST /me/account/challenges |\n| إعادة إرسال | resend | POST /me/account/challenges/{challenge_id}/resend |\n| تأكيد العملية | confirm | POST /me/account/challenges/{challenge_id}/confirm |\n| حسم فقد الرد | operation | GET /account/operations/{operation_id} |\n\nAccept:application/json؛ Content-Type:application/json لطلبات POST.\nأول أربع عمليات تتطلب Bearer صالحًا وملكية الحساب والتحقق. عملية الحسم\nالأخيرة لا تتطلب جلسة حساب، لكنها **ليست عامة بلا اعتماد**: تحتاج\nX-Operation-Token سريًا محدود الصلاحية بالعملية نفسها. التأكيد يحتاجه كذلك.\nإعادة تأكيد عملية مكتملة بعد إبطال الجلسة يسمح بها فقط لاسترجاع نتيجتها\nبنفس token والعملية والتحقق والحمولة، دون أي تعديل جديد. أول أثر يتطلب\nBearer صالحًا دائمًا؛ recovery token وحده لا ينفذ حذفًا أو تغييرًا.\n\nGET eligibility: data.phone_e164 مطلوب string سوري canonical؛\ndata.active_trip_ids قائمة معرفات فريدة للرحلات غير المنتهية. الخادم الحقيقي\nلا يعيد guest success؛ مثال phone_e164:null يصف أهلية المحاكاة للضيف فقط،\nولا يوجد نجاح كهذا محفوظ في طلب Postman الخادمي.\n\nPOST challenge body: operation_id مطلوب `[A-Za-z0-9_-]{16,128}`؛ العميل يولد\n48hex من مصدر آمن. purpose مطلوب change_phone|delete_account.\nnew_phone_e164 مطلوب لتغيير الرقم بصيغة +9639 ثم8 أرقام، ويجب أن يختلف\nعن الحالي وألا يخص حسابًا آخر. للحذف يغيب أو يكون null. يثبت الخادم\nهوية الحساب والهدف والغرض في التحقق، لا يقبل تبديلها عند التأكيد.\n\n200 data: challenge_id وoperation_id وpurpose وphone_e164 (هدف OTP)،\nexpires_at وresend_at، attempts_remaining:int0..5، revision:int≥1،\nوrecovery_token:64hex عشوائي آمن. الأخير اعتماد استعادة، يخزنه محول API\nخصوصيًا في data خلال عمر الصفحة؛ لا tokens في Cubit state أو logs أو URL.\nممنوع إعادة استخدامه للوصول للملف أو الرحلات أو بدء عملية أخرى.\n\nرمز OTP ست خانات، صالح5 دقائق، وإعادة الإرسال بعد30 ثانية. خمسة أخطاء\nتفرض قفل15 دقيقة على الحساب/الهدف عبر التحققات الجديدة أيضًا. الخادم\nيطبق حدود إرسال مستقلة حسب الحساب/الهدف/المصدر؛429 وRetry-After للرفض.\nهذه حدود مقترحة مثبتة في AccountPolicy وتحتاج تنسيقًا عند تغييرها.\nالوقت والمحاولات مصدرهما الخادم؛ العميل لا يقرر نجاح الرمز من الساعة.\n\nPOST resend body: request_id آمن بنفس نمط operation_id، ثابت عند إعادة\nمحاولة الإرسال نفسها. يظل challenge_id ثابتًا وترتفع revision وتتجدد\nالمواعيد والمحاولات ضمن حدود المعدل. كل إعادة إرسال ناجحة تبطل الرمز السابق.\nإعادة نفس request_id للتحقق نفسه لا ترسل SMS جديدًا ولا تعيد ضبط الساعة؛\nمع تحقق مختلف409. تعرض الاستجابة أحدث challenge دون recovery_token.\n\nPOST confirm body: operation_id وcode. يتحقق الخادم من OTP والغرض والهدف\nوملكية الحساب وأهلية الرحلات وتوفر الرقم ذريًا مع التعديل. لا استهلاك جزئي\nلرمز مع نجاح تعديل غير مسجل؛ لا محاولة جديدة بمعرف مختلف بعد timeout.\n200 data: operation_id وchallenge_id وpurpose وstatus=completed وcompleted_at.\nيعاد نفس المورد لإعادة نفس العملية، دون تعديل جديد أو وقت جديد.\nنفس العملية ببيانات مختلفة409 IDEMPOTENCY_CONFLICT. تُقارن حمولة التأكيد\nالمطبعة بما فيها الرمز لإعادة عملية مكتملة، ولا تعاد محاولة OTP مستهلكة\nكمورد مستقل. عدم تطابق الغرض/التحقق/الهدف لا يغير حسابًا آخر.\n\nنجاح الحذف يعطل الوصول للحساب ويبطل جلساته؛ نجاح تغيير الرقم يحدث حسابه\nنفسه ويبطل جلساته أيضًا، ثم يعود المستخدم للدخول بالرقم الجديد. لا يصدر\nهذا endpoint access_token أوrefresh_token. تفاصيل الاحتفاظ والحذف لدى\nالمنظومة وتدقيق الموظفين خارج قرار العميل؛ لا نعد بزمن مسح قانوني مختلق.\n\nيحفظ الخادم سجل نتيجة وgrant استعادة محدودًا24 ساعة على الأقل مع\nidempotency، حتى بعد إبطال جلسة الحساب. GET operation يحتاج token مطابقًا\nلنفس العملية؛ لا يكشف رقمًا أو ملف مستخدم.200 data:null تعني لم تنفذ\nهذه العملية بعد، و200 مع receipt تعني مكتملة. token مجهول/منتهي/لعملية\nأخرى401 RECOVERY_INVALID دون كشف الوجود. لا تنفذ GET أثرًا ولا تعيد حسابًا\nمحذوفًا. لا تعمم استثناء جلسة ملغاة إلى بقية المسارات.\n\nعند فقد رد start يعاد نفس operation_id والغرض والهدف ويعود نفس التحقق\nوgrant؛ لا يرسل رمز جديد. عند فقد confirm يجمد العميل الرمز والنية،\nويقرأ receipt أو يعيد نفس confirm. لا يوجد outbox دائم في هذا الإصدار؛\nالمسودة والـgrant غير المقبولين لعمر الصفحة. بعد إعادة تشغيل التطبيق\nتحدد استعادة Auth وضع الحساب من الخادم، ولا يختلق العميل نجاح عملية مفقودة.\n\n## الأخطاء\n\n401 UNAUTHENTICATED أوRECOVERY_INVALID؛403 FORBIDDEN/ACCOUNT_REQUIRED؛\n404 CHALLENGE_NOT_FOUND؛409 ACTIVE_TRIP_EXISTS/PHONE_UNCHANGED/PHONE_IN_USE/\nIDEMPOTENCY_CONFLICT؛410 OTP_EXPIRED؛422 VALIDATION_ERROR/OTP_INVALID؛\n429 OTP_COOLDOWN/OTP_ATTEMPTS_EXCEEDED/RATE_LIMITED؛503 SERVICE_UNAVAILABLE.\nالرفض المعروف قبل الأثر يتيح التصحيح. timeout وإخفاق النقل أو استجابة\nغير مطابقة قد تعني أثرًا غير محسوم، فتظل نفس النية مقفلة حتى الحسم.\nلا تعرض تفاصيل الحساب الآخر عند PHONE_IN_USE. لا fallback إلىmock.\n\n## المحاكاة والاختبارات\n\nACCOUNT_MANAGEMENT_DATA_MODE يرث DATA_MODE؛ ACCOUNT_MOCK_SCENARIO:\nsuccess|offline|lost_response|phone_in_use. كود fixture الأول123456 وبعد\nأول resend654321، للاختبار المحلي فقط ولا يظهر في UI كسر نجاح خادمي.\nالتطبيق ينهي جلسة المحاكاة ويمسح بياناتها عند القبول؛ هذا ليس حذف حساب\nحقيقيًا. اختبارات العقد تطابق أمثلة التحقق والنتيجة بالمستودع والـmapper.\nلا SMS حقيقي أو اختبار خادم أو استيراد Postman فعلي ضمن الأدلة الحالية.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://example.invalid/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "operation_id",
+      "value": "account-operation-0001",
+      "type": "string"
+    },
+    {
+      "key": "challenge_id",
+      "value": "mock-account-0-account-operation-0001",
+      "type": "string"
+    },
+    {
+      "key": "resend_request_id",
+      "value": "account-resend-0001",
+      "type": "string"
+    },
+    {
+      "key": "new_phone_e164",
+      "value": "+963944444444",
+      "type": "string"
+    },
+    {
+      "key": "otp_code",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "recovery_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "أهلية إدارة الحساب",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/eligibility",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "eligibility"
+          ]
+        },
+        "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+      },
+      "response": [
+        {
+          "name": "eligibility",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"phone_e164\": \"+963912345678\",\n    \"active_trip_ids\": []\n  }\n}\n"
+        },
+        {
+          "name": "eligibility-active",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"phone_e164\": \"+963912345678\",\n    \"active_trip_ids\": [\n      \"mock-trip-1\"\n    ]\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/eligibility",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "eligibility"
+              ]
+            },
+            "description": "أهلية إدارة الحساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "بدء change_phone",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/challenges",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "challenges"
+          ]
+        },
+        "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "change_phone-challenge",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"operation_id\": \"account-operation-0001\",\n    \"purpose\": \"change_phone\",\n    \"phone_e164\": \"+963944444444\",\n    \"expires_at\": \"2026-11-09T12:05:00.000Z\",\n    \"resend_at\": \"2026-11-09T12:00:30.000Z\",\n    \"attempts_remaining\": 5,\n    \"revision\": 1,\n    \"recovery_token\": \"0000000000000000000000000000000000000000000000000000000000000000\"\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "ACTIVE_TRIP_EXISTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "ACTIVE_TRIP_EXISTS",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACTIVE_TRIP_EXISTS\",\n    \"message\": {\n      \"ar\": \"توجد رحلة غير منتهية.\",\n      \"en\": \"An unfinished trip exists.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"معرف مكرر ببيانات مختلفة.\",\n      \"en\": \"ID reused with a different payload.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "PHONE_IN_USE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "PHONE_IN_USE",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"PHONE_IN_USE\",\n    \"message\": {\n      \"ar\": \"الرقم مرتبط بحساب آخر.\",\n      \"en\": \"Phone belongs to another account.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "PHONE_UNCHANGED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء change_phone — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"change_phone\",\n  \"new_phone_e164\": \"{{new_phone_e164}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "PHONE_UNCHANGED",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"PHONE_UNCHANGED\",\n    \"message\": {\n      \"ar\": \"الرقم الجديد مطابق للحالي.\",\n      \"en\": \"Phone number is unchanged.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "بدء delete_account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/challenges",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "challenges"
+          ]
+        },
+        "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "delete_account-challenge",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"operation_id\": \"account-operation-0001\",\n    \"purpose\": \"delete_account\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_at\": \"2026-11-09T12:05:00.000Z\",\n    \"resend_at\": \"2026-11-09T12:00:30.000Z\",\n    \"attempts_remaining\": 5,\n    \"revision\": 1,\n    \"recovery_token\": \"0000000000000000000000000000000000000000000000000000000000000000\"\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "ACTIVE_TRIP_EXISTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "ACTIVE_TRIP_EXISTS",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACTIVE_TRIP_EXISTS\",\n    \"message\": {\n      \"ar\": \"توجد رحلة غير منتهية.\",\n      \"en\": \"An unfinished trip exists.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"معرف مكرر ببيانات مختلفة.\",\n      \"en\": \"ID reused with a different payload.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges"
+              ]
+            },
+            "description": "بدء delete_account — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"purpose\": \"delete_account\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "إعادة إرسال رمز العملية",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "challenges",
+            "{{challenge_id}}",
+            "resend"
+          ]
+        },
+        "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "resend",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"operation_id\": \"account-operation-0001\",\n    \"purpose\": \"delete_account\",\n    \"phone_e164\": \"+963912345678\",\n    \"expires_at\": \"2026-11-09T12:05:30.000Z\",\n    \"resend_at\": \"2026-11-09T12:01:00.000Z\",\n    \"attempts_remaining\": 5,\n    \"revision\": 2\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "CHALLENGE_NOT_FOUND",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "CHALLENGE_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"CHALLENGE_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"التحقق غير موجود.\",\n      \"en\": \"Challenge not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_EXPIRED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_EXPIRED",
+          "code": 410,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية التحقق.\",\n      \"en\": \"Verification expired.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_ATTEMPTS_EXCEEDED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_ATTEMPTS_EXCEEDED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_ATTEMPTS_EXCEEDED\",\n    \"message\": {\n      \"ar\": \"استُنفدت محاولات التحقق.\",\n      \"en\": \"Verification attempts exhausted.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_COOLDOWN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_COOLDOWN",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_COOLDOWN\",\n    \"message\": {\n      \"ar\": \"انتظر قبل إعادة الإرسال.\",\n      \"en\": \"Wait before resending.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "ACTIVE_TRIP_EXISTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "ACTIVE_TRIP_EXISTS",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACTIVE_TRIP_EXISTS\",\n    \"message\": {\n      \"ar\": \"توجد رحلة غير منتهية.\",\n      \"en\": \"An unfinished trip exists.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/resend",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "resend"
+              ]
+            },
+            "description": "إعادة إرسال رمز العملية — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": \"{{resend_request_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"معرف مكرر ببيانات مختلفة.\",\n      \"en\": \"ID reused with a different payload.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "تأكيد change_phone — نفس العملية عند الإعادة",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Operation-Token",
+            "value": "{{recovery_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "challenges",
+            "{{challenge_id}}",
+            "confirm"
+          ]
+        },
+        "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "change_phone-completed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"operation_id\": \"account-operation-0001\",\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"purpose\": \"change_phone\",\n    \"status\": \"completed\",\n    \"completed_at\": \"2026-11-09T12:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RECOVERY_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RECOVERY_INVALID",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RECOVERY_INVALID\",\n    \"message\": {\n      \"ar\": \"بيانات استعادة العملية غير صالحة.\",\n      \"en\": \"Invalid operation recovery credential.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "CHALLENGE_NOT_FOUND",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "CHALLENGE_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"CHALLENGE_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"التحقق غير موجود.\",\n      \"en\": \"Challenge not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_INVALID",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": {\n      \"ar\": \"رمز التحقق غير صحيح.\",\n      \"en\": \"Incorrect verification code.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_EXPIRED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_EXPIRED",
+          "code": 410,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية التحقق.\",\n      \"en\": \"Verification expired.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_ATTEMPTS_EXCEEDED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_ATTEMPTS_EXCEEDED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_ATTEMPTS_EXCEEDED\",\n    \"message\": {\n      \"ar\": \"استُنفدت محاولات التحقق.\",\n      \"en\": \"Verification attempts exhausted.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "ACTIVE_TRIP_EXISTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "ACTIVE_TRIP_EXISTS",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACTIVE_TRIP_EXISTS\",\n    \"message\": {\n      \"ar\": \"توجد رحلة غير منتهية.\",\n      \"en\": \"An unfinished trip exists.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "PHONE_IN_USE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "PHONE_IN_USE",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"PHONE_IN_USE\",\n    \"message\": {\n      \"ar\": \"الرقم مرتبط بحساب آخر.\",\n      \"en\": \"Phone belongs to another account.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"معرف مكرر ببيانات مختلفة.\",\n      \"en\": \"ID reused with a different payload.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد change_phone — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "تأكيد delete_account — نفس العملية عند الإعادة",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Operation-Token",
+            "value": "{{recovery_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me",
+            "account",
+            "challenges",
+            "{{challenge_id}}",
+            "confirm"
+          ]
+        },
+        "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "delete_account-completed",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"operation_id\": \"account-operation-0001\",\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"purpose\": \"delete_account\",\n    \"status\": \"completed\",\n    \"completed_at\": \"2026-11-09T12:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RECOVERY_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RECOVERY_INVALID",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RECOVERY_INVALID\",\n    \"message\": {\n      \"ar\": \"بيانات استعادة العملية غير صالحة.\",\n      \"en\": \"Invalid operation recovery credential.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "CHALLENGE_NOT_FOUND",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "CHALLENGE_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"CHALLENGE_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"التحقق غير موجود.\",\n      \"en\": \"Challenge not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_INVALID",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_INVALID",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_INVALID\",\n    \"message\": {\n      \"ar\": \"رمز التحقق غير صحيح.\",\n      \"en\": \"Incorrect verification code.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_EXPIRED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_EXPIRED",
+          "code": 410,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_EXPIRED\",\n    \"message\": {\n      \"ar\": \"انتهت صلاحية التحقق.\",\n      \"en\": \"Verification expired.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "OTP_ATTEMPTS_EXCEEDED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OTP_ATTEMPTS_EXCEEDED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"OTP_ATTEMPTS_EXCEEDED\",\n    \"message\": {\n      \"ar\": \"استُنفدت محاولات التحقق.\",\n      \"en\": \"Verification attempts exhausted.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "ACTIVE_TRIP_EXISTS",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "ACTIVE_TRIP_EXISTS",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ACTIVE_TRIP_EXISTS\",\n    \"message\": {\n      \"ar\": \"توجد رحلة غير منتهية.\",\n      \"en\": \"An unfinished trip exists.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "PHONE_IN_USE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "PHONE_IN_USE",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"PHONE_IN_USE\",\n    \"message\": {\n      \"ar\": \"الرقم مرتبط بحساب آخر.\",\n      \"en\": \"Phone belongs to another account.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"معرف مكرر ببيانات مختلفة.\",\n      \"en\": \"ID reused with a different payload.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/me/account/challenges/{{challenge_id}}/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "me",
+                "account",
+                "challenges",
+                "{{challenge_id}}",
+                "confirm"
+              ]
+            },
+            "description": "تأكيد delete_account — نفس العملية عند الإعادة — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operation_id\": \"{{operation_id}}\",\n  \"code\": \"{{otp_code}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "name": "حسم العملية بعد فقد الرد — بلا جلسة حساب",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Operation-Token",
+            "value": "{{recovery_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/account/operations/{{operation_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "account",
+            "operations",
+            "{{operation_id}}"
+          ]
+        },
+        "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": [
+        {
+          "name": "operation-pending",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": null\n}\n"
+        },
+        {
+          "name": "change_phone-completed",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"operation_id\": \"account-operation-0001\",\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"purpose\": \"change_phone\",\n    \"status\": \"completed\",\n    \"completed_at\": \"2026-11-09T12:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "delete_account-completed",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"operation_id\": \"account-operation-0001\",\n    \"challenge_id\": \"mock-account-0-account-operation-0001\",\n    \"purpose\": \"delete_account\",\n    \"status\": \"completed\",\n    \"completed_at\": \"2026-11-09T12:00:00.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "RECOVERY_INVALID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "RECOVERY_INVALID",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RECOVERY_INVALID\",\n    \"message\": {\n      \"ar\": \"بيانات استعادة العملية غير صالحة.\",\n      \"en\": \"Invalid operation recovery credential.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Operation-Token",
+                "value": "{{recovery_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/account/operations/{{operation_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "account",
+                "operations",
+                "{{operation_id}}"
+              ]
+            },
+            "description": "حسم العملية بعد فقد الرد — بلا جلسة حساب — العقد الكامل في وصف المجموعة. لا خادم حي متصل.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        }
+      ]
+    }
+  ]
+}

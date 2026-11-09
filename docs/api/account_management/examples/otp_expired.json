@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "OTP_EXPIRED",
+    "message": {
+      "ar": "انتهت صلاحية التحقق.",
+      "en": "Verification expired."
+    }
+  }
+}

@@ -53,6 +53,12 @@ class TripsNavigationSpy implements CustomerNavigation {
   @override
   void openTrips() => openedTrips = true;
   @override
+  void openAccountPhone() {}
+  @override
+  void openAccountDeletion() {}
+  @override
+  void openDriverContact(String tripId, String driverId) {}
+  @override
   void openHome() {}
   @override
   void openNotifications() {}

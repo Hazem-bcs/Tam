@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "ACTIVE_TRIP_EXISTS",
+    "message": {
+      "ar": "توجد رحلة غير منتهية.",
+      "en": "An unfinished trip exists."
+    }
+  }
+}

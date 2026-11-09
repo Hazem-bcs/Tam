@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "DRIVER_CHANGED",
+    "message": {
+      "ar": "تغير السائق المعيّن.",
+      "en": "Assigned driver changed."
+    }
+  }
+}

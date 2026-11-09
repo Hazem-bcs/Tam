@@ -11,7 +11,10 @@ class SettingsAccountLinks extends StatelessWidget {
     required this.onSupport,
     required this.onTerms,
     required this.onPrivacy,
+    required this.onChangePhone,
+    required this.onDeleteAccount,
   });
+  final VoidCallback onChangePhone, onDeleteAccount;
   final bool enabled;
   final VoidCallback onAddresses, onSupport, onTerms, onPrivacy;
 
@@ -30,6 +33,18 @@ class SettingsAccountLinks extends StatelessWidget {
             size: AppDimensions.iconSize,
           ),
           onTap: enabled ? onAddresses : null,
+        ),
+        ListTile(
+          key: const Key('settings-change-phone'),
+          leading: const Icon(Icons.phone_outlined),
+          title: Text(t.accountManagementChangePhone),
+          onTap: enabled ? onChangePhone : null,
+        ),
+        ListTile(
+          key: const Key('settings-delete-account'),
+          leading: const Icon(Icons.person_remove_outlined),
+          title: Text(t.accountManagementDeleteAccount),
+          onTap: enabled ? onDeleteAccount : null,
         ),
         const SizedBox(height: AppSpacing.lg),
         Text(

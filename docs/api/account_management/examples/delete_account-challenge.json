@@ -1,0 +1,13 @@
+{
+  "data": {
+    "challenge_id": "mock-account-0-account-operation-0001",
+    "operation_id": "account-operation-0001",
+    "purpose": "delete_account",
+    "phone_e164": "+963912345678",
+    "expires_at": "2026-11-09T12:05:00.000Z",
+    "resend_at": "2026-11-09T12:00:30.000Z",
+    "attempts_remaining": 5,
+    "revision": 1,
+    "recovery_token": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "OTP_COOLDOWN",
+    "message": {
+      "ar": "انتظر قبل إعادة الإرسال.",
+      "en": "Wait before resending."
+    }
+  }
+}

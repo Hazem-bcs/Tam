@@ -676,7 +676,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsPhoneReadOnly =>
-      'رقم الهاتف مأخوذ من تسجيل الدخول ولا يمكن تغييره هنا';
+      'الرقم مرتبط بالدخول؛ لتغييره استخدم خيار تغيير رقم الهاتف.';
 
   @override
   String get settingsPhoneUnavailable => 'لا يوجد رقم هاتف لهذه الجلسة';
@@ -1348,4 +1348,148 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.';
+
+  @override
+  String get accountManagementChangePhone => 'تغيير رقم الهاتف';
+
+  @override
+  String get accountManagementDeleteAccount => 'حذف الحساب';
+
+  @override
+  String get accountManagementSimulation =>
+      'تجربة محلية؛ لا يتم تعديل أو حذف حساب على الخادم.';
+
+  @override
+  String get accountManagementPhone => 'رقم الهاتف الجديد';
+
+  @override
+  String get accountManagementRequestCode => 'إرسال رمز التحقق';
+
+  @override
+  String get accountManagementCode => 'رمز التحقق';
+
+  @override
+  String get accountManagementOtpHint =>
+      'أدخل الرمز المرسل إلى الرقم المعروض. تحقق هذه العملية مستقل عن تسجيل الدخول.';
+
+  @override
+  String get accountManagementConfirm => 'تأكيد العملية';
+
+  @override
+  String get accountManagementResend => 'إعادة إرسال الرمز';
+
+  @override
+  String get accountManagementRestart => 'بدء تحقق جديد';
+
+  @override
+  String get accountManagementDeleteNotice =>
+      'بعد تأكيد الحذف تُنهى الجلسة. لا يمكن التراجع عن الحذف من التطبيق.';
+
+  @override
+  String get accountManagementDeleteConsent => 'أؤكد أنني أريد حذف حسابي';
+
+  @override
+  String get accountManagementChanged =>
+      'تم تغيير الرقم. سجل الدخول بالرقم الجديد.';
+
+  @override
+  String get accountManagementDeleted => 'تم تأكيد حذف الحساب.';
+
+  @override
+  String get accountManagementSignOut => 'إنهاء الجلسة والمتابعة';
+
+  @override
+  String get accountManagementBusy => 'جارٍ تنفيذ العملية';
+
+  @override
+  String get accountManagementRetry => 'إعادة المحاولة';
+
+  @override
+  String get accountManagementUncertain =>
+      'لم يصل تأكيد العملية. التفاصيل مقفلة؛ أعد المحاولة للتحقق دون إنشاء عملية أخرى.';
+
+  @override
+  String get accountManagementActiveTrip =>
+      'أنهِ الرحلات الجارية أو ألغِ الرحلات المجدولة قبل إدارة رقم الحساب أو حذفه.';
+
+  @override
+  String get accountManagementRequired =>
+      'تحتاج إلى دخول برقم هاتف لإدارة الحساب.';
+
+  @override
+  String get accountManagementInvalidPhone =>
+      'أدخل رقم هاتف سوري صالحًا ومختلفًا عن الرقم الحالي.';
+
+  @override
+  String get accountManagementPhoneInUse =>
+      'هذا الرقم مرتبط بحساب آخر. لا يمكن دمج الحسابات من هنا.';
+
+  @override
+  String get accountManagementInvalidCode => 'رمز التحقق غير صحيح.';
+
+  @override
+  String get accountManagementExpired =>
+      'انتهى التحقق أو استُنفدت المحاولات. ابدأ تحققًا جديدًا عند السماح بذلك.';
+
+  @override
+  String get accountManagementCooldown =>
+      'انتظر قبل إعادة إرسال الرمز أو المحاولة مجددًا.';
+
+  @override
+  String get accountManagementUnavailable =>
+      'تعذر إكمال العملية. أعد المحاولة عند توفر الخدمة.';
+
+  @override
+  String get accountManagementInvalidResponse =>
+      'تعذر التحقق من استجابة الخدمة. أعد المحاولة لنفس العملية.';
+
+  @override
+  String get accountManagementSessionEnded =>
+      'انتهت الجلسة. لم يعد هذا النموذج متاحًا.';
+
+  @override
+  String get accountManagementChangedNotice =>
+      'بعد التحقق ستنتهي الجلسة، ثم تدخل باستخدام رقمك الجديد.';
+
+  @override
+  String get accountManagementValidation =>
+      'تحقق من البيانات المدخلة ثم أعد المحاولة.';
+
+  @override
+  String get driverContactTitle => 'الاتصال بالسائق';
+
+  @override
+  String get driverContactCall => 'فتح الاتصال';
+
+  @override
+  String get driverContactHint =>
+      'نطلب وسيلة الاتصال المتاحة لهذه الرحلة، ثم نفتح تطبيق الهاتف. فتح التطبيق لا يؤكد إجراء المكالمة.';
+
+  @override
+  String get driverContactSimulation =>
+      'تمت محاكاة فتح الاتصال؛ لن يتم الاتصال برقم تجريبي.';
+
+  @override
+  String get driverContactOpened => 'تم تسليم الرقم إلى تطبيق الهاتف.';
+
+  @override
+  String get driverContactBusy => 'جارٍ تجهيز الاتصال';
+
+  @override
+  String get driverContactUnavailable => 'الاتصال غير متاح لهذه الرحلة حاليًا.';
+
+  @override
+  String get driverContactChanged =>
+      'تغير السائق المعيّن. عد إلى متابعة الرحلة وحدّث بياناتها.';
+
+  @override
+  String get driverContactDialerUnavailable =>
+      'تعذر فتح تطبيق الهاتف على هذا الجهاز.';
+
+  @override
+  String get driverContactOffline =>
+      'تعذر تجهيز الاتصال. تحقق من الشبكة وأعد المحاولة.';
+
+  @override
+  String get driverContactSessionEnded => 'انتهت الجلسة ولم يُفتح اتصال جديد.';
 }

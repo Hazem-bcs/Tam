@@ -28,6 +28,8 @@ void main() {
       220,
       scrollable: find.byType(Scrollable).first,
     );
+    await tester.ensureVisible(find.byKey(const Key('settings-support')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-support')));
     await tester.pumpAndSettle();
     expect(find.byType(SupportPage), findsOneWidget);

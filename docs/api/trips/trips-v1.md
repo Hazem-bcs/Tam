@@ -16,7 +16,7 @@
 - `id` سلسلة opaque غير فارغة، لا تعتمد على أرقام متسلسلة؛ يُرمّز مكوّن URL وفق URI encoding عند الاستعمال. `created_at` نص ISO-8601 UTC ينتهي `Z` ويُحوّل محليًا للعرض.
 - لا يُسمح بإظهار رحلات مستخدم آخر. API يتحقق من الملكية في `GET detail` و`cancel`، ويفلتر القائمة حسب المستخدِم. يمكن إرجاع 404 بدل 403 لتجنب تسريب وجود رحلة؛ يثبت القرار مع الباكند.
 
-## شكل Trip (required، ولا توجد nullable داخله)
+## شكل Trip — الحقول الأساسية والامتدادات الحالية
 
 | الحقل | النوع والقيود |
 |---|---|
@@ -30,15 +30,18 @@
 | `fare.amount_minor` | integer >= 0؛ لا تستخدم float للأموال |
 | `fare.currency` | string ISO 4217 كبير 3 أحرف؛ مثال `SYP` |
 | `fare.minor_unit` | integer بين 0 و3؛ في سيناريو SYP = 0 |
-| `status` | `requested`, `confirmed`, `in_progress`, `completed`, `cancelled` |
+| `status` | `scheduled`, `requested`, `confirmed`, `driver_en_route`, `driver_arrived`, `in_progress`, `completed`, `cancelled`, `no_driver` |
 | `created_at` | string ISO-8601 UTC مثل `2026-11-01T12:00:00.000Z` |
 
-كل الحقول المذكورة **required non-null**؛ لا يفترض Flutter قيمة عندما يغيب حقل. لا توجد `driver`، GPS tracking، `payment_method`، `rating`، `discount`، ETA أو route geometry ضمن v1. بيانات التاريخ/العناوين في seed تجريبية.
+كل الحقول الأساسية المذكورة required non-null. يضيف عقد الجدولة scheduled_at
+للمجدولة، وعقد المتابعة live للحالة وبيانات السائق والموقع وETA؛ السجلات
+القديمة قد تخلو من live. التقييم والاتصال موردان مستقلان بعقديهما، ولا
+يفترض العميل driver أوrating أودفعة أوخصم عند غيابها. seed اصطناعي.
 
 ## GET /trips
 
 Query:
-- `filter` اختيارية؛ enum `all|active|completed|cancelled`، الافتراضي `all`. `active` تشمل `requested`, `confirmed`, `in_progress`.
+- `filter` اختيارية؛ enum `all|active|completed|cancelled`، الافتراضي `all`. `active` تشمل scheduled/requested/confirmed/driver_en_route/driver_arrived/in_progress.
 - `limit` اختيارية؛ integer من 1 إلى 50، الافتراضي 20.
 - `cursor` اختيارية؛ string opaque غير فارغة تصدر من `meta.next_cursor`. لا ينشئها العميل ولا يفسرها.
 
@@ -51,9 +54,9 @@ Query:
 ## POST /trips/{id}/cancel
 
 لا يوجد JSON body. يُنفذ بعد تأكيد واضح في UI، والسيرفر لا يعتمد على زر مخفي كحماية. الحالات:
-- `requested` / `confirmed`: تحويل ذري إلى `cancelled`، `200 OK` مع `{"data":Trip}` محدثة.
+- scheduled/requested/confirmed/driver_en_route/driver_arrived: تحويل ذري إلى `cancelled`، `200 OK` مع `{"data":Trip}` محدثة.
 - `cancelled`: رد **idempotent** `200 OK` بنسخة ملغاة نفسها، دون إنشاء إجراء أو استرداد ثانٍ.
-- `in_progress` / `completed`: `409 TRIP_NOT_CANCELLABLE` دون تغيير.
+- in_progress/completed/no_driver: `409 TRIP_NOT_CANCELLABLE` دون تغيير.
 - غير موجودة: `404 TRIP_NOT_FOUND`. شرط ملكية الرحلة ينطبق دائمًا.
 
 العميل يعطّل زر الإلغاء أثناء الإرسال؛ في timeout يمكنه قراءة التفاصيل وإعادة إلغاء الرحلة بأمان لأن العملية idempotent. يعود مصدر الحقيقة إلى رد الخادم عند نجاحه، ولا يختلق إلغاء عند فشل الشبكة.
@@ -62,7 +65,7 @@ Query:
 
 | HTTP | error.code | الدلالة |
 |---|---|---|
-| 401 | `UNAUTHORIZED` | لا توجد جلسة صالحة؛ يدخل ضمن Auth لا fake token |
+| 401 | `UNAUTHENTICATED` | لا توجد جلسة صالحة؛ يدخل ضمن Auth لا fake token |
 | 403 | `FORBIDDEN` | الصلاحية أو ملكية المورد (أو 404 لتجنب تسريب وجوده) |
 | 404 | `TRIP_NOT_FOUND` | id غير موجود/غير مرئي للعميل |
 | 409 | `TRIP_NOT_CANCELLABLE` | الحالة لا تسمح بالإلغاء |
@@ -81,4 +84,6 @@ Query:
 | إلغاء مؤكد | `TripDetailsCubit.cancel` | `POST /trips/{id}/cancel` | الحظر/الإعادة والتحديث |
 | «اطلب مجددًا» | `CustomerNavigation.openRideRequest(TripPrefill)` | **يمتلكه B** | لا يحمل السعر/الطلب القديم |
 
-**نقاط مفتوحة للتنسيق:** آلية push/polling وETag للتحديث الحقيقي؛ سياسة cursor عند تغيّر الفلاتر أثناء pagination، وتوحيد أكواد أخطاء النقل مع Auth عند التنفيذ. تغييرات شكل Trip المشتركة تحتاج موافقة المشرف وB.
+التحديث الحالي يقرأ المصدر وفق سياسة polling في عقد المتابعة؛ تبديل الفلتر
+يعيد بدء cursor. 401 الموحد UNAUTHENTICATED. أي توسيع لشكل Trip أوالترقيم
+ينسق بين العقود وFlutter والأمثلة قبل التنفيذ، ولا ينشئ مورد رحلة موازٍ.

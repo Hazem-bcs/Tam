@@ -1,0 +1,9 @@
+{
+  "data": {
+    "operation_id": "account-operation-0001",
+    "challenge_id": "mock-account-0-account-operation-0001",
+    "purpose": "delete_account",
+    "status": "completed",
+    "completed_at": "2026-11-09T12:00:00.000Z"
+  }
+}

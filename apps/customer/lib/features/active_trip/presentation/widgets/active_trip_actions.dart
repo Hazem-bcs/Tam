@@ -4,6 +4,7 @@ import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_display.dart';
+import 'package:tam_customer/features/driver_contact/domain/driver_contact_repository.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
@@ -78,6 +79,20 @@ class ActiveTripActions extends StatelessWidget {
             onPressed: () => _cancel(context),
           ),
         if (state.cancelling) const LinearProgressIndicator(),
+        if (canContactDriver(trip)) ...[
+          const SizedBox(height: AppSpacing.md),
+          TamButton.secondary(
+            key: const Key('active-call-driver'),
+            label: l.driverContactTitle,
+            icon: Icons.phone_outlined,
+            onPressed: state.cancelUncertain || state.cancelling
+                ? null
+                : () => navigation.openDriverContact(
+                    trip.id,
+                    trip.live!.driver!.id,
+                  ),
+          ),
+        ],
         if (trip.status == TripStatus.completed) ...[
           const SizedBox(height: AppSpacing.md),
           TamButton.primary(

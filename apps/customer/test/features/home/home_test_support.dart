@@ -29,6 +29,12 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   @override
   void openActiveTrip({String? id}) {}
   @override
+  void openAccountPhone() {}
+  @override
+  void openAccountDeletion() {}
+  @override
+  void openDriverContact(String tripId, String driverId) {}
+  @override
   void openHome() => home++;
   @override
   void openRideRequest({TripPrefill? prefill}) => ride++;

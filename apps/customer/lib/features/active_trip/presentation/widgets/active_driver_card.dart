@@ -34,7 +34,6 @@ class ActiveDriverCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 Text(l.activeTripRating(driver.rating.toStringAsFixed(1))),
                 const SizedBox(height: AppSpacing.md),
-                Text(l.activeTripContactPending),
               ],
             ),
           ),

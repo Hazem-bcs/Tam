@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
+import 'package:tam_customer/app/router/account_routes.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
 import 'package:tam_customer/app/router/support_routes.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/account_management/domain/account_management_repository.dart';
 import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
@@ -19,6 +21,7 @@ import 'package:tam_customer/features/auth/presentation/pages/otp_auth_page.dart
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
 import 'package:tam_customer/features/chat/chat_entry.dart';
 import 'package:tam_customer/features/completion/completion_entry.dart';
+import 'package:tam_customer/features/driver_contact/domain/driver_contact_repository.dart';
 import 'package:tam_customer/features/home/home_entry.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
 import 'package:tam_customer/features/notifications/notifications_entry.dart';
@@ -40,6 +43,9 @@ GoRouter createAppRouter(
   required ChatRepository chat,
   required CompletionRepository completion,
   required SupportRepository support,
+  required AccountManagementRepository accounts,
+  required DriverContactRepository contacts,
+  required PhoneDialer dialer,
   required AddressPlaceSearch Function(String languageCode) addressPlaceSearch,
   FeatureDataModes dataModes = const FeatureDataModes(),
   MockTripStore? mockTrips,
@@ -59,6 +65,13 @@ GoRouter createAppRouter(
       policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
     routes: [
+      ...buildAccountRoutes(
+        accounts: accounts,
+        contacts: contacts,
+        dialer: dialer,
+        now: clock ?? DateTime.now,
+        onAccountCompleted: auth.logout,
+      ),
       ...buildSupportRoutes(
         support,
         policy: AppConfig.supportPolicy,

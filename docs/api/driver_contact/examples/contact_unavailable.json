@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "CONTACT_UNAVAILABLE",
+    "message": {
+      "ar": "الاتصال غير متاح لهذه الرحلة.",
+      "en": "Contact is unavailable for this trip."
+    }
+  }
+}

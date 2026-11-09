@@ -11,6 +11,8 @@ enum CustomerFeature {
   chat,
   completion,
   support,
+  accountManagement,
+  driverContact,
 }
 
 /// Parsed at composition; widgets and feature states never select the mode.

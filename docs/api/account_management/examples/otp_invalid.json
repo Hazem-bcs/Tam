@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "OTP_INVALID",
+    "message": {
+      "ar": "رمز التحقق غير صحيح.",
+      "en": "Incorrect verification code."
+    }
+  }
+}

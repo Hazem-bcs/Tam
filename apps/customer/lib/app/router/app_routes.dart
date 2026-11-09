@@ -1,5 +1,11 @@
 /// Route locations shared by navigation, guards and deep links.
 abstract final class AppRoutes {
+  static const changePhone = '/account/change-phone';
+  static const deleteAccount = '/account/delete';
+  static const driverContact = '/trips/:tripId/drivers/:driverId/contact';
+  static String driverContactLocation(String tripId, String driverId) => Uri(
+    pathSegments: ['', 'trips', tripId, 'drivers', driverId, 'contact'],
+  ).toString();
   static const home = '/';
   static const auth = '/auth';
   static const otp = '/auth/otp';

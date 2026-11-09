@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "لا تملك صلاحية الوصول.",
+      "en": "Access forbidden."
+    }
+  }
+}

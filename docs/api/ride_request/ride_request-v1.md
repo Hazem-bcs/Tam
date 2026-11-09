@@ -13,7 +13,7 @@
 - كل المعرفات `string` opaque وغير فارغة. القيم المالية `Money={amount_minor:int>=0,currency:string ISO 4217,minor_unit:int 0..3}`؛ مثال سوري `SYP / minor_unit=0`. لا تستخدم float للمال.
 - `Location={label:string غير فارغ <=200 حرف,latitude:number [-90,90],longitude:number [-180,180]}`؛ الموقعان يجب أن يختلفا في الإحداثيات. إحداثيات الأمثلة اصطناعية للتطوير وليست موقع الجهاز.
 - أوقات الخادم `ISO-8601 UTC` مع `Z` (مثل `2026-11-07T12:01:30Z`). لا ترسل زمن الجهاز كسعر نهائي. `duration_minutes:int>0` و`distance_meters:int>0` قيم تقديرية.
-- الفئات المعروفة حاليًا `standard, comfort, van, motorbike`؛ تغيير القائمة ينسق مع Flutter. الحجز فوري فقط و`payment_method=cash`، بلا حقول wallet/coupon/schedule.
+- الفئات المعروفة حاليًا `standard, comfort, van, motorbike`؛ تغيير القائمة ينسق مع Flutter. الحجز فوري أو مجدول وفق امتداد scheduling-v1؛ `payment_method=cash`، دون wallet أوcoupon.
 - أي اختيار مكان/فئة مختلف يبطل الـquote في العميل؛ الخادم يربط quote بمدخلاته ويتحقق منها مجددًا. كل فشل API يظل فشلًا ولا ينقلب إلى mock.
 
 ## GET /places

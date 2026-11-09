@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "PHONE_IN_USE",
+    "message": {
+      "ar": "الرقم مرتبط بحساب آخر.",
+      "en": "Phone belongs to another account."
+    }
+  }
+}

@@ -32,6 +32,12 @@ class _NavigationSpy implements CustomerNavigation {
   @override
   void openActiveTrip({String? id}) {}
   @override
+  void openAccountPhone() {}
+  @override
+  void openAccountDeletion() {}
+  @override
+  void openDriverContact(String tripId, String driverId) {}
+  @override
   void openHome() => homeCount++;
   @override
   void openTrips() => tripsCount++;

@@ -1,0 +1,8 @@
+{
+  "data": {
+    "phone_e164": "+963912345678",
+    "active_trip_ids": [
+      "mock-trip-1"
+    ]
+  }
+}

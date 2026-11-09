@@ -1,4 +1,5 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/account_management/domain/account_management_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
 import 'package:tam_customer/features/completion/domain/completion_repository.dart';
@@ -10,6 +11,15 @@ abstract final class AppConfig {
   static const activeTripPolicy = ActiveTripPolicy();
   static const chatPolicy = ChatPolicy();
   static const completionPolicy = CompletionPolicy();
+  static const accountPolicy = AccountPolicy();
+  static const accountMockScenario = String.fromEnvironment(
+    'ACCOUNT_MOCK_SCENARIO',
+    defaultValue: 'success',
+  );
+  static const driverContactMockScenario = String.fromEnvironment(
+    'DRIVER_CONTACT_MOCK_SCENARIO',
+    defaultValue: 'success',
+  );
   static const supportPolicy = SupportPolicy();
   static const completionMockScenario = String.fromEnvironment(
     'COMPLETION_MOCK_SCENARIO',
@@ -38,6 +48,12 @@ abstract final class AppConfig {
       defaultValue: 'mock',
     ),
     overrides: const {
+      CustomerFeature.accountManagement: String.fromEnvironment(
+        'ACCOUNT_MANAGEMENT_DATA_MODE',
+      ),
+      CustomerFeature.driverContact: String.fromEnvironment(
+        'DRIVER_CONTACT_DATA_MODE',
+      ),
       CustomerFeature.home: String.fromEnvironment('HOME_DATA_MODE'),
       CustomerFeature.rideRequest: String.fromEnvironment(
         'RIDE_REQUEST_DATA_MODE',

@@ -98,7 +98,7 @@
               "body": "{\n  \"data\": {\n    \"display_name\": \"مستخدم تم\",\n    \"avatar_url\": null\n  }\n}"
             },
             {
-              "name": "401 AUTH_REQUIRED",
+              "name": "401 UNAUTHENTICATED",
               "originalRequest": {
                 "method": "GET",
                 "header": [
@@ -132,7 +132,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": \"AUTH_REQUIRED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
+              "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
             },
             {
               "name": "503 SERVICE_UNAVAILABLE",
@@ -338,7 +338,7 @@
               "body": "{\n  \"data\": {\n    \"display_name\": \"سارة أحمد\",\n    \"avatar_url\": null\n  }\n}"
             },
             {
-              "name": "401 AUTH_REQUIRED",
+              "name": "401 UNAUTHENTICATED",
               "originalRequest": {
                 "method": "PATCH",
                 "header": [
@@ -385,7 +385,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": \"AUTH_REQUIRED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
+              "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
             },
             {
               "name": "422 VALIDATION_ERROR",
@@ -659,7 +659,7 @@
               "body": "{\n  \"data\": {\n    \"account_notifications_enabled\": true\n  }\n}"
             },
             {
-              "name": "401 AUTH_REQUIRED",
+              "name": "401 UNAUTHENTICATED",
               "originalRequest": {
                 "method": "GET",
                 "header": [
@@ -693,7 +693,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": \"AUTH_REQUIRED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
+              "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
             },
             {
               "name": "503 SERVICE_UNAVAILABLE",
@@ -899,7 +899,7 @@
               "body": "{\n  \"data\": {\n    \"account_notifications_enabled\": false\n  }\n}"
             },
             {
-              "name": "401 AUTH_REQUIRED",
+              "name": "401 UNAUTHENTICATED",
               "originalRequest": {
                 "method": "PATCH",
                 "header": [
@@ -946,7 +946,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": \"AUTH_REQUIRED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
+              "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يرجى تسجيل الدخول\",\n      \"en\": \"Authentication required\"\n    }\n  }\n}"
             },
             {
               "name": "422 VALIDATION_ERROR",

@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "status": "REVIEW_REQUIRED",
+  "request_examples": 58,
+  "scope": "Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons",
+  "overview_sha256": "3b371d4d5bb8a1d19efebe69b7e5528cbac807845cc4528d4907a4fca89ea148",
+  "sources": [
+    {
+      "namespace": "auth",
+      "collection": "postman/Tam-Authentication-v1.postman_collection.json",
+      "contract": "authentication-v1.md",
+      "collection_sha256": "ff93667ed082d3334b40ebe86ef96f5db8ae04f53ccf3fe606a48a512eaea88d",
+      "contract_sha256": "3726add2291abb16cb0a3bdd48b23d12db095278b3e874387dd86963473fabda",
+      "request_examples": 6
+    },
+    {
+      "namespace": "home",
+      "collection": "home/home-v1.postman_collection.json",
+      "contract": "home/home-v1.md",
+      "collection_sha256": "596137c2501cf6e257b3006943c0df818ccbcad37fb94480b71face4549e2fc2",
+      "contract_sha256": "0449e6a54ca74629d0417abf97925e3e9b3efda5e0ff7bcbe9f612acd2bf74ff",
+      "request_examples": 1
+    },
+    {
+      "namespace": "ride",
+      "collection": "ride_request/ride_request-v1.postman_collection.json",
+      "contract": "ride_request/ride_request-v1.md",
+      "collection_sha256": "2b6cd18239c18812098baa5a5dd17bcbba77d8653f0870ea62786d939b60ec2a",
+      "contract_sha256": "f9bd48cf8eb530d94ada679f9fa753de27e981b69adcd822e94a8849547c076e",
+      "request_examples": 3
+    },
+    {
+      "namespace": "schedule",
+      "collection": "scheduling/scheduling-v1.postman_collection.json",
+      "contract": "scheduling/scheduling-v1.md",
+      "collection_sha256": "4f209eefb86bded3d3cfb4f4ba0e8a59b470557c77993c3cea672ba4aa75c864",
+      "contract_sha256": "81cc8d1e0338322de31e89ce416088b7a8019d643e80cc444ffe8d450bf1be83",
+      "request_examples": 5
+    },
+    {
+      "namespace": "trips",
+      "collection": "trips/trips-v1.postman_collection.json",
+      "contract": "trips/trips-v1.md",
+      "collection_sha256": "811cb324555e51c4c95d7438463bd65c740ea741af4714b0c6f9a5b2b89763f1",
+      "contract_sha256": "611e5937697a0b91ced6ebcbb6ed2509b3947d92ba0c7a44e1951e39fbe92d58",
+      "request_examples": 4
+    },
+    {
+      "namespace": "active",
+      "collection": "active_trip/active_trip-v1.postman_collection.json",
+      "contract": "active_trip/active_trip-v1.md",
+      "collection_sha256": "ad654fbbabc81c4b9fda16774d28c12b4b1867c345fb81f81fb7ad15b02620f3",
+      "contract_sha256": "d80ea1738f1644f457a18b927be160adc7fa7ea33768a9c1376a2e12820cbcab",
+      "request_examples": 3
+    },
+    {
+      "namespace": "addresses",
+      "collection": "addresses/addresses-v1.postman_collection.json",
+      "contract": "addresses/addresses-v1.md",
+      "collection_sha256": "29d80acbe3dc1238057598bd7028506e4c719390a01efdde85541fee3eeedc90",
+      "contract_sha256": "d738afa92c5c83d3d00f7bab0da43d24f611e3e0609b6b5756fe26e8ea85409a",
+      "request_examples": 6
+    },
+    {
+      "namespace": "contact",
+      "collection": "driver_contact/driver_contact-v1.postman_collection.json",
+      "contract": "driver_contact/driver_contact-v1.md",
+      "collection_sha256": "8a0c07f999d6331fb93b3dffbcf57c9ea32eb23040fbf20b3a22eeec29dd96d7",
+      "contract_sha256": "755ca9016f13bb890da59263e61a40df519527426c48f9087f51a4ea01565ce6",
+      "request_examples": 1
+    },
+    {
+      "namespace": "chat",
+      "collection": "chat/chat-v1.postman_collection.json",
+      "contract": "chat/chat-v1.md",
+      "collection_sha256": "401d2d6057de04fb989414bf171479d183ace559cb7cf445b3bf162e53d0bded",
+      "contract_sha256": "73ecaa0a9741131c66a05342b2b7b8e5802c32991772972f7f2337fd6b00e794",
+      "request_examples": 4
+    },
+    {
+      "namespace": "completion",
+      "collection": "completion/completion-v1.postman_collection.json",
+      "contract": "completion/completion-v1.md",
+      "collection_sha256": "c3405407b36834f9cb55edc7b223a18ce964e35932b03368fa860fe407178ef7",
+      "contract_sha256": "b31a8ce240f3eccd680492e3270c26216ec3e73b2ef3ab76878bb433eb29a0a4",
+      "request_examples": 2
+    },
+    {
+      "namespace": "notifications",
+      "collection": "notifications/notifications-v1.postman_collection.json",
+      "contract": "notifications/notifications-v1.md",
+      "collection_sha256": "5696be99f092d9dc7214eea808e8cc25935f96bdf07e235bfc51e180c9c2ebaf",
+      "contract_sha256": "39ca5a1f8d968367b43b134a141e76fa656cfcc083a556bd877faac99a50ea38",
+      "request_examples": 5
+    },
+    {
+      "namespace": "settings",
+      "collection": "settings/settings-v1.postman_collection.json",
+      "contract": "settings/settings-v1.md",
+      "collection_sha256": "f0747a9e5df47b9ac4303859d0d27ca0c3d2ee55be3cb4f9a722c0c45874ccac",
+      "contract_sha256": "1b18074c6df60e74dc75d36709594afd637ab7fed16bd79c66e473cbbe672f89",
+      "request_examples": 4
+    },
+    {
+      "namespace": "account",
+      "collection": "account_management/account_management-v1.postman_collection.json",
+      "contract": "account_management/account_management-v1.md",
+      "collection_sha256": "423f4dd1b7eae7f8c7f2513f5db55184f42a4ed905710c57d1adaa88319c50b3",
+      "contract_sha256": "59016da5cb4c4435fb836d2ff8d94bda44dd0fdc86cef2e0efd3fae955fbc058",
+      "request_examples": 7
+    },
+    {
+      "namespace": "support",
+      "collection": "support/support-v1.postman_collection.json",
+      "contract": "support/support-v1.md",
+      "collection_sha256": "2e731c0acc6302c69f8396a555e2819d8de0c481892afedb076c7c9e94ee9cfc",
+      "contract_sha256": "94e4d1853dfe69866fa309076dbd94dc3ee65b449242b9d30439657c28275f43",
+      "request_examples": 7
+    }
+  ]
+}

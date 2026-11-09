@@ -18,6 +18,9 @@ final class RouteAccessPolicy {
     return RouteAccessPolicy(
       routes: {
         ...appRoutes,
+        AppRoutes.changePhone: access(CustomerFeature.accountManagement),
+        AppRoutes.deleteAccount: access(CustomerFeature.accountManagement),
+        AppRoutes.driverContact: access(CustomerFeature.driverContact),
         AppRoutes.rideRequest: access(CustomerFeature.rideRequest),
         AppRoutes.trips: access(CustomerFeature.trips),
         AppRoutes.tripDetails: access(CustomerFeature.trips),

@@ -7,7 +7,7 @@
   "settingsNameHint": "2–60 characters",
   "settingsNameValidation": "Enter a name of 2–60 characters without control characters",
   "settingsPhone": "Phone number",
-  "settingsPhoneReadOnly": "This number comes from sign-in and cannot be changed here",
+  "settingsPhoneReadOnly": "This number belongs to your sign-in. Use Change phone number to update it.",
   "settingsPhoneUnavailable": "No phone number for this session",
   "settingsSaveName": "Save name",
   "settingsPreferencesTitle": "Settings",

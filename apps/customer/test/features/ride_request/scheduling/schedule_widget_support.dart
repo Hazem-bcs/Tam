@@ -78,6 +78,12 @@ final class ScheduleTestNavigation implements CustomerNavigation {
   @override
   void openAddresses() {}
   @override
+  void openAccountPhone() {}
+  @override
+  void openAccountDeletion() {}
+  @override
+  void openDriverContact(String tripId, String driverId) {}
+  @override
   void openHome() {}
   @override
   void openNotifications() {}

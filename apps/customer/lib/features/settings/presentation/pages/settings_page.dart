@@ -281,6 +281,9 @@ class _SettingsPageState extends State<SettingsPage> {
           onSupport: () => _navigate(() => widget.navigation.openSupport()),
           onTerms: () => _navigate(widget.navigation.openTerms),
           onPrivacy: () => _navigate(widget.navigation.openPrivacy),
+          onChangePhone: () => _navigate(widget.navigation.openAccountPhone),
+          onDeleteAccount: () =>
+              _navigate(widget.navigation.openAccountDeletion),
         ),
         const SizedBox(height: AppSpacing.xl),
         TamButton.secondary(

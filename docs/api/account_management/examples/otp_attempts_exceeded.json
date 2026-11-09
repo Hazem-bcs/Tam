@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "OTP_ATTEMPTS_EXCEEDED",
+    "message": {
+      "ar": "استُنفدت محاولات التحقق.",
+      "en": "Verification attempts exhausted."
+    }
+  }
+}

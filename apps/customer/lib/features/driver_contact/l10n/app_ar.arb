@@ -1,0 +1,14 @@
+{
+  "@@locale": "ar",
+  "driverContactTitle": "الاتصال بالسائق",
+  "driverContactCall": "فتح الاتصال",
+  "driverContactHint": "نطلب وسيلة الاتصال المتاحة لهذه الرحلة، ثم نفتح تطبيق الهاتف. فتح التطبيق لا يؤكد إجراء المكالمة.",
+  "driverContactSimulation": "تمت محاكاة فتح الاتصال؛ لن يتم الاتصال برقم تجريبي.",
+  "driverContactOpened": "تم تسليم الرقم إلى تطبيق الهاتف.",
+  "driverContactBusy": "جارٍ تجهيز الاتصال",
+  "driverContactUnavailable": "الاتصال غير متاح لهذه الرحلة حاليًا.",
+  "driverContactChanged": "تغير السائق المعيّن. عد إلى متابعة الرحلة وحدّث بياناتها.",
+  "driverContactDialerUnavailable": "تعذر فتح تطبيق الهاتف على هذا الجهاز.",
+  "driverContactOffline": "تعذر تجهيز الاتصال. تحقق من الشبكة وأعد المحاولة.",
+  "driverContactSessionEnded": "انتهت الجلسة ولم يُفتح اتصال جديد."
+}

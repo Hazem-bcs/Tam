@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": {
+      "ar": "معرف مكرر ببيانات مختلفة.",
+      "en": "ID reused with a different payload."
+    }
+  }
+}

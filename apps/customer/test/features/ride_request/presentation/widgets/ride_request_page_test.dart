@@ -33,6 +33,12 @@ final class _Nav implements CustomerNavigation {
   @override
   void openActiveTrip({String? id}) => openedTrip = id;
   @override
+  void openAccountPhone() {}
+  @override
+  void openAccountDeletion() {}
+  @override
+  void openDriverContact(String tripId, String driverId) {}
+  @override
   void openHome() {}
   @override
   void openRideRequest({TripPrefill? prefill}) {}

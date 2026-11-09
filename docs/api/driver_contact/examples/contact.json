@@ -1,0 +1,8 @@
+{
+  "data": {
+    "trip_id": "mock-trip-1",
+    "driver_id": "mock-driver-001",
+    "phone_e164": "+963900000000",
+    "expires_at": "2026-11-09T12:02:17.000Z"
+  }
+}

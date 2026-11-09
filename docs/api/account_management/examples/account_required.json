@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "ACCOUNT_REQUIRED",
+    "message": {
+      "ar": "تحتاج إلى حساب لإدارة بياناته.",
+      "en": "An account is required."
+    }
+  }
+}

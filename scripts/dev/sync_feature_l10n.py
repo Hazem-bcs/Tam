@@ -9,6 +9,7 @@ PREFIXES = {
     'notifications': 'notifications', 'settings': 'settings', 'addresses': 'addresses',
     'active_trip': 'activeTrip', 'chat': 'chat',
     'completion': 'completion', 'support': 'support',
+    'account_management': 'accountManagement', 'driver_contact': 'driverContact',
 }
 
 

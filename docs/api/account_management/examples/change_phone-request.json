@@ -1,0 +1,5 @@
+{
+  "operation_id": "account-operation-0001",
+  "purpose": "change_phone",
+  "new_phone_e164": "+963944444444"
+}

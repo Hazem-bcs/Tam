@@ -1,0 +1,424 @@
+{
+  "info": {
+    "name": "TAM | تم — driver_contact v1 (proposed)",
+    "description": "# تم — الاتصال بالسائق، عقد v1\n\nالحالة: مقترح للتنفيذ، لا خادم حي متصل. يقرأ العميل وسيلة اتصال للسائق\nالمعيّن لرحلته ثم يفتح تطبيق الهاتف. لا ينفذ عميل الراكب تعيين سائق،\nولا يدعي أن فتح تطبيق الهاتف يثبت إجراء مكالمة أو رد الطرف الآخر.\n\n## الطلب والملكية\n\nGET /trips/{trip_id}/contact?driver_id={expected_driver_id}\nبالنسبة إلى base_url الذي يشمل /api/v1. يلزم Authorization:Bearer\nوAccept:application/json. يتحقق الخادم من مالك الرحلة وحالتها والسائق\nالحالي؛ driver_id شرط تطابق، وليس اختيار سائق أو إذن اتصال بأي شخص.\nالضيف وlocalAccess ليسا جلسة API.\n\nيسمح الاتصال فقط في confirmed/driver_en_route/driver_arrived/in_progress\nمع سائق معيّن. scheduled/requested والحالات النهائية لا تسمح بالاتصال.\nتغير السائق يعيد409 DRIVER_CHANGED دون رقم السائق السابق. غياب وسيلة\nاتصال مخولة يعيد409 CONTACT_UNAVAILABLE. الرحلة الأجنبية403 أو404\nTRIP_NOT_FOUND وفق سياسة إخفاء الوجود المتفق عليها. لا يكشف الرقم في\nhistory أوالإشعارات أوlogs أو رسائل الخطأ.\n\n## الاستجابة\n\n200 envelope:\n\n```json\n{\n  \"data\": {\n    \"trip_id\": \"mock-trip-1\",\n    \"driver_id\": \"mock-driver-001\",\n    \"phone_e164\": \"+963900000000\",\n    \"expires_at\": \"2026-11-09T12:02:17.000Z\"\n  }\n}\n```\n\nكل الحقول مطلوبة وغيرnull؛ id نص غير فارغ، وphone_e164 مطابق\n`^\\+[1-9]\\d{7,14}$` بلاUSSD أورموز أوextensions أوURI. expires_at توقيتUTC Z\nصحيح، بصلاحية لا تزيد على دقيقتين من إصدار الخادم. لا يُخزن الرقم دائمًا\nأو يعرض قبل الحاجة. يختار الخادم رقمًا مخولًا لهذه الرحلة؛ يمكن أن يكون\nوسيطًا إذا وفرت المنظومة ذلك. لا يفرض العقد مزود إخفاء أرقام أو تكلفة\nاتصال أو وعد حماية رقم لم تُجهز بنيته.\n\n## سلوك Flutter\n\nيفحص العميل هوية الرحلة والسائق وصلاحية الرد، ثم يبني URI tel من الرقم\nالمتحقق منه فقط. لا يفتح URL حرًا من الخادم، ولا يطلب CALL_PHONE أو يبدأ\nاتصالًا مباشرًا دون تطبيق الهاتف. محول المنصة يستخدم url_launcher؛ فشل\nالجهاز أو غياب تطبيق الهاتف يعرض DIALER_UNAVAILABLE محليًا. القبول يعني\nتسليم URI للنظام فقط، وليس مكالمة أو فاتورة أو تأكيد رد السائق.\n\nإذا انتهت الجلسة أو أُغلقت الصفحة أو انتقل التطبيق للخلفية قبل رد الخدمة،\nلا يفتح اتصالًا متأخرًا؛ يلزم ضغط جديد من المستخدم بعد العودة.\nGET بلا أثر؛ لا Idempotency-Key ولا endpoint يدعي أن المكالمة تمت.\n\n## الأخطاء والمصدر\n\n401 UNAUTHENTICATED؛403 FORBIDDEN؛404 TRIP_NOT_FOUND؛409 DRIVER_CHANGED أو\nCONTACT_UNAVAILABLE؛422 VALIDATION_ERROR؛429 RATE_LIMITED؛503 SERVICE_UNAVAILABLE.\nالبنية error.code وerror.message.ar/en، دون data في استجابة الفشل.\n\nأرقام الأمثلة fixtures لا تُطلب فعليًا؛ mock يحقن MockPhoneDialer ويعرض\nنتيجة محاكاة دون تمرير رقم إلى النظام. DRIVER_CONTACT_DATA_MODE يرث\nDATA_MODE؛ السيناريو DRIVER_CONTACT_MOCK_SCENARIO=success|offline|unavailable.\nالمصدر MockTripStore نفسه، دون قائمة سائقين موازية. API غير المتصل يفشل\nSERVICE_UNAVAILABLE دون fallback.\n\nالاختبارات تشمل المنطق والـURI والهوية والخلفية والجلسة والأمثلة. فتح\nتطبيق الهاتف على جهاز فعلي وربط الخادم واختبارهما يبقيان لمرحلة الربط.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://example.invalid/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "trip_id",
+      "value": "mock-trip-1",
+      "type": "string"
+    },
+    {
+      "key": "driver_id",
+      "value": "mock-driver-001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "وسيلة الاتصال بالسائق المعيّن",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "trips",
+            "{{trip_id}}",
+            "contact"
+          ],
+          "query": [
+            {
+              "key": "driver_id",
+              "value": "{{driver_id}}"
+            }
+          ]
+        },
+        "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+      },
+      "response": [
+        {
+          "name": "contact",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"trip_id\": \"mock-trip-1\",\n    \"driver_id\": \"mock-driver-001\",\n    \"phone_e164\": \"+963900000000\",\n    \"expires_at\": \"2026-11-09T12:02:17.000Z\"\n  }\n}\n"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access forbidden.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "TRIP_NOT_FOUND",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "TRIP_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الرحلة غير موجودة.\",\n      \"en\": \"Trip not found.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "DRIVER_CHANGED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "DRIVER_CHANGED",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"DRIVER_CHANGED\",\n    \"message\": {\n      \"ar\": \"تغير السائق المعيّن.\",\n      \"en\": \"Assigned driver changed.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "CONTACT_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "CONTACT_UNAVAILABLE",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"CONTACT_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الاتصال غير متاح لهذه الرحلة.\",\n      \"en\": \"Contact is unavailable for this trip.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}\n"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/trips/{{trip_id}}/contact?driver_id={{driver_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "trips",
+                "{{trip_id}}",
+                "contact"
+              ],
+              "query": [
+                {
+                  "key": "driver_id",
+                  "value": "{{driver_id}}"
+                }
+              ]
+            },
+            "description": "وسيلة الاتصال بالسائق المعيّن — العقد الكامل في وصف المجموعة. لا خادم حي متصل."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}\n"
+        }
+      ]
+    }
+  ]
+}

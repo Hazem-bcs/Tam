@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "PHONE_UNCHANGED",
+    "message": {
+      "ar": "الرقم الجديد مطابق للحالي.",
+      "en": "Phone number is unchanged."
+    }
+  }
+}

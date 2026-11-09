@@ -688,7 +688,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPhoneReadOnly =>
-      'This number comes from sign-in and cannot be changed here';
+      'This number belongs to your sign-in. Use Change phone number to update it.';
 
   @override
   String get settingsPhoneUnavailable => 'No phone number for this session';
@@ -1378,4 +1378,152 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'Support operations in this version are simulated and are not sent to a real support team.';
+
+  @override
+  String get accountManagementChangePhone => 'Change phone number';
+
+  @override
+  String get accountManagementDeleteAccount => 'Delete account';
+
+  @override
+  String get accountManagementSimulation =>
+      'Local simulation; no server account is changed or deleted.';
+
+  @override
+  String get accountManagementPhone => 'New phone number';
+
+  @override
+  String get accountManagementRequestCode => 'Send verification code';
+
+  @override
+  String get accountManagementCode => 'Verification code';
+
+  @override
+  String get accountManagementOtpHint =>
+      'Enter the code sent to the displayed number. This verification is separate from sign-in.';
+
+  @override
+  String get accountManagementConfirm => 'Confirm action';
+
+  @override
+  String get accountManagementResend => 'Resend code';
+
+  @override
+  String get accountManagementRestart => 'Start new verification';
+
+  @override
+  String get accountManagementDeleteNotice =>
+      'Confirmation ends your session. Deletion cannot be undone from the app.';
+
+  @override
+  String get accountManagementDeleteConsent =>
+      'I confirm that I want to delete my account';
+
+  @override
+  String get accountManagementChanged =>
+      'Phone changed. Sign in with the new number.';
+
+  @override
+  String get accountManagementDeleted => 'Account deletion confirmed.';
+
+  @override
+  String get accountManagementSignOut => 'End session and continue';
+
+  @override
+  String get accountManagementBusy => 'Processing action';
+
+  @override
+  String get accountManagementRetry => 'Retry';
+
+  @override
+  String get accountManagementUncertain =>
+      'Confirmation was not received. Details are locked; retry to reconcile the same action.';
+
+  @override
+  String get accountManagementActiveTrip =>
+      'Finish active trips or cancel scheduled trips before changing the account number or deleting it.';
+
+  @override
+  String get accountManagementRequired =>
+      'Enter with a phone number to manage an account.';
+
+  @override
+  String get accountManagementInvalidPhone =>
+      'Enter a valid Syrian mobile number different from the current one.';
+
+  @override
+  String get accountManagementPhoneInUse =>
+      'This number belongs to another account. Accounts cannot be merged here.';
+
+  @override
+  String get accountManagementInvalidCode =>
+      'The verification code is incorrect.';
+
+  @override
+  String get accountManagementExpired =>
+      'Verification expired or attempts were exhausted. Start a new verification when allowed.';
+
+  @override
+  String get accountManagementCooldown =>
+      'Wait before resending or trying again.';
+
+  @override
+  String get accountManagementUnavailable =>
+      'Could not complete this action. Retry when the service is available.';
+
+  @override
+  String get accountManagementInvalidResponse =>
+      'The service response could not be verified. Retry the same action.';
+
+  @override
+  String get accountManagementSessionEnded =>
+      'The session ended. This form is no longer available.';
+
+  @override
+  String get accountManagementChangedNotice =>
+      'After verification your session ends; sign in using your new number.';
+
+  @override
+  String get accountManagementValidation =>
+      'Check the supplied fields and retry.';
+
+  @override
+  String get driverContactTitle => 'Call driver';
+
+  @override
+  String get driverContactCall => 'Open phone call';
+
+  @override
+  String get driverContactHint =>
+      'We request the contact available for this trip, then open the phone app. Opening it does not confirm a call.';
+
+  @override
+  String get driverContactSimulation =>
+      'Opening the dialer was simulated. No fixture number will be called.';
+
+  @override
+  String get driverContactOpened => 'The number was handed to the phone app.';
+
+  @override
+  String get driverContactBusy => 'Preparing call';
+
+  @override
+  String get driverContactUnavailable =>
+      'Calling is not available for this trip right now.';
+
+  @override
+  String get driverContactChanged =>
+      'The assigned driver changed. Return to trip tracking and refresh.';
+
+  @override
+  String get driverContactDialerUnavailable =>
+      'The phone app could not be opened on this device.';
+
+  @override
+  String get driverContactOffline =>
+      'The call could not be prepared. Check the network and retry.';
+
+  @override
+  String get driverContactSessionEnded =>
+      'The session ended. No new call was opened.';
 }

@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "driverContactTitle": "Call driver",
+  "driverContactCall": "Open phone call",
+  "driverContactHint": "We request the contact available for this trip, then open the phone app. Opening it does not confirm a call.",
+  "driverContactSimulation": "Opening the dialer was simulated. No fixture number will be called.",
+  "driverContactOpened": "The number was handed to the phone app.",
+  "driverContactBusy": "Preparing call",
+  "driverContactUnavailable": "Calling is not available for this trip right now.",
+  "driverContactChanged": "The assigned driver changed. Return to trip tracking and refresh.",
+  "driverContactDialerUnavailable": "The phone app could not be opened on this device.",
+  "driverContactOffline": "The call could not be prepared. Check the network and retry.",
+  "driverContactSessionEnded": "The session ended. No new call was opened."
+}

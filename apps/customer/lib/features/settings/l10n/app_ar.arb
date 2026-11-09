@@ -7,7 +7,7 @@
   "settingsNameHint": "من حرفين إلى 60 حرفًا",
   "settingsNameValidation": "أدخل اسمًا من حرفين إلى 60 حرفًا دون رموز تحكم",
   "settingsPhone": "رقم الهاتف",
-  "settingsPhoneReadOnly": "رقم الهاتف مأخوذ من تسجيل الدخول ولا يمكن تغييره هنا",
+  "settingsPhoneReadOnly": "الرقم مرتبط بالدخول؛ لتغييره استخدم خيار تغيير رقم الهاتف.",
   "settingsPhoneUnavailable": "لا يوجد رقم هاتف لهذه الجلسة",
   "settingsSaveName": "حفظ الاسم",
   "settingsPreferencesTitle": "الإعدادات",

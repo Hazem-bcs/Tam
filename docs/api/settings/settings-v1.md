@@ -1,3 +1,6 @@
+> تغيير رقم الهاتف وحذف الحساب منفذان في ميزة account_management المستقلة،
+> وليسا تعديلًا مباشرًا للهاتف داخل PATCH profile. اقرأ عقدها للتحقق والملكية.
+
 # عقد Settings API — v1 (مقترح، غير منفّذ)
 
 قاعدة `base_url` تتضمن `/api/v1`؛ الاستدعاءات أدناه نسبية إليها. جميعها تتطلب `Authorization: Bearer <access_token>` حقيقيًا (ليس دخول localAccess/guest)، و`Accept: application/json` و`Accept-Language: ar|en`. لطلبات PATCH أرسل `Content-Type: application/json`. التوكن يحصل عليه العميل من Auth الحالي دون تعديل عقد `/auth/me`.
@@ -37,7 +40,7 @@
 
 | الحالة | HTTP | `error.code` | التعامل المطلوب |
 | --- | --- | --- | --- |
-| جلسة غائبة/منتهية | 401 | `AUTH_REQUIRED` | التدفق الموحد لـAuth، دون mock |
+| جلسة غائبة/منتهية | 401 | `UNAUTHENTICATED` | التدفق الموحد لـAuth، دون mock |
 | جلسة لا تملك صلاحية | 403 | `FORBIDDEN` | إظهار منع حقيقي |
 | حقل ناقص/نوع خاطئ/اسم قصير أو طويل | 422 | `VALIDATION_ERROR` | الاحتفاظ بالدرفت وإظهار الخطأ |
 | خادم غير متاح | 503 | `SERVICE_UNAVAILABLE` | إبقاء البيانات المحفوظة كما هي وإتاحة Retry |

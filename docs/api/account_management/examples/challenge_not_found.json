@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "CHALLENGE_NOT_FOUND",
+    "message": {
+      "ar": "التحقق غير موجود.",
+      "en": "Challenge not found."
+    }
+  }
+}

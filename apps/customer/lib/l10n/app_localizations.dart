@@ -1349,7 +1349,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPhoneReadOnly.
   ///
   /// In ar, this message translates to:
-  /// **'رقم الهاتف مأخوذ من تسجيل الدخول ولا يمكن تغييره هنا'**
+  /// **'الرقم مرتبط بالدخول؛ لتغييره استخدم خيار تغيير رقم الهاتف.'**
   String get settingsPhoneReadOnly;
 
   /// No description provided for @settingsPhoneUnavailable.
@@ -2569,6 +2569,252 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.'**
   String get supportSimulationNotice;
+
+  /// No description provided for @accountManagementChangePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير رقم الهاتف'**
+  String get accountManagementChangePhone;
+
+  /// No description provided for @accountManagementDeleteAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الحساب'**
+  String get accountManagementDeleteAccount;
+
+  /// No description provided for @accountManagementSimulation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة محلية؛ لا يتم تعديل أو حذف حساب على الخادم.'**
+  String get accountManagementSimulation;
+
+  /// No description provided for @accountManagementPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف الجديد'**
+  String get accountManagementPhone;
+
+  /// No description provided for @accountManagementRequestCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رمز التحقق'**
+  String get accountManagementRequestCode;
+
+  /// No description provided for @accountManagementCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التحقق'**
+  String get accountManagementCode;
+
+  /// No description provided for @accountManagementOtpHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الرمز المرسل إلى الرقم المعروض. تحقق هذه العملية مستقل عن تسجيل الدخول.'**
+  String get accountManagementOtpHint;
+
+  /// No description provided for @accountManagementConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد العملية'**
+  String get accountManagementConfirm;
+
+  /// No description provided for @accountManagementResend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة إرسال الرمز'**
+  String get accountManagementResend;
+
+  /// No description provided for @accountManagementRestart.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء تحقق جديد'**
+  String get accountManagementRestart;
+
+  /// No description provided for @accountManagementDeleteNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد تأكيد الحذف تُنهى الجلسة. لا يمكن التراجع عن الحذف من التطبيق.'**
+  String get accountManagementDeleteNotice;
+
+  /// No description provided for @accountManagementDeleteConsent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أؤكد أنني أريد حذف حسابي'**
+  String get accountManagementDeleteConsent;
+
+  /// No description provided for @accountManagementChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير الرقم. سجل الدخول بالرقم الجديد.'**
+  String get accountManagementChanged;
+
+  /// No description provided for @accountManagementDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد حذف الحساب.'**
+  String get accountManagementDeleted;
+
+  /// No description provided for @accountManagementSignOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء الجلسة والمتابعة'**
+  String get accountManagementSignOut;
+
+  /// No description provided for @accountManagementBusy.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تنفيذ العملية'**
+  String get accountManagementBusy;
+
+  /// No description provided for @accountManagementRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get accountManagementRetry;
+
+  /// No description provided for @accountManagementUncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يصل تأكيد العملية. التفاصيل مقفلة؛ أعد المحاولة للتحقق دون إنشاء عملية أخرى.'**
+  String get accountManagementUncertain;
+
+  /// No description provided for @accountManagementActiveTrip.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنهِ الرحلات الجارية أو ألغِ الرحلات المجدولة قبل إدارة رقم الحساب أو حذفه.'**
+  String get accountManagementActiveTrip;
+
+  /// No description provided for @accountManagementRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج إلى دخول برقم هاتف لإدارة الحساب.'**
+  String get accountManagementRequired;
+
+  /// No description provided for @accountManagementInvalidPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رقم هاتف سوري صالحًا ومختلفًا عن الرقم الحالي.'**
+  String get accountManagementInvalidPhone;
+
+  /// No description provided for @accountManagementPhoneInUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الرقم مرتبط بحساب آخر. لا يمكن دمج الحسابات من هنا.'**
+  String get accountManagementPhoneInUse;
+
+  /// No description provided for @accountManagementInvalidCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التحقق غير صحيح.'**
+  String get accountManagementInvalidCode;
+
+  /// No description provided for @accountManagementExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى التحقق أو استُنفدت المحاولات. ابدأ تحققًا جديدًا عند السماح بذلك.'**
+  String get accountManagementExpired;
+
+  /// No description provided for @accountManagementCooldown.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتظر قبل إعادة إرسال الرمز أو المحاولة مجددًا.'**
+  String get accountManagementCooldown;
+
+  /// No description provided for @accountManagementUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر إكمال العملية. أعد المحاولة عند توفر الخدمة.'**
+  String get accountManagementUnavailable;
+
+  /// No description provided for @accountManagementInvalidResponse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر التحقق من استجابة الخدمة. أعد المحاولة لنفس العملية.'**
+  String get accountManagementInvalidResponse;
+
+  /// No description provided for @accountManagementSessionEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الجلسة. لم يعد هذا النموذج متاحًا.'**
+  String get accountManagementSessionEnded;
+
+  /// No description provided for @accountManagementChangedNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد التحقق ستنتهي الجلسة، ثم تدخل باستخدام رقمك الجديد.'**
+  String get accountManagementChangedNotice;
+
+  /// No description provided for @accountManagementValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من البيانات المدخلة ثم أعد المحاولة.'**
+  String get accountManagementValidation;
+
+  /// No description provided for @driverContactTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتصال بالسائق'**
+  String get driverContactTitle;
+
+  /// No description provided for @driverContactCall.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الاتصال'**
+  String get driverContactCall;
+
+  /// No description provided for @driverContactHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نطلب وسيلة الاتصال المتاحة لهذه الرحلة، ثم نفتح تطبيق الهاتف. فتح التطبيق لا يؤكد إجراء المكالمة.'**
+  String get driverContactHint;
+
+  /// No description provided for @driverContactSimulation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت محاكاة فتح الاتصال؛ لن يتم الاتصال برقم تجريبي.'**
+  String get driverContactSimulation;
+
+  /// No description provided for @driverContactOpened.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسليم الرقم إلى تطبيق الهاتف.'**
+  String get driverContactOpened;
+
+  /// No description provided for @driverContactBusy.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تجهيز الاتصال'**
+  String get driverContactBusy;
+
+  /// No description provided for @driverContactUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتصال غير متاح لهذه الرحلة حاليًا.'**
+  String get driverContactUnavailable;
+
+  /// No description provided for @driverContactChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغير السائق المعيّن. عد إلى متابعة الرحلة وحدّث بياناتها.'**
+  String get driverContactChanged;
+
+  /// No description provided for @driverContactDialerUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح تطبيق الهاتف على هذا الجهاز.'**
+  String get driverContactDialerUnavailable;
+
+  /// No description provided for @driverContactOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تجهيز الاتصال. تحقق من الشبكة وأعد المحاولة.'**
+  String get driverContactOffline;
+
+  /// No description provided for @driverContactSessionEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الجلسة ولم يُفتح اتصال جديد.'**
+  String get driverContactSessionEnded;
 }
 
 class _AppLocalizationsDelegate

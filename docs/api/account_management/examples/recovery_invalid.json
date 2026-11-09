@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "RECOVERY_INVALID",
+    "message": {
+      "ar": "بيانات استعادة العملية غير صالحة.",
+      "en": "Invalid operation recovery credential."
+    }
+  }
+}

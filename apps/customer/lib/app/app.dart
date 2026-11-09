@@ -10,6 +10,8 @@ import 'package:tam_customer/app/router/app_router.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/account_management/data/mock/mock_account_management_repository.dart';
+import 'package:tam_customer/features/account_management/data/unavailable_account_management_repository.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
@@ -29,6 +31,8 @@ import 'package:tam_customer/features/completion/data/mock/completion_mock_scena
 import 'package:tam_customer/features/completion/data/mock/mock_completion_repository.dart';
 import 'package:tam_customer/features/completion/data/unavailable_completion_repository.dart';
 import 'package:tam_customer/features/completion/domain/completion_repository.dart';
+import 'package:tam_customer/features/driver_contact/data/driver_phone_dialer.dart';
+import 'package:tam_customer/features/driver_contact/data/mock/mock_driver_contact_repository.dart';
 import 'package:tam_customer/features/notifications/data/mock/mock_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/data/unavailable_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
@@ -77,6 +81,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   MockChatRepository? _mockChat;
   MockCompletionRepository? _mockCompletion;
   MockSupportRepository? _mockSupport;
+  MockAccountManagementRepository? _mockAccounts;
+  MockDriverContactRepository? _mockContacts;
   late final StreamSubscription<AuthState> _sessionChanges;
 
   @override
@@ -150,6 +156,30 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         modes.forFeature(CustomerFeature.notifications) == FeatureDataMode.mock
         ? _mockNotifications
         : const UnavailableNotificationsRepository();
+    final accounts =
+        modes.forFeature(CustomerFeature.accountManagement) ==
+            FeatureDataMode.mock
+        ? (_mockAccounts = MockAccountManagementRepository(
+            _mockTrips,
+            phone: () =>
+                _auth.state.localPhoneE164 ?? _auth.state.user?.phoneE164,
+            now: widget.clock,
+            policy: AppConfig.accountPolicy,
+            scenario: AppConfig.accountMockScenario,
+          ))
+        : const UnavailableAccountManagementRepository();
+    final contacts =
+        modes.forFeature(CustomerFeature.driverContact) == FeatureDataMode.mock
+        ? (_mockContacts = MockDriverContactRepository(
+            _mockTrips,
+            now: widget.clock,
+            scenario: AppConfig.driverContactMockScenario,
+          ))
+        : const UnavailableDriverContactRepository();
+    final dialer =
+        modes.forFeature(CustomerFeature.driverContact) == FeatureDataMode.mock
+        ? const MockPhoneDialer()
+        : const DriverPhoneDialer();
     _router = createAppRouter(
       _auth,
       _refresh,
@@ -160,6 +190,9 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       chat: chat,
       completion: completion,
       support: support,
+      accounts: accounts,
+      contacts: contacts,
+      dialer: dialer,
       clock: widget.clock,
       addressPlaceSearch: (language) =>
           RideAddressPlaceSearch(placeSource, languageCode: language),
@@ -180,6 +213,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         _mockChat?.resetSession();
         _mockCompletion?.resetSession();
         _mockSupport?.resetSession();
+        _mockAccounts?.resetSession();
+        _mockContacts?.resetSession();
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
         resetSettingsFeatureSession(_locale);
@@ -214,6 +249,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     if (_mockChat != null) unawaited(_mockChat!.dispose());
     if (_mockCompletion != null) unawaited(_mockCompletion!.dispose());
     if (_mockSupport != null) unawaited(_mockSupport!.dispose());
+    if (_mockAccounts != null) unawaited(_mockAccounts!.dispose());
+    if (_mockContacts != null) unawaited(_mockContacts!.dispose());
     unawaited(_mockTrips.dispose());
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());

@@ -5,6 +5,9 @@ import 'package:tam_customer/shared/domain/trip.dart';
 
 /// Presentation callbacks; domain code must not import app navigation.
 abstract interface class CustomerNavigation {
+  void openAccountPhone();
+  void openAccountDeletion();
+  void openDriverContact(String tripId, String driverId);
   void openHome();
   void openRideRequest({TripPrefill? prefill});
   void openTrips();
@@ -23,6 +26,16 @@ abstract interface class CustomerNavigation {
 final class RouterCustomerNavigation implements CustomerNavigation {
   const RouterCustomerNavigation(this.router);
   final GoRouter router;
+  @override
+  void openAccountPhone() =>
+      unawaited(router.push<void>(AppRoutes.changePhone));
+  @override
+  void openAccountDeletion() =>
+      unawaited(router.push<void>(AppRoutes.deleteAccount));
+  @override
+  void openDriverContact(String tripId, String driverId) => unawaited(
+    router.push<void>(AppRoutes.driverContactLocation(tripId, driverId)),
+  );
   @override
   void openCompletion(String tripId) =>
       unawaited(router.push<void>(AppRoutes.completionLocation(tripId)));

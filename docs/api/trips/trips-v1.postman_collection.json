@@ -191,7 +191,7 @@
               "value": "application/json"
             }
           ],
-          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
         },
         {
           "name": "422 - invalid pagination",
@@ -561,7 +561,7 @@
       ]
     },
     {
-      "name": "Cancel trip (requested / confirmed only)",
+      "name": "Cancel trip — shared current lifecycle",
       "request": {
         "method": "POST",
         "header": [
@@ -733,7 +733,7 @@
               "value": "application/json"
             }
           ],
-          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}\n"
         },
         {
           "name": "503 - unavailable",
