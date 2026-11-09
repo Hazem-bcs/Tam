@@ -1,0 +1,34 @@
+{
+  "@@locale": "en",
+  "chatTitle": "Driver",
+  "chatRetry": "Retry",
+  "chatMessageHint": "Write a message…",
+  "chatSend": "Send",
+  "chatRefresh": "Refresh conversation",
+  "chatLoading": "Loading conversation",
+  "chatEmpty": "No messages yet",
+  "chatReadOnly": "This trip has ended. This conversation is read only.",
+  "chatLoadOlder": "Load older messages",
+  "chatNewest": "Newest messages",
+  "chatSent": "Sent ✓",
+  "chatDelivered": "Delivered ✓✓",
+  "chatRead": "Read ✓✓",
+  "chatSending": "Sending…",
+  "chatFailed": "Failed to send",
+  "chatUncertain": "Send unconfirmed — refresh or retry",
+  "chatValidation": "Enter a message from 1 to 1000 characters.",
+  "chatUnavailable": "Conversation unavailable for this driver or trip.",
+  "chatSessionEnded": "Session ended. Return to Home.",
+  "chatConnectionError": "Connection failed. Previous messages are retained; refresh to try again.",
+  "chatCharacterCount": "{count} / {max} characters",
+  "@chatCharacterCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  }
+}

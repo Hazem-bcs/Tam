@@ -1,0 +1,34 @@
+{
+  "@@locale": "ar",
+  "chatTitle": "السائق",
+  "chatRetry": "إعادة المحاولة",
+  "chatMessageHint": "اكتب رسالة…",
+  "chatSend": "إرسال",
+  "chatRefresh": "تحديث المحادثة",
+  "chatLoading": "جارٍ تحميل المحادثة",
+  "chatEmpty": "لا توجد رسائل بعد",
+  "chatReadOnly": "انتهت الرحلة. المحادثة للقراءة فقط.",
+  "chatLoadOlder": "تحميل رسائل أقدم",
+  "chatNewest": "أحدث الرسائل",
+  "chatSent": "أُرسلت ✓",
+  "chatDelivered": "تم التسليم ✓✓",
+  "chatRead": "مقروءة ✓✓",
+  "chatSending": "جارٍ الإرسال…",
+  "chatFailed": "تعذر الإرسال",
+  "chatUncertain": "لم يتأكد الإرسال — حدّث أو أعد المحاولة",
+  "chatValidation": "أدخل رسالة من ١ إلى ١٠٠٠ حرف.",
+  "chatUnavailable": "المحادثة غير متاحة لهذا السائق أو هذه الرحلة.",
+  "chatSessionEnded": "انتهت الجلسة. ارجع إلى الرئيسية.",
+  "chatConnectionError": "تعذر الاتصال. آخر الرسائل محفوظة؛ حدّث للمحاولة مجددًا.",
+  "chatCharacterCount": "{count} / {max} حرف",
+  "@chatCharacterCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  }
+}
