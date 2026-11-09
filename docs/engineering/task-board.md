@@ -67,8 +67,8 @@ W1-BASE جاهز من ناحية التجهيز والتحقق المحلي؛ ل
 | W2-SCHEDULE | INTEGRATED — المرحلة الأولى؛ 363 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_schedule؛ [البطاقة](tasks/W2-SCHEDULE.md) و[المراجعة](deliveries/W2-SCHEDULE/REVIEW.md) |
 | W2-ACTIVE-TRIP | INTEGRATED — المرحلة الأولى؛409 اختبارات ناجحة بعد الدمج المحلي | المشرف / review_active_trip؛ [البطاقة](tasks/W2-ACTIVE-TRIP.md) و[المراجعة](deliveries/W2-ACTIVE-TRIP/REVIEW.md) |
 | W2-CHAT | INTEGRATED — المرحلة الأولى؛468 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_chat؛ [البطاقة](tasks/W2-CHAT.md) و[المراجعة](deliveries/W2-CHAT/REVIEW.md) |
-| W2-COMPLETION | PLANNED — تحتاج تصميمًا | إنهاء الرحلة والتقييم؛ ليست لها صورة مكتملة في المراجع |
-| W2-SUPPORT | PLANNED — تحتاج تحديد نطاق | الدعم/البلاغات والمحتوى القانوني حسب تدفقات العميل |
+| W2-COMPLETION | IMPLEMENTING — implement_completion منbd24d59 | [البطاقة](tasks/W2-COMPLETION.md)؛ تقييم1..5 وتعليق اختياري وملخص رحلة |
+| W2-SUPPORT | IMPLEMENTING — implement_support منbd24d59 | [البطاقة](tasks/W2-SUPPORT.md)؛ دعم عام/رحلة، والقانوني غير منشور حتى اعتماد نصه |
 
 العناوين والجدولة والرحلة الجارية والمحادثة مكتملة للمرحلة الأولى؛ بقية هذه المهام ليست READY
 ولا تكليفًا لوكلاء جدد. تُفصل البطاقات والعقود قبل
