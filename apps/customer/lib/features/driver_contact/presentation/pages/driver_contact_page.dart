@@ -86,7 +86,11 @@ class _DriverContactPageState extends State<DriverContactPage>
                     icon: Icons.phone_outlined,
                     onPressed: state.busy || state.ended
                         ? null
-                        : context.read<DriverContactCubit>().call,
+                        : () => context.read<DriverContactCubit>().call(
+                            canOpen: () =>
+                                mounted &&
+                                ModalRoute.of(context)?.isCurrent != false,
+                          ),
                   ),
                 ],
               ),

@@ -29,12 +29,19 @@ abstract interface class PhoneDialer {
   Future<DialerResult> open(String phoneE164);
 }
 
+/// Invalidates an observed trip binding; position-only updates are excluded.
+final class DriverContactChange {
+  const DriverContactChange({this.sessionReset = false, this.tripId});
+  final bool sessionReset;
+  final String? tripId;
+}
+
 abstract interface class DriverContactRepository {
   Future<DriverContact> fetch({
     required String tripId,
     required String driverId,
   });
-  Stream<bool> get sessionResets;
+  Stream<DriverContactChange> get changes;
 }
 
 final class DriverContactFailure implements Exception {

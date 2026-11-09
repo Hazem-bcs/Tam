@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "status": "REVIEW_REQUIRED",
+  "status": "BACKEND_HANDOFF_PROPOSAL",
   "request_examples": 58,
   "scope": "Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons",
-  "overview_sha256": "3b371d4d5bb8a1d19efebe69b7e5528cbac807845cc4528d4907a4fca89ea148",
+  "overview_sha256": "4c213c269db0713e8afe47800558b0a219718301f6633d6f1e383e2179bf74ee",
   "sources": [
     {
       "namespace": "auth",
@@ -66,7 +66,7 @@
       "collection": "driver_contact/driver_contact-v1.postman_collection.json",
       "contract": "driver_contact/driver_contact-v1.md",
       "collection_sha256": "8a0c07f999d6331fb93b3dffbcf57c9ea32eb23040fbf20b3a22eeec29dd96d7",
-      "contract_sha256": "755ca9016f13bb890da59263e61a40df519527426c48f9087f51a4ea01565ce6",
+      "contract_sha256": "8937b830dd8d29c7796de25445d2636759ec397bda118338c3ea71b986eb7289",
       "request_examples": 1
     },
     {
@@ -106,7 +106,7 @@
       "collection": "account_management/account_management-v1.postman_collection.json",
       "contract": "account_management/account_management-v1.md",
       "collection_sha256": "423f4dd1b7eae7f8c7f2513f5db55184f42a4ed905710c57d1adaa88319c50b3",
-      "contract_sha256": "59016da5cb4c4435fb836d2ff8d94bda44dd0fdc86cef2e0efd3fae955fbc058",
+      "contract_sha256": "36aaaaf8783e5f81ce657b47d8f648ecaacc0e971a0ca506948d43b8eeabdc87",
       "request_examples": 7
     },
     {
