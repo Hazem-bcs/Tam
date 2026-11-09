@@ -1,0 +1,35 @@
+{
+  "data": {
+    "version": 1,
+    "revision": 2,
+    "trip": {
+      "id": "mock-history-001",
+      "pickup": {
+        "label": "المزة، شارع الجلاء",
+        "latitude": 33.5,
+        "longitude": 36.25
+      },
+      "destination": {
+        "label": "أبو رمانة، شارع الحمراء",
+        "latitude": 33.519,
+        "longitude": 36.283
+      },
+      "vehicle_class_id": "standard",
+      "fare": {
+        "amount_minor": 25000,
+        "currency": "SYP",
+        "minor_unit": 0
+      },
+      "status": "completed",
+      "created_at": "2026-11-01T12:00:00.000Z"
+    },
+    "rating": {
+      "id": "mock-history-001-rating",
+      "trip_id": "mock-history-001",
+      "stars": 4,
+      "comment": "رحلة مريحة",
+      "idempotency_key": "completion-example-key-001",
+      "submitted_at": "2026-11-09T12:00:00.000Z"
+    }
+  }
+}

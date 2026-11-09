@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "RATING_ALREADY_SUBMITTED",
+    "message": {
+      "ar": "سبق تقييم الرحلة.",
+      "en": "The trip was already rated."
+    }
+  }
+}

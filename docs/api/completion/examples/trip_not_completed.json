@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "TRIP_NOT_COMPLETED",
+    "message": {
+      "ar": "الرحلة غير مكتملة.",
+      "en": "The trip is not completed."
+    }
+  }
+}

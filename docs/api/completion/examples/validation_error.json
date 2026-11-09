@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "قيم التقييم غير صالحة.",
+      "en": "Invalid rating values."
+    }
+  }
+}

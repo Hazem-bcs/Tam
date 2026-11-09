@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "لا تملك صلاحية الوصول لهذه الرحلة.",
+      "en": "This trip is not accessible to this account."
+    }
+  }
+}
