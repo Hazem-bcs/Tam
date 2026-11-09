@@ -55,6 +55,11 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
           title: t.supportNewTicket,
           onBack: widget.onBack,
           children: [
+            Text(
+              t.supportSimulationNotice,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+
             if (state.ended) Text(t.supportSessionEnded),
             if (state.loading)
               TamLoadingIndicator(semanticLabel: t.supportLoading),

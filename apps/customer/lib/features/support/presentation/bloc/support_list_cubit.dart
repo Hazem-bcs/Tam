@@ -54,10 +54,13 @@ final class SupportListCubit extends Cubit<SupportListState> {
         for (final t in more ? old.tickets : <SupportTicket>[]) t.id: t,
       };
       for (final ticket in page.tickets) {
-        final existing = values[ticket.id];
-        if (existing == null || ticket.revision >= existing.revision) {
-          values[ticket.id] = ticket;
-        }
+        final existing =
+            values[ticket.id] ??
+            old.tickets.where((t) => t.id == ticket.id).firstOrNull;
+        values[ticket.id] =
+            existing == null || ticket.revision >= existing.revision
+            ? ticket
+            : existing;
       }
       emit(
         SupportListState(

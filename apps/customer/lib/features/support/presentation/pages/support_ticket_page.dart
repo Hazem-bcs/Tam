@@ -18,6 +18,11 @@ class SupportTicketDetailsPage extends StatelessWidget {
         title: t.supportTicketDetails,
         onBack: onBack,
         children: [
+          Text(
+            t.supportSimulationNotice,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+
           if (state.loading)
             TamLoadingIndicator(semanticLabel: t.supportLoading),
           if (state.ended) Text(t.supportSessionEnded),

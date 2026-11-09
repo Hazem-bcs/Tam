@@ -29,6 +29,11 @@ class SupportPage extends StatelessWidget {
           title: t.supportTitle,
           onBack: onBack,
           children: [
+            Text(
+              t.supportSimulationNotice,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+
             Text(t.supportIntro),
             const SizedBox(height: AppSpacing.lg),
             TamButton.primary(
