@@ -65,7 +65,7 @@ W1-BASE جاهز من ناحية التجهيز والتحقق المحلي؛ ل
 |---|---|---|
 | W2-ADDRESSES | INTEGRATED — المرحلة الأولى؛ 333 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_addresses؛ [البطاقة](tasks/W2-ADDRESSES.md) و[المراجعة](deliveries/W2-ADDRESSES/REVIEW.md) |
 | W2-SCHEDULE | INTEGRATED — المرحلة الأولى؛ 363 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_schedule؛ [البطاقة](tasks/W2-SCHEDULE.md) و[المراجعة](deliveries/W2-SCHEDULE/REVIEW.md) |
-| W2-ACTIVE-TRIP | REVIEW — التنفيذ مكتمل؛408 اختبارات ناجحة، المراجع عند SHA التسليم | [البطاقة](tasks/W2-ACTIVE-TRIP.md)، أساس276504d؛ UI-12/UI-15 ومصدر الرحلة الموحد |
+| W2-ACTIVE-TRIP | REVIEW — المراجع review_active_trip يفحص `8c08ac7b2ccad85ed9ac03a7025c6f2c4b31232d`؛408 اختبارات لدى المنفذ | [البطاقة](tasks/W2-ACTIVE-TRIP.md)، أساس276504d؛ UI-12/UI-15 ومصدر الرحلة الموحد |
 | W2-CHAT | PLANNED — غير مسندة | محادثة العميل UI-13؛ عقد الرسائل وحالات التسليم |
 | W2-COMPLETION | PLANNED — تحتاج تصميمًا | إنهاء الرحلة والتقييم؛ ليست لها صورة مكتملة في المراجع |
 | W2-SUPPORT | PLANNED — تحتاج تحديد نطاق | الدعم/البلاغات والمحتوى القانوني حسب تدفقات العميل |
