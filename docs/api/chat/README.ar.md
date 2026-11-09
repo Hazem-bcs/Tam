@@ -10,6 +10,8 @@
 - ضع token اختبار مملوكًا للعميل في `access_token`، و`trip_id` لرحلته.
 - ابدأ GET بلا X-Chat-Driver-Id؛ احفظ `metadata.driver.id` في `driver_id`.
 - بعد أول استجابة، يضيف adapter الهيدر إلى read/send وGET اللاحق لحراسة هوية المحادثة.
+- في Postman فعّل X-Chat-Driver-Id المعطل افتراضيًا في طلب أحدث الرسائل بعد أول GET؛
+  طلب الرسائل الأقدم يرسل الهيدر مفعّلًا لأنه يُنفذ بعد تثبيت driver_id.
 - GET الأحدث بحد30؛ ثم before_sequence من next_before_sequence، والتوقف عند null.
 - POST بنص جديد ومعرف جديد عشوائي. عند فقد الرد أعد POST بالمعرف والنص نفسيهما،
   أو GET للمصالحة؛ لا تولد معرفًا جديدًا للرسالة نفسها.
