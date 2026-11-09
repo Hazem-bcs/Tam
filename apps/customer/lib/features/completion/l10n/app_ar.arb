@@ -1,0 +1,58 @@
+{
+  "@@locale": "ar",
+  "completionTitle": "ملخص الرحلة والتقييم",
+  "completionLoading": "جارٍ تحميل ملخص الرحلة",
+  "completionSessionEnded": "انتهت الجلسة. عد إلى الرئيسية للمتابعة.",
+  "completionThankYou": "شكرًا لرحلتك مع تم",
+  "completionTripId": "رقم الطلب: {id}",
+  "@completionTripId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRecordedFare": "مبلغ الطلب المسجل",
+  "completionFareNote": "المبلغ المسجل عند الطلب، وليس تأكيدًا للدفع أو إيصالًا.",
+  "completionDriver": "السائق: {name}",
+  "@completionDriver": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "completionRateTrip": "كيف كانت تجربة رحلتك؟",
+  "completionStars": "{count} من ٥ نجوم",
+  "@completionStars": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionComment": "تعليق اختياري",
+  "completionCommentLimit": "حتى {count} حرف بعد إزالة الفراغات الطرفية.",
+  "@completionCommentLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "completionSubmit": "إرسال التقييم",
+  "completionSubmitting": "جارٍ إرسال التقييم",
+  "completionSaved": "تم حفظ تقييمك، شكرًا لك",
+  "completionImmutable": "يُسجل تقييم واحد لكل رحلة ولا يمكن تعديله.",
+  "completionUncertain": "لم نتمكن من تأكيد الحفظ. أبقينا تقييمك كما هو؛ أعد المحاولة للتحقق دون تكراره.",
+  "completionRetry": "تحقق وأعد المحاولة",
+  "completionSupport": "التواصل مع دعم هذه الرحلة",
+  "completionHome": "العودة إلى الرئيسية",
+  "completionValidation": "اختر من نجمة إلى خمس نجوم، والتزم بالحد المسموح للتعليق.",
+  "completionNotFound": "لم نعثر على هذه الرحلة.",
+  "completionNotCompleted": "يتاح الملخص والتقييم بعد اكتمال الرحلة فقط.",
+  "completionUnavailable": "ربط خدمة التقييم غير متاح حاليًا.",
+  "completionAlreadyRated": "سبق تقييم هذه الرحلة. جارٍ التحقق من التقييم المحفوظ.",
+  "completionInvalidResponse": "تعذر التحقق من نتيجة العملية. أعد المحاولة للتحقق أو تواصل مع الدعم.",
+  "completionOffline": "تعذر الاتصال. تحقق من الشبكة وأعد المحاولة."
+}
