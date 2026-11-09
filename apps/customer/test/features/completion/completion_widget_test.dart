@@ -58,15 +58,17 @@ void main() {
       final repo = ControlledCompletionRepository();
       addTearDown(repo.events.close);
       final semantics = tester.ensureSemantics();
-      addTearDown(semantics.dispose);
+
       await pumpCompletion(tester, repository: repo, locale: 'en');
       await showCompletionForm(tester);
       await tester.tap(find.byKey(const Key('completion-stars-5')));
       expect(find.bySemanticsLabel('5 of 5 stars'), findsWidgets);
+      semantics.dispose();
       await tester.enterText(
         find.byKey(const Key('completion-comment')),
         '😀' * 501,
       );
+      await tester.pumpAndSettle();
       expect(
         tester
             .widget<TamButton>(find.byKey(const Key('completion-submit')))
@@ -74,6 +76,7 @@ void main() {
         isNull,
       );
       await tester.enterText(find.byKey(const Key('completion-comment')), '');
+      await tester.pumpAndSettle();
       expect(
         tester
             .widget<TamButton>(find.byKey(const Key('completion-submit')))

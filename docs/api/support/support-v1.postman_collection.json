@@ -1,0 +1,2064 @@
+{
+  "info": {
+    "name": "TAM | تم — Support & Legal API v1 (proposed)",
+    "description": "طلب تنفيذ للباكند، وليس خادمًا متصلًا. ابدأ بقراءة README.ar.md وsupport-v1.md. فئات عامة أو مرتبطة برحلة، قائمة وتفاصيل وإرسال دعم مع idempotency. الشروط والخصوصية غير منشورتين؛ لا تعرض نصًا غير معتمد. كل طلبات الدعم تتطلب Bearer وملكية، والمحتوى القانوني عام. base_url اصطناعي، لا أسرار. عند فقد الرد أعد نفس client_request_id ونفس البيانات.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://example.invalid/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "trip_id",
+      "value": "trip-1",
+      "type": "string"
+    },
+    {
+      "key": "ticket_id",
+      "value": "mock-support-1",
+      "type": "string"
+    },
+    {
+      "key": "client_request_id",
+      "value": "request-0000000001",
+      "type": "string"
+    },
+    {
+      "key": "cursor",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "language",
+      "value": "ar",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "فئات الدعم العام",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/support/options",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "support",
+            "options"
+          ]
+        },
+        "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+      },
+      "response": [
+        {
+          "name": "General options",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ]
+            },
+            "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"trip_id\": null,\n    \"categories\": [\n      {\n        \"id\": \"general\",\n        \"name\": {\n          \"ar\": \"استفسار عام\",\n          \"en\": \"General question\"\n        },\n        \"trip_required\": false\n      },\n      {\n        \"id\": \"app_issue\",\n        \"name\": {\n          \"ar\": \"مشكلة في التطبيق\",\n          \"en\": \"App issue\"\n        },\n        \"trip_required\": false\n      }\n    ]\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ]
+            },
+            "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ]
+            },
+            "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ]
+            },
+            "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ]
+            },
+            "description": "فئات الدعم العام — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "فئات بلاغ الرحلة",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "support",
+            "options"
+          ],
+          "query": [
+            {
+              "key": "trip_id",
+              "value": "{{trip_id}}"
+            }
+          ]
+        },
+        "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+      },
+      "response": [
+        {
+          "name": "Trip options",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"trip_id\": \"trip-1\",\n    \"categories\": [\n      {\n        \"id\": \"general\",\n        \"name\": {\n          \"ar\": \"استفسار عام\",\n          \"en\": \"General question\"\n        },\n        \"trip_required\": false\n      },\n      {\n        \"id\": \"app_issue\",\n        \"name\": {\n          \"ar\": \"مشكلة في التطبيق\",\n          \"en\": \"App issue\"\n        },\n        \"trip_required\": false\n      },\n      {\n        \"id\": \"trip_issue\",\n        \"name\": {\n          \"ar\": \"بلاغ رحلة\",\n          \"en\": \"Trip report\"\n        },\n        \"trip_required\": true\n      }\n    ]\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "TRIP_NOT_FOUND",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/options?trip_id={{trip_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "options"
+              ],
+              "query": [
+                {
+                  "key": "trip_id",
+                  "value": "{{trip_id}}"
+                }
+              ]
+            },
+            "description": "فئات بلاغ الرحلة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "TRIP_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الرحلة غير موجودة.\",\n      \"en\": \"Trip not found.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "قائمة طلبات الدعم",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/support/tickets?limit=20",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "support",
+            "tickets"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "20"
+            },
+            {
+              "key": "cursor",
+              "value": "{{cursor}}",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+      },
+      "response": [
+        {
+          "name": "Empty",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"tickets\": [],\n    \"pagination\": {\n      \"limit\": 20,\n      \"next_cursor\": null\n    }\n  }\n}"
+        },
+        {
+          "name": "Page 1",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"tickets\": [\n      {\n        \"id\": \"mock-support-25\",\n        \"client_request_id\": \"request-0000000000000025\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 25\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:25.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:25.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-24\",\n        \"client_request_id\": \"request-0000000000000024\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 24\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:24.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:24.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-23\",\n        \"client_request_id\": \"request-0000000000000023\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 23\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:23.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:23.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-22\",\n        \"client_request_id\": \"request-0000000000000022\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 22\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:22.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:22.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-21\",\n        \"client_request_id\": \"request-0000000000000021\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 21\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:21.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:21.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-20\",\n        \"client_request_id\": \"request-0000000000000020\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 20\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:20.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:20.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-19\",\n        \"client_request_id\": \"request-0000000000000019\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 19\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:19.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:19.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-18\",\n        \"client_request_id\": \"request-0000000000000018\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 18\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:18.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:18.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-17\",\n        \"client_request_id\": \"request-0000000000000017\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 17\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:17.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:17.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-16\",\n        \"client_request_id\": \"request-0000000000000016\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 16\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:16.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:16.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-15\",\n        \"client_request_id\": \"request-0000000000000015\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 15\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:15.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:15.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-14\",\n        \"client_request_id\": \"request-0000000000000014\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 14\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:14.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:14.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-13\",\n        \"client_request_id\": \"request-0000000000000013\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 13\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:13.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:13.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-12\",\n        \"client_request_id\": \"request-0000000000000012\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 12\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:12.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:12.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-11\",\n        \"client_request_id\": \"request-0000000000000011\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 11\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:11.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:11.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-10\",\n        \"client_request_id\": \"request-0000000000000010\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 10\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:10.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:10.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-9\",\n        \"client_request_id\": \"request-0000000000000009\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 9\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:09.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:09.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-8\",\n        \"client_request_id\": \"request-0000000000000008\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 8\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:08.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:08.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-7\",\n        \"client_request_id\": \"request-0000000000000007\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 7\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:07.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:07.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-6\",\n        \"client_request_id\": \"request-0000000000000006\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 6\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:06.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:06.000Z\",\n        \"revision\": 1\n      }\n    ],\n    \"pagination\": {\n      \"limit\": 20,\n      \"next_cursor\": \"WzAsIm1vY2stc3VwcG9ydC02Il0=\"\n    }\n  }\n}"
+        },
+        {
+          "name": "Page 2",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"tickets\": [\n      {\n        \"id\": \"mock-support-5\",\n        \"client_request_id\": \"request-0000000000000005\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 5\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:05.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:05.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-4\",\n        \"client_request_id\": \"request-0000000000000004\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 4\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:04.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:04.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-3\",\n        \"client_request_id\": \"request-0000000000000003\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 3\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:03.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:03.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-2\",\n        \"client_request_id\": \"request-0000000000000002\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 2\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:02.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:02.000Z\",\n        \"revision\": 1\n      },\n      {\n        \"id\": \"mock-support-1\",\n        \"client_request_id\": \"request-0000000000000001\",\n        \"category_id\": \"general\",\n        \"body\": \"Issue details 1\",\n        \"trip_id\": null,\n        \"status\": \"open\",\n        \"created_at\": \"2026-11-09T12:00:01.000Z\",\n        \"updated_at\": \"2026-11-09T12:00:01.000Z\",\n        \"revision\": 1\n      }\n    ],\n    \"pagination\": {\n      \"limit\": 20,\n      \"next_cursor\": null\n    }\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "INVALID_CURSOR",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets?limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "{{cursor}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "قائمة طلبات الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "INVALID_CURSOR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"INVALID_CURSOR\",\n    \"message\": {\n      \"ar\": \"مؤشر الصفحة غير صالح.\",\n      \"en\": \"Invalid page cursor.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "تفاصيل طلب الدعم",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "support",
+            "tickets",
+            "{{ticket_id}}"
+          ]
+        },
+        "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+      },
+      "response": [
+        {
+          "name": "Open",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-support-1\",\n    \"client_request_id\": \"request-0000000001\",\n    \"category_id\": \"trip_issue\",\n    \"body\": \"Details of the issue\",\n    \"trip_id\": \"trip-1\",\n    \"status\": \"open\",\n    \"created_at\": \"2026-11-09T12:00:00.000Z\",\n    \"updated_at\": \"2026-11-09T12:00:00.000Z\",\n    \"revision\": 1\n  }\n}"
+        },
+        {
+          "name": "In progress",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-support-1\",\n    \"client_request_id\": \"request-0000000001\",\n    \"category_id\": \"trip_issue\",\n    \"body\": \"Details of the issue\",\n    \"trip_id\": \"trip-1\",\n    \"status\": \"in_progress\",\n    \"created_at\": \"2026-11-09T12:00:00.000Z\",\n    \"updated_at\": \"2026-11-09T13:00:02.000Z\",\n    \"revision\": 2\n  }\n}"
+        },
+        {
+          "name": "Resolved",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-support-1\",\n    \"client_request_id\": \"request-0000000001\",\n    \"category_id\": \"trip_issue\",\n    \"body\": \"Details of the issue\",\n    \"trip_id\": \"trip-1\",\n    \"status\": \"resolved\",\n    \"created_at\": \"2026-11-09T12:00:00.000Z\",\n    \"updated_at\": \"2026-11-09T13:00:03.000Z\",\n    \"revision\": 3\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "TICKET_NOT_FOUND",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets/{{ticket_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets",
+                "{{ticket_id}}"
+              ]
+            },
+            "description": "تفاصيل طلب الدعم — راجع support-v1.md للقيود والتفويض وإعادة المحاولة."
+          },
+          "status": "TICKET_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TICKET_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"طلب الدعم غير موجود.\",\n      \"en\": \"Support ticket not found.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/support/tickets",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "support",
+            "tickets"
+          ]
+        },
+        "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "Created",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-support-1\",\n    \"client_request_id\": \"request-0000000001\",\n    \"category_id\": \"trip_issue\",\n    \"body\": \"Details of the issue\",\n    \"trip_id\": \"trip-1\",\n    \"status\": \"open\",\n    \"created_at\": \"2026-11-09T12:00:00.000Z\",\n    \"updated_at\": \"2026-11-09T12:00:00.000Z\",\n    \"revision\": 1\n  }\n}"
+        },
+        {
+          "name": "Idempotent replay",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-support-1\",\n    \"client_request_id\": \"request-0000000001\",\n    \"category_id\": \"trip_issue\",\n    \"body\": \"Details of the issue\",\n    \"trip_id\": \"trip-1\",\n    \"status\": \"open\",\n    \"created_at\": \"2026-11-09T12:00:00.000Z\",\n    \"updated_at\": \"2026-11-09T12:00:00.000Z\",\n    \"revision\": 1\n  }\n}"
+        },
+        {
+          "name": "UNAUTHENTICATED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "UNAUTHENTICATED",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication is required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "FORBIDDEN",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "FORBIDDEN",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"لا تملك صلاحية الوصول.\",\n      \"en\": \"Access is forbidden.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "TRIP_NOT_FOUND",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "TRIP_NOT_FOUND",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"TRIP_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"الرحلة غير موجودة.\",\n      \"en\": \"Trip not found.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "IDEMPOTENCY_CONFLICT",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "IDEMPOTENCY_CONFLICT",
+          "code": 409,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"IDEMPOTENCY_CONFLICT\",\n    \"message\": {\n      \"ar\": \"استُخدم معرّف الطلب مع بيانات مختلفة.\",\n      \"en\": \"Request ID was used with a different payload.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات المدخلة.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "INVALID_CATEGORY",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/support/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "support",
+                "tickets"
+              ]
+            },
+            "description": "إرسال بلاغ رحلة — نفس المعرّف عند الإعادة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_request_id\": \"{{client_request_id}}\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"{{trip_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "INVALID_CATEGORY",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"INVALID_CATEGORY\",\n    \"message\": {\n      \"ar\": \"الفئة غير صالحة لهذا السياق.\",\n      \"en\": \"Category is invalid in this context.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "محتوى الشروط — عام بلا مصادقة",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/content/legal/terms?language={{language}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "content",
+            "legal",
+            "terms"
+          ],
+          "query": [
+            {
+              "key": "language",
+              "value": "{{language}}"
+            }
+          ]
+        },
+        "description": "محتوى الشروط — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": [
+        {
+          "name": "Not published",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/terms?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "terms"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الشروط — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": null\n}"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/terms?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "terms"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الشروط — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات المدخلة.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/terms?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "terms"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الشروط — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/terms?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "terms"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الشروط — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "محتوى الخصوصية — عام بلا مصادقة",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/content/legal/privacy?language={{language}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "content",
+            "legal",
+            "privacy"
+          ],
+          "query": [
+            {
+              "key": "language",
+              "value": "{{language}}"
+            }
+          ]
+        },
+        "description": "محتوى الخصوصية — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": [
+        {
+          "name": "Not published",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/privacy?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "privacy"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الخصوصية — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": null\n}"
+        },
+        {
+          "name": "VALIDATION_ERROR",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/privacy?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "privacy"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الخصوصية — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "VALIDATION_ERROR",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"تحقق من البيانات المدخلة.\",\n      \"en\": \"Check the supplied fields.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "RATE_LIMITED",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/privacy?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "privacy"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الخصوصية — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "RATE_LIMITED",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول مجددًا لاحقًا.\",\n      \"en\": \"Retry later.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "SERVICE_UNAVAILABLE",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/content/legal/privacy?language={{language}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "content",
+                "legal",
+                "privacy"
+              ],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "{{language}}"
+                }
+              ]
+            },
+            "description": "محتوى الخصوصية — عام بلا مصادقة — راجع support-v1.md للقيود والتفويض وإعادة المحاولة.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "status": "SERVICE_UNAVAILABLE",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة حاليًا.\",\n      \"en\": \"Service is currently unavailable.\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

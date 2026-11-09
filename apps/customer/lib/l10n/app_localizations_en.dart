@@ -1256,6 +1256,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not connect. Check your network and retry.';
 
   @override
+  String get completionSimulationNotice =>
+      'Ratings in this version are stored locally for testing until the service is connected.';
+
+  @override
   String get supportTitle => 'Help and support';
 
   @override
@@ -1370,4 +1374,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String supportLegalVersion(String version, String date) {
     return 'Version $version · Published $date';
   }
+
+  @override
+  String get supportSimulationNotice =>
+      'Support operations in this version are simulated and are not sent to a real support team.';
 }

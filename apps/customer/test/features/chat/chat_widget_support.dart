@@ -61,7 +61,7 @@ Future<void> captureChat(WidgetTester tester, String name) async {
     await expectLater(
       find.byKey(const Key('chat-preview')),
       matchesGoldenFile(
-        '../../../../../docs/engineering/deliveries/W2-CHAT/screenshots/$name.png',
+        '../../../../../docs/engineering/deliveries/${const String.fromEnvironment('CHAT_UI_DELIVERY', defaultValue: 'W2-CHAT')}/screenshots/$name.png',
       ),
     );
   }

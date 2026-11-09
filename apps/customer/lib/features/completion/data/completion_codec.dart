@@ -24,6 +24,9 @@ abstract final class CompletionCodec {
     Map<String, dynamic> envelope, {
     CompletionPolicy policy = const CompletionPolicy(),
   }) {
+    if (envelope.containsKey('error')) {
+      throw const FormatException('Expected success envelope');
+    }
     final data = _object(envelope['data']);
     final revision = data['revision'];
     if (data['version'] != 1 ||
@@ -87,6 +90,9 @@ abstract final class CompletionCodec {
   };
 
   static CompletionFailure failure(Map<String, dynamic> envelope) {
+    if (envelope.containsKey('data')) {
+      throw const FormatException('Expected error envelope');
+    }
     final error = _object(envelope['error']);
     final message = _object(error['message']);
     _text(message, 'ar');

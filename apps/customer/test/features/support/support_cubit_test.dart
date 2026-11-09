@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/support/data/mock/mock_support_repository.dart';
 import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/features/support/presentation/bloc/legal_cubit.dart';
+import 'package:tam_customer/features/support/presentation/bloc/support_detail_cubit.dart';
 import 'package:tam_customer/features/support/presentation/bloc/support_editor_cubit.dart';
 import 'package:tam_customer/features/support/presentation/bloc/support_list_cubit.dart';
-import 'package:tam_customer/features/support/presentation/bloc/support_detail_cubit.dart';
 import 'support_test_support.dart';
 
 SupportEditorCubit editor(SupportRepository repo, {String? tripId}) =>

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": {
+      "ar": "استُخدم معرّف الطلب مع بيانات مختلفة.",
+      "en": "Request ID was used with a different payload."
+    }
+  }
+}

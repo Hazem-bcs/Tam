@@ -1,0 +1,9 @@
+{
+  "data": {
+    "tickets": [],
+    "pagination": {
+      "limit": 20,
+      "next_cursor": null
+    }
+  }
+}

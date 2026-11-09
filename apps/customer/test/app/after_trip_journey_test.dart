@@ -51,7 +51,7 @@ void main() {
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('active-completion')));
+      await tester.tap(find.byKey(const Key('active-completion')));
       await tester.pumpAndSettle();
       final completion = tester
           .element(find.byType(CompletionPage))

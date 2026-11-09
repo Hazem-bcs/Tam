@@ -1,0 +1,65 @@
+{
+  "data": {
+    "tickets": [
+      {
+        "id": "mock-support-5",
+        "client_request_id": "request-0000000000000005",
+        "category_id": "general",
+        "body": "Issue details 5",
+        "trip_id": null,
+        "status": "open",
+        "created_at": "2026-11-09T12:00:05.000Z",
+        "updated_at": "2026-11-09T12:00:05.000Z",
+        "revision": 1
+      },
+      {
+        "id": "mock-support-4",
+        "client_request_id": "request-0000000000000004",
+        "category_id": "general",
+        "body": "Issue details 4",
+        "trip_id": null,
+        "status": "open",
+        "created_at": "2026-11-09T12:00:04.000Z",
+        "updated_at": "2026-11-09T12:00:04.000Z",
+        "revision": 1
+      },
+      {
+        "id": "mock-support-3",
+        "client_request_id": "request-0000000000000003",
+        "category_id": "general",
+        "body": "Issue details 3",
+        "trip_id": null,
+        "status": "open",
+        "created_at": "2026-11-09T12:00:03.000Z",
+        "updated_at": "2026-11-09T12:00:03.000Z",
+        "revision": 1
+      },
+      {
+        "id": "mock-support-2",
+        "client_request_id": "request-0000000000000002",
+        "category_id": "general",
+        "body": "Issue details 2",
+        "trip_id": null,
+        "status": "open",
+        "created_at": "2026-11-09T12:00:02.000Z",
+        "updated_at": "2026-11-09T12:00:02.000Z",
+        "revision": 1
+      },
+      {
+        "id": "mock-support-1",
+        "client_request_id": "request-0000000000000001",
+        "category_id": "general",
+        "body": "Issue details 1",
+        "trip_id": null,
+        "status": "open",
+        "created_at": "2026-11-09T12:00:01.000Z",
+        "updated_at": "2026-11-09T12:00:01.000Z",
+        "revision": 1
+      }
+    ],
+    "pagination": {
+      "limit": 20,
+      "next_cursor": null
+    }
+  }
+}

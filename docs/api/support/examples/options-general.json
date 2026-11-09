@@ -1,0 +1,23 @@
+{
+  "data": {
+    "trip_id": null,
+    "categories": [
+      {
+        "id": "general",
+        "name": {
+          "ar": "استفسار عام",
+          "en": "General question"
+        },
+        "trip_required": false
+      },
+      {
+        "id": "app_issue",
+        "name": {
+          "ar": "مشكلة في التطبيق",
+          "en": "App issue"
+        },
+        "trip_required": false
+      }
+    ]
+  }
+}

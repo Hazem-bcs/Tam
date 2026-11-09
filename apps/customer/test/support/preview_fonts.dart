@@ -32,6 +32,11 @@ ThemeData previewTheme() {
       fontFamily: 'TamPreviewArabic',
       fontFamilyFallback: const ['TamPreviewLatin'],
     ),
+    snackBarTheme: base.snackBarTheme.copyWith(
+      contentTextStyle: font(
+        base.snackBarTheme.contentTextStyle ?? base.textTheme.bodyMedium,
+      ),
+    ),
     appBarTheme: base.appBarTheme.copyWith(
       titleTextStyle: font(base.appBarTheme.titleTextStyle),
     ),

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "INVALID_CATEGORY",
+    "message": {
+      "ar": "الفئة غير صالحة لهذا السياق.",
+      "en": "Category is invalid in this context."
+    }
+  }
+}

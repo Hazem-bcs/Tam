@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "INVALID_CURSOR",
+    "message": {
+      "ar": "مؤشر الصفحة غير صالح.",
+      "en": "Invalid page cursor."
+    }
+  }
+}

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/support/data/mock/mock_support_repository.dart';
-import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/features/support/support_entry.dart';
 import 'support_test_support.dart';
 import 'support_widget_support.dart';
@@ -64,7 +63,7 @@ void main() {
           tester,
           'editor-$locale-${target.$1.toInt()}x${target.$2.toInt()}-x${target.$3.toInt()}',
         );
-        await tester.ensureVisible(find.byKey(const Key('support-body')));
+        await revealSupport(tester, 'support-body');
         await tester.enterText(
           find.byKey(const Key('support-body')),
           'تفاصيل المشكلة / Details of the issue',
@@ -73,7 +72,7 @@ void main() {
           bottom: target.$2 < 500 ? 120 : 260,
         );
         await tester.pumpAndSettle();
-        await tester.ensureVisible(find.byKey(const Key('support-submit')));
+        await revealSupport(tester, 'support-submit');
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         expect(
@@ -111,11 +110,12 @@ void main() {
           onCreated: created.add,
         ),
       );
+      await revealSupport(tester, 'support-body');
       await tester.enterText(
         find.byKey(const Key('support-body')),
         'Details of the issue',
       );
-      await tester.ensureVisible(find.byKey(const Key('support-submit')));
+      await revealSupport(tester, 'support-submit');
       await tester.tap(find.byKey(const Key('support-submit')));
       await tester.pumpAndSettle();
       expect(
@@ -124,7 +124,7 @@ void main() {
       );
       expect(created, isEmpty);
       await captureSupport(tester, 'state-uncertain');
-      await tester.ensureVisible(find.byKey(const Key('support-retry')));
+      await revealSupport(tester, 'support-retry');
       await tester.tap(find.byKey(const Key('support-retry')));
       await tester.pumpAndSettle();
       expect(created, hasLength(1));

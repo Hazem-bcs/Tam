@@ -39,15 +39,19 @@ class _ChatComposerState extends State<ChatComposer> {
           Expanded(
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: widget.maxHeight),
-              child: TamTextField(
-                key: const Key('chat-input'),
-                controller: _controller,
-                enabled: widget.enabled,
-                labelText: t.chatMessageHint,
-                maxLines: null,
-                helperText: t.chatCharacterCount(length, widget.maxLength),
-                keyboardType: TextInputType.multiline,
-                onChanged: (_) => setState(() {}),
+              // Keep the input and its wrapping counter scrollable together
+              // when the keyboard leaves only a short composer viewport.
+              child: SingleChildScrollView(
+                child: TamTextField(
+                  key: const Key('chat-input'),
+                  controller: _controller,
+                  enabled: widget.enabled,
+                  labelText: t.chatMessageHint,
+                  maxLines: null,
+                  helperText: t.chatCharacterCount(length, widget.maxLength),
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (_) => setState(() {}),
+                ),
               ),
             ),
           ),

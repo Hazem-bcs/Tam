@@ -39,7 +39,7 @@ final class SupportDetailCubit extends Cubit<SupportDetailState> {
       final old = state.ticket;
       emit(
         SupportDetailState(
-          ticket: old != null && old.revision > value.revision ? old : value,
+          ticket: old?.acceptUpdate(value) ?? value,
           loading: false,
         ),
       );

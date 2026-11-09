@@ -547,6 +547,7 @@
   "completionAlreadyRated": "This trip was already rated. Checking the saved rating.",
   "completionInvalidResponse": "The result could not be verified. Retry to check or contact support.",
   "completionOffline": "Could not connect. Check your network and retry.",
+  "completionSimulationNotice": "Ratings in this version are stored locally for testing until the service is connected.",
   "supportTitle": "Help and support",
   "supportIntro": "Create a general support request or choose a trip to report an issue.",
   "supportNewTicket": "New support request",
@@ -603,5 +604,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "supportSimulationNotice": "Support operations in this version are simulated and are not sent to a real support team."
 }

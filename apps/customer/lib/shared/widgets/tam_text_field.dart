@@ -82,7 +82,8 @@ class TamTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
-        helperText: helperText,
+        // A helper widget wraps naturally at accessibility text sizes.
+        helper: helperText == null ? null : Text(helperText!),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         alignLabelWithHint: maxLines != 1,

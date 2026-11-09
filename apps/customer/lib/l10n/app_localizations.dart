@@ -2360,6 +2360,12 @@ abstract class AppLocalizations {
   /// **'تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.'**
   String get completionOffline;
 
+  /// No description provided for @completionSimulationNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.'**
+  String get completionSimulationNotice;
+
   /// No description provided for @supportTitle.
   ///
   /// In ar, this message translates to:
@@ -2557,6 +2563,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإصدار {version} · نُشر {date}'**
   String supportLegalVersion(String version, String date);
+
+  /// No description provided for @supportSimulationNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.'**
+  String get supportSimulationNotice;
 }
 
 class _AppLocalizationsDelegate

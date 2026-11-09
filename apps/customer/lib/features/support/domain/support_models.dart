@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 enum SupportTicketStatus { open, inProgress, resolved }
 
 enum LegalDocumentKind { terms, privacy }
@@ -20,7 +22,7 @@ final class SupportOptions {
   final String? tripId;
 }
 
-final class SupportTicket {
+final class SupportTicket extends Equatable {
   const SupportTicket({
     required this.id,
     required this.clientRequestId,
@@ -37,6 +39,37 @@ final class SupportTicket {
   final SupportTicketStatus status;
   final DateTime createdAt, updatedAt;
   final int revision;
+
+  /// Creation fields are immutable even when staff update a ticket's status.
+  SupportTicket acceptUpdate(SupportTicket incoming) {
+    if (incoming.id != id ||
+        incoming.clientRequestId != clientRequestId ||
+        incoming.categoryId != categoryId ||
+        incoming.body != body ||
+        incoming.tripId != tripId ||
+        incoming.createdAt != createdAt ||
+        incoming.revision < 1 ||
+        incoming.updatedAt.isBefore(incoming.createdAt) ||
+        (incoming.revision == revision && incoming != this) ||
+        (incoming.revision > revision &&
+            incoming.updatedAt.isBefore(updatedAt))) {
+      throw const SupportFailure('INVALID_RESPONSE');
+    }
+    return incoming.revision < revision ? this : incoming;
+  }
+
+  @override
+  List<Object?> get props => [
+    id,
+    clientRequestId,
+    categoryId,
+    body,
+    tripId,
+    status,
+    createdAt,
+    updatedAt,
+    revision,
+  ];
 }
 
 final class SupportTicketPage {

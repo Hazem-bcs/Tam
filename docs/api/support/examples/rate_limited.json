@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": {
+      "ar": "حاول مجددًا لاحقًا.",
+      "en": "Retry later."
+    }
+  }
+}

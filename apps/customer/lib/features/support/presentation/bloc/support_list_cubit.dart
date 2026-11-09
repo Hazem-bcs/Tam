@@ -57,10 +57,7 @@ final class SupportListCubit extends Cubit<SupportListState> {
         final existing =
             values[ticket.id] ??
             old.tickets.where((t) => t.id == ticket.id).firstOrNull;
-        values[ticket.id] =
-            existing == null || ticket.revision >= existing.revision
-            ? ticket
-            : existing;
+        values[ticket.id] = existing?.acceptUpdate(ticket) ?? ticket;
       }
       emit(
         SupportListState(

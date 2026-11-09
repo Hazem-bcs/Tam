@@ -1,0 +1,6 @@
+{
+  "client_request_id": "request-0000000001",
+  "category_id": "trip_issue",
+  "body": "Details of the issue",
+  "trip_id": "trip-1"
+}

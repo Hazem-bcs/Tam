@@ -1232,6 +1232,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get completionOffline => 'تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.';
 
   @override
+  String get completionSimulationNotice =>
+      'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.';
+
+  @override
   String get supportTitle => 'المساعدة والدعم';
 
   @override
@@ -1340,4 +1344,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String supportLegalVersion(String version, String date) {
     return 'الإصدار $version · نُشر $date';
   }
+
+  @override
+  String get supportSimulationNotice =>
+      'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.';
 }

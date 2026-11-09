@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "TRIP_NOT_FOUND",
+    "message": {
+      "ar": "الرحلة غير موجودة.",
+      "en": "Trip not found."
+    }
+  }
+}

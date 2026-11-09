@@ -38,6 +38,11 @@ class CompletionPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Text(
+                        l.completionSimulationNotice,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
                       if (state.loading)
                         TamLoadingIndicator(semanticLabel: l.completionLoading),
                       if (state.sessionEnded) Text(l.completionSessionEnded),

@@ -54,5 +54,6 @@
   "completionUnavailable": "The rating service integration is currently unavailable.",
   "completionAlreadyRated": "This trip was already rated. Checking the saved rating.",
   "completionInvalidResponse": "The result could not be verified. Retry to check or contact support.",
-  "completionOffline": "Could not connect. Check your network and retry."
+  "completionOffline": "Could not connect. Check your network and retry.",
+  "completionSimulationNotice": "Ratings in this version are stored locally for testing until the service is connected."
 }

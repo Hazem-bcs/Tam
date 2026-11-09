@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "تحقق من البيانات المدخلة.",
+      "en": "Check the supplied fields."
+    }
+  }
+}

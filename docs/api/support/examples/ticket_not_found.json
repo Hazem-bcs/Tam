@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "TICKET_NOT_FOUND",
+    "message": {
+      "ar": "طلب الدعم غير موجود.",
+      "en": "Support ticket not found."
+    }
+  }
+}

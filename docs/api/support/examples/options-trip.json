@@ -1,0 +1,31 @@
+{
+  "data": {
+    "trip_id": "trip-1",
+    "categories": [
+      {
+        "id": "general",
+        "name": {
+          "ar": "استفسار عام",
+          "en": "General question"
+        },
+        "trip_required": false
+      },
+      {
+        "id": "app_issue",
+        "name": {
+          "ar": "مشكلة في التطبيق",
+          "en": "App issue"
+        },
+        "trip_required": false
+      },
+      {
+        "id": "trip_issue",
+        "name": {
+          "ar": "بلاغ رحلة",
+          "en": "Trip report"
+        },
+        "trip_required": true
+      }
+    ]
+  }
+}

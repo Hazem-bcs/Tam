@@ -49,3 +49,15 @@ Future<void> captureSupport(WidgetTester tester, String name) async {
     );
   }
 }
+
+Future<void> revealSupport(WidgetTester tester, String key) async {
+  await tester.pumpAndSettle();
+  final target = find.byKey(Key(key));
+  await tester.scrollUntilVisible(
+    target,
+    160,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.ensureVisible(target);
+  await tester.pumpAndSettle();
+}

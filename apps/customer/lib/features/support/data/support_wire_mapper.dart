@@ -1,3 +1,4 @@
+import 'package:tam_customer/shared/data/utc_timestamp.dart';
 import '../domain/support_repository.dart';
 
 /// Strict decoder shared by proposed API examples and the future HTTP adapter.
@@ -18,14 +19,7 @@ abstract final class SupportWireMapper {
 
   static String? _optional(Object? value) =>
       value == null ? null : _text(value);
-  static DateTime _time(Object? value) {
-    final text = _text(value);
-    final date = DateTime.tryParse(text);
-    if (!text.endsWith('Z') || date == null || !date.isUtc) {
-      throw const FormatException('Expected UTC timestamp');
-    }
-    return date;
-  }
+  static DateTime _time(Object? value) => UtcTimestamp.parse(value);
 
   static Object? _data(Map<String, dynamic> envelope) {
     if (!envelope.containsKey('data') || envelope.containsKey('error')) {
@@ -36,6 +30,9 @@ abstract final class SupportWireMapper {
 
   static SupportOptions options(Map<String, dynamic> envelope) {
     final data = _map(_data(envelope));
+    if (!data.containsKey('trip_id')) {
+      throw const FormatException('Missing trip context');
+    }
     final tripId = _optional(data['trip_id']);
     final categories = data['categories'];
     if (categories is! List || categories.isEmpty) {
@@ -66,6 +63,9 @@ abstract final class SupportWireMapper {
   static SupportTicket ticket(Map<String, dynamic> envelope) =>
       ticketData(_map(_data(envelope)));
   static SupportTicket ticketData(Map<String, dynamic> data) {
+    if (!data.containsKey('trip_id')) {
+      throw const FormatException('Missing trip context');
+    }
     final status = switch (data['status']) {
       'open' => SupportTicketStatus.open,
       'in_progress' => SupportTicketStatus.inProgress,
@@ -118,6 +118,9 @@ abstract final class SupportWireMapper {
         throw const FormatException('Invalid order');
       }
     }
+    if (!pagination.containsKey('next_cursor')) {
+      throw const FormatException('Missing continuation');
+    }
     final cursor = _optional(pagination['next_cursor']);
     if (cursor != null && tickets.length != 20) {
       throw const FormatException('Invalid continuation');
@@ -148,6 +151,9 @@ abstract final class SupportWireMapper {
   }
 
   static SupportFailure failure(Map<String, dynamic> envelope) {
+    if (envelope.containsKey('data')) {
+      throw const FormatException('Expected error envelope');
+    }
     final error = _map(envelope['error']),
         messages = _map(_map(envelope['error'])['message']);
     _text(messages['ar']);
