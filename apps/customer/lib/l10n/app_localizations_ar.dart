@@ -576,6 +576,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripsStatusNoDriver => 'لا يوجد سائق';
 
   @override
+  String get tripsCompletion => 'ملخص الرحلة وتقييمها';
+
+  @override
+  String get tripsSupport => 'المساعدة بخصوص الرحلة';
+
+  @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';
 
   @override
@@ -760,6 +766,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsLoggingOut => 'جارٍ تسجيل الخروج';
+
+  @override
+  String get settingsHelp => 'المساعدة والدعم';
+
+  @override
+  String get settingsTerms => 'الشروط والأحكام';
+
+  @override
+  String get settingsPrivacy => 'سياسة الخصوصية';
 
   @override
   String get addressesTitle => 'عناويني';
@@ -1043,6 +1058,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeTripChat => 'محادثة السائق';
+
+  @override
+  String get activeTripCompletion => 'ملخص الرحلة وتقييمها';
+
+  @override
+  String get activeTripSupport => 'المساعدة بخصوص الرحلة';
 
   @override
   String get chatTitle => 'السائق';

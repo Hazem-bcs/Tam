@@ -27,6 +27,10 @@ final class RouteAccessPolicy {
         AppRoutes.addAddress: access(CustomerFeature.addresses),
         AppRoutes.editAddress: access(CustomerFeature.addresses),
         AppRoutes.chat: access(CustomerFeature.chat),
+        AppRoutes.completion: access(CustomerFeature.completion),
+        AppRoutes.support: access(CustomerFeature.support),
+        AppRoutes.supportNew: access(CustomerFeature.support),
+        AppRoutes.supportTicket: access(CustomerFeature.support),
         AppRoutes.activeTrip: access(CustomerFeature.activeTrip),
         AppRoutes.activeTripDetails: access(CustomerFeature.activeTrip),
       },
@@ -35,6 +39,8 @@ final class RouteAccessPolicy {
 
   static const appRoutes = {
     AppRoutes.home: RouteAccess.public,
+    AppRoutes.terms: RouteAccess.public,
+    AppRoutes.privacy: RouteAccess.public,
     AppRoutes.auth: RouteAccess.authentication,
     AppRoutes.otp: RouteAccess.authentication,
     AppRoutes.authStatus: RouteAccess.authentication,

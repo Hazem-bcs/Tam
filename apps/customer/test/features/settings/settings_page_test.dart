@@ -20,6 +20,14 @@ final class FakeNavigation implements CustomerNavigation {
   int trips = 0;
   int notifications = 0;
   @override
+  void openCompletion(String tripId) {}
+  @override
+  void openSupport({String? tripId}) {}
+  @override
+  void openTerms() {}
+  @override
+  void openPrivacy() {}
+  @override
   void openChat(String tripId) {}
   @override
   void openActiveTrip({String? id}) {}

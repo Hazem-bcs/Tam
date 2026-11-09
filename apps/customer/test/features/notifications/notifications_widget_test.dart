@@ -20,6 +20,14 @@ class _NavigationSpy implements CustomerNavigation {
   var tripsCount = 0;
   final openedTrips = <String>[];
   @override
+  void openCompletion(String tripId) {}
+  @override
+  void openSupport({String? tripId}) {}
+  @override
+  void openTerms() {}
+  @override
+  void openPrivacy() {}
+  @override
   void openChat(String tripId) {}
   @override
   void openActiveTrip({String? id}) {}

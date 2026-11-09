@@ -82,6 +82,14 @@ class TripDetailsActions extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.sm),
             ],
+            if (trip.status == TripStatus.completed) ...[
+              TamButton.primary(
+                key: const Key('trips-completion'),
+                label: l.tripsCompletion,
+                onPressed: () => navigation.openCompletion(trip.id),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
             TamButton.primary(
               label: l.tripsRebook,
               icon: Icons.replay,
@@ -95,6 +103,14 @@ class TripDetailsActions extends StatelessWidget {
                         ),
                       );
                     },
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            TamButton.secondary(
+              key: const Key('trips-support'),
+              label: l.tripsSupport,
+              onPressed: state.isCancelling
+                  ? null
+                  : () => navigation.openSupport(tripId: trip.id),
             ),
             if (trip.canCancel) ...[
               const SizedBox(height: AppSpacing.sm),

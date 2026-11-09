@@ -587,6 +587,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripsStatusNoDriver => 'No driver found';
 
   @override
+  String get tripsCompletion => 'Trip summary and rating';
+
+  @override
+  String get tripsSupport => 'Get help with this trip';
+
+  @override
   String get notificationsMarkAll => 'Mark all as read';
 
   @override
@@ -772,6 +778,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLoggingOut => 'Logging out';
+
+  @override
+  String get settingsHelp => 'Help and support';
+
+  @override
+  String get settingsTerms => 'Terms and conditions';
+
+  @override
+  String get settingsPrivacy => 'Privacy policy';
 
   @override
   String get addressesTitle => 'My addresses';
@@ -1063,6 +1078,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeTripChat => 'Chat with driver';
+
+  @override
+  String get activeTripCompletion => 'Trip summary and rating';
+
+  @override
+  String get activeTripSupport => 'Get help with this trip';
 
   @override
   String get chatTitle => 'Driver';

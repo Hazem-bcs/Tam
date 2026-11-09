@@ -257,6 +257,8 @@
   "tripsStatusDriverEnRoute": "السائق في الطريق",
   "tripsStatusDriverArrived": "السائق ينتظرك",
   "tripsStatusNoDriver": "لا يوجد سائق",
+  "tripsCompletion": "ملخص الرحلة وتقييمها",
+  "tripsSupport": "المساعدة بخصوص الرحلة",
   "notificationsMarkAll": "تعيين الكل كمقروء",
   "notificationsUnreadCount": "غير مقروء: {count}",
   "@notificationsUnreadCount": {
@@ -322,6 +324,9 @@
   "settingsSaved": "تم حفظ التغييرات التجريبية",
   "settingsSaving": "جارٍ الحفظ",
   "settingsLoggingOut": "جارٍ تسجيل الخروج",
+  "settingsHelp": "المساعدة والدعم",
+  "settingsTerms": "الشروط والأحكام",
+  "settingsPrivacy": "سياسة الخصوصية",
   "addressesTitle": "عناويني",
   "addressesDescription": "احفظ أماكنك للوصول إليها أسرع",
   "addressesAdd": "إضافة موقع",
@@ -453,6 +458,8 @@
     }
   },
   "activeTripChat": "محادثة السائق",
+  "activeTripCompletion": "ملخص الرحلة وتقييمها",
+  "activeTripSupport": "المساعدة بخصوص الرحلة",
   "chatTitle": "السائق",
   "chatRetry": "إعادة المحاولة",
   "chatMessageHint": "اكتب رسالة…",

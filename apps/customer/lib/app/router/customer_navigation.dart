@@ -14,11 +14,30 @@ abstract interface class CustomerNavigation {
   void openAddresses();
   void openActiveTrip({String? id});
   void openChat(String tripId);
+  void openCompletion(String tripId);
+  void openSupport({String? tripId});
+  void openTerms();
+  void openPrivacy();
 }
 
 final class RouterCustomerNavigation implements CustomerNavigation {
   const RouterCustomerNavigation(this.router);
   final GoRouter router;
+  @override
+  void openCompletion(String tripId) =>
+      unawaited(router.push<void>(AppRoutes.completionLocation(tripId)));
+  @override
+  void openSupport({String? tripId}) => unawaited(
+    router.push<void>(
+      tripId == null
+          ? AppRoutes.support
+          : AppRoutes.supportNewLocation(tripId: tripId),
+    ),
+  );
+  @override
+  void openTerms() => unawaited(router.push<void>(AppRoutes.terms));
+  @override
+  void openPrivacy() => unawaited(router.push<void>(AppRoutes.privacy));
   @override
   void openChat(String tripId) =>
       unawaited(router.push<void>(AppRoutes.chatLocation(tripId)));

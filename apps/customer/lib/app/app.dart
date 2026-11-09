@@ -25,6 +25,10 @@ import 'package:tam_customer/features/chat/data/mock/chat_mock_scenario.dart';
 import 'package:tam_customer/features/chat/data/mock/mock_chat_repository.dart';
 import 'package:tam_customer/features/chat/data/unavailable_chat_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
+import 'package:tam_customer/features/completion/data/mock/completion_mock_scenario.dart';
+import 'package:tam_customer/features/completion/data/mock/mock_completion_repository.dart';
+import 'package:tam_customer/features/completion/data/unavailable_completion_repository.dart';
+import 'package:tam_customer/features/completion/domain/completion_repository.dart';
 import 'package:tam_customer/features/notifications/data/mock/mock_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/data/unavailable_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
@@ -32,6 +36,10 @@ import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_r
 import 'package:tam_customer/features/ride_request/data/repositories/unavailable_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/settings/settings_entry.dart';
+import 'package:tam_customer/features/support/data/mock/mock_support_repository.dart';
+import 'package:tam_customer/features/support/data/mock/support_mock_scenario.dart';
+import 'package:tam_customer/features/support/data/unavailable_support_repository.dart';
+import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/data/mock/seed_trips.dart';
@@ -68,6 +76,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final MockAddressesRepository _mockAddresses;
   MockActiveTripRepository? _mockActiveTrips;
   MockChatRepository? _mockChat;
+  MockCompletionRepository? _mockCompletion;
+  MockSupportRepository? _mockSupport;
   late final StreamSubscription<AuthState> _sessionChanges;
 
   @override
@@ -107,6 +117,26 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
             policy: AppConfig.chatPolicy,
           ))
         : const UnavailableChatRepository();
+    final CompletionRepository completion =
+        modes.forFeature(CustomerFeature.completion) == FeatureDataMode.mock
+        ? (_mockCompletion = MockCompletionRepository(
+            _mockTrips,
+            now: widget.clock,
+            policy: AppConfig.completionPolicy,
+            scenario: CompletionMockScenario.parse(
+              AppConfig.completionMockScenario,
+            ),
+          ))
+        : const UnavailableCompletionRepository();
+    final SupportRepository support =
+        modes.forFeature(CustomerFeature.support) == FeatureDataMode.mock
+        ? (_mockSupport = MockSupportRepository(
+            _mockTrips,
+            now: widget.clock,
+            policy: AppConfig.supportPolicy,
+            scenario: SupportMockScenario.parse(AppConfig.supportMockScenario),
+          ))
+        : const UnavailableSupportRepository();
     _mockNotifications = MockNotificationsRepository();
     _mockAddresses = MockAddressesRepository();
     final addressesMode = modes.forFeature(CustomerFeature.addresses);
@@ -129,6 +159,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       addresses: addresses,
       activeTrips: activeTrips,
       chat: chat,
+      completion: completion,
+      support: support,
       clock: widget.clock,
       addressPlaceSearch: (language) =>
           RideAddressPlaceSearch(placeSource, languageCode: language),
@@ -147,6 +179,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         _mockTrips.resetSession();
         _mockActiveTrips?.resetSession();
         _mockChat?.resetSession();
+        _mockCompletion?.resetSession();
+        _mockSupport?.resetSession();
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
         resetSettingsFeatureSession(_locale);
@@ -179,6 +213,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     unawaited(_sessionChanges.cancel());
     if (_mockActiveTrips != null) unawaited(_mockActiveTrips!.dispose());
     if (_mockChat != null) unawaited(_mockChat!.dispose());
+    if (_mockCompletion != null) unawaited(_mockCompletion!.dispose());
+    if (_mockSupport != null) unawaited(_mockSupport!.dispose());
     unawaited(_mockTrips.dispose());
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());

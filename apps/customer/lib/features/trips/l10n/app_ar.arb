@@ -67,5 +67,7 @@
   },
   "tripsStatusDriverEnRoute": "السائق في الطريق",
   "tripsStatusDriverArrived": "السائق ينتظرك",
-  "tripsStatusNoDriver": "لا يوجد سائق"
+  "tripsStatusNoDriver": "لا يوجد سائق",
+  "tripsCompletion": "ملخص الرحلة وتقييمها",
+  "tripsSupport": "المساعدة بخصوص الرحلة"
 }

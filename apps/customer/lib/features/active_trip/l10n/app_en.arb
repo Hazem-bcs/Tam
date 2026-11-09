@@ -73,5 +73,7 @@
       }
     }
   },
-  "activeTripChat": "Chat with driver"
+  "activeTripChat": "Chat with driver",
+  "activeTripCompletion": "Trip summary and rating",
+  "activeTripSupport": "Get help with this trip"
 }

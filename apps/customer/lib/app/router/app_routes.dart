@@ -12,6 +12,33 @@ abstract final class AppRoutes {
   static const addresses = '/addresses';
   static const addAddress = '/addresses/new';
   static const editAddress = '/addresses/:addressId/edit';
+  static const completion = '/trips/:tripId/completion';
+  static const support = '/support';
+  static const supportNew = '/support/new';
+  static const supportTicket = '/support/tickets/:ticketId';
+  static const terms = '/legal/terms';
+  static const privacy = '/legal/privacy';
+
+  static String completionLocation(String id) {
+    if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');
+    return Uri(pathSegments: ['', 'trips', id, 'completion']).toString();
+  }
+
+  static String supportNewLocation({String? tripId}) {
+    if (tripId != null && tripId.trim().isEmpty) {
+      throw ArgumentError.value(tripId, 'tripId');
+    }
+    return Uri(
+      path: supportNew,
+      queryParameters: tripId == null ? null : {'trip_id': tripId},
+    ).toString();
+  }
+
+  static String supportTicketLocation(String id) {
+    if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');
+    return Uri(pathSegments: ['', 'support', 'tickets', id]).toString();
+  }
+
   static const chat = '/trips/:tripId/chat';
   static String chatLocation(String id) {
     if (id.trim().isEmpty) throw ArgumentError.value(id, 'id');

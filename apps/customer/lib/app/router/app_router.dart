@@ -6,6 +6,7 @@ import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
+import 'package:tam_customer/app/router/support_routes.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
@@ -17,11 +18,13 @@ import 'package:tam_customer/features/auth/presentation/pages/auth_status_page.d
 import 'package:tam_customer/features/auth/presentation/pages/otp_auth_page.dart';
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
 import 'package:tam_customer/features/chat/chat_entry.dart';
+import 'package:tam_customer/features/completion/completion_entry.dart';
 import 'package:tam_customer/features/home/home_entry.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
 import 'package:tam_customer/features/notifications/notifications_entry.dart';
 import 'package:tam_customer/features/ride_request/ride_request_entry.dart';
 import 'package:tam_customer/features/settings/settings_entry.dart';
+import 'package:tam_customer/features/support/support_entry.dart';
 import 'package:tam_customer/features/trips/trips_entry.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -35,6 +38,8 @@ GoRouter createAppRouter(
   required AddressesRepository addresses,
   required ActiveTripRepository activeTrips,
   required ChatRepository chat,
+  required CompletionRepository completion,
+  required SupportRepository support,
   required AddressPlaceSearch Function(String languageCode) addressPlaceSearch,
   FeatureDataModes dataModes = const FeatureDataModes(),
   MockTripStore? mockTrips,
@@ -54,6 +59,33 @@ GoRouter createAppRouter(
       policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
     routes: [
+      ...buildSupportRoutes(
+        support,
+        policy: AppConfig.supportPolicy,
+        now: clock ?? DateTime.now,
+      ),
+      GoRoute(
+        path: AppRoutes.completion,
+        builder: (context, state) {
+          final id = state.pathParameters['tripId']!;
+          return buildCompletionFeature(
+            repository: completion,
+            tripId: id,
+            policy: AppConfig.completionPolicy,
+            now: clock ?? DateTime.now,
+            onBack: () {
+              final router = GoRouter.of(context);
+              if (router.canPop()) {
+                router.pop();
+              } else {
+                router.go(AppRoutes.tripLocation(id));
+              }
+            },
+            onSupport: () => navigation(context).openSupport(tripId: id),
+            onHome: navigation(context).openHome,
+          );
+        },
+      ),
       GoRoute(
         path: AppRoutes.chat,
         builder: (context, state) => buildChatFeature(

@@ -73,5 +73,7 @@
       }
     }
   },
-  "activeTripChat": "محادثة السائق"
+  "activeTripChat": "محادثة السائق",
+  "activeTripCompletion": "ملخص الرحلة وتقييمها",
+  "activeTripSupport": "المساعدة بخصوص الرحلة"
 }

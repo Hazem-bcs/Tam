@@ -9,6 +9,8 @@ enum CustomerFeature {
   addresses,
   activeTrip,
   chat,
+  completion,
+  support,
 }
 
 /// Parsed at composition; widgets and feature states never select the mode.

@@ -1160,6 +1160,18 @@ abstract class AppLocalizations {
   /// **'لا يوجد سائق'**
   String get tripsStatusNoDriver;
 
+  /// No description provided for @tripsCompletion.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص الرحلة وتقييمها'**
+  String get tripsCompletion;
+
+  /// No description provided for @tripsSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة بخصوص الرحلة'**
+  String get tripsSupport;
+
   /// No description provided for @notificationsMarkAll.
   ///
   /// In ar, this message translates to:
@@ -1507,6 +1519,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جارٍ تسجيل الخروج'**
   String get settingsLoggingOut;
+
+  /// No description provided for @settingsHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get settingsHelp;
+
+  /// No description provided for @settingsTerms.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروط والأحكام'**
+  String get settingsTerms;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الخصوصية'**
+  String get settingsPrivacy;
 
   /// No description provided for @addressesTitle.
   ///
@@ -2023,6 +2053,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'محادثة السائق'**
   String get activeTripChat;
+
+  /// No description provided for @activeTripCompletion.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص الرحلة وتقييمها'**
+  String get activeTripCompletion;
+
+  /// No description provided for @activeTripSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة بخصوص الرحلة'**
+  String get activeTripSupport;
 
   /// No description provided for @chatTitle.
   ///

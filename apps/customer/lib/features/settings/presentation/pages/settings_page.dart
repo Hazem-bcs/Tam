@@ -278,6 +278,9 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsAccountLinks(
           enabled: !state.isBusy,
           onAddresses: () => _navigate(widget.navigation.openAddresses),
+          onSupport: () => _navigate(() => widget.navigation.openSupport()),
+          onTerms: () => _navigate(widget.navigation.openTerms),
+          onPrivacy: () => _navigate(widget.navigation.openPrivacy),
         ),
         const SizedBox(height: AppSpacing.xl),
         TamButton.secondary(

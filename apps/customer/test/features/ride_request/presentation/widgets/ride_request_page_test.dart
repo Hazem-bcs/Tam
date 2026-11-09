@@ -21,6 +21,14 @@ import 'package:tam_customer/shared/domain/trip.dart';
 final class _Nav implements CustomerNavigation {
   String? openedTrip;
   @override
+  void openCompletion(String tripId) {}
+  @override
+  void openSupport({String? tripId}) {}
+  @override
+  void openTerms() {}
+  @override
+  void openPrivacy() {}
+  @override
   void openChat(String tripId) {}
   @override
   void openActiveTrip({String? id}) => openedTrip = id;

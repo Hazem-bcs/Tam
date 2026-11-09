@@ -35,5 +35,8 @@
   "settingsSaveError": "Could not save changes. Saved data was not changed; you can retry.",
   "settingsSaved": "Simulated changes saved",
   "settingsSaving": "Saving",
-  "settingsLoggingOut": "Logging out"
+  "settingsLoggingOut": "Logging out",
+  "settingsHelp": "Help and support",
+  "settingsTerms": "Terms and conditions",
+  "settingsPrivacy": "Privacy policy"
 }

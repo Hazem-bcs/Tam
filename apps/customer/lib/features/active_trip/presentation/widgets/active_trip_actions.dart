@@ -78,6 +78,14 @@ class ActiveTripActions extends StatelessWidget {
             onPressed: () => _cancel(context),
           ),
         if (state.cancelling) const LinearProgressIndicator(),
+        if (trip.status == TripStatus.completed) ...[
+          const SizedBox(height: AppSpacing.md),
+          TamButton.primary(
+            key: const Key('active-completion'),
+            label: l.activeTripCompletion,
+            onPressed: () => navigation.openCompletion(trip.id),
+          ),
+        ],
         if (state.canRebook) ...[
           const SizedBox(height: AppSpacing.md),
           TamButton.primary(
@@ -91,6 +99,14 @@ class ActiveTripActions extends StatelessWidget {
             ),
           ),
         ],
+        const SizedBox(height: AppSpacing.md),
+        TamButton.secondary(
+          key: const Key('active-support'),
+          label: l.activeTripSupport,
+          onPressed: state.cancelUncertain || state.cancelling
+              ? null
+              : () => navigation.openSupport(tripId: trip.id),
+        ),
         const SizedBox(height: AppSpacing.md),
         TamButton.secondary(
           label: l.activeTripDetails,

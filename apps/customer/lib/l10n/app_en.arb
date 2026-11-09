@@ -257,6 +257,8 @@
   "tripsStatusDriverEnRoute": "Driver on the way",
   "tripsStatusDriverArrived": "Driver waiting",
   "tripsStatusNoDriver": "No driver found",
+  "tripsCompletion": "Trip summary and rating",
+  "tripsSupport": "Get help with this trip",
   "notificationsMarkAll": "Mark all as read",
   "notificationsUnreadCount": "Unread: {count}",
   "@notificationsUnreadCount": {
@@ -322,6 +324,9 @@
   "settingsSaved": "Simulated changes saved",
   "settingsSaving": "Saving",
   "settingsLoggingOut": "Logging out",
+  "settingsHelp": "Help and support",
+  "settingsTerms": "Terms and conditions",
+  "settingsPrivacy": "Privacy policy",
   "addressesTitle": "My addresses",
   "addressesDescription": "Save places for faster booking",
   "addressesAdd": "Add a place",
@@ -453,6 +458,8 @@
     }
   },
   "activeTripChat": "Chat with driver",
+  "activeTripCompletion": "Trip summary and rating",
+  "activeTripSupport": "Get help with this trip",
   "chatTitle": "Driver",
   "chatRetry": "Retry",
   "chatMessageHint": "Write a message…",

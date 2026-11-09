@@ -60,20 +60,30 @@ class TripDetailsPage extends StatelessWidget {
                   buttonLabel: l.tripsBackToList,
                 );
               }
-              return Column(
-                children: [
-                  if (state.errorCode != null)
-                    TripsFailureBanner(
-                      errorCode: state.errorCode!,
-                      onRetry: () => context.read<TripDetailsCubit>().reload(),
+              return LayoutBuilder(
+                builder: (context, constraints) => Column(
+                  children: [
+                    if (state.errorCode != null)
+                      TripsFailureBanner(
+                        errorCode: state.errorCode!,
+                        onRetry: () =>
+                            context.read<TripDetailsCubit>().reload(),
+                      ),
+                    Expanded(child: TripDetailsBody(trip: state.trip!)),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: constraints.maxHeight * .55,
+                      ),
+                      child: SingleChildScrollView(
+                        child: TripDetailsActions(
+                          trip: state.trip!,
+                          state: state,
+                          navigation: navigation,
+                        ),
+                      ),
                     ),
-                  Expanded(child: TripDetailsBody(trip: state.trip!)),
-                  TripDetailsActions(
-                    trip: state.trip!,
-                    state: state,
-                    navigation: navigation,
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),

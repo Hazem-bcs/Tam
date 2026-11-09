@@ -35,5 +35,8 @@
   "settingsSaveError": "تعذر حفظ التغييرات. لم يتم تعديل البيانات المحفوظة؛ يمكنك المحاولة مجددًا.",
   "settingsSaved": "تم حفظ التغييرات التجريبية",
   "settingsSaving": "جارٍ الحفظ",
-  "settingsLoggingOut": "جارٍ تسجيل الخروج"
+  "settingsLoggingOut": "جارٍ تسجيل الخروج",
+  "settingsHelp": "المساعدة والدعم",
+  "settingsTerms": "الشروط والأحكام",
+  "settingsPrivacy": "سياسة الخصوصية"
 }

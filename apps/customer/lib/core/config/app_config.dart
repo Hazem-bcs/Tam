@@ -1,12 +1,24 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
+import 'package:tam_customer/features/completion/domain/completion_repository.dart';
+import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
 abstract final class AppConfig {
   static const rideSchedulePolicy = RideSchedulePolicy();
   static const activeTripPolicy = ActiveTripPolicy();
   static const chatPolicy = ChatPolicy();
+  static const completionPolicy = CompletionPolicy();
+  static const supportPolicy = SupportPolicy();
+  static const completionMockScenario = String.fromEnvironment(
+    'COMPLETION_MOCK_SCENARIO',
+    defaultValue: 'success',
+  );
+  static const supportMockScenario = String.fromEnvironment(
+    'SUPPORT_MOCK_SCENARIO',
+    defaultValue: 'success',
+  );
   static const chatMockScenario = String.fromEnvironment(
     'CHAT_MOCK_SCENARIO',
     defaultValue: 'success',
@@ -37,6 +49,10 @@ abstract final class AppConfig {
       CustomerFeature.settings: String.fromEnvironment('SETTINGS_DATA_MODE'),
       CustomerFeature.addresses: String.fromEnvironment('ADDRESSES_DATA_MODE'),
       CustomerFeature.chat: String.fromEnvironment('CHAT_DATA_MODE'),
+      CustomerFeature.completion: String.fromEnvironment(
+        'COMPLETION_DATA_MODE',
+      ),
+      CustomerFeature.support: String.fromEnvironment('SUPPORT_DATA_MODE'),
       CustomerFeature.activeTrip: String.fromEnvironment(
         'ACTIVE_TRIP_DATA_MODE',
       ),
