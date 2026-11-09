@@ -1,6 +1,9 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
 abstract final class AppConfig {
+  static const rideSchedulePolicy = RideSchedulePolicy();
+
   /// Use --dart-define=API_BASE_URL=https://your-service.example/v1.
   /// Never put privileged server credentials in a mobile binary.
   static const apiBaseUrl = String.fromEnvironment('API_BASE_URL');

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "QUOTE_EXPIRED",
+    "message": {
+      "ar": "انتهت صلاحية عرض السعر.",
+      "en": "The quote has expired."
+    }
+  }
+}

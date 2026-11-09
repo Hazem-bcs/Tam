@@ -4,6 +4,7 @@ import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.da
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
+import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 /// Deterministic simulation. Trips are written exclusively to the injected store.
@@ -13,6 +14,8 @@ final class MockRideRequestRepository implements RideRequestRepository {
     DateTime Function()? now,
     this.failNextQuote = false,
     this.loseFirstConfirmationResponse = false,
+    this.schedulePolicy = const RideSchedulePolicy(),
+    this.schedulingAvailable = true,
   }) : _trips = trips,
        _now = now ?? DateTime.now;
 
@@ -20,6 +23,8 @@ final class MockRideRequestRepository implements RideRequestRepository {
   final DateTime Function() _now;
   bool failNextQuote;
   bool loseFirstConfirmationResponse;
+  final RideSchedulePolicy schedulePolicy;
+  bool schedulingAvailable;
   int _sequence = 0;
   final Map<String, RideQuote> _quotes = {};
   // Tracks successful store writes only, not another trip collection.
@@ -42,8 +47,10 @@ final class MockRideRequestRepository implements RideRequestRepository {
     required TripLocation pickup,
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
+    DateTime? scheduledAt,
   }) async {
     _checkRoute(pickup, destination);
+    _checkSchedule(scheduledAt);
     if (failNextQuote) {
       failNextQuote = false;
       throw const RideRequestFailure('SERVICE_UNAVAILABLE');
@@ -66,6 +73,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
       distanceMeters: distanceMeters,
       durationMinutes: math.max(5, (distanceMeters / 280).ceil()),
       expiresAt: _now().toUtc().add(const Duration(seconds: 90)),
+      scheduledAt: scheduledAt?.toUtc(),
     );
     _quotes[quote.id] = quote;
     return quote;
@@ -93,6 +101,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
     if (!quote.isValidAt(_now()) && committedQuoteId == null) {
       throw const RideRequestFailure('QUOTE_EXPIRED');
     }
+    if (committedQuoteId == null) _checkSchedule(quote.scheduledAt);
     try {
       final trip = _trips.create(
         TripBookingInput(
@@ -100,6 +109,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
           destination: quote.destination,
           vehicleClassId: quote.vehicleClass.name,
           fare: quote.fare,
+          scheduledAt: quote.scheduledAt,
         ),
         idempotencyKey: idempotencyKey,
       );
@@ -119,6 +129,15 @@ final class MockRideRequestRepository implements RideRequestRepository {
         destination.label.trim().isEmpty ||
         pickup.point == destination.point) {
       throw const RideRequestFailure('VALIDATION_ERROR');
+    }
+  }
+
+  void _checkSchedule(DateTime? scheduledAt) {
+    if (!schedulePolicy.allows(scheduledAt, _now())) {
+      throw const RideRequestFailure('SCHEDULE_OUT_OF_RANGE');
+    }
+    if (scheduledAt != null && !schedulingAvailable) {
+      throw const RideRequestFailure('SCHEDULE_UNAVAILABLE');
     }
   }
 

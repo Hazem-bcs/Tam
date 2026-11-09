@@ -740,6 +740,102 @@ abstract class AppLocalizations {
   /// **'تعديل'**
   String get rideRequestEdit;
 
+  /// No description provided for @rideRequestImmediate.
+  ///
+  /// In ar, this message translates to:
+  /// **'فوري'**
+  String get rideRequestImmediate;
+
+  /// No description provided for @rideRequestScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجدولة'**
+  String get rideRequestScheduled;
+
+  /// No description provided for @rideRequestScheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد موعد الرحلة'**
+  String get rideRequestScheduleTitle;
+
+  /// No description provided for @rideRequestScheduleDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get rideRequestScheduleDate;
+
+  /// No description provided for @rideRequestScheduleTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الرحلة'**
+  String get rideRequestScheduleTime;
+
+  /// No description provided for @rideRequestScheduleTimezone.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوقيت المعتمد: {offset}'**
+  String rideRequestScheduleTimezone(String offset);
+
+  /// No description provided for @rideRequestScheduleRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موعدًا بين {minutes} دقيقة و{days} أيام من الآن.'**
+  String rideRequestScheduleRange(int minutes, int days);
+
+  /// No description provided for @rideRequestScheduleInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد خارج المدى المتاح الآن. عدّل التاريخ أو الوقت ثم أعد المحاولة.'**
+  String get rideRequestScheduleInvalid;
+
+  /// No description provided for @rideRequestScheduleUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجدولة غير متاحة لهذا الموعد. اختر موعدًا آخر أو اطلب رحلة فورية.'**
+  String get rideRequestScheduleUnavailable;
+
+  /// No description provided for @rideRequestScheduleSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الموعد'**
+  String get rideRequestScheduleSave;
+
+  /// No description provided for @rideRequestScheduleCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get rideRequestScheduleCancel;
+
+  /// No description provided for @rideRequestScheduledNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز موعد مسبق لا يعني تعيين سائق الآن.'**
+  String get rideRequestScheduledNotice;
+
+  /// No description provided for @rideRequestHour.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة'**
+  String get rideRequestHour;
+
+  /// No description provided for @rideRequestMinuteInput.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدقيقة'**
+  String get rideRequestMinuteInput;
+
+  /// No description provided for @rideRequestTimeFormat.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت بنظام 24 ساعة (00–23).'**
+  String get rideRequestTimeFormat;
+
+  /// No description provided for @rideRequestTimeInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل قيمة صحيحة ضمن المجال.'**
+  String get rideRequestTimeInvalid;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:
@@ -749,7 +845,7 @@ abstract class AppLocalizations {
   /// No description provided for @tripsActive.
   ///
   /// In ar, this message translates to:
-  /// **'الجارية'**
+  /// **'النشطة'**
   String get tripsActive;
 
   /// No description provided for @tripsCompletedFilter.
@@ -1027,6 +1123,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قائمة الرحلات'**
   String get tripsTripList;
+
+  /// No description provided for @tripsStatusScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجدولة'**
+  String get tripsStatusScheduled;
+
+  /// No description provided for @tripsScheduledTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الرحلة'**
+  String get tripsScheduledTime;
+
+  /// No description provided for @tripsScheduledAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد: {time}'**
+  String tripsScheduledAt(String time);
 
   /// No description provided for @notificationsMarkAll.
   ///

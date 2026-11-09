@@ -1,3 +1,4 @@
+import 'package:tam_customer/shared/data/utc_timestamp.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
@@ -5,6 +6,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 abstract final class TripWireCodec {
   static Trip fromJson(Map<String, dynamic> value) {
     final status = switch (value['status']) {
+      'scheduled' => TripStatus.scheduled,
       'requested' => TripStatus.requested,
       'confirmed' => TripStatus.confirmed,
       'in_progress' => TripStatus.inProgress,
@@ -12,7 +14,14 @@ abstract final class TripWireCodec {
       'cancelled' => TripStatus.cancelled,
       _ => throw const FormatException('Unknown trip status'),
     };
-    final timestamp = _timestamp(_string(value, 'created_at'));
+    final timestamp = UtcTimestamp.parse(value['created_at']);
+    final scheduledAt = value['scheduled_at'] == null
+        ? null
+        : UtcTimestamp.parse(value['scheduled_at']);
+    if ((status == TripStatus.scheduled && scheduledAt == null) ||
+        (scheduledAt != null && !scheduledAt.isAfter(timestamp))) {
+      throw const FormatException('Invalid scheduled trip time');
+    }
     return Trip(
       id: _string(value, 'id'),
       createdAt: timestamp,
@@ -22,6 +31,7 @@ abstract final class TripWireCodec {
         destination: _location(value['destination']),
         vehicleClassId: _string(value, 'vehicle_class_id'),
         fare: _money(value['fare']),
+        scheduledAt: scheduledAt,
       ),
     );
   }
@@ -37,6 +47,7 @@ abstract final class TripWireCodec {
       'minor_unit': trip.booking.fare.minorUnit,
     },
     'status': switch (trip.status) {
+      TripStatus.scheduled => 'scheduled',
       TripStatus.requested => 'requested',
       TripStatus.confirmed => 'confirmed',
       TripStatus.inProgress => 'in_progress',
@@ -44,6 +55,8 @@ abstract final class TripWireCodec {
       TripStatus.cancelled => 'cancelled',
     },
     'created_at': trip.createdAt.toUtc().toIso8601String(),
+    if (trip.booking.scheduledAt != null)
+      'scheduled_at': trip.booking.scheduledAt!.toUtc().toIso8601String(),
   };
 
   static TripLocation _location(Object? raw) {
@@ -88,30 +101,6 @@ abstract final class TripWireCodec {
       throw const FormatException('Money must use integer minor units');
     }
     return Money(amountMinor: amount, currency: currency, minorUnit: unit);
-  }
-
-  static DateTime _timestamp(String raw) {
-    final match = RegExp(
-      r'^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,6})?Z$',
-    ).firstMatch(raw);
-    final parsed = DateTime.tryParse(raw);
-    if (match == null || parsed == null || !parsed.isUtc) {
-      throw const FormatException('created_at must be ISO-8601 UTC');
-    }
-    final components = [
-      parsed.year,
-      parsed.month,
-      parsed.day,
-      parsed.hour,
-      parsed.minute,
-      parsed.second,
-    ];
-    for (var i = 0; i < components.length; i++) {
-      if (components[i] != int.parse(match.group(i + 1)!)) {
-        throw const FormatException('created_at contains an invalid date');
-      }
-    }
-    return parsed;
   }
 
   static Map<String, dynamic> _map(Object? raw) {

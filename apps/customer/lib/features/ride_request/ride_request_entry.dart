@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
@@ -22,14 +23,21 @@ Widget buildRideRequestFeature(
   TripPrefill? prefill,
 }) {
   final RideRequestRepository repository = switch (dataMode) {
-    FeatureDataMode.mock => MockRideRequestRepository(trips: mockTrips),
+    FeatureDataMode.mock => MockRideRequestRepository(
+      trips: mockTrips,
+      schedulePolicy: AppConfig.rideSchedulePolicy,
+    ),
     FeatureDataMode.api => const UnavailableRideRequestRepository(),
   };
   // Entry is the composition boundary; do not create a TripStore here.
   return BlocProvider<RideDraftBloc>(
     create: (_) => locator.isRegistered<RideDraftBloc>()
         ? locator<RideDraftBloc>(param1: repository, param2: prefill)
-        : RideDraftBloc(repository: repository, prefill: prefill),
+        : RideDraftBloc(
+            repository: repository,
+            prefill: prefill,
+            schedulePolicy: AppConfig.rideSchedulePolicy,
+          ),
     child: RideRequestPage(
       navigation: navigation,
       savedAddressPickerBuilder: addresses == null

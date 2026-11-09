@@ -1,5 +1,8 @@
 # Ride request HTTP contract v1 — مقترح
 
+> نطاق W1 التاريخي؛ التنفيذ الحالي يضيف [امتداد الجدولة v1](../scheduling/scheduling-v1.md)
+> للموعد والسعر والتأكيد. اقرأ الحزمتين قبل تنفيذ الباكند.
+
 الحالة: **Proposed / mock-first**، 2026-11-07؛ ليس إعلانًا عن وجود خادم. Base URL متغير `{{base_url}}` يشمل `/api/v1`، مثل `https://api.example.invalid/api/v1`.
 
 ## القواعد العامة

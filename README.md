@@ -61,3 +61,9 @@ the repository root, then `flutter gen-l10n` from `apps/customer` before
 analysis/tests. Shared base ARB lives in `apps/customer/l10n/base/`. Owners
 commit their fragments, while the supervisor regenerates and commits shared
 `lib/l10n` outputs at integration. See the [wave contracts](docs/engineering/wave-one-contracts.md).
+# جدولة الرحلات — W2
+
+تدفق الحجز يدعم الموعد من30 دقيقة إلى7 أيام، بتوقيت الخدمة المعتمد
+UTC+03:00 ونقل UTC، مع نفس مصدر طلباتي ومحاكاة الجلسة. الحزمة المقترحة
+للباكند: [جدولة الرحلات](docs/api/scheduling/README.ar.md).
+يستخدم RIDE_REQUEST_DATA_MODE نفسه، ولا يفعّل GPS أو dispatch أو API حيًا.

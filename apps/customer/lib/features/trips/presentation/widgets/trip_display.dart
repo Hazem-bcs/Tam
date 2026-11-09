@@ -6,6 +6,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 
 String tripStatusLabel(AppLocalizations l, TripStatus status) =>
     switch (status) {
+      TripStatus.scheduled => l.tripsStatusScheduled,
       TripStatus.requested => l.tripsStatusRequested,
       TripStatus.confirmed => l.tripsStatusConfirmed,
       TripStatus.inProgress => l.tripsStatusInProgress,
@@ -61,7 +62,7 @@ String tripVehicleLabel(AppLocalizations l, String classId) =>
       background: scheme.primaryContainer,
       icon: Icons.route_outlined,
     ),
-    TripStatus.confirmed => (
+    TripStatus.scheduled || TripStatus.confirmed => (
       foreground: scheme.onSecondaryContainer,
       background: scheme.secondaryContainer,
       icon: Icons.check_circle_outline,

@@ -1,7 +1,7 @@
 {
   "@@locale": "ar",
   "tripsAll": "الكل",
-  "tripsActive": "الجارية",
+  "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",
   "tripsCancelledFilter": "الملغاة",
   "tripsStatusRequested": "بانتظار التأكيد",
@@ -54,5 +54,15 @@
   "tripsLoading": "جارٍ تحميل الرحلات",
   "tripsLoadingDetails": "جارٍ تحميل تفاصيل الرحلة",
   "tripsCancelling": "جارٍ الإلغاء",
-  "tripsTripList": "قائمة الرحلات"
+  "tripsTripList": "قائمة الرحلات",
+  "tripsStatusScheduled": "مجدولة",
+  "tripsScheduledTime": "موعد الرحلة",
+  "tripsScheduledAt": "الموعد: {time}",
+  "@tripsScheduledAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

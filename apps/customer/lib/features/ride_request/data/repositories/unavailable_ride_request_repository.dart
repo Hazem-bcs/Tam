@@ -16,6 +16,7 @@ final class UnavailableRideRequestRepository implements RideRequestRepository {
     required TripLocation pickup,
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
+    DateTime? scheduledAt,
   }) async => _unavailable();
 
   @override

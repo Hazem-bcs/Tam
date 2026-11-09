@@ -4,6 +4,7 @@ import 'package:tam_customer/features/trips/presentation/widgets/trip_display.da
 import 'package:tam_customer/features/trips/presentation/widgets/trip_route.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
 
 class TripCard extends StatelessWidget {
@@ -37,6 +38,15 @@ class TripCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
+          if (trip.booking.scheduledAt != null) ...[
+            Text(
+              l.tripsScheduledAt(
+                rideTimeLabel(context, trip.booking.scheduledAt!),
+              ),
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: AppSpacing.md),
+          ],
           TripRoute(
             pickup: trip.booking.pickup,
             destination: trip.booking.destination,

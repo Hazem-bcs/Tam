@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "العملية غير مسموحة.",
+      "en": "This operation is forbidden."
+    }
+  }
+}

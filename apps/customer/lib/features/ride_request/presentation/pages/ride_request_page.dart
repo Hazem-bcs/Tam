@@ -6,6 +6,7 @@ import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_location_fields.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_quote_review.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_schedule_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/simulated_route_map.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -55,7 +56,7 @@ class RideRequestPage extends StatelessWidget {
         final locked = state.confirmationPending;
         final isConfirming = state.status == RideFlowStatus.confirming;
         final canConfirm =
-            state.canConfirmAt(DateTime.now()) ||
+            context.read<RideDraftBloc>().canConfirm ||
             (state.status == RideFlowStatus.failed &&
                 state.failureStep == RideFailureStep.confirmation &&
                 state.quote != null);
@@ -78,6 +79,16 @@ class RideRequestPage extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     SimulatedRouteMap(hasRoute: state.hasRoute),
+                    const SizedBox(height: AppSpacing.lg),
+                    RideSchedulePicker(
+                      scheduledAt: state.scheduledAt,
+                      enabled: !locked,
+                      policy: context.read<RideDraftBloc>().schedulePolicy,
+                      now: () => context.read<RideDraftBloc>().currentTime,
+                      onChanged: (time) => context.read<RideDraftBloc>().add(
+                        RideScheduleChanged(time),
+                      ),
+                    ),
                     const SizedBox(height: AppSpacing.xl),
                     RideVehiclePicker(
                       selected: state.vehicleClass,
@@ -154,6 +165,8 @@ class RideRequestPage extends StatelessWidget {
     'QUOTE_EXPIRED' => l.rideRequestErrorExpired,
     'SERVICE_UNAVAILABLE' => l.rideRequestErrorUnavailable,
     'IDEMPOTENCY_CONFLICT' => l.rideRequestErrorConflict,
+    'SCHEDULE_OUT_OF_RANGE' => l.rideRequestScheduleInvalid,
+    'SCHEDULE_UNAVAILABLE' => l.rideRequestScheduleUnavailable,
     _ => l.rideRequestErrorGeneric,
   };
 }

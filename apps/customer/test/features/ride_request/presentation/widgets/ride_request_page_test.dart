@@ -109,6 +109,7 @@ void main() {
   }
 
   Future<void> screenshot(WidgetTester tester, String filename) async {
+    if (!const bool.fromEnvironment('CAPTURE_RIDE_GOLDENS')) return;
     await tester.runAsync(() async {
       final boundary = tester.renderObject<RenderRepaintBoundary>(
         find.byKey(const Key('ride-screenshot')),

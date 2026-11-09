@@ -352,10 +352,65 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestEdit => 'تعديل';
 
   @override
+  String get rideRequestImmediate => 'فوري';
+
+  @override
+  String get rideRequestScheduled => 'مجدولة';
+
+  @override
+  String get rideRequestScheduleTitle => 'حدد موعد الرحلة';
+
+  @override
+  String get rideRequestScheduleDate => 'التاريخ';
+
+  @override
+  String get rideRequestScheduleTime => 'موعد الرحلة';
+
+  @override
+  String rideRequestScheduleTimezone(String offset) {
+    return 'التوقيت المعتمد: $offset';
+  }
+
+  @override
+  String rideRequestScheduleRange(int minutes, int days) {
+    return 'اختر موعدًا بين $minutes دقيقة و$days أيام من الآن.';
+  }
+
+  @override
+  String get rideRequestScheduleInvalid =>
+      'الموعد خارج المدى المتاح الآن. عدّل التاريخ أو الوقت ثم أعد المحاولة.';
+
+  @override
+  String get rideRequestScheduleUnavailable =>
+      'الجدولة غير متاحة لهذا الموعد. اختر موعدًا آخر أو اطلب رحلة فورية.';
+
+  @override
+  String get rideRequestScheduleSave => 'تأكيد الموعد';
+
+  @override
+  String get rideRequestScheduleCancel => 'إلغاء';
+
+  @override
+  String get rideRequestScheduledNotice =>
+      'حجز موعد مسبق لا يعني تعيين سائق الآن.';
+
+  @override
+  String get rideRequestHour => 'الساعة';
+
+  @override
+  String get rideRequestMinuteInput => 'الدقيقة';
+
+  @override
+  String get rideRequestTimeFormat => 'الوقت بنظام 24 ساعة (00–23).';
+
+  @override
+  String get rideRequestTimeInvalid => 'أدخل قيمة صحيحة ضمن المجال.';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override
-  String get tripsActive => 'الجارية';
+  String get tripsActive => 'النشطة';
 
   @override
   String get tripsCompletedFilter => 'المكتملة';
@@ -499,6 +554,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tripsTripList => 'قائمة الرحلات';
+
+  @override
+  String get tripsStatusScheduled => 'مجدولة';
+
+  @override
+  String get tripsScheduledTime => 'موعد الرحلة';
+
+  @override
+  String tripsScheduledAt(String time) {
+    return 'الموعد: $time';
+  }
 
   @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';

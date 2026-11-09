@@ -360,6 +360,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestEdit => 'Edit';
 
   @override
+  String get rideRequestImmediate => 'Now';
+
+  @override
+  String get rideRequestScheduled => 'Scheduled';
+
+  @override
+  String get rideRequestScheduleTitle => 'Choose your trip time';
+
+  @override
+  String get rideRequestScheduleDate => 'Date';
+
+  @override
+  String get rideRequestScheduleTime => 'Trip time';
+
+  @override
+  String rideRequestScheduleTimezone(String offset) {
+    return 'Service time: $offset';
+  }
+
+  @override
+  String rideRequestScheduleRange(int minutes, int days) {
+    return 'Choose a time between $minutes minutes and $days days from now.';
+  }
+
+  @override
+  String get rideRequestScheduleInvalid =>
+      'This time is outside the available window. Change the date or time and try again.';
+
+  @override
+  String get rideRequestScheduleUnavailable =>
+      'Scheduling is unavailable for this time. Choose another time or request a ride now.';
+
+  @override
+  String get rideRequestScheduleSave => 'Confirm time';
+
+  @override
+  String get rideRequestScheduleCancel => 'Cancel';
+
+  @override
+  String get rideRequestScheduledNotice =>
+      'Reserving a time does not assign a driver now.';
+
+  @override
+  String get rideRequestHour => 'Hour';
+
+  @override
+  String get rideRequestMinuteInput => 'Minute';
+
+  @override
+  String get rideRequestTimeFormat => '24-hour time (00–23).';
+
+  @override
+  String get rideRequestTimeInvalid => 'Enter a valid value in range.';
+
+  @override
   String get tripsAll => 'All';
 
   @override
@@ -510,6 +565,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tripsTripList => 'Trip list';
+
+  @override
+  String get tripsStatusScheduled => 'Scheduled';
+
+  @override
+  String get tripsScheduledTime => 'Trip time';
+
+  @override
+  String tripsScheduledAt(String time) {
+    return 'Scheduled: $time';
+  }
 
   @override
   String get notificationsMarkAll => 'Mark all as read';

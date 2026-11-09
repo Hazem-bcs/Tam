@@ -54,5 +54,15 @@
   "tripsLoading": "Loading trips",
   "tripsLoadingDetails": "Loading trip details",
   "tripsCancelling": "Cancelling",
-  "tripsTripList": "Trip list"
+  "tripsTripList": "Trip list",
+  "tripsStatusScheduled": "Scheduled",
+  "tripsScheduledTime": "Trip time",
+  "tripsScheduledAt": "Scheduled: {time}",
+  "@tripsScheduledAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

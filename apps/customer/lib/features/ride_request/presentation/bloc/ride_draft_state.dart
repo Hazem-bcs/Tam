@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
+import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 sealed class RideDraftEvent extends Equatable {
@@ -40,6 +41,13 @@ final class RideQuoteRequested extends RideDraftEvent {
   const RideQuoteRequested();
 }
 
+final class RideScheduleChanged extends RideDraftEvent {
+  const RideScheduleChanged(this.scheduledAt);
+  final DateTime? scheduledAt;
+  @override
+  List<Object?> get props => [scheduledAt];
+}
+
 final class RideConfirmationRequested extends RideDraftEvent {
   const RideConfirmationRequested();
 }
@@ -68,6 +76,7 @@ final class RideDraftState extends Equatable {
     this.suggestions = const [],
     this.searching = false,
     this.searchError,
+    this.scheduledAt,
   });
 
   final TripLocation? pickup;
@@ -81,6 +90,7 @@ final class RideDraftState extends Equatable {
   final List<RidePlace> suggestions;
   final bool searching;
   final String? searchError;
+  final DateTime? scheduledAt;
 
   // An unanswered confirmation must resolve before a new booking intent.
   bool get confirmationPending =>
@@ -95,12 +105,17 @@ final class RideDraftState extends Equatable {
       destination!.label.trim().isNotEmpty &&
       pickup!.point != destination!.point;
 
-  bool canConfirmAt(DateTime now) =>
+  bool canConfirmAt(
+    DateTime now, {
+    RideSchedulePolicy policy = const RideSchedulePolicy(),
+  }) =>
       hasRoute &&
       quote != null &&
       quote!.pickup == pickup &&
       quote!.destination == destination &&
       quote!.vehicleClass == vehicleClass &&
+      quote!.scheduledAt == scheduledAt &&
+      policy.allows(scheduledAt, now) &&
       quote!.isValidAt(now) &&
       status != RideFlowStatus.quoting &&
       status != RideFlowStatus.confirming &&
@@ -121,6 +136,8 @@ final class RideDraftState extends Equatable {
     bool clearQuote = false,
     bool clearError = false,
     bool clearSearchError = false,
+    DateTime? scheduledAt,
+    bool clearSchedule = false,
   }) => RideDraftState(
     pickup: pickup ?? this.pickup,
     destination: destination ?? this.destination,
@@ -133,6 +150,7 @@ final class RideDraftState extends Equatable {
     suggestions: suggestions ?? this.suggestions,
     searching: searching ?? this.searching,
     searchError: clearSearchError ? null : searchError ?? this.searchError,
+    scheduledAt: clearSchedule ? null : scheduledAt ?? this.scheduledAt,
   );
 
   @override
@@ -148,5 +166,6 @@ final class RideDraftState extends Equatable {
     suggestions,
     searching,
     searchError,
+    scheduledAt,
   ];
 }

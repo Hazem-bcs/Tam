@@ -156,8 +156,41 @@
   "rideRequestSelected": "تم الاختيار",
   "rideRequestPlaceSearchLoading": "جارٍ البحث عن المواقع",
   "rideRequestEdit": "تعديل",
+  "rideRequestImmediate": "فوري",
+  "rideRequestScheduled": "مجدولة",
+  "rideRequestScheduleTitle": "حدد موعد الرحلة",
+  "rideRequestScheduleDate": "التاريخ",
+  "rideRequestScheduleTime": "موعد الرحلة",
+  "rideRequestScheduleTimezone": "التوقيت المعتمد: {offset}",
+  "rideRequestScheduleRange": "اختر موعدًا بين {minutes} دقيقة و{days} أيام من الآن.",
+  "rideRequestScheduleInvalid": "الموعد خارج المدى المتاح الآن. عدّل التاريخ أو الوقت ثم أعد المحاولة.",
+  "rideRequestScheduleUnavailable": "الجدولة غير متاحة لهذا الموعد. اختر موعدًا آخر أو اطلب رحلة فورية.",
+  "rideRequestScheduleSave": "تأكيد الموعد",
+  "rideRequestScheduleCancel": "إلغاء",
+  "rideRequestScheduledNotice": "حجز موعد مسبق لا يعني تعيين سائق الآن.",
+  "@rideRequestScheduleTimezone": {
+    "placeholders": {
+      "offset": {
+        "type": "String"
+      }
+    }
+  },
+  "@rideRequestScheduleRange": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "rideRequestHour": "الساعة",
+  "rideRequestMinuteInput": "الدقيقة",
+  "rideRequestTimeFormat": "الوقت بنظام 24 ساعة (00–23).",
+  "rideRequestTimeInvalid": "أدخل قيمة صحيحة ضمن المجال.",
   "tripsAll": "الكل",
-  "tripsActive": "الجارية",
+  "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",
   "tripsCancelledFilter": "الملغاة",
   "tripsStatusRequested": "بانتظار التأكيد",
@@ -211,6 +244,16 @@
   "tripsLoadingDetails": "جارٍ تحميل تفاصيل الرحلة",
   "tripsCancelling": "جارٍ الإلغاء",
   "tripsTripList": "قائمة الرحلات",
+  "tripsStatusScheduled": "مجدولة",
+  "tripsScheduledTime": "موعد الرحلة",
+  "tripsScheduledAt": "الموعد: {time}",
+  "@tripsScheduledAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "notificationsMarkAll": "تعيين الكل كمقروء",
   "notificationsUnreadCount": "غير مقروء: {count}",
   "@notificationsUnreadCount": {

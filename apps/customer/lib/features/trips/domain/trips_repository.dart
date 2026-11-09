@@ -9,6 +9,7 @@ extension TripsFilterRules on TripsFilter {
   bool includes(Trip trip) => switch (this) {
     TripsFilter.all => true,
     TripsFilter.active => switch (trip.status) {
+      TripStatus.scheduled ||
       TripStatus.requested ||
       TripStatus.confirmed ||
       TripStatus.inProgress => true,

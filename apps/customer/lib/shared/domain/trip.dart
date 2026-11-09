@@ -38,7 +38,14 @@ final class TripPrefill extends Equatable {
   List<Object?> get props => [pickup, destination];
 }
 
-enum TripStatus { requested, confirmed, inProgress, completed, cancelled }
+enum TripStatus {
+  scheduled,
+  requested,
+  confirmed,
+  inProgress,
+  completed,
+  cancelled,
+}
 
 final class TripBookingInput extends Equatable {
   const TripBookingInput({
@@ -46,13 +53,21 @@ final class TripBookingInput extends Equatable {
     required this.destination,
     required this.vehicleClassId,
     required this.fare,
+    this.scheduledAt,
   });
   final TripLocation pickup;
   final TripLocation destination;
   final String vehicleClassId;
   final Money fare;
+  final DateTime? scheduledAt;
   @override
-  List<Object?> get props => [pickup, destination, vehicleClassId, fare];
+  List<Object?> get props => [
+    pickup,
+    destination,
+    vehicleClassId,
+    fare,
+    scheduledAt,
+  ];
 }
 
 final class Trip extends Equatable {
@@ -67,7 +82,9 @@ final class Trip extends Equatable {
   final DateTime createdAt;
   final TripStatus status;
   bool get canCancel =>
-      status == TripStatus.requested || status == TripStatus.confirmed;
+      status == TripStatus.scheduled ||
+      status == TripStatus.requested ||
+      status == TripStatus.confirmed;
   Trip withStatus(TripStatus value) =>
       Trip(id: id, booking: booking, createdAt: createdAt, status: value);
   @override

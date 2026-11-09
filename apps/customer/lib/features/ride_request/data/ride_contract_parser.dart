@@ -1,4 +1,6 @@
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
+import 'package:tam_customer/shared/data/trip_wire_codec.dart';
+import 'package:tam_customer/shared/data/utc_timestamp.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
@@ -35,32 +37,15 @@ abstract final class RideContractParser {
       fare: _money(data['fare']),
       distanceMeters: _positiveInt(data, 'distance_meters'),
       durationMinutes: _positiveInt(data, 'duration_minutes'),
-      expiresAt: _utc(data, 'expires_at'),
+      expiresAt: UtcTimestamp.parse(data['expires_at']),
+      scheduledAt: data['scheduled_at'] == null
+          ? null
+          : UtcTimestamp.parse(data['scheduled_at']),
     );
   }
 
-  static Trip trip(Map<String, dynamic> response) {
-    final data = _map(response['data']);
-    final status = switch (_text(data, 'status')) {
-      'requested' => TripStatus.requested,
-      'confirmed' => TripStatus.confirmed,
-      'in_progress' => TripStatus.inProgress,
-      'completed' => TripStatus.completed,
-      'cancelled' => TripStatus.cancelled,
-      _ => throw const FormatException('Invalid trip status'),
-    };
-    return Trip(
-      id: _text(data, 'id'),
-      booking: TripBookingInput(
-        pickup: _location(data['pickup']),
-        destination: _location(data['destination']),
-        vehicleClassId: _text(data, 'vehicle_class_id'),
-        fare: _money(data['fare']),
-      ),
-      createdAt: _utc(data, 'created_at'),
-      status: status,
-    );
-  }
+  static Trip trip(Map<String, dynamic> response) =>
+      TripWireCodec.fromJson(_map(response['data']));
 
   static RideRequestFailure failure(Map<String, dynamic> response) {
     final error = _map(response['error']);
@@ -106,18 +91,6 @@ abstract final class RideContractParser {
       if (vehicle.name == value) return vehicle;
     }
     throw const FormatException('Unknown vehicle class');
-  }
-
-  static DateTime _utc(Map<String, dynamic> map, String key) {
-    final text = _text(map, key);
-    if (!text.endsWith('Z')) {
-      throw const FormatException('Timestamp must be UTC Z');
-    }
-    try {
-      return DateTime.parse(text).toUtc();
-    } on FormatException {
-      throw const FormatException('Invalid ISO-8601 timestamp');
-    }
   }
 
   static int _positiveInt(Map<String, dynamic> map, String key) {

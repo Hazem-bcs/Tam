@@ -134,3 +134,17 @@ lib/l10n/app_*.arb ولا app_localizations*.dart. هذه نواتج مجمعة 
 ترجمات الميزة في fragments الخاصة بها، وبادئتها addresses؛ لا نسخة l10n
 جديدة. بحث الأماكن يعاد استخدامه من عقد Ride عبر adapter بيانات، دون
 مصدر أماكن مكرر أو GPS حي. الواجهات الأولية تخضع لخطة المرحلتين.
+# امتداد W2-SCHEDULE — 2026-11-09
+
+توسع الجدولة الحجز الحالي دون Repository أو Draft موازيين. RideQuote
+وTripBookingInput يحملان scheduledAt:DateTime?؛ null فوري، وUTC للمجدولة.
+المصدر المشترك MockTripStore ينشئ scheduled عند وجود الموعد وrequested بدونه.
+active يشمل scheduled، والإلغاء يحفظ الموعد؛ TripPrefill يبقى موقعين فقط.
+RideSchedulePolicy في shared/domain، والتركيب المركزي AppConfig، بحد30 دقيقة
+و7 أيام شاملة اختاره المستخدم. وقت العرض UTC+03:00 مستقل عن منطقة الجهاز؛
+النقل UTC Z. كل تغيير موعد يبطل السعر، والتأكيد يعيد فحص الحد والتوفر.
+النتيجة غير المحسومة تحتفظ بالمفتاح والموعد الأصليين؛ لا تعديل أو تسعير جديد.
+نُقل TripWireCodec إلى shared/data ليستعمله تسعير/تأكيد Ride وقراءة Trips
+لنفس المورد، مع UTC parser مشترك صارم؛ لا نقل JSON إلى Domain.
+حزمة docs/api/scheduling/ امتداد معلن لعقود Ride/Trips القديمة مع Postman.
+نفس RIDE_REQUEST_DATA_MODE وحماية الوصول؛ لا API أو dispatch محلي جديد.

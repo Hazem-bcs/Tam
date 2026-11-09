@@ -47,7 +47,9 @@ final class MockTripStore {
       id: id,
       booking: input,
       createdAt: _now().toUtc(),
-      status: TripStatus.requested,
+      status: input.scheduledAt == null
+          ? TripStatus.requested
+          : TripStatus.scheduled,
     );
     _trips[id] = trip;
     _requests[idempotencyKey] = trip;

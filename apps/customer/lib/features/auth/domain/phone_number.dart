@@ -1,13 +1,6 @@
-/// Normalizes Arabic/Persian digits without translating personal data.
-String normalizeDigits(String input) {
-  return String.fromCharCodes(
-    input.runes.map((value) {
-      if (value >= 0x0660 && value <= 0x0669) return value - 0x0660 + 0x30;
-      if (value >= 0x06F0 && value <= 0x06F9) return value - 0x06F0 + 0x30;
-      return value;
-    }),
-  );
-}
+import 'package:tam_customer/shared/domain/normalize_digits.dart';
+
+export 'package:tam_customer/shared/domain/normalize_digits.dart';
 
 /// Supported region: Syrian mobile numbers. Returns null for invalid input.
 /// Other supported regions must be agreed with Backend before adding them.

@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/trips/data/api/unavailable_trips_repository.dart';
 import 'package:tam_customer/features/trips/data/mock/mock_trips_repository.dart';
-import 'package:tam_customer/features/trips/data/trip_wire_codec.dart';
 import 'package:tam_customer/features/trips/domain/trips_repository.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/data/mock/seed_trips.dart';
+import 'package:tam_customer/shared/data/trip_wire_codec.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 void main() {

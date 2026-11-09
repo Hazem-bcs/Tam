@@ -1,5 +1,8 @@
 # Trip history API — عقد مقترح v1
 
+> التنفيذ الحالي يضيف [امتداد الجدولة v1](../scheduling/scheduling-v1.md)
+> لحالة scheduled وموعد الرحلة وتصنيف active والإلغاء، مع توحيد401 كما في Auth.
+
 **Status: PROPOSED / NOT IMPLEMENTED / NOT LIVE VERIFIED.** المالك: W1-TRIPS (C)، تاريخ الإعداد: 2026-11-07. التكامل مع B يعتمد أنواع الرحلة المشتركة في `shared/domain/trip.dart` و`docs/engineering/wave-one-contracts.md`.
 
 ## قواعد عامة

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SCHEDULE_UNAVAILABLE",
+    "message": {
+      "ar": "الجدولة غير متاحة لهذا الموعد.",
+      "en": "Scheduling is unavailable for this time."
+    }
+  }
+}

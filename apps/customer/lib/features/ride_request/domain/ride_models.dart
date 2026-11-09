@@ -29,6 +29,7 @@ final class RideQuote extends Equatable {
     required this.distanceMeters,
     required this.durationMinutes,
     required this.expiresAt,
+    this.scheduledAt,
   });
 
   final String id;
@@ -39,6 +40,7 @@ final class RideQuote extends Equatable {
   final int distanceMeters;
   final int durationMinutes;
   final DateTime expiresAt;
+  final DateTime? scheduledAt;
 
   bool isValidAt(DateTime now) => now.toUtc().isBefore(expiresAt.toUtc());
 
@@ -52,6 +54,7 @@ final class RideQuote extends Equatable {
     distanceMeters,
     durationMinutes,
     expiresAt,
+    scheduledAt,
   ];
 }
 

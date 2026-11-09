@@ -156,6 +156,39 @@
   "rideRequestSelected": "Selected",
   "rideRequestPlaceSearchLoading": "Searching places",
   "rideRequestEdit": "Edit",
+  "rideRequestImmediate": "Now",
+  "rideRequestScheduled": "Scheduled",
+  "rideRequestScheduleTitle": "Choose your trip time",
+  "rideRequestScheduleDate": "Date",
+  "rideRequestScheduleTime": "Trip time",
+  "rideRequestScheduleTimezone": "Service time: {offset}",
+  "rideRequestScheduleRange": "Choose a time between {minutes} minutes and {days} days from now.",
+  "rideRequestScheduleInvalid": "This time is outside the available window. Change the date or time and try again.",
+  "rideRequestScheduleUnavailable": "Scheduling is unavailable for this time. Choose another time or request a ride now.",
+  "rideRequestScheduleSave": "Confirm time",
+  "rideRequestScheduleCancel": "Cancel",
+  "rideRequestScheduledNotice": "Reserving a time does not assign a driver now.",
+  "@rideRequestScheduleTimezone": {
+    "placeholders": {
+      "offset": {
+        "type": "String"
+      }
+    }
+  },
+  "@rideRequestScheduleRange": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "rideRequestHour": "Hour",
+  "rideRequestMinuteInput": "Minute",
+  "rideRequestTimeFormat": "24-hour time (00–23).",
+  "rideRequestTimeInvalid": "Enter a valid value in range.",
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
@@ -211,6 +244,16 @@
   "tripsLoadingDetails": "Loading trip details",
   "tripsCancelling": "Cancelling",
   "tripsTripList": "Trip list",
+  "tripsStatusScheduled": "Scheduled",
+  "tripsScheduledTime": "Trip time",
+  "tripsScheduledAt": "Scheduled: {time}",
+  "@tripsScheduledAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "notificationsMarkAll": "Mark all as read",
   "notificationsUnreadCount": "Unread: {count}",
   "@notificationsUnreadCount": {

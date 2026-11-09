@@ -9,6 +9,7 @@ abstract interface class RideRequestRepository {
     required TripLocation pickup,
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
+    DateTime? scheduledAt,
   });
 
   /// Keep the same idempotency key on retries of this exact booking.

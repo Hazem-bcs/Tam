@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SCHEDULE_OUT_OF_RANGE",
+    "message": {
+      "ar": "الموعد خارج المدى المتاح.",
+      "en": "The scheduled time is outside the allowed window."
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": {
+      "ar": "مفتاح العملية مستخدم لطلب مختلف.",
+      "en": "This operation key belongs to another request."
+    }
+  }
+}

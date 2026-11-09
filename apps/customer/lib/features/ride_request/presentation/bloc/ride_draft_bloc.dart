@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_state.dart';
+import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 export 'ride_draft_state.dart';
@@ -14,6 +15,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
   RideDraftBloc({
     required RideRequestRepository repository,
     TripPrefill? prefill,
+    this.schedulePolicy = const RideSchedulePolicy(),
     DateTime Function()? now,
     String Function()? newIdempotencyKey,
   }) : _repository = repository,
@@ -25,44 +27,38 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
            destination: prefill?.destination,
          ),
        ) {
-    on<PickupSelected>((event, emit) {
-      if (_locked) return;
-      _resetQuote();
-      emit(
-        state.copyWith(
-          pickup: event.location,
-          clearQuote: true,
-          clearError: true,
-          status: RideFlowStatus.editing,
-        ),
-      );
-      if (state.hasRoute) add(const RideQuoteRequested());
-    });
-    on<DestinationSelected>((event, emit) {
-      if (_locked) return;
-      _resetQuote();
-      emit(
-        state.copyWith(
-          destination: event.location,
-          clearQuote: true,
-          clearError: true,
-          status: RideFlowStatus.editing,
-        ),
-      );
-      if (state.hasRoute) add(const RideQuoteRequested());
-    });
+    on<PickupSelected>(
+      (event, emit) => _edit(state.copyWith(pickup: event.location), emit),
+    );
+    on<DestinationSelected>(
+      (event, emit) => _edit(state.copyWith(destination: event.location), emit),
+    );
     on<VehicleClassSelected>((event, emit) {
-      if (_locked || state.vehicleClass == event.vehicleClass) return;
-      _resetQuote();
-      emit(
-        state.copyWith(
-          vehicleClass: event.vehicleClass,
-          clearQuote: true,
-          clearError: true,
-          status: RideFlowStatus.editing,
-        ),
-      );
-      if (state.hasRoute) add(const RideQuoteRequested());
+      if (state.vehicleClass != event.vehicleClass) {
+        _edit(state.copyWith(vehicleClass: event.vehicleClass), emit);
+      }
+    });
+    on<RideScheduleChanged>((event, emit) {
+      if (_locked) return;
+      final scheduledAt = event.scheduledAt?.toUtc();
+      if (!schedulePolicy.allows(scheduledAt, _now())) {
+        emit(
+          state.copyWith(
+            errorCode: 'SCHEDULE_OUT_OF_RANGE',
+            failureStep: RideFailureStep.quote,
+          ),
+        );
+        return;
+      }
+      if (scheduledAt != state.scheduledAt) {
+        _edit(
+          state.copyWith(
+            scheduledAt: scheduledAt,
+            clearSchedule: scheduledAt == null,
+          ),
+          emit,
+        );
+      }
     });
     on<RidePlaceSearchChanged>(_search);
     on<RideQuoteRequested>(_quote);
@@ -72,7 +68,9 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       emit(
         state.copyWith(
           status: RideFlowStatus.failed,
-          errorCode: 'QUOTE_EXPIRED',
+          errorCode: schedulePolicy.allows(state.scheduledAt, _now())
+              ? 'QUOTE_EXPIRED'
+              : 'SCHEDULE_OUT_OF_RANGE',
           failureStep: RideFailureStep.quote,
         ),
       );
@@ -80,6 +78,9 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     if (prefill != null && state.hasRoute) add(const RideQuoteRequested());
   }
 
+  final RideSchedulePolicy schedulePolicy;
+  DateTime get currentTime => _now().toUtc();
+  bool get canConfirm => state.canConfirmAt(_now(), policy: schedulePolicy);
   final RideRequestRepository _repository;
   final DateTime Function() _now;
   final String Function() _newKey;
@@ -90,6 +91,19 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
   int _searchRevision = 0;
 
   bool get _locked => _confirming || state.confirmationPending;
+
+  void _edit(RideDraftState edited, Emitter<RideDraftState> emit) {
+    if (_locked) return;
+    _resetQuote();
+    emit(
+      edited.copyWith(
+        clearQuote: true,
+        clearError: true,
+        status: RideFlowStatus.editing,
+      ),
+    );
+    if (state.hasRoute) add(const RideQuoteRequested());
+  }
 
   void _resetQuote() {
     _revision++;
@@ -149,6 +163,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     final pickup = state.pickup!;
     final destination = state.destination!;
     final vehicle = state.vehicleClass;
+    final scheduledAt = state.scheduledAt;
     emit(
       state.copyWith(
         status: RideFlowStatus.quoting,
@@ -157,12 +172,22 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       ),
     );
     try {
+      if (!schedulePolicy.allows(scheduledAt, _now())) {
+        throw const RideRequestFailure('SCHEDULE_OUT_OF_RANGE');
+      }
       final quote = await _repository.requestQuote(
         pickup: pickup,
         destination: destination,
         vehicleClass: vehicle,
+        scheduledAt: scheduledAt,
       );
       if (isClosed || revision != _revision) return;
+      if (quote.scheduledAt != scheduledAt) {
+        throw const RideRequestFailure('INVALID_RESPONSE');
+      }
+      if (!schedulePolicy.allows(scheduledAt, _now())) {
+        throw const RideRequestFailure('SCHEDULE_OUT_OF_RANGE');
+      }
       if (!quote.isValidAt(_now())) {
         throw const RideRequestFailure('QUOTE_EXPIRED');
       }
@@ -174,7 +199,14 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
         ),
       );
       _expiryTimer?.cancel();
-      _expiryTimer = Timer(quote.expiresAt.difference(_now()), () {
+      var deadline = quote.expiresAt;
+      if (scheduledAt != null) {
+        final scheduleDeadline = scheduledAt
+            .subtract(schedulePolicy.minimumLeadTime)
+            .add(const Duration(microseconds: 1));
+        if (scheduleDeadline.isBefore(deadline)) deadline = scheduleDeadline;
+      }
+      _expiryTimer = Timer(deadline.difference(_now()), () {
         if (!isClosed) add(RideQuoteExpired(quote.id));
       });
     } on RideRequestFailure catch (error) {
@@ -201,12 +233,14 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
         state.failureStep == RideFailureStep.confirmation &&
         state.quote != null &&
         state.hasRoute;
-    if (!retryingUncertainConfirmation && !state.canConfirmAt(_now())) {
+    if (!retryingUncertainConfirmation && !canConfirm) {
       emit(
         state.copyWith(
           status: RideFlowStatus.failed,
           errorCode: state.quote != null && !state.quote!.isValidAt(_now())
               ? 'QUOTE_EXPIRED'
+              : !schedulePolicy.allows(state.scheduledAt, _now())
+              ? 'SCHEDULE_OUT_OF_RANGE'
               : 'VALIDATION_ERROR',
           failureStep: RideFailureStep.quote,
         ),
@@ -236,13 +270,22 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       );
     } on RideRequestFailure catch (error) {
       if (isClosed) return;
+      final definitive = const {
+        'QUOTE_EXPIRED',
+        'SCHEDULE_OUT_OF_RANGE',
+        'SCHEDULE_UNAVAILABLE',
+        'VALIDATION_ERROR',
+        'IDEMPOTENCY_CONFLICT',
+      }.contains(error.code);
+      if (definitive) _pendingKey = null;
       emit(
         state.copyWith(
           status: RideFlowStatus.failed,
           errorCode: error.code,
-          failureStep: error.code == 'QUOTE_EXPIRED'
+          failureStep: definitive
               ? RideFailureStep.quote
               : RideFailureStep.confirmation,
+          clearQuote: definitive,
         ),
       );
     } finally {
