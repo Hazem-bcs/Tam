@@ -56,5 +56,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "supportSimulationNotice": "Support operations in this version are simulated and are not sent to a real support team."
 }
