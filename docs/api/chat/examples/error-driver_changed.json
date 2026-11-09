@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "DRIVER_CHANGED",
+    "message": {
+      "ar": "تغير السائق. افتح سياق المحادثة الصحيح.",
+      "en": "Driver changed. Open the correct conversation context."
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "data": {
+    "metadata": {
+      "version": 1,
+      "trip_id": "trip-1",
+      "driver": {
+        "id": "driver-1",
+        "name_ar": "أحمد",
+        "name_en": "Ahmad"
+      },
+      "revision": 3,
+      "can_send": true,
+      "delivered_through": 0,
+      "read_through": 0,
+      "customer_read_through": 3
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "CHAT_UNAVAILABLE",
+    "message": {
+      "ar": "لا يوجد سائق متاح للمحادثة.",
+      "en": "No driver is available for this conversation."
+    }
+  }
+}

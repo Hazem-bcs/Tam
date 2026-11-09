@@ -1,0 +1,101 @@
+{
+  "data": {
+    "metadata": {
+      "version": 1,
+      "trip_id": "trip-1",
+      "driver": {
+        "id": "driver-1",
+        "name_ar": "أحمد",
+        "name_en": "Ahmad"
+      },
+      "revision": 70,
+      "can_send": true,
+      "delivered_through": 0,
+      "read_through": 0,
+      "customer_read_through": 0
+    },
+    "messages": [
+      {
+        "id": "trip-1-message-1",
+        "sequence": 1,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 1",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-2",
+        "sequence": 2,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 2",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-3",
+        "sequence": 3,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 3",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-4",
+        "sequence": 4,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 4",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-5",
+        "sequence": 5,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 5",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-6",
+        "sequence": 6,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 6",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-7",
+        "sequence": 7,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 7",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-8",
+        "sequence": 8,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 8",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-9",
+        "sequence": 9,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 9",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-10",
+        "sequence": 10,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 10",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      }
+    ],
+    "next_before_sequence": null
+  }
+}

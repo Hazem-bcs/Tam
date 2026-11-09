@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/l10n/app_localizations.dart';
+import '../bloc/chat_state.dart';
+
+class ChatStatusBanner extends StatelessWidget {
+  const ChatStatusBanner({super.key, required this.state});
+  final ChatState state;
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        child: Column(
+          children: [
+            Text(
+              t.chatSimulation,
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+            if (state.failure != null)
+              Text(
+                _failure(t, state.failure!),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            if (state.metadata?.canSend == false) Text(t.chatReadOnly),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _failure(AppLocalizations t, String code) => switch (code) {
+  'VALIDATION_ERROR' => t.chatValidation,
+  'DRIVER_CHANGED' ||
+  'CHAT_UNAVAILABLE' ||
+  'TRIP_NOT_FOUND' => t.chatUnavailable,
+  'CHAT_CLOSED' => t.chatReadOnly,
+  'SESSION_ENDED' => t.chatSessionEnded,
+  _ => t.chatConnectionError,
+};

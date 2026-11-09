@@ -1,0 +1,26 @@
+{
+  "data": {
+    "metadata": {
+      "version": 1,
+      "trip_id": "trip-1",
+      "driver": {
+        "id": "driver-1",
+        "name_ar": "أحمد",
+        "name_en": "Ahmad"
+      },
+      "revision": 3,
+      "can_send": true,
+      "delivered_through": 0,
+      "read_through": 0,
+      "customer_read_through": 0
+    },
+    "message": {
+      "id": "trip-1-message-4",
+      "sequence": 4,
+      "author": "customer",
+      "client_message_id": "demo-client-message-1",
+      "body": "أنا عند المدخل.",
+      "sent_at": "2026-11-09T12:00:00.000Z"
+    }
+  }
+}

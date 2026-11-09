@@ -4,6 +4,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import '../../domain/chat_repository.dart';
 import 'chat_fixtures.dart';
 import 'chat_mock_scenario.dart';
+import 'chat_simulation.dart';
 
 /// Session-owned text store. Trip eligibility is always resolved at operation time.
 final class MockChatRepository implements ChatRepository {
@@ -51,7 +52,7 @@ final class MockChatRepository implements ChatRepository {
       driver.id,
       scenario == ChatMockScenario.empty
           ? []
-          : ChatFixtures.messages(tripId, _now().toUtc()),
+          : ChatFixtures.messages(tripId, _timestamp(trip)),
     );
     final canSend = {
       TripStatus.confirmed,
@@ -60,6 +61,19 @@ final class MockChatRepository implements ChatRepository {
       TripStatus.inProgress,
     }.contains(trip.status);
     if (write && !canSend) throw const ChatFailure('CHAT_CLOSED');
+    final events = thread.simulation.advance(
+      thread.messages,
+      _now().toUtc(),
+      tripId: tripId,
+      canReply: canSend,
+      deliveredThrough: thread.deliveredThrough,
+      readThrough: thread.readThrough,
+    );
+    if (events.changed) {
+      thread.deliveredThrough = events.delivered;
+      thread.readThrough = events.read;
+      thread.revision++;
+    }
     final tripRevision = trip.live?.revision ?? 0;
     if (thread.tripRevision != tripRevision) {
       thread.tripRevision = tripRevision;
@@ -77,6 +91,12 @@ final class MockChatRepository implements ChatRepository {
       customerReadThrough: thread.customerReadThrough,
     );
     return thread;
+  }
+
+  DateTime _timestamp(Trip trip) {
+    final floor = trip.live?.statusChangedAt ?? trip.createdAt;
+    final time = _now().toUtc();
+    return time.isBefore(floor) ? floor : time;
   }
 
   @override
@@ -114,7 +134,7 @@ final class MockChatRepository implements ChatRepository {
     required String clientMessageId,
     required String body,
   }) async {
-    final thread = _resolve(tripId, write: true);
+    final thread = _resolve(tripId);
     final value = policy.validate(body);
     if (clientMessageId.trim().isEmpty) {
       throw const ChatFailure('VALIDATION_ERROR');
@@ -128,6 +148,7 @@ final class MockChatRepository implements ChatRepository {
       }
       return ChatSent(thread.metadata!, previous);
     }
+    _resolve(tripId, write: true);
     if (failNextSend ||
         scenario == ChatMockScenario.disconnect ||
         (scenario == ChatMockScenario.sendFailure &&
@@ -136,7 +157,7 @@ final class MockChatRepository implements ChatRepository {
       throw const ChatFailure('NETWORK_ERROR');
     }
     final sequence = (thread.messages.lastOrNull?.sequence ?? 0) + 1;
-    var timestamp = _now().toUtc();
+    var timestamp = _timestamp(_store.find(tripId)!);
     final last = thread.messages.lastOrNull?.sentAt;
     if (last != null && timestamp.isBefore(last)) timestamp = last;
     final message = ChatMessage(
@@ -148,6 +169,7 @@ final class MockChatRepository implements ChatRepository {
       sentAt: timestamp,
     );
     thread.messages.add(message);
+    thread.simulation.sent(message);
     thread.revision++;
     _resolve(tripId);
     if (loseNextSendResponse ||
@@ -217,6 +239,7 @@ final class _Thread {
   _Thread(this.driverId, this.messages);
   final String driverId;
   final List<ChatMessage> messages;
+  final simulation = ChatSimulation();
   int revision = 1, tripRevision = -1;
   int deliveredThrough = 0, readThrough = 0, customerReadThrough = 0;
   ChatMetadata? metadata;

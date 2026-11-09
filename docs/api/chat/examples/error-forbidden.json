@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "لا تملك هذه الرحلة.",
+      "en": "This trip does not belong to you."
+    }
+  }
+}

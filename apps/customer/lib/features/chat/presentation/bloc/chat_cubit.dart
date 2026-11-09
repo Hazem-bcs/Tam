@@ -43,8 +43,11 @@ final class ChatCubit extends Cubit<ChatState> {
     ).join();
   }
 
-  int _epoch = 0, _request = 0;
-  bool _active = true, _reading = false;
+  int _epoch = 0, _request = 0, _acknowledgedThrough = 0;
+  bool _active = true,
+      _reading = false,
+      _identityLost = false,
+      _latestAvailable = false;
   bool _valid(int epoch) => !isClosed && epoch == _epoch && !state.sessionEnded;
 
   void _update({
@@ -64,7 +67,7 @@ final class ChatCubit extends Cubit<ChatState> {
       pending: pending ?? state.pending,
       loading: loading ?? state.loading,
       loadingOlder: loadingOlder ?? state.loadingOlder,
-      failure: failure,
+      failure: _identityLost ? 'CHAT_UNAVAILABLE' : failure,
       loaded: loaded ?? state.loaded,
       nextBeforeSequence: replaceCursor
           ? nextBeforeSequence
@@ -73,6 +76,7 @@ final class ChatCubit extends Cubit<ChatState> {
   );
 
   ChatMetadata _metadata(ChatMetadata incoming) {
+    if (_identityLost) throw const ChatFailure('CHAT_UNAVAILABLE');
     final old = state.metadata;
     if (incoming.tripId != tripId ||
         (old != null && old.driverId != incoming.driverId)) {
@@ -108,22 +112,36 @@ final class ChatCubit extends Cubit<ChatState> {
   Future<void> refresh() async {
     if (isClosed || state.sessionEnded || !_active) return;
     final epoch = _epoch, request = ++_request;
+    _latestAvailable = false;
     _update(loading: !state.loaded);
     try {
       final page = await repository.fetch(tripId);
       if (!_valid(epoch) || request != _request || !_active) return;
       final metadata = _metadata(page.metadata);
       final messages = _merge(page.messages);
+      _latestAvailable = true;
       _update(
         metadata: metadata,
         messages: messages,
         pending: _reconcile(messages),
         loading: false,
         loaded: true,
-        replaceCursor: !state.loaded,
+        replaceCursor:
+            !state.loaded ||
+            (page.messages.isNotEmpty &&
+                page.messages.first.sequence >
+                    (state.messages.lastOrNull?.sequence ?? 0) + 1),
         nextBeforeSequence: page.nextBeforeSequence,
       );
     } on ChatFailure catch (failure) {
+      if (!_valid(epoch) || request != _request) return;
+      if ({
+        'DRIVER_CHANGED',
+        'CHAT_UNAVAILABLE',
+        'TRIP_NOT_FOUND',
+      }.contains(failure.code)) {
+        _identityLost = true;
+      }
       if (_valid(epoch) && request == _request) {
         _update(loading: false, failure: failure.code);
       }
@@ -158,6 +176,14 @@ final class ChatCubit extends Cubit<ChatState> {
         nextBeforeSequence: page.nextBeforeSequence,
       );
     } on ChatFailure catch (failure) {
+      if (!_valid(epoch)) return;
+      if ({
+        'DRIVER_CHANGED',
+        'CHAT_UNAVAILABLE',
+        'TRIP_NOT_FOUND',
+      }.contains(failure.code)) {
+        _identityLost = true;
+      }
       if (_valid(epoch)) _update(loadingOlder: false, failure: failure.code);
     } catch (_) {
       if (_valid(epoch)) {
@@ -168,7 +194,7 @@ final class ChatCubit extends Cubit<ChatState> {
 
   /// Accept the draft synchronously; later responses cannot clear a newer draft.
   bool send(String body) {
-    if (!state.canSend || !_active) return false;
+    if (!state.canSend || !_active || _identityLost) return false;
     String value;
     try {
       value = policy.validate(body);
@@ -188,7 +214,7 @@ final class ChatCubit extends Cubit<ChatState> {
   }
 
   Future<void> retry(String clientMessageId) async {
-    if (!state.canSend || !_active) return;
+    if (!state.canSend || !_active || _identityLost) return;
     final pending = state.pending
         .where((p) => p.clientMessageId == clientMessageId)
         .firstOrNull;
@@ -206,6 +232,11 @@ final class ChatCubit extends Cubit<ChatState> {
         body: pending.body,
       );
       if (!_valid(epoch)) return;
+      if (sent.message.clientMessageId != pending.clientMessageId ||
+          sent.message.body != pending.body ||
+          sent.message.author != ChatAuthor.customer) {
+        throw const ChatFailure('INVALID_RESPONSE', uncertain: true);
+      }
       final metadata = _metadata(sent.metadata);
       final messages = _merge([sent.message]);
       _update(
@@ -250,11 +281,16 @@ final class ChatCubit extends Cubit<ChatState> {
 
   Future<void> displayedThrough(int sequence) async {
     if (!_active ||
+        !_latestAvailable ||
         _reading ||
         !state.loaded ||
         state.failure != null ||
         state.sessionEnded ||
-        sequence <= (state.metadata?.customerReadThrough ?? 0) ||
+        sequence <=
+            max(
+              _acknowledgedThrough,
+              state.metadata?.customerReadThrough ?? 0,
+            ) ||
         sequence > (state.messages.lastOrNull?.sequence ?? 0)) {
       return;
     }
@@ -263,9 +299,18 @@ final class ChatCubit extends Cubit<ChatState> {
     try {
       final metadata = await repository.markRead(tripId, sequence);
       if (_valid(epoch) && _active) {
+        _acknowledgedThrough = max(_acknowledgedThrough, sequence);
         _update(metadata: _metadata(metadata), failure: state.failure);
       }
     } on ChatFailure catch (failure) {
+      if (!_valid(epoch)) return;
+      if ({
+        'DRIVER_CHANGED',
+        'CHAT_UNAVAILABLE',
+        'TRIP_NOT_FOUND',
+      }.contains(failure.code)) {
+        _identityLost = true;
+      }
       if (_valid(epoch)) _update(failure: failure.code);
     } catch (_) {
       if (_valid(epoch)) _update(failure: 'INVALID_RESPONSE');
