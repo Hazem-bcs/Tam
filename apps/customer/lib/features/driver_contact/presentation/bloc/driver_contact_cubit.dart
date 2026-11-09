@@ -23,10 +23,13 @@ final class DriverContactCubit extends Cubit<DriverContactState> {
     DateTime Function()? now,
   }) : now = now ?? DateTime.now,
        super(const DriverContactState()) {
-    _resets = repository.sessionResets.listen((reset) {
-      if (reset) {
+    _changes = repository.changes.listen((change) {
+      if (change.sessionReset) {
         _epoch++;
         emit(const DriverContactState(ended: true));
+      } else if (change.tripId == tripId && !state.ended) {
+        _epoch++;
+        emit(const DriverContactState(failure: 'CONTACT_UNAVAILABLE'));
       }
     });
   }
@@ -34,7 +37,7 @@ final class DriverContactCubit extends Cubit<DriverContactState> {
   final PhoneDialer dialer;
   final String tripId, driverId;
   final DateTime Function() now;
-  late final StreamSubscription<bool> _resets;
+  late final StreamSubscription<DriverContactChange> _changes;
   int _epoch = 0;
   bool _active = true;
   void setActive(bool active) {
@@ -46,7 +49,7 @@ final class DriverContactCubit extends Cubit<DriverContactState> {
     }
   }
 
-  Future<void> call() async {
+  Future<void> call({bool Function()? canOpen}) async {
     if (isClosed || state.busy || state.ended || !_active) return;
     final epoch = ++_epoch;
     emit(const DriverContactState(busy: true));
@@ -61,6 +64,10 @@ final class DriverContactCubit extends Cubit<DriverContactState> {
           !RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(contact.phoneE164) ||
           !now().toUtc().isBefore(contact.expiresAt)) {
         throw const DriverContactFailure('INVALID_RESPONSE');
+      }
+      if (canOpen != null && !canOpen()) {
+        emit(const DriverContactState());
+        return;
       }
       final result = await dialer.open(contact.phoneE164);
       if (_current(epoch)) emit(DriverContactState(result: result));
@@ -80,7 +87,7 @@ final class DriverContactCubit extends Cubit<DriverContactState> {
   @override
   Future<void> close() async {
     _epoch++;
-    await _resets.cancel();
+    await _changes.cancel();
     return super.close();
   }
 }

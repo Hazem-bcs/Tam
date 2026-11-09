@@ -106,7 +106,8 @@ IDEMPOTENCY_CONFLICT؛410 OTP_EXPIRED؛422 VALIDATION_ERROR/OTP_INVALID؛
 
 ACCOUNT_MANAGEMENT_DATA_MODE يرث DATA_MODE؛ ACCOUNT_MOCK_SCENARIO:
 success|offline|lost_response|phone_in_use. كود fixture الأول123456 وبعد
-أول resend654321، للاختبار المحلي فقط ولا يظهر في UI كسر نجاح خادمي.
+أول resend654321، ثم تتزايد رموز المحاكاة دون إعادة رمز سابق داخل التحقق،
+بمعزل عن revision ومحاولات الإدخال. للاختبار المحلي فقط ولا يظهر في UI كسر نجاح خادمي.
 التطبيق ينهي جلسة المحاكاة ويمسح بياناتها عند القبول؛ هذا ليس حذف حساب
 حقيقيًا. اختبارات العقد تطابق أمثلة التحقق والنتيجة بالمستودع والـmapper.
 لا SMS حقيقي أو اختبار خادم أو استيراد Postman فعلي ضمن الأدلة الحالية.

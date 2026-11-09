@@ -114,7 +114,7 @@ void main() {
         await c.call();
         expect(reads, 1);
         if (boundary == 'reset') {
-          r.events.add(true);
+          r.events.add(const DriverContactChange(sessionReset: true));
         } else if (boundary == 'background') {
           c.setActive(false);
         } else {

@@ -31,6 +31,7 @@ final class MockAccountManagementRepository
   final _challenges = <String, AccountChallenge>{};
   final _fingerprints = <String, (AccountAction, String?)>{};
   final _codes = <String, String>{};
+  final _nextCodes = <String, int>{};
   final _resends = <String, AccountChallenge>{};
   final _receipts = <String, AccountReceipt>{};
   final _acceptedCodes = <String, String>{};
@@ -162,6 +163,8 @@ final class MockAccountManagementRepository
     if (_time.isBefore(old.resendAt)) {
       throw const AccountFailure('OTP_COOLDOWN');
     }
+    final nextCode = _nextCodes[old.id] ?? 654321;
+    if (nextCode > 999999) throw const AccountFailure('RATE_LIMITED');
     final next = AccountChallenge(
       id: old.id,
       operationId: old.operationId,
@@ -174,7 +177,8 @@ final class MockAccountManagementRepository
     );
     _challenges[old.operationId] = next;
     _resends[requestId] = next;
-    _codes[old.id] = next.revision.isEven ? '654321' : '123456';
+    _codes[old.id] = nextCode.toString();
+    _nextCodes[old.id] = nextCode + 1;
     return next;
   }
 
@@ -251,6 +255,7 @@ final class MockAccountManagementRepository
     _challenges.clear();
     _fingerprints.clear();
     _codes.clear();
+    _nextCodes.clear();
     _resends.clear();
     _receipts.clear();
     _acceptedCodes.clear();

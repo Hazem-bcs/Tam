@@ -4,7 +4,7 @@ import 'package:tam_customer/features/driver_contact/domain/driver_contact_repos
 final contactNow = DateTime.utc(2026, 11, 9, 12);
 
 final class ContactProbe implements DriverContactRepository {
-  final events = StreamController<bool>.broadcast(sync: true);
+  final events = StreamController<DriverContactChange>.broadcast(sync: true);
   Future<DriverContact> Function()? onFetch;
   @override
   Future<DriverContact> fetch({
@@ -21,7 +21,7 @@ final class ContactProbe implements DriverContactRepository {
         ),
       );
   @override
-  Stream<bool> get sessionResets => events.stream;
+  Stream<DriverContactChange> get changes => events.stream;
 }
 
 final class DialerProbe implements PhoneDialer {

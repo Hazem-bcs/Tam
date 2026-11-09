@@ -33,5 +33,5 @@ final class UnavailableDriverContactRepository
     required String driverId,
   }) async => throw const DriverContactFailure('SERVICE_UNAVAILABLE');
   @override
-  Stream<bool> get sessionResets => const Stream.empty();
+  Stream<DriverContactChange> get changes => const Stream.empty();
 }
