@@ -1,0 +1,60 @@
+{
+  "@@locale": "ar",
+  "supportTitle": "المساعدة والدعم",
+  "supportIntro": "أنشئ طلب دعم عام أو اختر رحلة لإرسال بلاغ عنها.",
+  "supportNewTicket": "طلب دعم جديد",
+  "supportChooseTrip": "اختيار رحلة للإبلاغ عنها",
+  "supportMyTickets": "طلبات الدعم",
+  "supportEmpty": "لا توجد طلبات دعم بعد.",
+  "supportLoading": "جارٍ التحميل",
+  "supportLoadMore": "عرض المزيد",
+  "supportCategory": "الفئة",
+  "supportBody": "تفاصيل الطلب",
+  "supportBodyHint": "اكتب من 10 إلى 2000 حرف دون المسافات المحيطة.",
+  "supportSubmit": "إرسال الطلب",
+  "supportSending": "جارٍ الإرسال",
+  "supportCreated": "تم إنشاء طلب الدعم",
+  "supportRetry": "إعادة المحاولة",
+  "supportUncertain": "تعذر تأكيد الإرسال. احتفظنا بالتفاصيل كما هي؛ أعد المحاولة للتحقق بنفس معرّف الطلب دون تكراره.",
+  "supportBodyValidation": "يجب أن يتكون النص من 10 إلى 2000 حرف بعد حذف المسافات المحيطة.",
+  "supportInvalidCategory": "اختر فئة صالحة لسياق الطلب.",
+  "supportNotFound": "الطلب أو الرحلة غير متاحين لهذا الحساب.",
+  "supportSessionEnded": "انتهت الجلسة. أُزيلت بيانات الدعم من هذه الصفحة.",
+  "supportConflict": "معرّف الطلب مستخدم لتفاصيل مختلفة. تعذر تأكيد هذا الطلب.",
+  "supportOffline": "تعذر الاتصال. حاول مجددًا عند توفر الشبكة.",
+  "supportUnavailable": "الدعم غير متاح حاليًا. حاول لاحقًا.",
+  "supportStatusOpen": "مفتوح",
+  "supportStatusInProgress": "قيد المعالجة",
+  "supportStatusResolved": "تم الحل",
+  "supportTicketDetails": "تفاصيل طلب الدعم",
+  "supportTerms": "الشروط والأحكام",
+  "supportPrivacy": "سياسة الخصوصية",
+  "supportLegalUnpublished": "المحتوى المعتمد غير منشور بعد. سيظهر هنا بعد توفيره واعتماده.",
+  "supportTicketReference": "طلب الدعم: {id}",
+  "@supportTicketReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportTripReference": "الرحلة: {id}",
+  "@supportTripReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportLegalVersion": "الإصدار {version} · نُشر {date}",
+  "@supportLegalVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}
