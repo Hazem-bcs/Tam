@@ -76,7 +76,15 @@ void main() {
         item['request']['url'],
         startsWith('{{base_url}}/trips/{{trip_id}}/chat/'),
       );
+      final request = item['request'] as Map<String, dynamic>;
+      final identity = (request['header'] as List).singleWhere(
+        (header) => header['key'] == 'X-Chat-Driver-Id',
+      );
+      expect(identity['value'], '{{driver_id}}');
+      final initialGet = identical(item, collection['item'][0]);
+      expect(identity['disabled'] == true, initialGet);
       for (final response in item['response']) {
+        expect(response['originalRequest'], request);
         expect(
           jsonDecode(response['body'] as String),
           example(response['name'] as String),

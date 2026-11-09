@@ -49,6 +49,12 @@
           {
             "key": "Accept",
             "value": "application/json"
+          },
+          {
+            "key": "X-Chat-Driver-Id",
+            "value": "{{driver_id}}",
+            "disabled": true,
+            "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
           }
         ],
         "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -63,6 +69,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -86,6 +98,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -109,6 +127,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -132,6 +156,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -155,6 +185,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -178,6 +214,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -201,6 +243,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -224,6 +272,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -247,6 +301,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -270,6 +330,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -293,6 +359,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -320,6 +392,12 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}",
+                "disabled": true,
+                "description": "اتركه معطلًا لأول GET فقط؛ بعد تثبيت driver_id فعّله لكل تحديث لاحق في الجلسة."
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?limit=30",
@@ -345,6 +423,10 @@
           {
             "key": "Accept",
             "value": "application/json"
+          },
+          {
+            "key": "X-Chat-Driver-Id",
+            "value": "{{driver_id}}"
           }
         ],
         "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?before_sequence={{before_sequence}}&limit=30",
@@ -359,6 +441,10 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}"
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?before_sequence={{before_sequence}}&limit=30",
@@ -382,6 +468,10 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}"
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?before_sequence={{before_sequence}}&limit=30",
@@ -405,6 +495,10 @@
               {
                 "key": "Accept",
                 "value": "application/json"
+              },
+              {
+                "key": "X-Chat-Driver-Id",
+                "value": "{{driver_id}}"
               }
             ],
             "url": "{{base_url}}/trips/{{trip_id}}/chat/messages?before_sequence={{before_sequence}}&limit=30",
