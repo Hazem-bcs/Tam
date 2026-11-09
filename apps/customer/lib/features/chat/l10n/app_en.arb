@@ -10,9 +10,9 @@
   "chatReadOnly": "This trip has ended. This conversation is read only.",
   "chatLoadOlder": "Load older messages",
   "chatNewest": "Newest messages",
-  "chatSent": "Sent ✓",
-  "chatDelivered": "Delivered ✓✓",
-  "chatRead": "Read ✓✓",
+  "chatSent": "Sent",
+  "chatDelivered": "Delivered",
+  "chatRead": "Read",
   "chatSending": "Sending…",
   "chatFailed": "Failed to send",
   "chatUncertain": "Send unconfirmed — refresh or retry",
@@ -30,5 +30,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "chatSimulation": "Simulation"
 }

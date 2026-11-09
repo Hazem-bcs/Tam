@@ -9,9 +9,11 @@ class ChatComposer extends StatefulWidget {
     required this.enabled,
     required this.maxLength,
     required this.onSend,
+    this.maxHeight = 180,
   });
   final bool enabled;
   final int maxLength;
+  final double maxHeight;
   final bool Function(String) onSend;
   @override
   State<ChatComposer> createState() => _ChatComposerState();
@@ -36,18 +38,16 @@ class _ChatComposerState extends State<ChatComposer> {
         children: [
           Expanded(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 180),
-              child: SingleChildScrollView(
-                child: TamTextField(
-                  key: const Key('chat-input'),
-                  controller: _controller,
-                  enabled: widget.enabled,
-                  labelText: t.chatMessageHint,
-                  maxLines: null,
-                  helperText: t.chatCharacterCount(length, widget.maxLength),
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (_) => setState(() {}),
-                ),
+              constraints: BoxConstraints(maxHeight: widget.maxHeight),
+              child: TamTextField(
+                key: const Key('chat-input'),
+                controller: _controller,
+                enabled: widget.enabled,
+                labelText: t.chatMessageHint,
+                maxLines: null,
+                helperText: t.chatCharacterCount(length, widget.maxLength),
+                keyboardType: TextInputType.multiline,
+                onChanged: (_) => setState(() {}),
               ),
             ),
           ),

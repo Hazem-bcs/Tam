@@ -7,7 +7,7 @@ abstract final class ChatFixtures {
       sequence: 1,
       author: ChatAuthor.driver,
       body: 'مرحبًا، أنا في طريقي إليك.',
-      sentAt: time.subtract(const Duration(minutes: 3)),
+      sentAt: time,
     ),
     ChatMessage(
       id: '$tripId-message-2',
@@ -15,14 +15,14 @@ abstract final class ChatFixtures {
       clientMessageId: '$tripId-fixture-2',
       author: ChatAuthor.customer,
       body: 'أهلًا، أنا عند المدخل الرئيسي.',
-      sentAt: time.subtract(const Duration(minutes: 2)),
+      sentAt: time,
     ),
     ChatMessage(
       id: '$tripId-message-3',
       sequence: 3,
       author: ChatAuthor.driver,
       body: 'تمام، سأصل خلال دقائق.',
-      sentAt: time.subtract(const Duration(minutes: 1)),
+      sentAt: time,
     ),
   ];
 }

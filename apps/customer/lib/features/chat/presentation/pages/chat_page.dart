@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
-import '../../domain/chat_repository.dart';
+
 import '../bloc/chat_cubit.dart';
 import '../widgets/chat_composer.dart';
-import '../widgets/chat_message_bubble.dart';
+import '../widgets/chat_status_banner.dart';
+import '../widgets/chat_timeline.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.onBack});
@@ -18,6 +17,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final _scroll = ScrollController();
   bool _resumed = true, _atNewest = true;
+  int _lastSequence = 0;
   @override
   void initState() {
     super.initState();
@@ -63,7 +63,23 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     return BlocConsumer<ChatCubit, ChatState>(
-      listener: (_, state) => _scheduleRead(),
+      listener: (_, state) {
+        final sequence = state.messages.lastOrNull?.sequence ?? 0;
+        if (!_atNewest && sequence > _lastSequence && _scroll.hasClients) {
+          final offset = _scroll.offset;
+          final extent = _scroll.position.maxScrollExtent;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _scroll.hasClients && !_atNewest) {
+              final delta = _scroll.position.maxScrollExtent - extent;
+              _scroll.jumpTo(
+                (offset + delta).clamp(0, _scroll.position.maxScrollExtent),
+              );
+            }
+          });
+        }
+        _lastSequence = sequence;
+        _scheduleRead();
+      },
       builder: (context, state) {
         final cubit = context.read<ChatCubit>();
         final metadata = state.metadata;
@@ -87,123 +103,44 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 800),
-                child: Column(
-                  children: [
-                    if (state.failure != null)
-                      Padding(
-                        padding: const EdgeInsets.all(AppSpacing.sm),
-                        child: Text(
-                          _failure(t, state.failure!),
-                          semanticsLabel: _failure(t, state.failure!),
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) => Column(
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: constraints.maxHeight * .22,
+                        ),
+                        child: ChatStatusBanner(state: state),
+                      ),
+                      Expanded(
+                        child: ChatTimeline(
+                          state: state,
+                          controller: _scroll,
+                          onLoadOlder: cubit.loadOlder,
+                          onRetry: cubit.retry,
                         ),
                       ),
-                    if (metadata != null && !state.canSend)
-                      Padding(
-                        padding: const EdgeInsets.all(AppSpacing.sm),
-                        child: Text(t.chatReadOnly),
-                      ),
-                    if (state.loading)
-                      Expanded(
-                        child: Center(
-                          child: TamLoadingIndicator(
-                            semanticLabel: t.chatLoading,
-                          ),
+                      if (!_atNewest)
+                        TextButton.icon(
+                          key: const Key('chat-newest'),
+                          onPressed: () {
+                            _scroll.jumpTo(0);
+                            _scheduleRead();
+                          },
+                          icon: const Icon(Icons.arrow_downward),
+                          label: Text(t.chatNewest),
                         ),
-                      )
-                    else
-                      Expanded(
-                        child: state.messages.isEmpty && state.pending.isEmpty
-                            ? Center(child: Text(t.chatEmpty))
-                            : ListView.builder(
-                                controller: _scroll,
-                                reverse: true,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppSpacing.lg,
-                                ),
-                                itemCount:
-                                    state.messages.length +
-                                    state.pending.length +
-                                    (state.nextBeforeSequence == null ? 0 : 1),
-                                itemBuilder: (_, index) {
-                                  final count =
-                                      state.messages.length +
-                                      state.pending.length;
-                                  if (index == count) {
-                                    return TextButton(
-                                      key: const Key('chat-load-older'),
-                                      onPressed: state.loadingOlder
-                                          ? null
-                                          : cubit.loadOlder,
-                                      child: Text(
-                                        state.loadingOlder
-                                            ? t.chatLoading
-                                            : t.chatLoadOlder,
-                                      ),
-                                    );
-                                  }
-                                  final chronological = count - 1 - index;
-                                  if (chronological >= state.messages.length) {
-                                    final p =
-                                        state.pending[chronological -
-                                            state.messages.length];
-                                    return ChatMessageBubble(
-                                      key: ValueKey(p.clientMessageId),
-                                      body: p.body,
-                                      sentAt: p.createdAt,
-                                      customer: true,
-                                      status: switch (p.status) {
-                                        ChatSendStatus.sending => t.chatSending,
-                                        ChatSendStatus.failed => t.chatFailed,
-                                        ChatSendStatus.uncertain =>
-                                          t.chatUncertain,
-                                      },
-                                      onRetry:
-                                          p.status == ChatSendStatus.sending ||
-                                              !state.canSend
-                                          ? null
-                                          : () =>
-                                                cubit.retry(p.clientMessageId),
-                                    );
-                                  }
-                                  final message = state.messages[chronological];
-                                  return ChatMessageBubble(
-                                    key: ValueKey(message.id),
-                                    body: message.body,
-                                    sentAt: message.sentAt,
-                                    customer:
-                                        message.author == ChatAuthor.customer,
-                                    status: chatReceiptLabel(
-                                      t,
-                                      message,
-                                      metadata,
-                                    ),
-                                  );
-                                },
-                              ),
+                      ChatComposer(
+                        enabled: state.canSend,
+                        maxLength: cubit.policy.maxBodyCodePoints,
+                        maxHeight: (constraints.maxHeight * .5).clamp(40, 180),
+                        onSend: (body) =>
+                            _resumed &&
+                            ModalRoute.of(context)?.isCurrent != false &&
+                            cubit.send(body),
                       ),
-                    if (!_atNewest)
-                      TextButton.icon(
-                        key: const Key('chat-newest'),
-                        onPressed: () {
-                          _scroll.jumpTo(0);
-                          _scheduleRead();
-                        },
-                        icon: const Icon(Icons.arrow_downward),
-                        label: Text(t.chatNewest),
-                      ),
-                    ChatComposer(
-                      enabled: state.canSend,
-                      maxLength: cubit.policy.maxBodyCodePoints,
-                      onSend: (body) =>
-                          _resumed &&
-                          ModalRoute.of(context)?.isCurrent != false &&
-                          cubit.send(body),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -213,13 +150,3 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     );
   }
 }
-
-String _failure(AppLocalizations t, String code) => switch (code) {
-  'VALIDATION_ERROR' => t.chatValidation,
-  'DRIVER_CHANGED' ||
-  'CHAT_UNAVAILABLE' ||
-  'TRIP_NOT_FOUND' => t.chatUnavailable,
-  'CHAT_CLOSED' => t.chatReadOnly,
-  'SESSION_ENDED' => t.chatSessionEnded,
-  _ => t.chatConnectionError,
-};

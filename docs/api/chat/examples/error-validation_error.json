@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "بيانات الرسالة غير صالحة.",
+      "en": "Invalid message data."
+    }
+  }
+}

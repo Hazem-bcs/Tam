@@ -1,0 +1,261 @@
+{
+  "data": {
+    "metadata": {
+      "version": 1,
+      "trip_id": "trip-1",
+      "driver": {
+        "id": "driver-1",
+        "name_ar": "أحمد",
+        "name_en": "Ahmad"
+      },
+      "revision": 70,
+      "can_send": true,
+      "delivered_through": 0,
+      "read_through": 0,
+      "customer_read_through": 0
+    },
+    "messages": [
+      {
+        "id": "trip-1-message-41",
+        "sequence": 41,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 41",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-42",
+        "sequence": 42,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 42",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-43",
+        "sequence": 43,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 43",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-44",
+        "sequence": 44,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 44",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-45",
+        "sequence": 45,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 45",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-46",
+        "sequence": 46,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 46",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-47",
+        "sequence": 47,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 47",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-48",
+        "sequence": 48,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 48",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-49",
+        "sequence": 49,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 49",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-50",
+        "sequence": 50,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 50",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-51",
+        "sequence": 51,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 51",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-52",
+        "sequence": 52,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 52",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-53",
+        "sequence": 53,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 53",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-54",
+        "sequence": 54,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 54",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-55",
+        "sequence": 55,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 55",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-56",
+        "sequence": 56,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 56",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-57",
+        "sequence": 57,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 57",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-58",
+        "sequence": 58,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 58",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-59",
+        "sequence": 59,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 59",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-60",
+        "sequence": 60,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 60",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-61",
+        "sequence": 61,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 61",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-62",
+        "sequence": 62,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 62",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-63",
+        "sequence": 63,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 63",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-64",
+        "sequence": 64,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 64",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-65",
+        "sequence": 65,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 65",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-66",
+        "sequence": 66,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 66",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-67",
+        "sequence": 67,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 67",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-68",
+        "sequence": 68,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 68",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-69",
+        "sequence": 69,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 69",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-70",
+        "sequence": 70,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "رسالة محاكاة 70",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      }
+    ],
+    "next_before_sequence": 41
+  }
+}

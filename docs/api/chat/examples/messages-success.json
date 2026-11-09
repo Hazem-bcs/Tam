@@ -1,0 +1,45 @@
+{
+  "data": {
+    "metadata": {
+      "version": 1,
+      "trip_id": "trip-1",
+      "driver": {
+        "id": "driver-1",
+        "name_ar": "أحمد",
+        "name_en": "Ahmad"
+      },
+      "revision": 2,
+      "can_send": true,
+      "delivered_through": 0,
+      "read_through": 0,
+      "customer_read_through": 0
+    },
+    "messages": [
+      {
+        "id": "trip-1-message-1",
+        "sequence": 1,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "مرحبًا، أنا في طريقي إليك.",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-2",
+        "sequence": 2,
+        "author": "customer",
+        "client_message_id": "trip-1-fixture-2",
+        "body": "أهلًا، أنا عند المدخل الرئيسي.",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      },
+      {
+        "id": "trip-1-message-3",
+        "sequence": 3,
+        "author": "driver",
+        "client_message_id": null,
+        "body": "تمام، سأصل خلال دقائق.",
+        "sent_at": "2026-11-09T12:00:00.000Z"
+      }
+    ],
+    "next_before_sequence": null
+  }
+}

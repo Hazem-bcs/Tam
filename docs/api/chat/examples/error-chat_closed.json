@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "CHAT_CLOSED",
+    "message": {
+      "ar": "المحادثة للقراءة فقط.",
+      "en": "The conversation is read only."
+    }
+  }
+}

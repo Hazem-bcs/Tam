@@ -11,11 +11,13 @@ class ChatMessageBubble extends StatelessWidget {
     required this.customer,
     required this.status,
     this.onRetry,
+    this.statusIcon = Icons.done,
   });
   final String body, status;
   final DateTime sentAt;
   final bool customer;
   final VoidCallback? onRetry;
+  final IconData statusIcon;
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -24,15 +26,11 @@ class ChatMessageBubble extends StatelessWidget {
       context,
     ).formatTimeOfDay(TimeOfDay.fromDateTime(sentAt.toLocal()));
     return Align(
-      alignment: customer
-          ? AlignmentDirectional.centerEnd
-          : AlignmentDirectional.centerStart,
+      alignment: customer ? Alignment.centerRight : Alignment.centerLeft,
       child: FractionallySizedBox(
         widthFactor: .88,
         child: Align(
-          alignment: customer
-              ? AlignmentDirectional.centerEnd
-              : AlignmentDirectional.centerStart,
+          alignment: customer ? Alignment.centerRight : Alignment.centerLeft,
           child: Container(
             margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
             padding: const EdgeInsets.all(AppSpacing.md),
@@ -61,6 +59,7 @@ class ChatMessageBubble extends StatelessWidget {
                         context,
                       ).textTheme.labelSmall?.copyWith(color: foreground),
                     ),
+                    if (customer) Icon(statusIcon, size: 16, color: foreground),
                     if (customer)
                       Text(
                         status,

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": {
+      "ar": "المعرف مستخدم مع نص مختلف.",
+      "en": "Client message ID already used with a different body."
+    }
+  }
+}
