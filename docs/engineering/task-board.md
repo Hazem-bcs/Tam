@@ -153,8 +153,20 @@ Integration SHA and branch / unresolved limitations:
 
 | المهمة | الحالة | المالك | البطاقة |
 |---|---|---|---|
-| W3-ACCOUNT-CONTACT | IMPLEMENTING منda34b3d | المشرف root، فرع codex/customer-backend-handoff | [التكليف](tasks/W3-ACCOUNT-CONTACT.md) |
+| W3-ACCOUNT-CONTACT | REVIEW — المرشح882c9e5؛618 اختبارًا ناجحًا | المشرف root، فرع codex/customer-backend-handoff | [التكليف](tasks/W3-ACCOUNT-CONTACT.md) |
 
 يشمل حذف الحساب وتغيير الرقم والاتصال بالسائق، ثم تجميع ومراجعة Postman
 موحد. المحفظة والدفع الإلكتروني والكوبونات مؤجلة. لا يتطلب العمل باكندًا
 حيًا؛ لا يبدأ الصقل البصري حتى تسليم العقد المتفق عليه.
+
+مرشح إغلاق منطق العميل `882c9e55ca17bc651f238d0b98abbabe14d877fb`
+يتضمن تغييرات الرقم والحذف والاتصال وPostman موحدًا بـ14 مجلدًا و58 مثال
+طلب. format334/0 وanalyze و618 اختبارًا و92 مقارنة UI وستة اختبارات
+Python وJSON218 وl10n/Postman --check/diff ناجحة. المراجعة المستقلة تشمل
+W2 السابق غير المعتمد وW3 معًا؛ [بطاقة المراجعة](tasks/W3-CUSTOMER-REVIEW.md)
+و[التسليم](deliveries/W3-ACCOUNT-CONTACT/HANDOFF.md). لا اعتماد نهائي أوpush/main/Actions.
+
+تعيين المراجعة: review_chat على codex/review-customer-api داخل worktree
+/home/hazem/.codex/worktrees/review-customer-api/mashwar من882c9e5؛
+المجلدات القديمة محفوظة بتوليداتها غير الملتزم بها ولا تُستخدم للكتابة.
+التكليف مراجعة مستقلة، وليس اعتمادًا قبل صدور تقرير على SHA محدد.
