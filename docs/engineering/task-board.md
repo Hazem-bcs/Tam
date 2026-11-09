@@ -66,7 +66,7 @@ W1-BASE جاهز من ناحية التجهيز والتحقق المحلي؛ ل
 | W2-ADDRESSES | INTEGRATED — المرحلة الأولى؛ 333 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_addresses؛ [البطاقة](tasks/W2-ADDRESSES.md) و[المراجعة](deliveries/W2-ADDRESSES/REVIEW.md) |
 | W2-SCHEDULE | INTEGRATED — المرحلة الأولى؛ 363 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_schedule؛ [البطاقة](tasks/W2-SCHEDULE.md) و[المراجعة](deliveries/W2-SCHEDULE/REVIEW.md) |
 | W2-ACTIVE-TRIP | INTEGRATED — المرحلة الأولى؛409 اختبارات ناجحة بعد الدمج المحلي | المشرف / review_active_trip؛ [البطاقة](tasks/W2-ACTIVE-TRIP.md) و[المراجعة](deliveries/W2-ACTIVE-TRIP/REVIEW.md) |
-| W2-CHAT | IMPLEMENTING — تكليف الميزة والمشرف للتكامل من a1199ef | [البطاقة](tasks/W2-CHAT.md)؛ UI-13، محادثة نصية وreceipts ومحاكاة معزولة |
+| W2-CHAT | REVIEW — review_chat يفحص99b364488da6275aabef52cace5296e634084780؛462اختبارًا لدى المشرف | [البطاقة](tasks/W2-CHAT.md) و[التسليم](deliveries/W2-CHAT/HANDOFF.md)؛ UI-13 |
 | W2-COMPLETION | PLANNED — تحتاج تصميمًا | إنهاء الرحلة والتقييم؛ ليست لها صورة مكتملة في المراجع |
 | W2-SUPPORT | PLANNED — تحتاج تحديد نطاق | الدعم/البلاغات والمحتوى القانوني حسب تدفقات العميل |
 
