@@ -74,3 +74,14 @@ version/revision، تأكيدnot-completed/duplicate/conflict/validation/401/403
 اختباراتvalidation/idempotency/lost response/reload/late replies/close/session/
 identity/invalidack وcodec/Postman؛ صورwidget renders فعليةمفتوحةومراجعة.
 format/analyze/fulltests وl10n/JSON/diff، ثمSHA وتسليمومراجع مستقل وفحصالمجموع.
+
+## تحديث تسليم المشرف — 2026-11-09
+
+الحالة REVIEW؛ المنفذ الأصلي توقف برسالة usage limit. حُفظت تغييراته
+المملوكة في كوميت وجُمعت إلى فرع التكامل؛ أكمل المشرف النواقص والعقود
+والتحقق بنفسه. المرشح `7c040f7d9954033530d724237d382780b563bbea`
+على codex/w2-final-features-integration؛569 اختبارًا ناجحًا، analyze نظيف،
+format307/0 و76 اختبار مقارنة UI ناجحًا دون تحديث.
+التسليم: docs/engineering/deliveries/W2-COMPLETION/HANDOFF.md.
+المراجعة المستقلة معلقة وغير مسندة؛ لا اعتماد أو دمج نهائي. بطاقة
+W2-FINAL-REVIEW تراجع الميزتين والتغييرات المشتركة على SHA واحد.
