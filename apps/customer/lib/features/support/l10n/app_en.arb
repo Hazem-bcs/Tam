@@ -1,0 +1,60 @@
+{
+  "@@locale": "en",
+  "supportTitle": "Help and support",
+  "supportIntro": "Create a general support request or choose a trip to report an issue.",
+  "supportNewTicket": "New support request",
+  "supportChooseTrip": "Choose a trip to report",
+  "supportMyTickets": "My support requests",
+  "supportEmpty": "No support requests yet.",
+  "supportLoading": "Loading",
+  "supportLoadMore": "Load more",
+  "supportCategory": "Category",
+  "supportBody": "Request details",
+  "supportBodyHint": "Enter 10 to 2000 characters, excluding surrounding whitespace.",
+  "supportSubmit": "Send request",
+  "supportSending": "Sending",
+  "supportCreated": "Support request created",
+  "supportRetry": "Retry",
+  "supportUncertain": "Delivery could not be confirmed. Your details are locked; retry with the same request ID to avoid a duplicate.",
+  "supportBodyValidation": "The text must contain 10 to 2000 characters after trimming whitespace.",
+  "supportInvalidCategory": "Choose a valid category for this request.",
+  "supportNotFound": "This request or trip is unavailable for this account.",
+  "supportSessionEnded": "The session ended. Support data has been removed from this page.",
+  "supportConflict": "This request ID was used with different details. This request could not be confirmed.",
+  "supportOffline": "Unable to connect. Try again when the network is available.",
+  "supportUnavailable": "Support is currently unavailable. Try again later.",
+  "supportStatusOpen": "Open",
+  "supportStatusInProgress": "In progress",
+  "supportStatusResolved": "Resolved",
+  "supportTicketDetails": "Support request details",
+  "supportTerms": "Terms and conditions",
+  "supportPrivacy": "Privacy policy",
+  "supportLegalUnpublished": "Approved content has not been published yet. It will appear here once supplied and approved.",
+  "supportTicketReference": "Support request: {id}",
+  "@supportTicketReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportTripReference": "Trip: {id}",
+  "@supportTripReference": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "supportLegalVersion": "Version {version} · Published {date}",
+  "@supportLegalVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}
