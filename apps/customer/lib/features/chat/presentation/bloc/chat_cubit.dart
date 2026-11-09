@@ -43,7 +43,7 @@ final class ChatCubit extends Cubit<ChatState> {
     ).join();
   }
 
-  int _epoch = 0, _request = 0, _acknowledgedThrough = 0;
+  int _epoch = 0, _request = 0, _olderRequest = 0, _acknowledgedThrough = 0;
   bool _active = true,
       _reading = false,
       _identityLost = false,
@@ -109,6 +109,16 @@ final class ChatCubit extends Cubit<ChatState> {
         .toList();
   }
 
+  bool _hasNewGap(ChatMessagePage page) {
+    if (page.messages.isEmpty) return false;
+    final first = page.messages.first.sequence;
+    // A send acknowledgement may already be ahead of the fetched page.
+    final preceding = state.messages
+        .where((m) => m.sequence < first)
+        .lastOrNull;
+    return first > (preceding?.sequence ?? 0) + 1;
+  }
+
   Future<void> refresh() async {
     if (isClosed || state.sessionEnded || !_active) return;
     final epoch = _epoch, request = ++_request;
@@ -126,11 +136,7 @@ final class ChatCubit extends Cubit<ChatState> {
         pending: _reconcile(messages),
         loading: false,
         loaded: true,
-        replaceCursor:
-            !state.loaded ||
-            (page.messages.isNotEmpty &&
-                page.messages.first.sequence >
-                    (state.messages.lastOrNull?.sequence ?? 0) + 1),
+        replaceCursor: !state.loaded || _hasNewGap(page),
         nextBeforeSequence: page.nextBeforeSequence,
       );
     } on ChatFailure catch (failure) {
@@ -160,11 +166,11 @@ final class ChatCubit extends Cubit<ChatState> {
         !_active) {
       return;
     }
-    final epoch = _epoch;
+    final epoch = _epoch, request = ++_olderRequest, latestRequest = _request;
     _update(loadingOlder: true, failure: state.failure);
     try {
       final page = await repository.fetch(tripId, beforeSequence: before);
-      if (!_valid(epoch) || !_active) return;
+      if (!_valid(epoch) || request != _olderRequest || !_active) return;
       final metadata = _metadata(page.metadata);
       final messages = _merge(page.messages);
       _update(
@@ -172,11 +178,15 @@ final class ChatCubit extends Cubit<ChatState> {
         messages: messages,
         pending: _reconcile(messages),
         loadingOlder: false,
-        replaceCursor: true,
+        replaceCursor: state.nextBeforeSequence == before,
         nextBeforeSequence: page.nextBeforeSequence,
       );
     } on ChatFailure catch (failure) {
-      if (!_valid(epoch)) return;
+      if (!_valid(epoch) || request != _olderRequest) return;
+      if (latestRequest != _request) {
+        _update(loadingOlder: false, failure: state.failure);
+        return;
+      }
       if ({
         'DRIVER_CHANGED',
         'CHAT_UNAVAILABLE',
@@ -186,8 +196,13 @@ final class ChatCubit extends Cubit<ChatState> {
       }
       if (_valid(epoch)) _update(loadingOlder: false, failure: failure.code);
     } catch (_) {
-      if (_valid(epoch)) {
-        _update(loadingOlder: false, failure: 'INVALID_RESPONSE');
+      if (_valid(epoch) && request == _olderRequest) {
+        _update(
+          loadingOlder: false,
+          failure: latestRequest == _request
+              ? 'INVALID_RESPONSE'
+              : state.failure,
+        );
       }
     }
   }
@@ -322,6 +337,10 @@ final class ChatCubit extends Cubit<ChatState> {
   void setActive(bool value) {
     _active = value;
     _request++;
+    _olderRequest++;
+    if (state.loadingOlder) {
+      _update(loadingOlder: false, failure: state.failure);
+    }
     if (value) refresh();
   }
 

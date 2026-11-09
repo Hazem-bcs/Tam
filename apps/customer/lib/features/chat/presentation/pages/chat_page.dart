@@ -16,6 +16,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   final _scroll = ScrollController();
+  final _timelineKey = GlobalKey(), _latestMessageKey = GlobalKey();
   bool _resumed = true, _atNewest = true;
   int _lastSequence = 0;
   @override
@@ -48,7 +49,18 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       }
       final cubit = context.read<ChatCubit>();
       final last = cubit.state.messages.lastOrNull;
-      if (last != null) cubit.displayedThrough(last.sequence);
+      final messageBox = _latestMessageKey.currentContext?.findRenderObject();
+      final viewport = _timelineKey.currentContext?.findRenderObject();
+      if (last != null &&
+          messageBox is RenderBox &&
+          viewport is RenderBox &&
+          messageBox.hasSize &&
+          viewport.hasSize &&
+          (messageBox.localToGlobal(Offset.zero) & messageBox.size).overlaps(
+            viewport.localToGlobal(Offset.zero) & viewport.size,
+          )) {
+        cubit.displayedThrough(last.sequence);
+      }
     });
   }
 
@@ -114,6 +126,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       ),
                       Expanded(
                         child: ChatTimeline(
+                          key: _timelineKey,
+                          latestMessageKey: _latestMessageKey,
                           state: state,
                           controller: _scroll,
                           onLoadOlder: cubit.loadOlder,

@@ -9,11 +9,13 @@ import 'chat_message_bubble.dart';
 class ChatTimeline extends StatelessWidget {
   const ChatTimeline({
     super.key,
+    this.latestMessageKey,
     required this.state,
     required this.controller,
     required this.onLoadOlder,
     required this.onRetry,
   });
+  final Key? latestMessageKey;
   final ChatState state;
   final ScrollController controller;
   final VoidCallback onLoadOlder;
@@ -66,7 +68,9 @@ class ChatTimeline extends StatelessWidget {
         }
         final message = state.messages[chronological];
         return ChatMessageBubble(
-          key: ValueKey(message.id),
+          key: message == state.messages.last && latestMessageKey != null
+              ? latestMessageKey
+              : ValueKey(message.id),
           body: message.body,
           sentAt: message.sentAt,
           customer: message.author == ChatAuthor.customer,
