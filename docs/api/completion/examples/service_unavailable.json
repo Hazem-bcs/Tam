@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "SERVICE_UNAVAILABLE",
+    "message": {
+      "ar": "الخدمة غير متاحة مؤقتًا.",
+      "en": "The service is temporarily unavailable."
+    }
+  }
+}

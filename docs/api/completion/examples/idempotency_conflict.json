@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "IDEMPOTENCY_CONFLICT",
+    "message": {
+      "ar": "المفتاح مستخدم لطلب مختلف.",
+      "en": "The key was used for a different request."
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import '../../domain/completion_repository.dart';
 import 'completion_state.dart';
 export 'completion_state.dart';
@@ -67,6 +68,7 @@ final class CompletionCubit extends Cubit<CompletionState> {
     if (_identityLost ||
         incoming.trip.id != tripId ||
         incoming.revision < 1 ||
+        incoming.trip.status != TripStatus.completed ||
         (rating != null && rating.tripId != tripId) ||
         (old != null &&
             (old.trip.booking != incoming.trip.booking ||
@@ -74,7 +76,29 @@ final class CompletionCubit extends Cubit<CompletionState> {
       _identityLost = true;
       throw const CompletionFailure('INVALID_RESPONSE');
     }
+    if (rating != null &&
+        (rating.id.trim().isEmpty ||
+            rating.idempotencyKey.trim().isEmpty ||
+            rating.stars < 1 ||
+            rating.stars > 5 ||
+            rating.comment != rating.comment.trim() ||
+            rating.comment.runes.length > policy.maxCommentCodePoints ||
+            rating.submittedAt.isBefore(
+              incoming.trip.live?.statusChangedAt ?? incoming.trip.createdAt,
+            ))) {
+      throw const CompletionFailure('INVALID_RESPONSE');
+    }
+    final intent = state.intent;
+    if (rating != null &&
+        intent != null &&
+        rating.idempotencyKey == intent.idempotencyKey &&
+        !intent.matches(rating)) {
+      throw const CompletionFailure('INVALID_RESPONSE');
+    }
     if (old != null && incoming.revision < old.revision) return old;
+    if (old != null && incoming.revision == old.revision && incoming != old) {
+      throw const CompletionFailure('INVALID_RESPONSE');
+    }
     if (old?.rating != null && old!.rating != rating) {
       throw const CompletionFailure('INVALID_RESPONSE');
     }
@@ -84,6 +108,7 @@ final class CompletionCubit extends Cubit<CompletionState> {
   Future<void> refresh() async {
     if (isClosed || state.sessionEnded || _identityLost) return;
     final epoch = _epoch, read = ++_read;
+    final revision = state.completion?.revision;
     _update(loading: state.completion == null, failure: state.failure);
     try {
       final incoming = await repository.fetch(tripId);
@@ -97,11 +122,15 @@ final class CompletionCubit extends Cubit<CompletionState> {
         uncertain: resolved ? false : state.uncertain,
       );
     } on CompletionFailure catch (failure) {
-      if (_valid(epoch) && read == _read) {
+      if (_valid(epoch) &&
+          read == _read &&
+          revision == state.completion?.revision) {
         _update(loading: false, failure: failure.code);
       }
     } catch (_) {
-      if (_valid(epoch) && read == _read) {
+      if (_valid(epoch) &&
+          read == _read &&
+          revision == state.completion?.revision) {
         _update(loading: false, failure: 'INVALID_RESPONSE');
       }
     }
@@ -178,8 +207,12 @@ final class CompletionCubit extends Cubit<CompletionState> {
         await refresh();
       }
     } catch (_) {
-      if (_valid(epoch) && state.completion?.rating == null) {
-        _update(submitting: false, uncertain: true, failure: 'NETWORK_ERROR');
+      if (_valid(epoch)) {
+        if (state.completion?.rating != null) {
+          _update(submitting: false, uncertain: false, clearIntent: true);
+        } else {
+          _update(submitting: false, uncertain: true, failure: 'NETWORK_ERROR');
+        }
       }
     }
   }
