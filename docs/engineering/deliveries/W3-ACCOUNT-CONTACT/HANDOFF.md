@@ -82,6 +82,15 @@ expiry/lockout/retry/session reset/late replies وURI/background/dialer errors.
 اختبارات App تعبر من Settings إلى تغيير/حذف وإنهاء الجلسة وإعادة الدخول
 المحلي، ومن حجز بسائق إلى اتصال محاكى، مع حراسة API للضيف وlocalAccess.
 
+تحقق إضافي للمشرف من Collection المرشح882c9e5: اجتاز مخطط Postman2.1
+الرسمي باستخدام jsonschema.Draft4Validator دون أخطاء. استُخدمت24 قطعة
+من schemas/draft-04/v2.1.0 في مستودع postmanlabs/schemas عند
+`c5fa20c6210207d09b06a23d700f9228c31ad703`؛ جُمعت تعريفاتها بحسب id
+بعد حذف تعليقات JSON من المصادر. أعاد مضيفا schema المباشران403، لذلك
+قُرئت المصادر الرسمية من GitHub. النسخة المجمعة المؤقتة في
+/tmp/tam-postman-v2.1.0-schema.json، ولا يتطلب builder تنزيلًا أو حزمة
+جديدة. هذا تحقق schema محلي، وليس استيرادًا في واجهة Postman أو طلبًا حيًا.
+
 40 صورة في screenshots/ فُتحت فعليًا عبر view_image ومجموعات صور؛ العربية
 والإنجليزية،320/390/800 وlandscape،1x/2x وkeyboard insets محاكية. راجعت
 أيضًا صور ActiveTrip/Settings الحالية بعد إضافة المداخل؛ لا صقل بصري نهائي.
