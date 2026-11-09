@@ -1075,13 +1075,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatNewest => 'أحدث الرسائل';
 
   @override
-  String get chatSent => 'أُرسلت ✓';
+  String get chatSent => 'أُرسلت';
 
   @override
-  String get chatDelivered => 'تم التسليم ✓✓';
+  String get chatDelivered => 'تم التسليم';
 
   @override
-  String get chatRead => 'مقروءة ✓✓';
+  String get chatRead => 'مقروءة';
 
   @override
   String get chatSending => 'جارٍ الإرسال…';
@@ -1109,4 +1109,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String chatCharacterCount(int count, int max) {
     return '$count / $max حرف';
   }
+
+  @override
+  String get chatSimulation => 'محاكاة تطوير';
 }

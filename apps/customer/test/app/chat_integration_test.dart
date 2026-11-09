@@ -1,4 +1,3 @@
-import '../support/fake_auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,8 +9,9 @@ import 'package:tam_customer/features/active_trip/presentation/pages/active_trip
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/chat/presentation/bloc/chat_cubit.dart';
 import 'package:tam_customer/features/chat/presentation/pages/chat_page.dart';
-
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+
+import '../support/fake_auth_repository.dart';
 import 'support/customer_app_harness.dart';
 
 void main() {

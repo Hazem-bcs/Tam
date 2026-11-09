@@ -2087,19 +2087,19 @@ abstract class AppLocalizations {
   /// No description provided for @chatSent.
   ///
   /// In ar, this message translates to:
-  /// **'أُرسلت ✓'**
+  /// **'أُرسلت'**
   String get chatSent;
 
   /// No description provided for @chatDelivered.
   ///
   /// In ar, this message translates to:
-  /// **'تم التسليم ✓✓'**
+  /// **'تم التسليم'**
   String get chatDelivered;
 
   /// No description provided for @chatRead.
   ///
   /// In ar, this message translates to:
-  /// **'مقروءة ✓✓'**
+  /// **'مقروءة'**
   String get chatRead;
 
   /// No description provided for @chatSending.
@@ -2149,6 +2149,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count} / {max} حرف'**
   String chatCharacterCount(int count, int max);
+
+  /// No description provided for @chatSimulation.
+  ///
+  /// In ar, this message translates to:
+  /// **'محاكاة تطوير'**
+  String get chatSimulation;
 }
 
 class _AppLocalizationsDelegate

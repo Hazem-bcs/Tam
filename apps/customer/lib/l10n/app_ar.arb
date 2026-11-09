@@ -463,9 +463,9 @@
   "chatReadOnly": "انتهت الرحلة. المحادثة للقراءة فقط.",
   "chatLoadOlder": "تحميل رسائل أقدم",
   "chatNewest": "أحدث الرسائل",
-  "chatSent": "أُرسلت ✓",
-  "chatDelivered": "تم التسليم ✓✓",
-  "chatRead": "مقروءة ✓✓",
+  "chatSent": "أُرسلت",
+  "chatDelivered": "تم التسليم",
+  "chatRead": "مقروءة",
   "chatSending": "جارٍ الإرسال…",
   "chatFailed": "تعذر الإرسال",
   "chatUncertain": "لم يتأكد الإرسال — حدّث أو أعد المحاولة",
@@ -483,5 +483,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "chatSimulation": "محاكاة تطوير"
 }
