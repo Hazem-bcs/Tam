@@ -1,6 +1,8 @@
 # W3-CUSTOMER-REVIEW — اعتماد منطق العميل وPostman
 
-الحالة READY ثم REVIEW؛ المراجع المسند review_chat مستقل عن تنفيذ W2/W3.
+الحالة APPROVED_AT_SHA511ca9ce2ed24484602c78db283d5ef1fc66eb25؛
+المراجع review_chat مستقل عن تنفيذ W2/W3. رأس التقرير93c663e؛
+[نتيجة المراجعة والفحوص](../deliveries/W3-ACCOUNT-CONTACT/REVIEW.md).
 worktree: /home/hazem/.codex/worktrees/review-customer-api/mashwar
 الفرع codex/review-customer-api. ليس المنفذ مراجعًا لكتابته.
 المرشح `882c9e55ca17bc651f238d0b98abbabe14d877fb`؛ الأساس المعتمد السابق

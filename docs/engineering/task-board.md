@@ -67,17 +67,19 @@ W1-BASE جاهز من ناحية التجهيز والتحقق المحلي؛ ل
 | W2-SCHEDULE | INTEGRATED — المرحلة الأولى؛ 363 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_schedule؛ [البطاقة](tasks/W2-SCHEDULE.md) و[المراجعة](deliveries/W2-SCHEDULE/REVIEW.md) |
 | W2-ACTIVE-TRIP | INTEGRATED — المرحلة الأولى؛409 اختبارات ناجحة بعد الدمج المحلي | المشرف / review_active_trip؛ [البطاقة](tasks/W2-ACTIVE-TRIP.md) و[المراجعة](deliveries/W2-ACTIVE-TRIP/REVIEW.md) |
 | W2-CHAT | INTEGRATED — المرحلة الأولى؛468 اختبارًا ناجحًا بعد الدمج المحلي | المشرف / review_chat؛ [البطاقة](tasks/W2-CHAT.md) و[المراجعة](deliveries/W2-CHAT/REVIEW.md) |
-| W2-COMPLETION | REVIEW — تنفيذ محلي وفحص مكتمل، دون اعتماد مستقل | [البطاقة](tasks/W2-COMPLETION.md)؛ تقييم1..5 وتعليق اختياري وملخص رحلة |
-| W2-SUPPORT | REVIEW — تنفيذ محلي وفحص مكتمل، دون اعتماد مستقل | [البطاقة](tasks/W2-SUPPORT.md)؛ دعم عام/رحلة، والقانوني غير منشور حتى اعتماد نصه |
+| W2-COMPLETION | INTEGRATED — اعتماد الإغلاق المجمع511ca9c؛625 اختبارًا بعد الدمج | [البطاقة](tasks/W2-COMPLETION.md)؛ [المراجعة المستقلة](deliveries/W3-ACCOUNT-CONTACT/REVIEW.md) |
+| W2-SUPPORT | INTEGRATED — اعتماد الإغلاق المجمع511ca9c؛625 اختبارًا بعد الدمج | [البطاقة](tasks/W2-SUPPORT.md)؛ القانوني غير منشور حتى اعتماد نصه |
 
 العناوين والجدولة والرحلة الجارية والمحادثة معتمدة ومدمجة للمرحلة الأولى.
+السجل التالي يصف مرشح W2 قبل مراجعة الإغلاق؛ حُل تعليق اعتماده لاحقًا
+بمراجعة W3 الشاملة منbd24d59 إلى511ca9c كما في سجل الإغلاق أدناه.
 التقييم والدعم منفذان ومفحوصان على `7c040f7d9954033530d724237d382780b563bbea`
 في codex/w2-final-features-integration؛569 اختبارًا و76 اختبار مقارنة UI
 ناجحة، وformat/analyze/l10n/JSON34/diff سليمة. توقف المنفذان عند حد
 الاستخدام؛ حفظ المشرف عملهما وأكمل النواقص. لم تُنفذ مراجعة مستقلة لهذا
 المرشح، لذلك لم يُجمع إلى feat/auth-contract ولم يُسجل INTEGRATED أوAPPROVED.
 [تسليم المرشح](deliveries/W2-FINAL-FEATURES/HANDOFF.md) و[بطاقة المراجعة الجاهزة](tasks/W2-FINAL-REVIEW.md).
-المراجعة غير مسندة بعد؛ يحجز المشرف worktree ويعين المراجع عند توفره.
+لم تكن المراجعة مسندة آنذاك؛ استوعبتها بطاقة W3-CUSTOMER-REVIEW لاحقًا.
 لا حجز جديد لكتابة الميزتين، ولا push/main/Actions. المحفظة/الكوبونات والخدمات الأخرى تحتاج قرار منتج وتصميم عميل،
 ولا يُستخدم تصميم محفظة السائق بديلًا عنها.
 
@@ -153,20 +155,29 @@ Integration SHA and branch / unresolved limitations:
 
 | المهمة | الحالة | المالك | البطاقة |
 |---|---|---|---|
-| W3-ACCOUNT-CONTACT | REVIEW — المرشح882c9e5؛618 اختبارًا ناجحًا | المشرف root، فرع codex/customer-backend-handoff | [التكليف](tasks/W3-ACCOUNT-CONTACT.md) |
+| W3-ACCOUNT-CONTACT | INTEGRATED — اعتماد511ca9c؛625 اختبارًا بعد الدمج | المشرف root / review_chat | [التكليف](tasks/W3-ACCOUNT-CONTACT.md) |
+| W3-CUSTOMER-REVIEW | APPROVED_AT_SHA511ca9c — شمل W2 وW3 كاملين | review_chat، فرع codex/review-customer-api | [التقرير](deliveries/W3-ACCOUNT-CONTACT/REVIEW.md) |
 
 يشمل حذف الحساب وتغيير الرقم والاتصال بالسائق، ثم تجميع ومراجعة Postman
 موحد. المحفظة والدفع الإلكتروني والكوبونات مؤجلة. لا يتطلب العمل باكندًا
 حيًا؛ لا يبدأ الصقل البصري حتى تسليم العقد المتفق عليه.
 
-مرشح إغلاق منطق العميل `882c9e55ca17bc651f238d0b98abbabe14d877fb`
+مرشح إغلاق منطق العميل الأصلي `882c9e55ca17bc651f238d0b98abbabe14d877fb`
 يتضمن تغييرات الرقم والحذف والاتصال وPostman موحدًا بـ14 مجلدًا و58 مثال
 طلب. format334/0 وanalyze و618 اختبارًا و92 مقارنة UI وستة اختبارات
 Python وJSON218 وl10n/Postman --check/diff ناجحة. المراجعة المستقلة تشمل
 W2 السابق غير المعتمد وW3 معًا؛ [بطاقة المراجعة](tasks/W3-CUSTOMER-REVIEW.md)
-و[التسليم](deliveries/W3-ACCOUNT-CONTACT/HANDOFF.md). لا اعتماد نهائي أوpush/main/Actions.
+و[التسليم](deliveries/W3-ACCOUNT-CONTACT/HANDOFF.md). هذه نتائج المرشح قبل إصلاحات المراجعة.
 
 تعيين المراجعة: review_chat على codex/review-customer-api داخل worktree
 /home/hazem/.codex/worktrees/review-customer-api/mashwar من882c9e5؛
 المجلدات القديمة محفوظة بتوليداتها غير الملتزم بها ولا تُستخدم للكتابة.
-التكليف مراجعة مستقلة، وليس اعتمادًا قبل صدور تقرير على SHA محدد.
+اكتملت المراجعة الشاملة عند511ca9ce2ed24484602c78db283d5ef1fc66eb25؛
+الرأس93c663effa3fec72061d762f370decb6751b7cba يضيف التقرير فقط.
+أصلح المراجع إبطال OTP وسباق أهلية/هوية الاتصال وظهور الصفحة، وأضاف7
+اختبارات.625 اختبارًا و92 مقارنة UI وPython6 وJSON218 وschema والتوليد سليمة.
+دُمج المعتمد دون تعارض محليًا عند0409a37، والتقرير عندb775ccc، في
+codex/customer-backend-handoff. تحقق المشرف من تطابق الكود/API/scripts
+مع511ca9c وأعاد التنسيق336/0 والتحليل وكامل625 اختبارًا وPython6 وJSON218
+وl10n/Postman/schema/diff؛ جميعها سليمة. الملف BACKEND_HANDOFF_PROPOSAL
+صالح لتسليم طلب التنفيذ، وليس API حيًا. لا push/main/Actions أو Android build.
