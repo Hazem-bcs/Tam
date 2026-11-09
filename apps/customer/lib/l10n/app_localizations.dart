@@ -2023,6 +2023,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'محادثة السائق'**
   String get activeTripChat;
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق'**
+  String get chatTitle;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get chatRetry;
+
+  /// No description provided for @chatMessageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب رسالة…'**
+  String get chatMessageHint;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get chatSend;
+
+  /// No description provided for @chatRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث المحادثة'**
+  String get chatRefresh;
+
+  /// No description provided for @chatLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل المحادثة'**
+  String get chatLoading;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رسائل بعد'**
+  String get chatEmpty;
+
+  /// No description provided for @chatReadOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الرحلة. المحادثة للقراءة فقط.'**
+  String get chatReadOnly;
+
+  /// No description provided for @chatLoadOlder.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل رسائل أقدم'**
+  String get chatLoadOlder;
+
+  /// No description provided for @chatNewest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحدث الرسائل'**
+  String get chatNewest;
+
+  /// No description provided for @chatSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسلت ✓'**
+  String get chatSent;
+
+  /// No description provided for @chatDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم ✓✓'**
+  String get chatDelivered;
+
+  /// No description provided for @chatRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقروءة ✓✓'**
+  String get chatRead;
+
+  /// No description provided for @chatSending.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الإرسال…'**
+  String get chatSending;
+
+  /// No description provided for @chatFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الإرسال'**
+  String get chatFailed;
+
+  /// No description provided for @chatUncertain.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتأكد الإرسال — حدّث أو أعد المحاولة'**
+  String get chatUncertain;
+
+  /// No description provided for @chatValidation.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رسالة من ١ إلى ١٠٠٠ حرف.'**
+  String get chatValidation;
+
+  /// No description provided for @chatUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثة غير متاحة لهذا السائق أو هذه الرحلة.'**
+  String get chatUnavailable;
+
+  /// No description provided for @chatSessionEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت الجلسة. ارجع إلى الرئيسية.'**
+  String get chatSessionEnded;
+
+  /// No description provided for @chatConnectionError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الاتصال. آخر الرسائل محفوظة؛ حدّث للمحاولة مجددًا.'**
+  String get chatConnectionError;
+
+  /// No description provided for @chatCharacterCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} / {max} حرف'**
+  String chatCharacterCount(int count, int max);
 }
 
 class _AppLocalizationsDelegate

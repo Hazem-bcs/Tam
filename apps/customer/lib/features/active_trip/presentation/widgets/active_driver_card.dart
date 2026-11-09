@@ -17,22 +17,26 @@ class ActiveDriverCard extends StatelessWidget {
       onTap: () => showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
+          insetPadding: const EdgeInsets.all(AppSpacing.lg),
           scrollable: true,
           title: Text(name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.directions_car_outlined, size: 48),
-              const SizedBox(height: AppSpacing.md),
-              Text(vehicle),
-              const SizedBox(height: AppSpacing.md),
-              Text(l.activeTripPlate(driver.plate)),
-              const SizedBox(height: AppSpacing.md),
-              Text(l.activeTripRating(driver.rating.toStringAsFixed(1))),
-              const SizedBox(height: AppSpacing.md),
-              Text(l.activeTripContactPending),
-            ],
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Icon(Icons.directions_car_outlined, size: 48),
+                const SizedBox(height: AppSpacing.md),
+                Text(vehicle),
+                const SizedBox(height: AppSpacing.md),
+                Text(l.activeTripPlate(driver.plate)),
+                const SizedBox(height: AppSpacing.md),
+                Text(l.activeTripRating(driver.rating.toStringAsFixed(1))),
+                const SizedBox(height: AppSpacing.md),
+                Text(l.activeTripContactPending),
+              ],
+            ),
           ),
           actions: [
             TextButton(

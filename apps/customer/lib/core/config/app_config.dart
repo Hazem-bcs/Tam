@@ -1,7 +1,7 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
-import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
+import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
 abstract final class AppConfig {
   static const rideSchedulePolicy = RideSchedulePolicy();

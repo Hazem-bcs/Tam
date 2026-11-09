@@ -1063,4 +1063,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeTripChat => 'Chat with driver';
+
+  @override
+  String get chatTitle => 'Driver';
+
+  @override
+  String get chatRetry => 'Retry';
+
+  @override
+  String get chatMessageHint => 'Write a message…';
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String get chatRefresh => 'Refresh conversation';
+
+  @override
+  String get chatLoading => 'Loading conversation';
+
+  @override
+  String get chatEmpty => 'No messages yet';
+
+  @override
+  String get chatReadOnly =>
+      'This trip has ended. This conversation is read only.';
+
+  @override
+  String get chatLoadOlder => 'Load older messages';
+
+  @override
+  String get chatNewest => 'Newest messages';
+
+  @override
+  String get chatSent => 'Sent ✓';
+
+  @override
+  String get chatDelivered => 'Delivered ✓✓';
+
+  @override
+  String get chatRead => 'Read ✓✓';
+
+  @override
+  String get chatSending => 'Sending…';
+
+  @override
+  String get chatFailed => 'Failed to send';
+
+  @override
+  String get chatUncertain => 'Send unconfirmed — refresh or retry';
+
+  @override
+  String get chatValidation => 'Enter a message from 1 to 1000 characters.';
+
+  @override
+  String get chatUnavailable =>
+      'Conversation unavailable for this driver or trip.';
+
+  @override
+  String get chatSessionEnded => 'Session ended. Return to Home.';
+
+  @override
+  String get chatConnectionError =>
+      'Connection failed. Previous messages are retained; refresh to try again.';
+
+  @override
+  String chatCharacterCount(int count, int max) {
+    return '$count / $max characters';
+  }
 }

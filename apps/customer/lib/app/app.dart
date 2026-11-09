@@ -14,10 +14,6 @@ import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario
 import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
-import 'package:tam_customer/features/chat/domain/chat_repository.dart';
-import 'package:tam_customer/features/chat/data/mock/mock_chat_repository.dart';
-import 'package:tam_customer/features/chat/data/mock/chat_mock_scenario.dart';
-import 'package:tam_customer/features/chat/data/unavailable_chat_repository.dart';
 import 'package:tam_customer/features/addresses/data/mock/mock_addresses_repository.dart';
 import 'package:tam_customer/features/addresses/data/ride_address_place_search.dart';
 import 'package:tam_customer/features/addresses/data/unavailable_addresses_repository.dart';
@@ -25,6 +21,10 @@ import 'package:tam_customer/features/addresses/domain/addresses_repository.dart
 import 'package:tam_customer/features/auth/auth_dependencies.dart';
 import 'package:tam_customer/features/auth/domain/auth_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
+import 'package:tam_customer/features/chat/data/mock/chat_mock_scenario.dart';
+import 'package:tam_customer/features/chat/data/mock/mock_chat_repository.dart';
+import 'package:tam_customer/features/chat/data/unavailable_chat_repository.dart';
+import 'package:tam_customer/features/chat/domain/chat_repository.dart';
 import 'package:tam_customer/features/notifications/data/mock/mock_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/data/unavailable_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';

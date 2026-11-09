@@ -1,3 +1,4 @@
+import '../support/fake_auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,10 +8,10 @@ import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/pages/active_trip_page.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
+import 'package:tam_customer/features/chat/presentation/bloc/chat_cubit.dart';
 import 'package:tam_customer/features/chat/presentation/pages/chat_page.dart';
-import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
-import '../support/fake_auth_repository.dart';
+import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 import 'support/customer_app_harness.dart';
 
 void main() {
@@ -55,6 +56,7 @@ void main() {
     expect(find.byType(ChatPage), findsOneWidget);
     const body = 'أنا عند المدخل الرئيسي الآن';
     await tester.enterText(find.byKey(const Key('chat-input')), body);
+    await tester.pump();
     await tester.tap(find.byKey(const Key('chat-send')));
     await tester.pumpAndSettle();
     expect(find.text(body), findsOneWidget);
@@ -64,6 +66,21 @@ void main() {
     router.push(AppRoutes.chatLocation(id));
     await tester.pumpAndSettle();
     expect(find.text(body), findsOneWidget);
+    final reopened = tester.element(find.byType(ChatPage)).read<ChatCubit>();
+    expect(reopened.state.messages.where((m) => m.body == body), hasLength(1));
+    await showCustomerHome(tester, router);
+    router.push(AppRoutes.tripLocation(id));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('إلغاء الرحلة'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('تأكيد الإلغاء'));
+    await tester.pumpAndSettle();
+    await showCustomerHome(tester, router);
+    router.push(AppRoutes.chatLocation(id));
+    await tester.pumpAndSettle();
+    final closed = tester.element(find.byType(ChatPage)).read<ChatCubit>();
+    expect(closed.state.canSend, isFalse);
+    expect(closed.state.messages.where((m) => m.body == body), hasLength(1));
     await showCustomerHome(tester, router);
     await customerAuth(tester).logout();
     await tester.pumpAndSettle();
@@ -72,10 +89,47 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ChatPage), findsOneWidget);
     expect(find.text(body), findsNothing);
-    expect(find.byKey(const Key('chat-send')), findsNothing);
+    expect(
+      tester.element(find.byType(ChatPage)).read<ChatCubit>().state.canSend,
+      isFalse,
+    );
     await tester.pumpWidget(const SizedBox.shrink());
     expect(tester.takeException(), isNull);
   });
+  testWidgets(
+    'authenticated API chat exposes unavailable transport without mocks',
+    (tester) async {
+      final repository = FakeAuthRepository(latency: Duration.zero);
+      final challenge = await repository.requestOtp(phoneE164: '+963941234567');
+      final verified = await repository.verifyOtp(
+        challengeId: challenge.id,
+        code: repository.debugOtpCode!,
+      );
+      final store = MemoryAuthSessionStore();
+      await store.write(verified.session);
+      await tester.pumpWidget(
+        TamApp(
+          authRepository: repository,
+          sessionStore: store,
+          dataModes: const FeatureDataModes(
+            overrides: {CustomerFeature.chat: FeatureDataMode.api},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      customerRouter(tester).go(AppRoutes.chatLocation('mock-trip-1'));
+      await tester.pumpAndSettle();
+      final state = tester
+          .element(find.byType(ChatPage))
+          .read<ChatCubit>()
+          .state;
+      expect(state.failure, 'SERVICE_UNAVAILABLE');
+      expect(state.messages, isEmpty);
+      expect(state.canSend, isFalse);
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(tester.takeException(), isNull);
+    },
+  );
   for (final guest in [true, false]) {
     testWidgets('API chat blocks ${guest ? 'guest' : 'localAccess'}', (
       tester,

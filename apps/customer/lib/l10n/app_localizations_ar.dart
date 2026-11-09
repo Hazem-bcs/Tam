@@ -1043,4 +1043,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeTripChat => 'محادثة السائق';
+
+  @override
+  String get chatTitle => 'السائق';
+
+  @override
+  String get chatRetry => 'إعادة المحاولة';
+
+  @override
+  String get chatMessageHint => 'اكتب رسالة…';
+
+  @override
+  String get chatSend => 'إرسال';
+
+  @override
+  String get chatRefresh => 'تحديث المحادثة';
+
+  @override
+  String get chatLoading => 'جارٍ تحميل المحادثة';
+
+  @override
+  String get chatEmpty => 'لا توجد رسائل بعد';
+
+  @override
+  String get chatReadOnly => 'انتهت الرحلة. المحادثة للقراءة فقط.';
+
+  @override
+  String get chatLoadOlder => 'تحميل رسائل أقدم';
+
+  @override
+  String get chatNewest => 'أحدث الرسائل';
+
+  @override
+  String get chatSent => 'أُرسلت ✓';
+
+  @override
+  String get chatDelivered => 'تم التسليم ✓✓';
+
+  @override
+  String get chatRead => 'مقروءة ✓✓';
+
+  @override
+  String get chatSending => 'جارٍ الإرسال…';
+
+  @override
+  String get chatFailed => 'تعذر الإرسال';
+
+  @override
+  String get chatUncertain => 'لم يتأكد الإرسال — حدّث أو أعد المحاولة';
+
+  @override
+  String get chatValidation => 'أدخل رسالة من ١ إلى ١٠٠٠ حرف.';
+
+  @override
+  String get chatUnavailable => 'المحادثة غير متاحة لهذا السائق أو هذه الرحلة.';
+
+  @override
+  String get chatSessionEnded => 'انتهت الجلسة. ارجع إلى الرئيسية.';
+
+  @override
+  String get chatConnectionError =>
+      'تعذر الاتصال. آخر الرسائل محفوظة؛ حدّث للمحاولة مجددًا.';
+
+  @override
+  String chatCharacterCount(int count, int max) {
+    return '$count / $max حرف';
+  }
 }
