@@ -219,6 +219,22 @@ void main() {
     },
   );
   test(
+    'clock reversal before the first live snapshot does not crash the engine',
+    () async {
+      final trip = fixture.book();
+      fixture.now = fixture.now.subtract(const Duration(seconds: 2));
+      final snapshot = await fixture.repository.fetch(trip.id);
+      expect(snapshot!.status, TripStatus.requested);
+      expect(snapshot.live!.updatedAt, trip.createdAt);
+      expect(await fixture.repository.current(), snapshot);
+      fixture.advance(5);
+      expect(
+        (await fixture.repository.fetch(trip.id))!.status,
+        TripStatus.driverEnRoute,
+      );
+    },
+  );
+  test(
     'no-driver scenario is terminal and excluded from active history',
     () async {
       final other = ActiveTripFixture(scenario: ActiveTripScenario.noDriver);
