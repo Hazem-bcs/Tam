@@ -2,7 +2,8 @@
 
 التاريخ:2026-11-09. الدور: المشرف/منفذ الميزة. الأساس
 `276504da4dc6692ae13b21a441db2a7c5563174c`، وفرع codex/w2-active-trip.
-الحكم قبل المراجعة READY_FOR_REVIEW؛ يرسل SHA الحفظ الفعلي للمراجع المستقل.
+حكم التسليم الأول READY_FOR_REVIEW عند `8c08ac7b2ccad85ed9ac03a7025c6f2c4b31232d`.
+الحالة النهائية INTEGRATED؛ الاعتماد والتكامل والفحوص النهائية أدناه.
 
 ## السياق والملكية
 
@@ -107,3 +108,28 @@ GET /trips/current وGET /trips/{id}/live وPOST /trips/{id}/cancel الموجو
 والإنجليزية وخط2x؛ اختبارات التمرير تصل للبطاقة/الإغلاق/الإلغاء حتى
 عندما لا تظهر كل العناصر في لقطة واحدة. لا Android build أو محاكي
 أو push أو main أو GitHub Actions.
+
+## نتيجة المراجعة والتكامل النهائي
+
+اعتمد review_active_trip الكود عند `cb60f95e1697732d2e9125870440c6290eb1b4da`؛
+رأس فرع المراجعة `d952046b557a5e73158095d9784ac87bda941f33` يضيف [التقرير](REVIEW.md) فقط.
+أصلح عيب P2 مثبتًا: تراجع ساعة الجهاز قبل أول snapshot كان ينتج updatedAt
+أقدم من createdAt ويرفضه المخزن باستثناء. حُدّ الزمن الأولي بتاريخ الإنشاء،
+وأضيف اختبار يثبت صحة أول snapshot/current ثم استمرار التقدم.
+
+دُمج رأس المراجعة دون تعارض في codex/w2-active-trip-integration عند
+`961f1e62bfc54044077f3287aae98d13cfd37366`، ثم جُمع إلى feat/auth-contract المحلي.
+تحقق المشرف من تطابق apps/customer وdocs/api وscripts/dev مع SHA الكود
+المعتمد؛ الاختلافات فقط تقارير وحالة المهمة. أعاد على مرشح التكامل:
+
+- `dart format --output=none --set-exit-if-changed lib test`:232 ملفًا،0 تغيير.
+- `flutter analyze --no-pub`:No issues found.
+- `flutter test --no-pub --reporter expanded`:409 PASS؛ السجل المؤقت
+  `/tmp/tam-active-integration-tests.log`.
+- `python3 scripts/dev/sync_feature_l10n.py --check` وgit diff --check:ناجحان.
+- تحليل20 ملفJSON في docs/api/active_trip:ناجح.
+
+أعاد المراجع مستقلًا الفحوص نفسها وgen-l10n، وقارن golden15 دون تحديث،
+وفتح UI-12/UI-15 وصور التسليم19. بقيت الحدود المذكورة كما هي: محاكاة داخل
+عمر العملية، واجهة مرحلة أولى، دون backend/GPS/مكالمات/محادثة حية.
+لم يحدث push أو main أو Actions أو Android build أو تشغيل محاكي في هذه المهمة.

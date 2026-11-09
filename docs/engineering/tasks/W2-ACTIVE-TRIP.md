@@ -56,3 +56,15 @@ landscape وRTL/LTR و2x والكيبورد وحالات الفراغ/الخطأ
 والإلغاء/فقد الرد/الجلسة والطرق، وصور فعلية من widget renderer مفحوصة.
 format/analyze/full tests وl10n/JSON/diff، ثم مراجعة مستقلة عند SHA محدد.
 لا push أو main أو Actions أو builds مكلفة.
+
+## الإغلاق والتكامل المحلي
+
+الحالة النهائية INTEGRATED للمرحلة الأولى في 2026-11-09.
+التنفيذ `8c08ac7b2ccad85ed9ac03a7025c6f2c4b31232d`؛ الاعتماد المستقل
+`cb60f95e1697732d2e9125870440c6290eb1b4da` بعد إصلاح تراجع الساعة الأولي واختباره.
+رأس المراجعة `d952046b557a5e73158095d9784ac87bda941f33` تقرير فقط فوقه.
+مرشح التكامل `961f1e62bfc54044077f3287aae98d13cfd37366` على codex/w2-active-trip-integration
+مطابق للكود/الاختبارات/API المعتمدة، ثم جُمع محليًا إلى feat/auth-contract.
+409 اختبارات ناجحة بعد الدمج، format232/0 وanalyze وl10n وJSON20 وdiff سليمة.
+[التسليم](../deliveries/W2-ACTIVE-TRIP/HANDOFF.md) و[المراجعة](../deliveries/W2-ACTIVE-TRIP/REVIEW.md).
+لا رفع أو main أو Actions أو بناء Android أو تشغيل محاكي جديد؛ الصقل البصري مرحلة ثانية.
