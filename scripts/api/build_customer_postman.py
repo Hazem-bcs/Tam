@@ -133,13 +133,13 @@ def build(root):
             'request_examples': sum(1 for _ in request_items(items)),
         })
     collection = {
-        'info': {'name': 'TAM | تم — Customer API Contract v1 — REVIEW REQUIRED',
+        'info': {'name': 'TAM | تم — Customer API Contract v1 — BACKEND HANDOFF PROPOSAL',
                  'description': description,
                  'schema': 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'},
         'auth': {'type': 'noauth'}, 'variable': variables, 'item': folders,
     }
     validate(collection)
-    manifest = {'version': 1, 'status': 'REVIEW_REQUIRED',
+    manifest = {'version': 1, 'status': 'BACKEND_HANDOFF_PROPOSAL',
                 'request_examples': sum(entry['request_examples'] for entry in entries),
                 'scope': 'Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons',
                 'overview_sha256': hashlib.sha256((api / 'customer-api-v1.md').read_bytes()).hexdigest(),

@@ -39,6 +39,11 @@ abstract interface class DeviceLocation {
   Future<GeoPoint> locate();
 }
 
+abstract interface class MapAttribution {
+  /// Opens license information only after an explicit user action.
+  Future<void> open();
+}
+
 final class MapsFailure implements Exception {
   const MapsFailure(this.code);
   final String code;

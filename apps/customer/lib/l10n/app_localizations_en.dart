@@ -1610,4 +1610,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsInvalidInput => 'Check the selected point or search input.';
+
+  @override
+  String get mapsAttributionUnavailable =>
+      'Could not open map license information. Please try again.';
 }

@@ -4,6 +4,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 
 import 'data/api_maps_repository.dart';
 import 'data/device_location_adapter.dart';
+import 'data/maps_attribution_adapter.dart';
 import 'data/private_tile_provider.dart';
 import 'domain/maps_repository.dart';
 
@@ -12,12 +13,14 @@ final class MapsDependencies {
     required this.configuration,
     required this.repository,
     required this.deviceLocation,
+    this.attribution = const MapsAttributionAdapter(),
     this.client,
     this.tileProviderFactory,
   });
   final MapConfiguration configuration;
   final MapsRepository repository;
   final DeviceLocation deviceLocation;
+  final MapAttribution attribution;
   final Dio? client;
   final TileProvider Function(String)? tileProviderFactory;
   factory MapsDependencies.configured(MapConfiguration configuration) {

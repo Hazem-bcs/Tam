@@ -45,6 +45,7 @@ class RouteMapView extends StatelessWidget {
               height: height,
               child: TamMapCanvas(
                 configuration: dependencies.configuration,
+                onAttribution: dependencies.attribution.open,
                 tileProviderFactory: dependencies.tileProviderFactory,
                 origin: origin,
                 destination: destination,

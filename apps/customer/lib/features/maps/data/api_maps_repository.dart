@@ -9,13 +9,14 @@ final class ApiMapsRepository implements MapsRepository {
   final Dio client;
   Future<T> _read<T>(
     Future<Response<dynamic>> Function() request,
-    T Function(Object?) decode,
-  ) async {
+    T Function(Object?) decode, {
+    String notFoundCode = 'LOCATION_NOT_FOUND',
+  }) async {
     try {
       return decode((await request()).data);
     } on DioException catch (error) {
       final code = switch (error.response?.statusCode) {
-        404 => 'LOCATION_NOT_FOUND',
+        404 => notFoundCode,
         422 => 'VALIDATION_ERROR',
         429 => 'RATE_LIMITED',
         _ => 'SERVICE_UNAVAILABLE',
@@ -81,6 +82,7 @@ final class ApiMapsRepository implements MapsRepository {
         },
       ),
       (raw) => MapsCodec.route(raw, origin, destination),
+      notFoundCode: 'ROUTE_NOT_FOUND',
     );
   }
 }

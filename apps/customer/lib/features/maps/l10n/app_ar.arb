@@ -24,5 +24,6 @@
   "mapsSearch": "البحث عن مكان",
   "mapsConfirmLocation": "تأكيد الموقع",
   "mapsRouteFailed": "تعذر تحميل مسار الطريق من خدمة تم.",
-  "mapsInvalidInput": "راجع الموقع أو نص البحث المدخل."
+  "mapsInvalidInput": "راجع الموقع أو نص البحث المدخل.",
+  "mapsAttributionUnavailable": "تعذر فتح معلومات حقوق الخريطة. حاول مجددًا."
 }

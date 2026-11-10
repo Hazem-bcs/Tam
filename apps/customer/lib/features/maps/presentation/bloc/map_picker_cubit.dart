@@ -63,8 +63,7 @@ final class MapPickerCubit extends Cubit<MapPickerState> {
   void choose(TripLocation location) {
     if (isClosed) return;
     _selection++;
-    _search++;
-    _debounce?.cancel();
+    _cancelSearch();
     emit(MapPickerState(point: location.point, label: location.label));
   }
 
@@ -107,7 +106,24 @@ final class MapPickerCubit extends Cubit<MapPickerState> {
   Future<void> select(GeoPoint point) async {
     if (isClosed) return;
     final generation = ++_selection, labelRevision = ++_label;
-    emit(state.copy(point: point, label: '', busy: true));
+    _cancelSearch();
+    emit(
+      state.copy(
+        point: point,
+        label: '',
+        busy: true,
+        results: [],
+        searching: false,
+      ),
+    );
+    await _reverse(point, generation, labelRevision);
+  }
+
+  Future<void> _reverse(
+    GeoPoint point,
+    int generation,
+    int labelRevision,
+  ) async {
     try {
       final location = await repository.reverse(point, language: language);
       if (isClosed || generation != _selection) return;
@@ -127,16 +143,30 @@ final class MapPickerCubit extends Cubit<MapPickerState> {
 
   Future<void> locate() async {
     if (isClosed || state.busy) return;
-    final generation = ++_selection;
-    emit(state.copy(busy: true));
+    final generation = ++_selection, labelRevision = ++_label;
+    _cancelSearch();
+    emit(state.copy(busy: true, results: [], searching: false));
     try {
       final point = await device.locate();
-      if (!isClosed && generation == _selection) await select(point);
+      if (isClosed || generation != _selection) return;
+      emit(
+        state.copy(
+          point: point,
+          label: labelRevision == _label ? '' : state.label,
+          busy: true,
+        ),
+      );
+      await _reverse(point, generation, labelRevision);
     } catch (error) {
       if (!isClosed && generation == _selection) {
         emit(state.copy(busy: false, failure: _code(error)));
       }
     }
+  }
+
+  void _cancelSearch() {
+    _search++;
+    _debounce?.cancel();
   }
 
   String _code(Object error) =>

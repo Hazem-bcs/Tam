@@ -165,7 +165,14 @@ void main() {
       );
       await expectLater(
         ApiMapsRepository(dio).route(origin, destination),
-        throwsA(isA<MapsFailure>()),
+        throwsA(
+          isA<MapsFailure>().having((f) => f.code, 'code', switch (status) {
+            404 => 'ROUTE_NOT_FOUND',
+            422 => 'VALIDATION_ERROR',
+            429 => 'RATE_LIMITED',
+            _ => 'SERVICE_UNAVAILABLE',
+          }),
+        ),
       );
     });
   }

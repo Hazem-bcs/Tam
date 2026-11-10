@@ -1,15 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/address_editor_cubit.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/addresses_cubit.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/address_editor_page.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/addresses_page.dart';
+import 'package:tam_customer/features/maps/maps_dependencies.dart';
 import 'package:tam_customer/features/maps/presentation/pages/map_location_picker_page.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
+import 'package:tam_customer/shared/domain/geo_point.dart';
+
+import '../features/maps/maps_test_support.dart';
 import 'support/customer_app_harness.dart';
 
 Future<void> pin(WidgetTester tester, String label) async {
@@ -30,6 +38,50 @@ Future<void> pin(WidgetTester tester, String label) async {
 }
 
 void main() {
+  testWidgets(
+    'logout disposes pending GPS and a new session starts without its point',
+    (tester) async {
+      final gps = Completer<GeoPoint>();
+      final device = LocationProbe()..onLocate = () => gps.future;
+      locator.registerSingleton<MapsDependencies>(
+        MapsDependencies(
+          configuration: const MapConfiguration(),
+          repository: MapsProbe(),
+          deviceLocation: device,
+        ),
+      );
+      addTearDown(() => locator.unregister<MapsDependencies>());
+      await launchCustomerApp(tester);
+      await enterCustomerSession(tester);
+      final auth = customerAuth(tester);
+      customerRouter(tester).push(AppRoutes.rideRequest);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('حدد مكان الانطلاق'));
+      await tester.pumpAndSettle();
+      await revealPageWidget(tester, find.byKey(const Key('ride-pick-on-map')));
+      await tester.tap(find.byKey(const Key('ride-pick-on-map')));
+      await tester.pumpAndSettle();
+      final locate = find.byKey(const Key('map-use-device-location'));
+      await revealPageWidget(tester, locate);
+      await tester.tap(locate);
+      await tester.pump();
+      expect(device.calls, 1);
+      await auth.logout();
+      await tester.pumpAndSettle();
+      expect(find.byType(MapLocationPickerPage), findsNothing);
+      gps.complete(origin);
+      await tester.pumpAndSettle();
+      await enterCustomerSession(tester, phone: '0947654321');
+      customerRouter(tester).push(AppRoutes.rideRequest);
+      await tester.pumpAndSettle();
+      final draft = tester
+          .element(find.byType(RideRequestPage))
+          .read<RideDraftBloc>();
+      expect(draft.state.pickup, isNull);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
   testWidgets(
     'manual map pin reaches booking draft without a backend or public tiles',
     (tester) async {
