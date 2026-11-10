@@ -1492,4 +1492,86 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get driverContactSessionEnded => 'انتهت الجلسة ولم يُفتح اتصال جديد.';
+
+  @override
+  String get mapsNotConfigured => 'لم تُهيأ خدمة خريطة تم بعد.';
+
+  @override
+  String get mapsTilesFailed => 'تعذر تحميل الخريطة من خادم تم.';
+
+  @override
+  String get mapsRetry => 'إعادة المحاولة';
+
+  @override
+  String get mapsAttribution => '© مساهمو OpenStreetMap';
+
+  @override
+  String get mapsOrigin => 'نقطة الانطلاق';
+
+  @override
+  String get mapsDestination => 'الوجهة';
+
+  @override
+  String get mapsDriver => 'موقع السائق';
+
+  @override
+  String get mapsZoomIn => 'تكبير الخريطة';
+
+  @override
+  String get mapsZoomOut => 'تصغير الخريطة';
+
+  @override
+  String get mapsPickLocation => 'اختيار موقع على الخريطة';
+
+  @override
+  String get mapsUseMyLocation => 'استخدام موقعي الحالي';
+
+  @override
+  String get mapsLocationDisabled =>
+      'خدمة الموقع مغلقة. فعّلها من إعدادات الجهاز أو اختر نقطة يدويًا.';
+
+  @override
+  String get mapsPermissionDenied =>
+      'لم يُسمح بالوصول للموقع. يمكنك اختيار نقطة يدويًا.';
+
+  @override
+  String get mapsPermissionPermanent =>
+      'إذن الموقع مرفوض. يمكنك تفعيله من إعدادات التطبيق في الجهاز أو الاختيار يدويًا.';
+
+  @override
+  String get mapsLocationUnavailable =>
+      'تعذر تحديد موقعك الآن. حاول مجددًا أو اختر نقطة يدويًا.';
+
+  @override
+  String get mapsNotFound =>
+      'لم نجد عنوانًا لهذه النقطة. اكتب وصف المكان يدويًا.';
+
+  @override
+  String get mapsRateLimited => 'طلبات كثيرة. انتظر قليلًا ثم حاول مجددًا.';
+
+  @override
+  String get mapsServiceFailed =>
+      'تعذر الاتصال بخدمة الخريطة. يمكنك الاحتفاظ بالنقطة وتسميتها يدويًا.';
+
+  @override
+  String get mapsTapHint =>
+      'اضغط على الخريطة لتحديد نقطة، ثم راجع وصف المكان قبل تأكيده.';
+
+  @override
+  String get mapsAddressLabel => 'وصف المكان';
+
+  @override
+  String get mapsAddressHint => 'مثل: أمام مدخل المبنى';
+
+  @override
+  String get mapsSearch => 'البحث عن مكان';
+
+  @override
+  String get mapsConfirmLocation => 'تأكيد الموقع';
+
+  @override
+  String get mapsRouteFailed => 'تعذر تحميل مسار الطريق من خدمة تم.';
+
+  @override
+  String get mapsInvalidInput => 'راجع الموقع أو نص البحث المدخل.';
 }

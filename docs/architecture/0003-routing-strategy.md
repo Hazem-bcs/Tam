@@ -11,3 +11,5 @@
 - Track outcomes by provider: p50/p95 API latency, route validity, ETA accuracy, cost per route/matrix element, and errors.
 - Keep server-assigned route authority; app does not calculate authoritative fares.
 - A 15/15 sequential trial is useful operationally, but subject to day-of-week, supply, weather and demand confounders.
+
+Rendering was subsequently selected in [ADR0004](0004-self-hosted-map-client.md): our own raster XYZ tiles through flutter_map. No public map service is configured by default.

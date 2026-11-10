@@ -11,12 +11,16 @@ import 'package:tam_customer/features/auth/auth_dependencies.dart';
 import 'package:tam_customer/features/chat/chat_entry.dart';
 import 'package:tam_customer/features/completion/completion_entry.dart';
 import 'package:tam_customer/features/driver_contact/driver_contact_entry.dart';
+import 'package:tam_customer/features/maps/maps_dependencies.dart';
 import 'package:tam_customer/features/ride_request/ride_request_dependencies.dart';
 import 'package:tam_customer/features/support/support_entry.dart';
 
 final GetIt locator = GetIt.instance;
 
 void configureDependencies() {
+  locator.registerFactory<MapsDependencies>(
+    () => MapsDependencies.configured(AppConfig.maps),
+  );
   locator.registerLazySingleton<Dio>(
     () => buildApiClient(AppConfig.apiBaseUrl),
   );

@@ -4,22 +4,14 @@ import 'package:tam_customer/features/ride_request/presentation/widgets/ride_sch
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_time_dialog.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
+import '../../../support/page_scroll.dart';
 import 'schedule_widget_support.dart';
 
 void main() {
   setUpAll(loadScheduleFonts);
   Future<void> open(WidgetTester tester) async {
     final chip = find.byKey(const Key('ride-scheduled'));
-    await tester.scrollUntilVisible(
-      chip,
-      180,
-      scrollable: find
-          .descendant(
-            of: find.byType(ListView).first,
-            matching: find.byType(Scrollable),
-          )
-          .first,
-    );
+    await revealPageWidget(tester, chip);
     await tester.ensureVisible(chip);
     await tester.pumpAndSettle();
     await tester.tap(chip);

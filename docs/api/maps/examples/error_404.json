@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "LOCATION_NOT_FOUND",
+    "message": {
+      "ar": "المكان غير موجود",
+      "en": "Location not found"
+    }
+  }
+}

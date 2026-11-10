@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/maps/maps_entry.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -74,6 +76,19 @@ class _RidePlacePickerState extends State<RidePlacePicker> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: AppSpacing.md),
+            if (MapsScope.maybeOf(context) != null) ...[
+              TamButton.secondary(
+                key: const Key('ride-pick-on-map'),
+                label: t.mapsPickLocation,
+                icon: Icons.map_outlined,
+                onPressed: () async {
+                  _focus.unfocus();
+                  final selected = await showMapLocationPicker(context);
+                  if (mounted && selected != null) _select(selected);
+                },
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
             if (widget.savedAddressPickerBuilder != null) ...[
               Wrap(
                 spacing: AppSpacing.sm,

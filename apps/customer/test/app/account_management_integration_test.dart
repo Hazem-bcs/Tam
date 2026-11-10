@@ -16,11 +16,7 @@ import 'support/customer_app_harness.dart';
 
 Future<void> reveal(WidgetTester tester, String key) async {
   final target = find.byKey(Key(key));
-  await tester.scrollUntilVisible(
-    target,
-    160,
-    scrollable: find.byType(Scrollable).first,
-  );
+  await revealPageWidget(tester, target);
   await tester.ensureVisible(target);
   await tester.pumpAndSettle();
 }

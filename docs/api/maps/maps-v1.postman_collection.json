@@ -1,0 +1,683 @@
+{
+  "info": {
+    "name": "TAM | تم — Self-hosted Maps v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "# تم — الخرائط المستضافة على خوادمنا v1\n\nمقترح تنفيذ2026-11-10؛ الخدمات لم تجهز بعد. لا يعتمد العميل على خوادم\nOpenStreetMap العامة أو Google مباشرة. تغطي هذه الحزمة واجهات عرض الخريطة\nواختيار المكان والمسار؛ لا تنشئ حجزًا أو سعرًا أو جلسة Auth.\n\n## الاستضافة والتهيئة\n\n- طبقة العرض raster XYZ: PNG بحجم256×256، zoom3..19 وWeb Mercator.\n  `MAP_TILES_URL_TEMPLATE=https://maps.your-domain/tiles/{z}/{x}/{y}.png`.\n  تخدمها بنيتنا من بيانات OSM المرخصة؛ هذه قيمة توضيحية وليست خدمة متاحة.\n  لا مفاتيح إدارية أو روابط سرية في Flutter، ولا redirects إلى خدمات عامة.\n- `MAP_API_BASE_URL=https://api.your-domain/api/v1` للبحث والعكس والمسار.\n  قد يكون نفس base_url لبقية التطبيق؛ لا يرسل العميل Bearer أوcookies\n  إلى هذه الخدمات العامة من خوادمنا. يطبق الخادم rate limiting وحدود المنطقة.\n- الإعدادان فارغان افتراضيًا؛ غيابهما يعرض عدم التهيئة ولا يفعل fallback.\n  HTTPS لازم. الاختبارات المحلية فقط يمكنها تفعيل MAP_ALLOW_LOCAL_HTTP\n  لعناوين localhost/127.0.0.1/10.0.2.2/::1؛ لا HTTP عام أو تساهل TLS.\n- © OpenStreetMap contributors ظاهر في العارض. يلزم الخادم بيانات مصدر\n  وتحديثات وترخيص صحيحة. لا تنزيل مسبق أو cache قرص دائم في هذا الإصدار؛\n  HTTP tiles بلا اعتمادات التطبيق، والمزود لا يتبع redirect.\n\n## GET /places — المورد المشترك\n\nنفس عقد ride_request-v1؛ لا مزود بحث ثانٍ لكل شاشة. q بطول0..100codepoints،\nlimit=20 في منتقي الخريطة، وAccept-Language:ar|en. يعيد data:[Place]\nوmeta.next_cursor؛ Place={id,label,label_en,latitude,longitude}.\nيعرض المنتقي أول20 نتيجة؛ لا طلب تلقائي عند فتح الصفحة، ويجمع الكتابة\nبمهلة300ms. البحث والعكس ينفذهما Laravel عبر خدمة الأسماء التي تستضيفها\nبنيتنا. لا اتصال Nominatim عام أو SDK geocoding من الهاتف.\n\n## GET /map/reverse\n\nQuery latitude وlongitude رقمان ضمن[-90,90] و[-180,180]؛ القيم غير المنتهية\nمرفوضة. Accept-Language:ar|en.200:\n\n```json\n{\"data\":{\"label\":\"المزة، شارع الجلاء\",\"label_en\":\"Mezzeh, Al Jalaa Street\",\"latitude\":33.5,\"longitude\":36.25}}\n```\n\nlabel وlabel_en نصان غير فارغين بحد200codepoints. نقطة النتيجة تبعد200م\nكحد أقصى عن الطلب؛ يحتفظ Flutter بنقطة الدبوس الأصلية ويستعمل النص فقط.\n404 LOCATION_NOT_FOUND يسمح بإدخال وصف يدوي لنفس النقطة، دون الادعاء\nبنجاح العكس. هذا الخيار متاح أيضًا عند تعطل الخدمة أو عدم تهيئتها.\n422 VALIDATION_ERROR و429 RATE_LIMITED و503 SERVICE_UNAVAILABLE.\n\n## POST /map/routes — معاينة جغرافية فقط\n\nContent-Type:application/json، مورد عام محدود المعدل من خادمنا، بلا Bearer.\nالطلب لا ينشئ رحلة ولا يستقبل سعرًا ولا يستخدم Idempotency-Key:\n\n```json\n{\"origin\":{\"latitude\":33.5,\"longitude\":36.25},\"destination\":{\"latitude\":33.519,\"longitude\":36.283}}\n```\n\nالنقطتان مختلفتان وصالحتان.200:\n\n```json\n{\"data\":{\"origin\":{\"latitude\":33.5,\"longitude\":36.25},\"destination\":{\"latitude\":33.519,\"longitude\":36.283},\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[36.25,33.5],[36.27,33.51],[36.283,33.519]]},\"distance_meters\":5019,\"duration_seconds\":1080,\"provider\":\"osrm\"}}\n```\n\norigin/destination صدى النقطتين المطلوبتين بالأرقام نفسها؛ لا تبديل lat/lng.\ngeometry من الخادم فقط، GeoJSON LineString من2 إلى10000 نقطة؛ كل إحداثية\nبالترتيب **longitude,latitude**. أول/آخر نقطة لا تبعد عن الانطلاق/الوجهة أكثر\nمن200م بسبب snapping للطريق. distance_meters وduration_seconds عددان صحيحان\nموجبان؛ provider=osrm|google. لا تحويل لوحدات عائم أو encoded polyline غير معلن.\n\nLaravel يستعمل RoutingService المتفق عليه: OSRM المستضاف أو Google Routes\nمن جهة الخادم. وحدة backend/laravel الحالية تعيد encodedPolyline؛ يلزم عند\nدمج هذا endpoint تحويله بدقةpolyline5 إلى LineString أو طلبGeoJSON من OSRM\nفي adapter متوافق. Google وOSRM يرجعان نفس Schema أعلاه، بلا تغيير Flutter.\n\nالمسار هنا للعرض ولا يثبت السعر أو يحل محل quote. POST /ride-quotes وPOST\n/trips يظلان صاحبي السعر والتوفر والتحقق والحجز. للمجدولة يحسب الخادم السعر\nوفق موعدها؛ لا يعتمد سعرًا من الهاتف أو من مسار معاينة قديم.\n\nتعرض خريطة الرحلة الطريق بين الانطلاق والوجهة وعلامة السائق منlive؛ لا\nملاحة دورًا بدور أو تحديث ETA من جهاز العميل. عند وصول موقع سائق قديم/فشل\nالمتابعة تُخفى العلامة القديمة. الحركة وحدها لا تعيد طلب المسار أو تحرك\nالكاميرا قسرًا؛ تغير الطرفين أو retry يطلب معاينة جديدة. لا رسم خط مستقيم\nبديل عند الفشل، ولا تخزين دائم للمسار أو ادعاء معرفته offline.\n\n404 ROUTE_NOT_FOUND أو422 VALIDATION_ERROR أو429 RATE_LIMITED أو503\nSERVICE_UNAVAILABLE؛ لا تحويل الفشل إلى مسار افتراضي.\n\n## GET tiles/{z}/{x}/{y}.png — مضيف البلاطات\n\nهذا عنوان استضافة صور، مستقل عن JSON base_url.200 Content-Type:image/png\nوجسم PNG256×256؛ لا غلافdata. الصور الثنائية لا تدرج كـJSON في saved response؛\nطلب Postman يوضح headers والمقاسات، ويقرأ الصورة الحقيقية عند تشغيل الخادم.\n404 بلاطة غير موجودة،429 أو503. لا redirects، أوفاتورة دفع، أوعنوانGPS فيlogs.\nحدود الاستضافة والتحديث واختبارات التغطية السورية مسؤولية الباكند/البنية.\n\n## الأخطاء والموقع\n\nأخطاء JSON بغلاف {error:{code,message:{ar,en}}}؛ لا نص خادم يعرض دون ترجمة.\nGPS قراءة foreground واحدة عند ضغط المستخدم فقط، بمهلة15ثانية. رفض الإذن\nأو إغلاق خدمة الموقع لا يمنع الاختيار اليدوي. لا صلاحية خلفية أو endpoint\nلرفع موقع الراكب تلقائيًا أو GPS وهمي. label اليدوي200codepoints كحد أقصى.\nيحمي العميل الاختيار الجديد من رد عكس/GPS قديم، ويمهل البحث ويهمل ردوده\nبعد المغادرة؛ لا تظهر إحداثيات قديمة في جلسة أخرى.\n\n## فحوص مطور الباكند قبل الربط\n\nزودنا بعنوانَي HTTPS، وتأكد من التغطية والمقاس والمحاور وحقوق OSM، ونجاح\nقواعد العكس وGeoJSON وحدود المنطقة والطريق غير الموجود، وعدم redirect\nإلى مزود عام. اختبر rate limits وtimeouts، ولا تسجل النصوص/الإحداثيات\nالشخصية في logs. تظل تجربة15/15 يوم السابقة معطلة حتى جاهزية المزودين\nوتأكيد تفعيلها؛ العميل لا يختار routing provider بنفسه.\n"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://example.invalid/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "language",
+      "value": "ar",
+      "type": "string"
+    },
+    {
+      "key": "query",
+      "value": "المزة",
+      "type": "string"
+    },
+    {
+      "key": "latitude",
+      "value": "33.5",
+      "type": "string"
+    },
+    {
+      "key": "longitude",
+      "value": "36.25",
+      "type": "string"
+    },
+    {
+      "key": "tiles_base_url",
+      "value": "https://maps.example.invalid/tiles",
+      "type": "string"
+    },
+    {
+      "key": "tile_z",
+      "value": "12",
+      "type": "string"
+    },
+    {
+      "key": "tile_x",
+      "value": "2460",
+      "type": "string"
+    },
+    {
+      "key": "tile_y",
+      "value": "1645",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "البحث المشترك عن الأماكن",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/places?q={{query}}&limit=20"
+      },
+      "response": [
+        {
+          "name": "200",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{query}}&limit=20"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"id\": \"place-1\",\n      \"label\": \"المزة، شارع الجلاء\",\n      \"label_en\": \"Mezzeh, Al Jalaa Street\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+        },
+        {
+          "name": "404",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{query}}&limit=20"
+          },
+          "status": "Error",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"LOCATION_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"المكان غير موجود\",\n      \"en\": \"Location not found\"\n    }\n  }\n}"
+        },
+        {
+          "name": "422",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{query}}&limit=20"
+          },
+          "status": "Error",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{query}}&limit=20"
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{query}}&limit=20"
+          },
+          "status": "Error",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "عنوان نقطة الخريطة",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+      },
+      "response": [
+        {
+          "name": "200",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"place-1\",\n    \"label\": \"المزة، شارع الجلاء\",\n    \"label_en\": \"Mezzeh, Al Jalaa Street\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  }\n}"
+        },
+        {
+          "name": "404",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+          },
+          "status": "Error",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"LOCATION_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"المكان غير موجود\",\n      \"en\": \"Location not found\"\n    }\n  }\n}"
+        },
+        {
+          "name": "422",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+          },
+          "status": "Error",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{latitude}}&longitude={{longitude}}"
+          },
+          "status": "Error",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "معاينة الطريق من خادم تم",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept-Language",
+            "value": "{{language}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "auth": {
+          "type": "noauth"
+        },
+        "url": "{{base_url}}/map/routes",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "200",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"origin\": {\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"geometry\": {\n      \"type\": \"LineString\",\n      \"coordinates\": [\n        [\n          36.25,\n          33.5\n        ],\n        [\n          36.27,\n          33.51\n        ],\n        [\n          36.283,\n          33.519\n        ]\n      ]\n    },\n    \"distance_meters\": 5019,\n    \"duration_seconds\": 1080,\n    \"provider\": \"osrm\"\n  }\n}"
+        },
+        {
+          "name": "404",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"ROUTE_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"لا يوجد طريق صالح\",\n      \"en\": \"No usable route\"\n    }\n  }\n}"
+        },
+        {
+          "name": "422",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+        },
+        {
+          "name": "429",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+        },
+        {
+          "name": "503",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "بلاطة خريطة من سيرفرنا",
+      "request": {
+        "method": "GET",
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "image/png"
+          }
+        ],
+        "url": "{{tiles_base_url}}/{{tile_z}}/{{tile_x}}/{{tile_y}}.png",
+        "description": "صورة PNG256×256 من استضافتنا. الجسم الثنائي غير مضمن في saved example؛ لا غلاف JSON أو توكن تطبيق."
+      },
+      "response": [
+        {
+          "name": "200 PNG — body supplied by the tile server",
+          "originalRequest": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/png"
+              }
+            ],
+            "url": "{{tiles_base_url}}/{{tile_z}}/{{tile_x}}/{{tile_y}}.png",
+            "description": "صورة PNG256×256 من استضافتنا. الجسم الثنائي غير مضمن في saved example؛ لا غلاف JSON أو توكن تطبيق."
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "image/png"
+            }
+          ],
+          "body": ""
+        }
+      ]
+    }
+  ]
+}

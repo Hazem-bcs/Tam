@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import '../../support/page_scroll.dart';
 import 'active_trip_test_support.dart';
 import 'active_trip_widget_support.dart';
 
@@ -17,11 +18,7 @@ void main() {
   }
 
   Future<void> visible(WidgetTester tester, Finder target) async {
-    await tester.scrollUntilVisible(
-      target,
-      180,
-      scrollable: find.byType(Scrollable).first,
-    );
+    await revealPageWidget(tester, target);
     await tester.ensureVisible(target);
     await tester.pumpAndSettle();
   }

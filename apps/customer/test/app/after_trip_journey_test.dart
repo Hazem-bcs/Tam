@@ -45,10 +45,9 @@ void main() {
       await tester.pump(const Duration(seconds: 90));
       await tester.pumpAndSettle();
       expect(tracker.state.trip!.status, TripStatus.completed);
-      await tester.scrollUntilVisible(
+      await revealPageWidget(
+        tester,
         find.byKey(const Key('active-completion')),
-        220,
-        scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('active-completion')));

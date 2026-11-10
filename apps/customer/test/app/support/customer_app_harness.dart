@@ -9,6 +9,8 @@ import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
 import '../../support/fake_auth_repository.dart';
+import '../../support/page_scroll.dart';
+export '../../support/page_scroll.dart';
 
 Future<void> launchCustomerApp(
   WidgetTester tester, {
@@ -60,11 +62,7 @@ Future<void> dismissCustomerMessages(WidgetTester tester) async {
 /// Booking now opens live tracking; historical checks still use order details.
 Future<void> openBookedTripDetails(WidgetTester tester) async {
   final details = find.text('تفاصيل الطلب');
-  await tester.scrollUntilVisible(
-    details,
-    220,
-    scrollable: find.byType(Scrollable).first,
-  );
+  await revealPageWidget(tester, details);
   await tester.ensureVisible(details);
   await tester.pumpAndSettle();
   await tester.tap(details);

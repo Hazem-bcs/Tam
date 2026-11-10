@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "TAM | تم — Customer API Contract v1 — BACKEND HANDOFF PROPOSAL",
-    "description": "# TAM | تم — العقد الموحد لتطبيق العميل v1\n\nالحالة: **مقترح مُراجع صالح لتسليم الباكند، لا API حي ولا اعتماد باكند بعد**.\nهذا الملف طلب تنفيذ من مطور Laravel. نكمل منطق العميل بالمحاكاة وعقوده،\nنسلّم Collection موحدة، ثم نحسن الواجهات أثناء تنفيذ الخادم. الربط الحقيقي\nواختبار الخدمات يأتيان عند تسليم الباكند؛ لا يشترطان لبدء الصقل البصري.\n\n## النطاق المعتمد\n\nالمصادقة، الرئيسية، البحث والتسعير والحجز النقدي، الجدولة، طلباتي والإلغاء\nوإعادة الطلب، العناوين، متابعة الرحلة، المحادثة، التقييم، الدعم والبلاغات،\nالإشعارات داخل التطبيق، إعدادات الحساب، تغيير الرقم وحذف الحساب والاتصال\nبالسائق. المحفظة والدفع الإلكتروني والكوبونات مؤجلة بقرار المستخدم.\nلا طعام أو تسوق أو أدوار سائق وإدارة داخل هذا العميل. payment_method=cash\nلا يثبت تحصيلًا أو إيصالًا، ولا توجد عملية دفع خادمية مختلقة.\n\nقبول الرحلة وإسناد سائق ووصوله وبدؤها وإنهاؤها وموقعه مسؤولية الخادم\nوالسائق؛ ليست أوامر من تطبيق الراكب. تنفيذ الجدولة عند الموعد مسؤولية\nالخادم حتى لو كان العميل مغلقًا. المحاكاة لا تنفذ عملًا خلفيًا حقيقيًا.\n\n## القواعد المشتركة\n\n- base_url يشمل /api/v1 مرة واحدة؛ example.invalid قيمة توضيحية.\n- النجاح data؛ الفشل error.code وerror.message.ar/en، دون الجمع بينهما.\n- UTF8، معرفات opaque نصية، والوقت ISO8601 UTC Z بتقويم صحيح. عرض الجدولة\n  UTC+03:00 والمدخل المنقول UTC؛ النطاق من30 دقيقة إلى7 أيام.\n- المال amount_minor:int≥0 وcurrency كبيرة3أحرف وminor_unit:int0..3.\n  أمثلة SYP بوحدة0؛ لا float ولا سعر نهائي من جهاز العميل.\n- Bearer للبيانات والعمليات الشخصية؛ guest/localAccess ليسا مصادقة API.\n  /home و/places و/content/legal عامة. مسارات Auth تتبع عقدها الأصلي؛\n  /auth/me محمي، وrefresh/logout يستخدمان refresh_token كما في العقد.\n- للميزات 401 UNAUTHENTICATED؛ استبدل الاسمين القديمين AUTH_REQUIRED\n  وUNAUTHORIZED في Settings/Trips. أكواد Auth التفصيلية SESSION_INVALID\n  وSESSION_REVOKED تبقى كما هي؛ لم يُغير عقد Auth.\n- الملكية تفحص في كل عملية. يجوز404 للمورد الأجنبي بدل403 بسياسة ثابتة،\n  دون كشف بياناته. فشل الخدمة لا يعود إلى mock.\n- عمليات الإنشاء تطبق idempotency وفق عقدها. timeout ليس رفضًا نهائيًا؛\n  لا تبديل للنية أو المفتاح بعد فقد رد غير محسوم.\n\n## Trip واحد وامتدادات متوافقة\n\nالحجز وطلباتي والجدولة والمتابعة تستخدم المورد نفسه. دورة الحالات:\n\nscheduled → requested → confirmed → driver_en_route → driver_arrived →\nin_progress → completed. قد تصبح requested حالة no_driver.\n\nيسمح إلغاء العميل في scheduled/requested/confirmed/driver_en_route/\ndriver_arrived. تكرار إلغاء cancelled آمن؛ بقية الحالات409\nTRIP_NOT_CANCELLABLE دون رسوم مختلقة. active يشمل الحالات الست غير النهائية،\nوno_driver يظهر في all.\n\nscheduled_at مطلوب للمجدولة ويظل محفوظًا بعد الإلغاء وتغيّر الحالة؛ غيابه\nأوnull للفوري القديم مسموح. live مطلوب لمسارات المتابعة، واختياري للسجلات\nالقديمة في Trip. active_trip-v1 يحدد الحالة الموسعة كاملة؛ الامتدادات الحالية\nتحدث قيود W1 القديمة ولا تطلب مخزن رحلات أو إلغاء آخر لكل شاشة.\n\nfare مبلغ الطلب المسجل، وليس تأكيد دفع. بيانات السائق والموقع وETA من live؛\nموقع وETA الحالات النهائية null. التقييم مورد واحد immutable لرحلة completed.\nالاتصال مورد مستقل قصير الصلاحية للسائق الحالي؛ لا رقم هاتف في history.\n\nGET /places مشترك للحجز والعناوين. POST /ride-quotes وPOST /trips يدعمان\nالفوري والمجدول بنفس المسارات، مع أمثلة سيناريوهات منفصلة. تكرار GET detail\nأوPOST cancel في المجلدات يشرح حالات استخدامها، ولا يعني endpoint جديدًا\nفي Laravel لكل مجلد.\n\nالترقيم بحسب المورد، دون تحويل صامت: Trips/Places/Notifications تستخدم\nقائمة data وmeta.next_cursor؛ Support تستخدم data.tickets وpagination.\nالحدود والترتيب موثقة في كل عقد وتطابق Flutter. أي توحيد لاحق يحتاج تغيير\nالعقد والـmappers والأمثلة معًا.\n\n## الحساب والاتصال\n\nتغيير الرقم والحذف يحتاجان OTP مستقلًا عن الدخول، مع منع رحلة غير منتهية.\nالتغيير يتحقق من الرقم الجديد، والحذف من الحالي مع موافقة صريحة. النجاح\nينهي الجلسة ولا يصدر توكنًا جديدًا. راجع account_management-v1 للحدود\nوالتحقق الذري والقفل وidempotency وحسم فقد الرد.\n\nX-Operation-Token اعتماد ضيق لنتيجة عملية واحدة، وليس جلسة أوBearer. لا\nينفذ أول تعديل دون Bearer وOTP صالحين. يتيح استرجاع نتيجة نفس العملية\nبعد إبطال الجلسة أو فقد الرد. GET /account/operations/{operation_id} يحتاج\nهذا الاعتماد ولا يكشف بيانات حساب؛ يخزنه محول API خصوصيًا في data، لا في\nURL أوlogs أوBLoC state.\n\nالاتصال يقرأ رقمًا مخولًا للرحلة والسائق الحاليين، ثم يفتح تطبيق الهاتف.\nلا URL حر ولا اتصال مباشر دون تطبيق الهاتف، ولا ادعاء رد السائق أوفوترة.\nالمحاكاة لا تطلب رقم fixtures فعليًا. النص القانوني غير المنشور يعيد null؛\nلا نصوص قانونية مولدة أو إقرار موافقة مخترع. اللغة إعداد محلي بلا endpoint.\n\n## كيفية قراءة ملف Postman\n\nالملف Tam-Customer-API-v1.postman_collection.json مقسم حسب الميزة. وصف\nالمجموعة يحتوي هذا النص، ووصف كل مجلد يحتوي عقد الميزة كاملًا، وتحت كل\nطلب Headers وBody وAuthorization وأمثلة نجاح وفشل. لا يحتاج المطور قراءة\nكود Flutter لمعرفة الحقول والقيود.\n\nالمتغيرات التخصصية تبدأ باسم الميزة لمنع تداخل challenge_id أومفاتيح\nidempotency أوcursor؛ base_url وaccess_token وlanguage مشتركة. لا أسرار أو\nscripts تشغل طلبات تلقائيًا. الأمثلة اصطناعية؛ لا تستخدم أرقامها كجهات اتصال.\n\nنحتاج من الباكند: staging URL، تنفيذ العقود والملكية والحفظ، مصادقة وSMS\nاختبار، تحقق ذري للحجز والسعر والوقت والحالات ومنع التكرار، مصدر حالة\nوموقع السائق والمحادثة، واختبارات Laravel لكل نجاح وفشل مطلوب. جهة routing\nتحدد مزود المسار والبحث؛ لا مفاتيح مزود سرية داخل Flutter.\n\nالعميل الحالي يستخدم polling للمتابعة والمحادثة وصندوق إشعارات داخل\nالتطبيق. Push/FCM وتسجيل الجهاز والتسليم بالخلفية وSDK المواقع والخرائط\nواختبار تطبيق الهاتف على جهاز فعلي أعمال ربط خدمات تنسق عند جاهزيتها؛\nليست منفذة لمجرد وجود واجهة أو مثال. لا endpoint جهاز مختلق في هذا الإصدار.\n\n## معيار الاعتماد\n\nنفحص JSON وبنية Postman2.1 ومراجع المتغيرات والتفويض والأمثلة والمحاكاة\nوالـmappers والتدفقات المتكاملة. الاعتماد المستقل مرتبط بـSHA الكود والعقود\nفي [تقرير المراجعة](../engineering/deliveries/W3-ACCOUNT-CONTACT/REVIEW.md)،\nويُعاد عند تغيير النسخة. فحص JSON لا يساوي استيراد Postman أو طلبًا حيًا.\nهذا المقترح لا يدعي اكتمال الربط أو جاهزية النشر. التحسين البصري لاحق؛ إذا أضاف تغيير\nالتصميم قاعدة عمل أوحقلًا جديدًا، ينسق تعديل العقد صراحة.\n",
+    "name": "TAM | تم — Customer API Contract v1 — REVIEW REQUIRED",
+    "description": "# TAM | تم — العقد الموحد لتطبيق العميل v1\n\nالحالة: **مرشح مراجعة بعد استكمال خرائط العميل، لا API حي أو اعتماد باكند**.\nهذا الملف طلب تنفيذ من مطور Laravel. نكمل منطق العميل بالمحاكاة وعقوده،\nنسلّم Collection موحدة، ثم نحسن الواجهات أثناء تنفيذ الخادم. الربط الحقيقي\nواختبار الخدمات يأتيان عند تسليم الباكند؛ لا يشترطان لبدء الصقل البصري.\n\n## النطاق المعتمد\n\nالمصادقة، الرئيسية، البحث والتسعير والحجز النقدي، الجدولة، طلباتي والإلغاء\nوإعادة الطلب، العناوين، متابعة الرحلة، المحادثة، التقييم، الدعم والبلاغات،\nالإشعارات داخل التطبيق، إعدادات الحساب، تغيير الرقم وحذف الحساب والاتصال\nبالسائق. المحفظة والدفع الإلكتروني والكوبونات مؤجلة بقرار المستخدم.\nلا طعام أو تسوق أو أدوار سائق وإدارة داخل هذا العميل. payment_method=cash\nلا يثبت تحصيلًا أو إيصالًا، ولا توجد عملية دفع خادمية مختلقة.\n\nقبول الرحلة وإسناد سائق ووصوله وبدؤها وإنهاؤها وموقعه مسؤولية الخادم\nوالسائق؛ ليست أوامر من تطبيق الراكب. تنفيذ الجدولة عند الموعد مسؤولية\nالخادم حتى لو كان العميل مغلقًا. المحاكاة لا تنفذ عملًا خلفيًا حقيقيًا.\n\n## القواعد المشتركة\n\n- base_url يشمل /api/v1 مرة واحدة؛ example.invalid قيمة توضيحية.\n- النجاح data؛ الفشل error.code وerror.message.ar/en، دون الجمع بينهما.\n- UTF8، معرفات opaque نصية، والوقت ISO8601 UTC Z بتقويم صحيح. عرض الجدولة\n  UTC+03:00 والمدخل المنقول UTC؛ النطاق من30 دقيقة إلى7 أيام.\n- المال amount_minor:int≥0 وcurrency كبيرة3أحرف وminor_unit:int0..3.\n  أمثلة SYP بوحدة0؛ لا float ولا سعر نهائي من جهاز العميل.\n- Bearer للبيانات والعمليات الشخصية؛ guest/localAccess ليسا مصادقة API.\n  /home و/places و/content/legal عامة. مسارات Auth تتبع عقدها الأصلي؛\n  /auth/me محمي، وrefresh/logout يستخدمان refresh_token كما في العقد.\n- للميزات 401 UNAUTHENTICATED؛ استبدل الاسمين القديمين AUTH_REQUIRED\n  وUNAUTHORIZED في Settings/Trips. أكواد Auth التفصيلية SESSION_INVALID\n  وSESSION_REVOKED تبقى كما هي؛ لم يُغير عقد Auth.\n- الملكية تفحص في كل عملية. يجوز404 للمورد الأجنبي بدل403 بسياسة ثابتة،\n  دون كشف بياناته. فشل الخدمة لا يعود إلى mock.\n- عمليات الإنشاء تطبق idempotency وفق عقدها. timeout ليس رفضًا نهائيًا؛\n  لا تبديل للنية أو المفتاح بعد فقد رد غير محسوم.\n\n## Trip واحد وامتدادات متوافقة\n\nالحجز وطلباتي والجدولة والمتابعة تستخدم المورد نفسه. دورة الحالات:\n\nscheduled → requested → confirmed → driver_en_route → driver_arrived →\nin_progress → completed. قد تصبح requested حالة no_driver.\n\nيسمح إلغاء العميل في scheduled/requested/confirmed/driver_en_route/\ndriver_arrived. تكرار إلغاء cancelled آمن؛ بقية الحالات409\nTRIP_NOT_CANCELLABLE دون رسوم مختلقة. active يشمل الحالات الست غير النهائية،\nوno_driver يظهر في all.\n\nscheduled_at مطلوب للمجدولة ويظل محفوظًا بعد الإلغاء وتغيّر الحالة؛ غيابه\nأوnull للفوري القديم مسموح. live مطلوب لمسارات المتابعة، واختياري للسجلات\nالقديمة في Trip. active_trip-v1 يحدد الحالة الموسعة كاملة؛ الامتدادات الحالية\nتحدث قيود W1 القديمة ولا تطلب مخزن رحلات أو إلغاء آخر لكل شاشة.\n\nfare مبلغ الطلب المسجل، وليس تأكيد دفع. بيانات السائق والموقع وETA من live؛\nموقع وETA الحالات النهائية null. التقييم مورد واحد immutable لرحلة completed.\nالاتصال مورد مستقل قصير الصلاحية للسائق الحالي؛ لا رقم هاتف في history.\n\nGET /places مشترك للحجز والعناوين. POST /ride-quotes وPOST /trips يدعمان\nالفوري والمجدول بنفس المسارات، مع أمثلة سيناريوهات منفصلة. تكرار GET detail\nأوPOST cancel في المجلدات يشرح حالات استخدامها، ولا يعني endpoint جديدًا\nفي Laravel لكل مجلد.\n\nالترقيم بحسب المورد، دون تحويل صامت: Trips/Places/Notifications تستخدم\nقائمة data وmeta.next_cursor؛ Support تستخدم data.tickets وpagination.\nالحدود والترتيب موثقة في كل عقد وتطابق Flutter. أي توحيد لاحق يحتاج تغيير\nالعقد والـmappers والأمثلة معًا.\n\n## الحساب والاتصال\n\nتغيير الرقم والحذف يحتاجان OTP مستقلًا عن الدخول، مع منع رحلة غير منتهية.\nالتغيير يتحقق من الرقم الجديد، والحذف من الحالي مع موافقة صريحة. النجاح\nينهي الجلسة ولا يصدر توكنًا جديدًا. راجع account_management-v1 للحدود\nوالتحقق الذري والقفل وidempotency وحسم فقد الرد.\n\nX-Operation-Token اعتماد ضيق لنتيجة عملية واحدة، وليس جلسة أوBearer. لا\nينفذ أول تعديل دون Bearer وOTP صالحين. يتيح استرجاع نتيجة نفس العملية\nبعد إبطال الجلسة أو فقد الرد. GET /account/operations/{operation_id} يحتاج\nهذا الاعتماد ولا يكشف بيانات حساب؛ يخزنه محول API خصوصيًا في data، لا في\nURL أوlogs أوBLoC state.\n\nالاتصال يقرأ رقمًا مخولًا للرحلة والسائق الحاليين، ثم يفتح تطبيق الهاتف.\nلا URL حر ولا اتصال مباشر دون تطبيق الهاتف، ولا ادعاء رد السائق أوفوترة.\nالمحاكاة لا تطلب رقم fixtures فعليًا. النص القانوني غير المنشور يعيد null؛\nلا نصوص قانونية مولدة أو إقرار موافقة مخترع. اللغة إعداد محلي بلا endpoint.\n\n## كيفية قراءة ملف Postman\n\nالملف Tam-Customer-API-v1.postman_collection.json مقسم حسب الميزة. وصف\nالمجموعة يحتوي هذا النص، ووصف كل مجلد يحتوي عقد الميزة كاملًا، وتحت كل\nطلب Headers وBody وAuthorization وأمثلة نجاح وفشل. لا يحتاج المطور قراءة\nكود Flutter لمعرفة الحقول والقيود.\n\nالمتغيرات التخصصية تبدأ باسم الميزة لمنع تداخل challenge_id أومفاتيح\nidempotency أوcursor؛ base_url وaccess_token وlanguage مشتركة. لا أسرار أو\nscripts تشغل طلبات تلقائيًا. الأمثلة اصطناعية؛ لا تستخدم أرقامها كجهات اتصال.\n\nنحتاج من الباكند: staging URL، تنفيذ العقود والملكية والحفظ، مصادقة وSMS\nاختبار، تحقق ذري للحجز والسعر والوقت والحالات ومنع التكرار، مصدر حالة\nوموقع السائق والمحادثة، واختبارات Laravel لكل نجاح وفشل مطلوب. جهة routing\nتحدد مزود المسار والبحث؛ لا مفاتيح مزود سرية داخل Flutter.\n\nالعميل الحالي يستخدم polling للمتابعة والمحادثة وصندوق إشعارات داخل\nالتطبيق. أضيف عارض الخريطة وقراءة الموقع في امتداد maps-v1 أدناه؛ تشغيل\nخدماتها وPush/FCM وتسجيل الجهاز والتسليم بالخلفية واختبار تطبيق الهاتف\nعلى جهاز فعلي أعمال ربط خدمات تنسق عند جاهزيتها؛\nليست منفذة لمجرد وجود واجهة أو مثال. لا endpoint جهاز مختلق في هذا الإصدار.\n\n## معيار الاعتماد\n\nنفحص JSON وبنية Postman2.1 ومراجع المتغيرات والتفويض والأمثلة والمحاكاة\nوالـmappers والتدفقات المتكاملة. الاعتماد المستقل مرتبط بـSHA الكود والعقود\nفي [تقرير المراجعة](../engineering/deliveries/W3-ACCOUNT-CONTACT/REVIEW.md)،\nويُعاد عند تغيير النسخة. فحص JSON لا يساوي استيراد Postman أو طلبًا حيًا.\nهذا المقترح لا يدعي اكتمال الربط أو جاهزية النشر. التحسين البصري لاحق؛ إذا أضاف تغيير\nالتصميم قاعدة عمل أوحقلًا جديدًا، ينسق تعديل العقد صراحة.\n\n## امتداد الخرائط —2026-11-10\n\nخدماتنا غير جاهزة، والعميل لا يعتمد على خدمات خرائط عامة. maps-v1 يحدد\nPNG XYZ من استضافتنا وGET /map/reverse وPOST /map/routes، مع إعادة استخدام\nGET /places. هذه العمليات عامة من خوادمنا وبحدود معدل، دون Bearer؛ معاينة\nالمسار GeoJSON لا تنشئ سعرًا أو رحلة. لا GPS خلفي أو نقل تلقائي لموقع الراكب.\nMAP_TILES_URL_TEMPLATE وMAP_API_BASE_URL فارغان حتى يوفرهما الباكند.\nغيابهما يظهر عدم التهيئة، والفشل لا يعود إلى طرق مرسومة وهميًا.\nوحدة routing القديمة تحتاج normalization إلى GeoJSON وفق العقد الجديد.\n",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -91,6 +91,41 @@
     {
       "key": "addresses_query",
       "value": "المزة"
+    },
+    {
+      "key": "maps_query",
+      "value": "المزة",
+      "type": "string"
+    },
+    {
+      "key": "maps_latitude",
+      "value": "33.5",
+      "type": "string"
+    },
+    {
+      "key": "maps_longitude",
+      "value": "36.25",
+      "type": "string"
+    },
+    {
+      "key": "maps_tiles_base_url",
+      "value": "https://maps.example.invalid/tiles",
+      "type": "string"
+    },
+    {
+      "key": "maps_tile_z",
+      "value": "12",
+      "type": "string"
+    },
+    {
+      "key": "maps_tile_x",
+      "value": "2460",
+      "type": "string"
+    },
+    {
+      "key": "maps_tile_y",
+      "value": "1645",
+      "type": "string"
     },
     {
       "key": "contact_trip_id",
@@ -8868,7 +8903,640 @@
       ]
     },
     {
-      "name": "08 — الاتصال بالسائق",
+      "name": "08 — الخرائط المستضافة ذاتيًا",
+      "description": "المصدر: maps/maps-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـmaps_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# تم — الخرائط المستضافة على خوادمنا v1\n\nمقترح تنفيذ2026-11-10؛ الخدمات لم تجهز بعد. لا يعتمد العميل على خوادم\nOpenStreetMap العامة أو Google مباشرة. تغطي هذه الحزمة واجهات عرض الخريطة\nواختيار المكان والمسار؛ لا تنشئ حجزًا أو سعرًا أو جلسة Auth.\n\n## الاستضافة والتهيئة\n\n- طبقة العرض raster XYZ: PNG بحجم256×256، zoom3..19 وWeb Mercator.\n  `MAP_TILES_URL_TEMPLATE=https://maps.your-domain/tiles/{z}/{x}/{y}.png`.\n  تخدمها بنيتنا من بيانات OSM المرخصة؛ هذه قيمة توضيحية وليست خدمة متاحة.\n  لا مفاتيح إدارية أو روابط سرية في Flutter، ولا redirects إلى خدمات عامة.\n- `MAP_API_BASE_URL=https://api.your-domain/api/v1` للبحث والعكس والمسار.\n  قد يكون نفس base_url لبقية التطبيق؛ لا يرسل العميل Bearer أوcookies\n  إلى هذه الخدمات العامة من خوادمنا. يطبق الخادم rate limiting وحدود المنطقة.\n- الإعدادان فارغان افتراضيًا؛ غيابهما يعرض عدم التهيئة ولا يفعل fallback.\n  HTTPS لازم. الاختبارات المحلية فقط يمكنها تفعيل MAP_ALLOW_LOCAL_HTTP\n  لعناوين localhost/127.0.0.1/10.0.2.2/::1؛ لا HTTP عام أو تساهل TLS.\n- © OpenStreetMap contributors ظاهر في العارض. يلزم الخادم بيانات مصدر\n  وتحديثات وترخيص صحيحة. لا تنزيل مسبق أو cache قرص دائم في هذا الإصدار؛\n  HTTP tiles بلا اعتمادات التطبيق، والمزود لا يتبع redirect.\n\n## GET /places — المورد المشترك\n\nنفس عقد ride_request-v1؛ لا مزود بحث ثانٍ لكل شاشة. q بطول0..100codepoints،\nlimit=20 في منتقي الخريطة، وAccept-Language:ar|en. يعيد data:[Place]\nوmeta.next_cursor؛ Place={id,label,label_en,latitude,longitude}.\nيعرض المنتقي أول20 نتيجة؛ لا طلب تلقائي عند فتح الصفحة، ويجمع الكتابة\nبمهلة300ms. البحث والعكس ينفذهما Laravel عبر خدمة الأسماء التي تستضيفها\nبنيتنا. لا اتصال Nominatim عام أو SDK geocoding من الهاتف.\n\n## GET /map/reverse\n\nQuery latitude وlongitude رقمان ضمن[-90,90] و[-180,180]؛ القيم غير المنتهية\nمرفوضة. Accept-Language:ar|en.200:\n\n```json\n{\"data\":{\"label\":\"المزة، شارع الجلاء\",\"label_en\":\"Mezzeh, Al Jalaa Street\",\"latitude\":33.5,\"longitude\":36.25}}\n```\n\nlabel وlabel_en نصان غير فارغين بحد200codepoints. نقطة النتيجة تبعد200م\nكحد أقصى عن الطلب؛ يحتفظ Flutter بنقطة الدبوس الأصلية ويستعمل النص فقط.\n404 LOCATION_NOT_FOUND يسمح بإدخال وصف يدوي لنفس النقطة، دون الادعاء\nبنجاح العكس. هذا الخيار متاح أيضًا عند تعطل الخدمة أو عدم تهيئتها.\n422 VALIDATION_ERROR و429 RATE_LIMITED و503 SERVICE_UNAVAILABLE.\n\n## POST /map/routes — معاينة جغرافية فقط\n\nContent-Type:application/json، مورد عام محدود المعدل من خادمنا، بلا Bearer.\nالطلب لا ينشئ رحلة ولا يستقبل سعرًا ولا يستخدم Idempotency-Key:\n\n```json\n{\"origin\":{\"latitude\":33.5,\"longitude\":36.25},\"destination\":{\"latitude\":33.519,\"longitude\":36.283}}\n```\n\nالنقطتان مختلفتان وصالحتان.200:\n\n```json\n{\"data\":{\"origin\":{\"latitude\":33.5,\"longitude\":36.25},\"destination\":{\"latitude\":33.519,\"longitude\":36.283},\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[36.25,33.5],[36.27,33.51],[36.283,33.519]]},\"distance_meters\":5019,\"duration_seconds\":1080,\"provider\":\"osrm\"}}\n```\n\norigin/destination صدى النقطتين المطلوبتين بالأرقام نفسها؛ لا تبديل lat/lng.\ngeometry من الخادم فقط، GeoJSON LineString من2 إلى10000 نقطة؛ كل إحداثية\nبالترتيب **longitude,latitude**. أول/آخر نقطة لا تبعد عن الانطلاق/الوجهة أكثر\nمن200م بسبب snapping للطريق. distance_meters وduration_seconds عددان صحيحان\nموجبان؛ provider=osrm|google. لا تحويل لوحدات عائم أو encoded polyline غير معلن.\n\nLaravel يستعمل RoutingService المتفق عليه: OSRM المستضاف أو Google Routes\nمن جهة الخادم. وحدة backend/laravel الحالية تعيد encodedPolyline؛ يلزم عند\nدمج هذا endpoint تحويله بدقةpolyline5 إلى LineString أو طلبGeoJSON من OSRM\nفي adapter متوافق. Google وOSRM يرجعان نفس Schema أعلاه، بلا تغيير Flutter.\n\nالمسار هنا للعرض ولا يثبت السعر أو يحل محل quote. POST /ride-quotes وPOST\n/trips يظلان صاحبي السعر والتوفر والتحقق والحجز. للمجدولة يحسب الخادم السعر\nوفق موعدها؛ لا يعتمد سعرًا من الهاتف أو من مسار معاينة قديم.\n\nتعرض خريطة الرحلة الطريق بين الانطلاق والوجهة وعلامة السائق منlive؛ لا\nملاحة دورًا بدور أو تحديث ETA من جهاز العميل. عند وصول موقع سائق قديم/فشل\nالمتابعة تُخفى العلامة القديمة. الحركة وحدها لا تعيد طلب المسار أو تحرك\nالكاميرا قسرًا؛ تغير الطرفين أو retry يطلب معاينة جديدة. لا رسم خط مستقيم\nبديل عند الفشل، ولا تخزين دائم للمسار أو ادعاء معرفته offline.\n\n404 ROUTE_NOT_FOUND أو422 VALIDATION_ERROR أو429 RATE_LIMITED أو503\nSERVICE_UNAVAILABLE؛ لا تحويل الفشل إلى مسار افتراضي.\n\n## GET tiles/{z}/{x}/{y}.png — مضيف البلاطات\n\nهذا عنوان استضافة صور، مستقل عن JSON base_url.200 Content-Type:image/png\nوجسم PNG256×256؛ لا غلافdata. الصور الثنائية لا تدرج كـJSON في saved response؛\nطلب Postman يوضح headers والمقاسات، ويقرأ الصورة الحقيقية عند تشغيل الخادم.\n404 بلاطة غير موجودة،429 أو503. لا redirects، أوفاتورة دفع، أوعنوانGPS فيlogs.\nحدود الاستضافة والتحديث واختبارات التغطية السورية مسؤولية الباكند/البنية.\n\n## الأخطاء والموقع\n\nأخطاء JSON بغلاف {error:{code,message:{ar,en}}}؛ لا نص خادم يعرض دون ترجمة.\nGPS قراءة foreground واحدة عند ضغط المستخدم فقط، بمهلة15ثانية. رفض الإذن\nأو إغلاق خدمة الموقع لا يمنع الاختيار اليدوي. لا صلاحية خلفية أو endpoint\nلرفع موقع الراكب تلقائيًا أو GPS وهمي. label اليدوي200codepoints كحد أقصى.\nيحمي العميل الاختيار الجديد من رد عكس/GPS قديم، ويمهل البحث ويهمل ردوده\nبعد المغادرة؛ لا تظهر إحداثيات قديمة في جلسة أخرى.\n\n## فحوص مطور الباكند قبل الربط\n\nزودنا بعنوانَي HTTPS، وتأكد من التغطية والمقاس والمحاور وحقوق OSM، ونجاح\nقواعد العكس وGeoJSON وحدود المنطقة والطريق غير الموجود، وعدم redirect\nإلى مزود عام. اختبر rate limits وtimeouts، ولا تسجل النصوص/الإحداثيات\nالشخصية في logs. تظل تجربة15/15 يوم السابقة معطلة حتى جاهزية المزودين\nوتأكيد تفعيلها؛ العميل لا يختار routing provider بنفسه.\n",
+      "auth": {
+        "type": "noauth"
+      },
+      "item": [
+        {
+          "name": "البحث المشترك عن الأماكن",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"place-1\",\n      \"label\": \"المزة، شارع الجلاء\",\n      \"label_en\": \"Mezzeh, Al Jalaa Street\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    }\n  ],\n  \"meta\": {\n    \"next_cursor\": null\n  }\n}"
+            },
+            {
+              "name": "404",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+              },
+              "status": "Error",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"LOCATION_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"المكان غير موجود\",\n      \"en\": \"Location not found\"\n    }\n  }\n}"
+            },
+            {
+              "name": "422",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+              },
+              "status": "Error",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+            },
+            {
+              "name": "429",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+              },
+              "status": "Error",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+            },
+            {
+              "name": "503",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/places?q={{maps_query}}&limit=20"
+              },
+              "status": "Error",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "عنوان نقطة الخريطة",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"place-1\",\n    \"label\": \"المزة، شارع الجلاء\",\n    \"label_en\": \"Mezzeh, Al Jalaa Street\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  }\n}"
+            },
+            {
+              "name": "404",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+              },
+              "status": "Error",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"LOCATION_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"المكان غير موجود\",\n      \"en\": \"Location not found\"\n    }\n  }\n}"
+            },
+            {
+              "name": "422",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+              },
+              "status": "Error",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+            },
+            {
+              "name": "429",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+              },
+              "status": "Error",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+            },
+            {
+              "name": "503",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/reverse?latitude={{maps_latitude}}&longitude={{maps_longitude}}"
+              },
+              "status": "Error",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "معاينة الطريق من خادم تم",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept-Language",
+                "value": "{{language}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "url": "{{base_url}}/map/routes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/routes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"origin\": {\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"geometry\": {\n      \"type\": \"LineString\",\n      \"coordinates\": [\n        [\n          36.25,\n          33.5\n        ],\n        [\n          36.27,\n          33.51\n        ],\n        [\n          36.283,\n          33.519\n        ]\n      ]\n    },\n    \"distance_meters\": 5019,\n    \"duration_seconds\": 1080,\n    \"provider\": \"osrm\"\n  }\n}"
+            },
+            {
+              "name": "404",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/routes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Error",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ROUTE_NOT_FOUND\",\n    \"message\": {\n      \"ar\": \"لا يوجد طريق صالح\",\n      \"en\": \"No usable route\"\n    }\n  }\n}"
+            },
+            {
+              "name": "422",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/routes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Error",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": {\n      \"ar\": \"مدخلات غير صالحة\",\n      \"en\": \"Invalid input\"\n    }\n  }\n}"
+            },
+            {
+              "name": "429",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/routes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Error",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"طلبات كثيرة\",\n      \"en\": \"Too many requests\"\n    }\n  }\n}"
+            },
+            {
+              "name": "503",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept-Language",
+                    "value": "{{language}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "url": "{{base_url}}/map/routes",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"origin\": {\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Error",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة\",\n      \"en\": \"Service unavailable\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "بلاطة خريطة من سيرفرنا",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "image/png"
+              }
+            ],
+            "url": "{{maps_tiles_base_url}}/{{maps_tile_z}}/{{maps_tile_x}}/{{maps_tile_y}}.png",
+            "description": "صورة PNG256×256 من استضافتنا. الجسم الثنائي غير مضمن في saved example؛ لا غلاف JSON أو توكن تطبيق."
+          },
+          "response": [
+            {
+              "name": "200 PNG — body supplied by the tile server",
+              "originalRequest": {
+                "method": "GET",
+                "auth": {
+                  "type": "noauth"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "image/png"
+                  }
+                ],
+                "url": "{{maps_tiles_base_url}}/{{maps_tile_z}}/{{maps_tile_x}}/{{maps_tile_y}}.png",
+                "description": "صورة PNG256×256 من استضافتنا. الجسم الثنائي غير مضمن في saved example؛ لا غلاف JSON أو توكن تطبيق."
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "image/png"
+                }
+              ],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 — الاتصال بالسائق",
       "description": "المصدر: driver_contact/driver_contact-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـcontact_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# تم — الاتصال بالسائق، عقد v1\n\nالحالة: مقترح للتنفيذ، لا خادم حي متصل. يقرأ العميل وسيلة اتصال للسائق\nالمعيّن لرحلته ثم يفتح تطبيق الهاتف. لا ينفذ عميل الراكب تعيين سائق،\nولا يدعي أن فتح تطبيق الهاتف يثبت إجراء مكالمة أو رد الطرف الآخر.\n\n## الطلب والملكية\n\nGET /trips/{trip_id}/contact?driver_id={expected_driver_id}\nبالنسبة إلى base_url الذي يشمل /api/v1. يلزم Authorization:Bearer\nوAccept:application/json. يتحقق الخادم من مالك الرحلة وحالتها والسائق\nالحالي؛ driver_id شرط تطابق، وليس اختيار سائق أو إذن اتصال بأي شخص.\nالضيف وlocalAccess ليسا جلسة API.\n\nيسمح الاتصال فقط في confirmed/driver_en_route/driver_arrived/in_progress\nمع سائق معيّن. scheduled/requested والحالات النهائية لا تسمح بالاتصال.\nتغير السائق يعيد409 DRIVER_CHANGED دون رقم السائق السابق. غياب وسيلة\nاتصال مخولة يعيد409 CONTACT_UNAVAILABLE. الرحلة الأجنبية403 أو404\nTRIP_NOT_FOUND وفق سياسة إخفاء الوجود المتفق عليها. لا يكشف الرقم في\nhistory أوالإشعارات أوlogs أو رسائل الخطأ.\n\n## الاستجابة\n\n200 envelope:\n\n```json\n{\n  \"data\": {\n    \"trip_id\": \"mock-trip-1\",\n    \"driver_id\": \"mock-driver-001\",\n    \"phone_e164\": \"+963900000000\",\n    \"expires_at\": \"2026-11-09T12:02:17.000Z\"\n  }\n}\n```\n\nكل الحقول مطلوبة وغيرnull؛ id نص غير فارغ، وphone_e164 مطابق\n`^\\+[1-9]\\d{7,14}$` بلاUSSD أورموز أوextensions أوURI. expires_at توقيتUTC Z\nصحيح، بصلاحية لا تزيد على دقيقتين من إصدار الخادم. لا يُخزن الرقم دائمًا\nأو يعرض قبل الحاجة. يختار الخادم رقمًا مخولًا لهذه الرحلة؛ يمكن أن يكون\nوسيطًا إذا وفرت المنظومة ذلك. لا يفرض العقد مزود إخفاء أرقام أو تكلفة\nاتصال أو وعد حماية رقم لم تُجهز بنيته.\n\n## سلوك Flutter\n\nيفحص العميل هوية الرحلة والسائق وصلاحية الرد، ثم يبني URI tel من الرقم\nالمتحقق منه فقط. لا يفتح URL حرًا من الخادم، ولا يطلب CALL_PHONE أو يبدأ\nاتصالًا مباشرًا دون تطبيق الهاتف. محول المنصة يستخدم url_launcher؛ فشل\nالجهاز أو غياب تطبيق الهاتف يعرض DIALER_UNAVAILABLE محليًا. القبول يعني\nتسليم URI للنظام فقط، وليس مكالمة أو فاتورة أو تأكيد رد السائق.\n\nإذا انتهت الجلسة أو أُغلقت الصفحة أو غُطيت بمسار آخر أو انتقل التطبيق للخلفية قبل رد الخدمة،\nلا يفتح اتصالًا متأخرًا؛ يلزم ضغط جديد من المستخدم بعد العودة.\nيتلقى المستودع إبطال أهلية الاتصال أو هوية السائق من مصدر Trip المشترك؛\nالتغيير المعروف قبل فتح التطبيق يلغي النتيجة الجارية ويحتاج ضغطًا جديدًا.\nتحديث الموقع أو الانتقال بين حالات تسمح بالاتصال مع السائق نفسه لا يبطل الطلب.\nيربط محول API المستقبلي المصدر نفسه مع تغييرات الرحلة والجلسة؛ لا يختلق العميل\nمعرفة بتغيير خادمي لم يصل إليه، ولا يضمن بقاء الرحلة نشطة بعد تسليم URI للنظام.\nGET بلا أثر؛ لا Idempotency-Key ولا endpoint يدعي أن المكالمة تمت.\n\n## الأخطاء والمصدر\n\n401 UNAUTHENTICATED؛403 FORBIDDEN؛404 TRIP_NOT_FOUND؛409 DRIVER_CHANGED أو\nCONTACT_UNAVAILABLE؛422 VALIDATION_ERROR؛429 RATE_LIMITED؛503 SERVICE_UNAVAILABLE.\nالبنية error.code وerror.message.ar/en، دون data في استجابة الفشل.\n\nأرقام الأمثلة fixtures لا تُطلب فعليًا؛ mock يحقن MockPhoneDialer ويعرض\nنتيجة محاكاة دون تمرير رقم إلى النظام. DRIVER_CONTACT_DATA_MODE يرث\nDATA_MODE؛ السيناريو DRIVER_CONTACT_MOCK_SCENARIO=success|offline|unavailable.\nالمصدر MockTripStore نفسه، دون قائمة سائقين موازية. API غير المتصل يفشل\nSERVICE_UNAVAILABLE دون fallback.\n\nالاختبارات تشمل المنطق والـURI والهوية والخلفية والجلسة والأمثلة. فتح\nتطبيق الهاتف على جهاز فعلي وربط الخادم واختبارهما يبقيان لمرحلة الربط.\n",
       "auth": {
         "type": "bearer",
@@ -9267,7 +9935,7 @@
       ]
     },
     {
-      "name": "09 — المحادثة",
+      "name": "10 — المحادثة",
       "description": "المصدر: chat/chat-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـchat_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# عقد محادثة العميل والسائق — v1\n\nالحالة: مقترح للتنفيذ الخلفي، مرحلة أولى. أُعد بتاريخ 2026-11-09؛ لا رسائل فعلية.\nالنطاق نصوص داخل رحلة واحدة وسائق واحد. لا مرفقات أو typing أو مكالمات أو حذف/تعديل.\n\n## الملكية والهوية\n\nBearer authentication حقيقي مطلوب لكل API؛ يتحقق الخادم من ملكية trip للعميل في كل عملية.\nالضيف وlocalAccess لا يُصدران token ولا يملكان وصول API. أول GET يثبت driver.id في adapter.\nكل send/read وGET لاحق يرسل `X-Chat-Driver-Id` من هذا السياق. يقارن الخادم الهوية\nذرّيًا مع حالة الرحلة عند التنفيذ؛ تبدل السائق يعطي409 DRIVER_CHANGED دون إرساله للسابق\nأو الجديد ضمن السياق القديم. لا يثق الخادم بزر UI. يجب أن تُفصل الرسائل بمفتاح\ncustomer-session + trip_id + driver_id في الخادم وفي cache؛ لا تعِد بيانات سائق سابق\nلسياق جديد. يحتفظ العميل بالهوية الأولى ويرفض تبديلها تلقائيًا.\n\n| حالة الرحلة | قراءة | إرسال |\n| --- | --- | --- |\n| confirmed / driver_en_route / driver_arrived / in_progress مع سائق | نعم | نعم |\n| completed / cancelled مع سائق سابق | سجل سابق فقط | لا؛409 CHAT_CLOSED |\n| scheduled / requested / no_driver أو لا سائق | لا؛409 CHAT_UNAVAILABLE | لا |\n\nGET لا ينشئ محادثة باكند أو تعيينًا. الرسائل immutable؛ لا إعادة استخدام id أو sequence.\nتأكيد الإرسال لا يثبت تسليمًا أو قراءة، ولا يحول المحاكاة إلى حجز/جلسة حقيقية.\n\n## الشكل المشترك\n\nنجاح `data`، وفشل `error.code` و`error.message.ar/en`، متسقان مع عقد Auth القائم.\nراجع JSON الكامل تحت examples. كل response يحمل `metadata` التالية:\n\n| حقل | قاعدة |\n| --- | --- |\n| version | العدد1، رفض الإصدار غير المدعوم |\n| trip_id | نص opaque غير فارغ، مطابق للسياق |\n| driver.id / name_ar / name_en | معرف opaque وأسماء عرض غير فارغة |\n| revision | integer موجب، متزايد لكل تغيير بالرسائل/الأهلية/receipts، مورد ذري واحد |\n| can_send | boolean محسوب لحظة العملية، ليس إذنًا دائمًا |\n| delivered_through / read_through | integer >=0؛ read<=delivered؛ لا تراجع |\n| customer_read_through | آخر sequence أقره العميل، لا تراجع؛ مستقل عن قراءة السائق |\n\nالرسالة: `id` نص فريد، `sequence` integer موجب متزايد داخل محادثة trip+driver،\n`author` من customer/driver، `body` نص محفوظ كما أُرسل بعد trim على الأطراف،\n`sent_at` UTC ISO8601 من الخادم مع Z وتاريخ صالح، و`client_message_id` غير فارغ\nللعميل وnull للسائق. لا ترتب بالساعة المحلية؛ الترتيب sequence. timestamps غير متراجعة.\nحد النص1..1000 Unicode code points بعد trim (ليس UTF16 units أو grapheme clusters).\nلا ترجمة لنص المستخدم. Flutter ChatPolicy مالك حد1000 والصفحة30 وpoll5s المركزي.\n\n## GET /trips/{trip_id}/chat/messages\n\nQuery `limit=30` فقط حاليًا؛ اختيار before_sequence integer موجب exclusive يعيد أقرب\n30 رسالة قبله. الافتراضي أحدث30. `messages` تصاعدية sequence بلا تكرارid/clientid/sequence.\n`next_before_sequence` يساوي sequence أول رسالة بالصفحة إن بقي تاريخ أقدم، وإلاnull.\nالفراغ `messages:[]` مع cursor:null؛ ليس خطأ ولا نجاح إرسال.\nكل صفحة snapshot متسقة مع metadata.revision. الصفحات مستقلة؛ metadata القديمة لا تُرجع\nreceipts/revision الأحدث في العميل. polling5s/استئناف الصفحة/التحديث اليدوي تدمج أحدث صفحة\nمع التاريخ المحمل وتصالح pending بالـclient_message_id. لا يُمحى التاريخ عند خطأ الشبكة.\nإذا فات أكثر من30 رسالة بين pollين، يتبع cursor أحدث صفحة لملء الفجوة دون تكرار.\n\n## POST /trips/{trip_id}/chat/messages\n\nJSON: `{\"client_message_id\":\"opaque-random-id\",\"body\":\"أنا عند المدخل.\"}`.\nالهيدر X-Chat-Driver-Id مطلوب. استجابة200 `data.metadata` و`data.message` مؤكدة؛\nالمحاكاة لا تدعي HTTP201. المعرّف client-scoped ثابت عبر retry وفقد الرد وإعادة فتح الصفحة.\nينفذ الخادم التخزين والتحقق idempotency وإرسال event داخل معاملة ذرية واحدة؛ المفتاح\ncustomer + trip + driver + client_message_id، محفوظ طوال عمر سجل المحادثة على الأقل.\nتكرار نفس المعرف والنص يعيد الرسالة الأصلية id/sequence/timestamp دون رسالة أو side effect ثانية.\nنفس المعرف بنص مختلف409 IDEMPOTENCY_CONFLICT. يتحقق الخادم من الملكية وهوية السائق أولًا، ثم يبحث عن معرف الرسالة قبل أهلية كتابة جديدة؛\nبعد الإغلاق يعيد نفس الرسالة المقبولة سابقًا دون كتابة جديدة مع metadata.can_send=false.\nإذا لم يكن المعرف مقبولًا سابقًا يعيد CHAT_CLOSED. ويمكن GET كذلك أن يصالح النتيجة السابقة.\nإذا انقطع الرد بعد قبول الخادم يعرض العميل uncertain ويحفظ النص والمعرف، ويستخدم GET\nأو retry بنفسهما. إرسال جديد فقط يولد معرفًا عشوائيًا جديدًا، حتى بعد إعادة فتح الصفحة\nوالساعة المحلية ثابتة. لا retry تلقائي بلا تمييز عند409/422/429.\n\n## PUT /trips/{trip_id}/chat/read\n\nJSON: `{\"through_sequence\":3}` مع الهيدر نفسه. نجاح200 `data.metadata`.\n0 مسموح no-op، والقيمة لا تتجاوز آخر رسالة موجودة. الخادم يحفظ max(old,through_sequence)،\nويزيد revision فقط عند تغيير فعلي. الإغلاق يسمح بتأكيد قراءة سجل سابق دون إرسال نص.\nالعميل يقر فقط آخر رسالة ظهرت في الصفحة الحالية وهي resumed وعند الوصول للأحدث؛\nتحميل صفحة خلفية أو polling أو قراءة التاريخ لا يعني رؤية رسائل أحدث. خطأ التحميل\nيوقف التأكيد. الطلب المتأخر لا يعكس metadata أحدث أو يعيد نصوص جلسة أُغلقت.\n\n## الأخطاء\n\n| HTTP | code | سلوك العميل |\n| --- | --- | --- |\n| 401 | UNAUTHENTICATED | معالجة الجلسة مركزيًا؛ لا mock fallback |\n| 403 | FORBIDDEN | لا عرض لمورد ليس للعميل |\n| 404 | TRIP_NOT_FOUND | تعطيل المحادثة |\n| 409 | CHAT_UNAVAILABLE / DRIVER_CHANGED / CHAT_CLOSED | تعطيل الإرسال، تحديث الأهلية |\n| 409 | IDEMPOTENCY_CONFLICT | لا توليد مفتاح جديد للرسالة نفسها |\n| 422 | VALIDATION_ERROR | نص/معرف/حد/ترقيم/sequence غير صالح |\n| 429 | RATE_LIMITED | Retry-After بالثواني، مثال5؛ لا نجاح وهمي |\n| 503 | SERVICE_UNAVAILABLE | آخر بيانات محفوظة، إعادة محاولة صريحة |\n\nNETWORK_ERROR وINVALID_RESPONSE وSESSION_ENDED أخطاء عميل/محاكاة محلية وليست envelope\nHTTP إضافية. timeout بعد POST يعني uncertain حتى المصالحة، وقد تعني أخطاء الشبكة قبل\nالإرسال failed عندما يستطيع adapter إثبات عدم القبول. API غير مربوط حاليًا ويعيد503محليًا.\n\n## خريطة التحقق\n\nCollection v2.1 تضم العمليات الأربع والأمثلة saved responses مع errors والتفرغ والترقيم\nوالإغلاق والقراءة والتسليم. ChatCodec يفحص UTC/version/أنواع/ترتيب/هوية/حدود/cursor.\nالاختبارات تفك جميع الأمثلة وتقارن fixture البداية وPOST/read مباشرة مع mock،\nوتغطي فقد الرد والتكرار والقراءة المتأخرة والجلسة والسائق والصفحة المغلقة والتجاوب.\nالتنفيذ الحقيقي للباكند وحمل الشبكة ومعدلات التحديد واستيراد Postman الفعلي خارج التحقق الحالي.\n\nالمسودة وpending غير المقبول لا يُحفظان بعد مغادرة الصفحة في هذه الدفعة.\nالرسائل التي قبلها الخادم/المحاكاة تستعاد من repository عند إعادة الفتح؛\nلا outbox دائم ولا حفظ على القرص. retry داخل الصفحة يحتفظ بالمعرف الأصلي.\n",
       "auth": {
         "type": "bearer",
@@ -10672,7 +11340,7 @@
       ]
     },
     {
-      "name": "10 — إنهاء الرحلة والتقييم",
+      "name": "11 — إنهاء الرحلة والتقييم",
       "description": "المصدر: completion/completion-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـcompletion_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# عقد ملخص الرحلة والتقييم v1\n\nالحالة: **مقترح للباكند، لا تكامل HTTP منفذ أو تحقق حي**. الإصدار1 داخل\n`data.version`، والأساس المتغير `{{base_url}}` يشمل بادئةAPI مثل`/v1`.\nيطبق الباكند جلسةBearer موثقة وملكية الرحلة في كل GET/POST. الضيف والدخول\nالمحلي في تطوير المحاكاة لا يكوّنان مستخدمًا موثقًا أو tokens.\n\n## التدفق ومصدر البيانات\n\nالرحلة نفسها منTrips وActiveTrip مصدر الملخص، ويشترطstatus=completed.\nيدعم التاريخ القديم الذي لا يحويlive أوdriver؛ التقييم لتجربة الرحلة.\nيعرض معرف الطلب وتاريخ إنشائه ومواقعه وحالته ومبلغbooking.fare المسجل،\nوالسائق اختياري إن وُجد فيlive. لا استنتاج لدفع أو إيصال/ضريبة/خصم أو\nمسافة/مدة، ولا أسعار نهائية مختلقة. لا يغير العميل حالة الرحلة إلىcompleted.\n\n| فعل الواجهة | Repository | HTTP |\n|---|---|---|\n| فتح/إعادة تحميل الملخص أو حسم الرد المفقود | fetch(tripId) | GET /trips/{trip_id}/completion |\n| إرسال نجوم وتعليق | submitRating(tripId,stars,comment,idempotencyKey) | POST /trips/{trip_id}/rating |\n| إعادة الإرسال بعد الفشل/فقد الرد | نفسsubmitRating بنفسintent | نفسPOST والمفتاح والحمولة |\n| الرئيسية/رجوع/دعم الرحلة | callbacks محلية | لا endpoint مخترع؛ الدعم ميزة مستقلة |\n\n## الطلبات\n\nHeaders مشتركة: `Authorization: Bearer {{access_token}}`, `Accept: application/json`.\nPOST يضيف`Content-Type: application/json` و`Idempotency-Key` غير فارغ.\nمعرفtrip_id نصopaque ثابت؛ يجبpath-encode عند إدخاله فيURL. لاpagination أوfilters.\n\nPOST body: `stars` عدد صحيح مطلوب1..5، `comment` نص مطلوب فيwire لكن اختياري\nللمستخدم (الغياب في النموذج يرسل`\"\"`). تُزال الفراغات الطرفية قبل الإرسال،\nويقبل الخادم النصcanonical نفسه فقط/يطبع قبل المقارنة حسب قاعدةtrim المشتركة.\nالحد500 Unicode code points بعدtrim، وليسUTF-16 units ولاbytes ولاgraphemes؛\nإيموجي منفرد خارجBMP يحسبcodepoint واحدًا. لاقطع صامت للنص. CompletionPolicy\nالمركزي يطبق الحد؛ تغيير المنتج يحتاج تحديث العقد والباكند والعميل معًا.\n\n## النجاح200\n\nكلGET وPOST يعيد`{\"data\": {...}}`، بالحقول التالية المطلوبة:\n\n| الحقل | النوع والمعنى |\n|---|---|\n| version | integer=1 |\n| revision | integer>=1؛ إصدار متزايد داخل ملخص الرحلة يزداد عند تغيّرtrip/rating |\n| trip | TripWireCodec المشترك كاملًا، ولاحقًاlive اختياري وفقعقد ActiveTrip |\n| rating | null أوكائنTripRating كامل |\n\nحقولtrip: `id` نص، `status=\"completed\"`، `created_at` timestampUTC بصيغةISO8601\nمعZ؛ `pickup/destination` كائناتlabel/latitude/longitude؛ `vehicle_class_id` نص؛\n`fare` بقيم`amount_minor` integer>=0 و`currency`ISO4217 و`minor_unit`0..3.\nالقيمة25000/SYP/0 تعني25000ليرة. `scheduled_at` اختياريUTC إن كان الطلب مجدولًا؛\n`live` اختياري، ولا يصنعه الملخص. أمثلةالرحلات القديمة بلاlive معتمدة ضمنالحزمة.\n\nحقولrating المطلوبة: `id` نص ثابت، `trip_id` يطابقtrip.id، `stars` integer1..5،\n`comment` نصtrimmed<=500codepoints ويمكنفارغًا، `idempotency_key` نصopaque مطابق\nلطلب الإنشاء، `submitted_at`ISO8601UTC معZ ولايسبقtrip.created_at أووقت اكتماله\nالمسجل فيlive إن وجد. لايقعrevision مختلف لمحتوىمختلف عندنفسالإصدار؛ ولاينقص.\n\nتردPOST الأولية والإعادةبنفسالحالة200 والموردنفسه؛ لاtimestamp أوid أوrevision\nجديد للإعادة. GET بلا تقييم يعيدrating:null، وليس404 أو قائمة فارغة.\nحقولidempotency تحفظ داخل حساب صاحبالتقييم ولا تُكشف لحسابآخر.\n\n## عدم التكرار والتزامن\n\nتقييم واحدimmutable لكلرحلة ولكلصاحبها، بفرضtransaction/unique constraint\nعلىtrip_id ومعرفالمالك. المفتاحعشوائيآمن مستقلعنالساعةوعمرCubit. يسجّل الخادم\nالمفتاحوالحمولةcanonical ونتيجتهاأتوميًا، بنطاقالحساب؛ لايعتمد العميلعلىتوقيت\nالساعةلتوليدهوية. نفسالمفتاح/الرحلة/النجوم/النص يعيدنفسالمورد؛ المفتاحنفسه\nلحمولةأورحلةمختلفة409IDEMPOTENCY_CONFLICT. مفتاحجديدلرحلةمقيّمة\n409RATING_ALREADY_SUBMITTED. تُحفظالمفاتيح طوالعمرالمورد (أوlookupدائم مكافئ).\nلا تعديل/حذف/تخطي مصطنع للتقييم. الرفض قبل القبول لا يحجزالمفتاح.\n\nبعدtimeout/ردغيرمؤكد يحتفظالعميلبالنجوموالتعليقوالمفتاح دونتعديل؛ GET يحسم\nالتقييمالمحفوظ أوPOST يعيدنفسالطلب. لايدعي فشلًا مؤكدًا أويسجلنجاحًا محليًا.\nيُتحقق منtrip/rating/intent فيالإقرار؛ readsالأقدم لا تمسحackأحدث، ولايقلب\nratingمحفوظ إلىnull. تغييرالجلسةيبطل الطلباتالجارية ويزيلصفحاتالبيانات.\nالإقرارالمقبول بعدإغلاقالصفحة يبقىفيالخادم؛ إعادةالفتح تقرأGET. المسوداتغير\nالمقبولةلاتُحفظدائمًا فيالعميل؛ هذاقرارالمرحلةالحاليةوليستعهدتسليمفيالخلفية.\n\n## الأخطاء\n\nالشكل: `{\"error\":{\"code\":\"...\",\"message\":{\"ar\":\"...\",\"en\":\"...\"}}}`.\nالرسائل للإنسان، والأكواد ثابتة. كلاالنصين مطلوبانغيرفارغين.\n\n| HTTP | code | السبب/تصرفالعميل |\n|---|---|---|\n|401|UNAUTHENTICATED|جلسةمفقودة/منتهية؛ لاطلبAPI باسمguest/localAccess|\n|403|FORBIDDEN|رحلةليستملكالحساب؛ لاكشفبياناتها|\n|404|TRIP_NOT_FOUND|معرفغيرموجود بعدتفويضالطلب|\n|409|TRIP_NOT_COMPLETED|قراءةأوتقييمقبلcompleted؛ لايغيرالعميلالحالة|\n|409|RATING_ALREADY_SUBMITTED|مفتاحجديدلرحلةمقيّمة؛ GETللتقييمالقائم|\n|409|IDEMPOTENCY_CONFLICT|المفتاحذاته معpayloadأورحلةمختلفة؛ لاتبدلمفتاحًالتجاوزه|\n|422|VALIDATION_ERROR|نجوم/تعليق/مفتاحغيرصالح؛ قبلالقبول|\n|429|RATE_LIMITED|حدطلبات؛ Retry-Afterبالثواني عندتوفره، لاإعادةتلقائيةمتسارعة|\n|503|SERVICE_UNAVAILABLE|عدمجاهزيةالخدمة؛ لاfallbackمحاكاة|\n\nNETWORK_ERROR وINVALID_RESPONSE وSESSION_ENDED أكوادعميلمحلية، ليستHTTP\nresponsesمختلقة. فقدtransportأثناءPOST غيرمؤكد، ويحتاجقراءة/إعادةبنفسالمفتاح.\nالباكند مسؤولعنالتفويضوالحفظالأتوميوالإصدار؛ العميلمسؤولعنvalidationللتجربة\nوالعزلوحمايةالاستجاباتالمتأخرة، ولايغنيأيمنهماتحققعنالآخر.\n\n## نقاط مفتوحة\n\nالعقد ينتظر مراجعةالباكند وعنوانالخادم واعتمادسياسةالمحتوى/الخصوصيةوالاحتفاظ.\nلا توجدواجهاتتعديلأوحذف ضمنالنطاق. التطبيقلاينشرنصًاقانونيًا غيرمعتمد،\nوالواجهةمبدئيةللمرحلةالأولى؛ المراجعةالبصريةالنهائيةومطابقةالأصوللاحقًا.\n",
       "auth": {
         "type": "bearer",
@@ -11571,7 +12239,7 @@
       ]
     },
     {
-      "name": "11 — الإشعارات داخل التطبيق",
+      "name": "12 — الإشعارات داخل التطبيق",
       "description": "المصدر: notifications/notifications-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـnotifications_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# عقد إشعارات العميل v1.0 — مقترح للباكند\n\n**الحالة:** مقترح، غير مطبق على الخادم، غير متحقق حيًا. **Owner:** W1-NOTIFICATIONS (D).\n**Base URL:** `https://api.example.com/api/v1` مثال غير حي. المسارات أدناه نسبية إلى `/api/v1`.\n\n## 1. الترويسات والمصادقة والشكل العام\n\n- `Accept: application/json`، و`Accept-Language: ar|en`.\n- `Authorization: Bearer <access_token>` **إلزامي** في API لجميع العمليات؛ ينطبق Auth القائم دون تعديل. استجابة 401 عند الغياب/انتهاء الجلسة، 403 للمنع. لا تستخدِم localAccess أو guest كجلسة API حقيقية.\n- `Content-Type: application/json` لعمليات POST مع الجسم `{}` (لا حقول إضافية).\n- نجاح القراءة: `{ \"data\": ..., \"meta\": { \"next_cursor\": string|null } }` للقائمة، و`{ \"data\": ... }` للبقية.\n- الخطأ: `{ \"error\": { \"code\": \"STABLE_CODE\", \"message\": { \"ar\": \"...\", \"en\": \"...\" } } }`؛ قرارات التطبيق بالأكواد لا بنص الرسالة.\n- الأوقات ISO-8601 UTC وتنتهي حرفيًا `Z`، ويحوّل Flutter التاريخ إلى التوقيت المحلي للعرض. النصوص المترجمة كائنان `{ ar: string, en: string }` غير فارغين.\n\n## 2. نموذج الإشعار\n\n| الحقل | النوع | السماح بـ null؟ | الدلالة |\n|---|---|---|---|\n| `id` | string، opaque، غير فارغ | لا | معرف فريد ثابت، لا تفترض صيغة رقمية. |\n| `kind` | string | لا | `trip`, `offer`, `account`, `system`؛ أي قيمة مستقبلية تُعرض بأيقونة عامة. |\n| `title` | object `{ar,en}` | لا | نص قصير بلغتين. |\n| `body` | object `{ar,en}` | لا | وصف بلغتين؛ لا HTML تنفيذي. |\n| `created_at` | UTC ISO-8601 `Z` | لا | تاريخ الإنشاء والترتيب. |\n| `read_at` | UTC ISO-8601 `Z` | نعم | `null` تعني غير مقروء. التعليم لا يغيّر القيمة إن كانت موجودة. |\n| `target` | object | لا | `type: home|trips|trip` أو قيمة جديدة غير معروفة. |\n| `target.trip_id` | string opaque | نعم / غائب | مطلوب وغير فارغ فقط حين `type=trip` لتنقل صالح. |\n\n**أمان التنقل:** allowlist ثابتة `home / trips / trip`. ينقل Flutter إلى التفاصيل بواسطة `CustomerNavigation.openTrip(trip_id)` فقط، لا بفتح URL أو route من JSON. `target.type` غير معروف أو `trip_id` فارغ: يُعرض نص الإشعار، **ولا تنقل**. يمكن أن يحتوي JSON إضافات مجهولة؛ يجب تجاهلها وعدم تنفيذها. مثال `notice-unknown-001` يعرض `target.type=external` و`url` لأغراض اختبار الرفض فقط؛ لا ينبغي أن يطلبه الباكند للإنتاج. إشعار الرحلة الأساسي يستخدم `mock-history-001`، نفس seed للرحلات في Flutter.\n\n## 3. GET /notifications\n\n**Query:** `limit` اختياري، عدد صحيح افتراضي 20 في المجال 1..50؛ `cursor` اختياري opaque string (لا تفسره الواجهة). لا يوجد filter إلزامي في v1. استجابة HTTP 200:\n\n```json\n{\n  \"data\": [\n    {\n      \"id\": \"notice-trip-complete-001\",\n      \"kind\": \"trip\",\n      \"title\": {\"ar\": \"اكتملت رحلتك\", \"en\": \"Your trip is complete\"},\n      \"body\": {\"ar\": \"شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.\", \"en\": \"Thanks for choosing Tam. Review your trip details.\"},\n      \"created_at\": \"2026-11-07T12:20:00Z\",\n      \"read_at\": null,\n      \"target\": {\"type\": \"trip\", \"trip_id\": \"mock-history-001\"}\n    }\n  ],\n  \"meta\": {\"next_cursor\": \"bjE6Mg\"}\n}\n```\n\nالمثال أعلاه مختصر توضيحي؛ `examples/notifications-page-1.json` يتضمن العنصرين المتطابقين مع طلب `limit=2`. الترتيب **`created_at DESC, id ASC`**، مع عدم تكرار `id` بين الصفحات. `next_cursor=null` يعني النهاية. القائمة الفارغة نجاح `200` و`data=[]`. ينسق الباكند cursor ثابتًا عبر الصفحات في وجود إشعارات جديدة (نقترح cursor مقيّدًا بلقطة القائمة)؛ عند انتهاء/فساد cursor يُعيد `INVALID_CURSOR` حتى يبدأ العميل من الصفحة الأولى. تغير `read_at` لا يعيد ترتيب القائمة.\n\n## 4. GET /notifications/unread-count\n\nاستجابة HTTP 200: `{\"data\":{\"unread_count\":4}}`. عدد صحيح غير سالب؛ يُحسب لكل حساب المستخدم، بما فيها العناصر غير المحمّلة في القائمة. يعد هذا endpoint مصدر الحقيقة للعداد. يُطلب عند فتح الصندوق وعند إعادة المزامنة؛ في المستقبل يحق لخادم الحدث دفع تحديثات موثوقة إلى المستودع نفسه، دون إنشاء عداد ثانٍ داخل Home.\n\n## 5. POST /notifications/{id}/read\n\n`id` مُعرّف opaque يُرمّز عند تكوين URI؛ الجسم `{}`. استجابة HTTP 200 تعيد `{\"data\": <Notification>}` مع `read_at` غير null. العملية **idempotent**: إذا كان مقروءًا سابقًا، يُعيد `read_at` الأصلية، ولا يُنقص العدد مجددًا. تعيين عنصر لا يخص الحساب يعامل كـ404 دون كشف وجوده. لا تفترض الواجهة نجاح القراءة قبل استجابة ناجحة؛ بعد timeout يمكن تكرار الطلب بأمان. مثال `examples/mark-read.json`.\n\n## 6. POST /notifications/read-all\n\nالجسم `{}`، استجابة HTTP 200 `{\"data\":{\"read_at\":\"2026-11-07T15:00:00Z\",\"unread_count\":0}}`. يطبَّق على كل إشعارات الحساب غير المقروءة **بعملية ذرّية**، حتى غير المحمّلة. يُرجع `read_at` وقت العملية الذي يُستخدم فقط لتحديث العناصر التي كانت غير مقروءة؛ تُحفَظ أوقات قراءة العناصر القديمة. تكرار العملية آمن: يبقى العدد 0، ولا تُسجَّل إنقاصات إضافية. عند timeout يعيد العميل العملية ثم يراجع unread-count. مثال `examples/mark-all-read.json`.\n\n## 7. أخطاء موحّدة وإعادة المحاولة\n\n| HTTP | `error.code` | الحالات |\n|---|---|---|\n| 400 | `INVALID_CURSOR` | cursor فاسد/منتهي أو `limit` خارج 1..50. |\n| 401 | `UNAUTHENTICATED` | جلسة مفقودة/منتهية؛ لا تستخدم Auth محاكى كبديل. |\n| 403 | `FORBIDDEN` | حق وصول مرفوض. |\n| 404 | `NOTIFICATION_NOT_FOUND` | معرف غير موجود أو غير مملوك. |\n| 422 | `VALIDATION_ERROR` | جسم POST أو query غير صالح، مع رسائل باللغتين. |\n| 429 | `RATE_LIMITED` | استخدام مفرط، احترم `Retry-After` إن وجد. |\n| 503 | `SERVICE_UNAVAILABLE` | خدمة غير متاحة؛ لم يكتمل التعديل. |\n| 500 | `INTERNAL_ERROR` | عطل عام لا يُعرض نصه الخام للمستخدم. |\n\nفي أخطاء HTTP أو الاتصال، لا تعدّل حالة القراءة محليًا بصورة مؤكدة؛ احتفظ بحالة آخر نجاح واعرض خطأ وإعادة محاولة. قد يكون timeout حصل بعد تطبيق التعديل فعليًا؛ idempotency والتحديث من المستودع يضمنان التقارب. يعرض العميل بيانات الصفحة السابقة بعد فشل تحديثها مع رسالة واضحة، ولا يُبنى عدد جديد من العناصر المحمّلة.\n\n## 8. مصفوفة الربط والمسؤوليات\n\n| التدفق | Domain repository | API |\n|---|---|---|\n| فتح الصندوق/السحب للتحديث | `getPage(limit,cursor)` | GET /notifications |\n| الترقيم | `getPage(cursor)` | GET /notifications |\n| الشارة وعدد غير المقروء | `getUnreadCount()` و`unreadChanges` | GET /notifications/unread-count |\n| نقر إشعار جديد | `markAsRead(id)` | POST /notifications/{id}/read |\n| تعيين الكل | `markAllAsRead()` | POST /notifications/read-all |\n| فتح وجهة مصرح بها | `NotificationTarget` + `CustomerNavigation` | لا API إضافي؛ رحلة قائمة في GET /trips/{id} عند الربط |\n\nالمحاكاة حالياً ثابتة seed وبداخل الذاكرة؛ لا Push أو SDK للنظام. **على الباكند** تطبيق auth والملكية والترتيب والعداد الذري وidempotency والأخطاء؛ **على Flutter مستقبلًا** تنفيذ HTTP adapter مع اختبار body/error parsing والتحقق من الجلسات وretry. **نقطة تنسيق:** تثبيت عمر cursor وسياسة اتساق الصفحات تحت التغييرات المتزامنة قبل الاعتماد النهائي.\n",
       "auth": {
         "type": "bearer",
@@ -12317,7 +12985,7 @@
       ]
     },
     {
-      "name": "12 — إعدادات الحساب",
+      "name": "13 — إعدادات الحساب",
       "description": "المصدر: settings/settings-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـsettings_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n> تغيير رقم الهاتف وحذف الحساب منفذان في ميزة account_management المستقلة،\n> وليسا تعديلًا مباشرًا للهاتف داخل PATCH profile. اقرأ عقدها للتحقق والملكية.\n\n# عقد Settings API — v1 (مقترح، غير منفّذ)\n\nقاعدة `base_url` تتضمن `/api/v1`؛ الاستدعاءات أدناه نسبية إليها. جميعها تتطلب `Authorization: Bearer <access_token>` حقيقيًا (ليس دخول localAccess/guest)، و`Accept: application/json` و`Accept-Language: ar|en`. لطلبات PATCH أرسل `Content-Type: application/json`. التوكن يحصل عليه العميل من Auth الحالي دون تعديل عقد `/auth/me`.\n\n## أشكال النقل\n\nكل نجاح: `HTTP 200 { \"data\": { ... } }`. كل خطأ: `{ \"error\": { \"code\": \"FIXED_CODE\", \"message\": {\"ar\": \"...\", \"en\": \"...\" } } }`؛ لا تُرجع HTTP 200 على الخطأ. الحقول المطلوبة لا تعتمد على defaults صامتة. لا توجد قوائم أو ترتيب أو `limit/cursor` أو pagination بهذه الواجهات المفردة. لا يوجد وقت خادم أو سعر أو معرف مورد مطلوب في هذه النسخة. حقول الهوية `id` و`phoneE164` والتوكن خارج هذا العقد؛ الهاتف من Auth للعرض.\n\n### GET /me/profile\nالطلب بلا body. استجابة:\n```json\n{\"data\":{\"display_name\":\"مستخدم تم\",\"avatar_url\":null}}\n```\n\n| الحقل | النوع | مطلوب؟ | nullable؟ | الوصف |\n| --- | --- | --- | --- | --- |\n| `display_name` | string | نعم | لا | الاسم الظاهر، 2–60 محرف Unicode بعد trim وطيّ المسافات؛ ليس اسم Auth موثقًا |\n| `avatar_url` | string URL | نعم | **نعم** | صورة اختيارية للعرض فقط في هذه النسخة؛ لا تُدخل صورة وهمية إن كانت null |\n\n### PATCH /me/profile\nالطلب `{\"display_name\":\"اسم جديد\"}`؛ الحقل مطلوب، ممنوع null، لا يقبل `phone` أو `avatar_url` كحقل كتابة في v1. يحوّل الخادم مجموعات whitespace إلى مسافة واحدة، ويقص البداية والنهاية، ويرفض بعد التطبيع طولًا خارج `[2,60]` Unicode code points أو رموز التحكم المتبقية. لا يترجم الاسم بين اللغات. يرجع `200` مع الجسم الكامل كـGET (بما فيه `avatar_url`). لا يعدّل AuthUser ولا الهاتف. إعادة PATCH بنفس القيمة تحقق النتيجة نفسها؛ ليس تأكيدًا ماليًا ولا يلزم Idempotency-Key.\n\n### GET /me/preferences\nالطلب بلا body. استجابة:\n```json\n{\"data\":{\"account_notifications_enabled\":true}}\n```\n\n| الحقل | النوع | مطلوب؟ | nullable؟ | الوصف |\n| --- | --- | --- | --- | --- |\n| `account_notifications_enabled` | boolean | نعم | لا | رغبة الحساب في إشعارات التطبيق؛ لا يعني Push permission |\n\n### PATCH /me/preferences\nالطلب `{\"account_notifications_enabled\":false}`، الحقل مطلوب boolean لا نص `\"false\"` ولا null. يرجع `200` مع `data` كاملًا بنفس النوع. لا يُطلب إذن OS، ولا يرسل Push من تطبيق العميل. تعديل preferences لا يلمس display_name، والعكس صحيح.\n\n## الأخطاء والحالات\n\n| الحالة | HTTP | `error.code` | التعامل المطلوب |\n| --- | --- | --- | --- |\n| جلسة غائبة/منتهية | 401 | `UNAUTHENTICATED` | التدفق الموحد لـAuth، دون mock |\n| جلسة لا تملك صلاحية | 403 | `FORBIDDEN` | إظهار منع حقيقي |\n| حقل ناقص/نوع خاطئ/اسم قصير أو طويل | 422 | `VALIDATION_ERROR` | الاحتفاظ بالدرفت وإظهار الخطأ |\n| خادم غير متاح | 503 | `SERVICE_UNAVAILABLE` | إبقاء البيانات المحفوظة كما هي وإتاحة Retry |\n| فشل حفظ غير متوقع | 500 | `INTERNAL_ERROR` | عدم إظهار نجاح وهمي، إمكان retry |\n\nالاستجابة `error.message.ar/en` **مطلوبة للغتين**. لا يغيّر فشل PATCH القيمة المحفوظة، وعلى العميل الاحتفاظ بالدرفت وإظهار Retry. بعد timeout مجهول النتيجة: استعلم GET للتحقق من حالة الحقل؛ يجوز إعادة PATCH المرغوب لأن العملية set-value idempotent. عند تعديلات متزامنة من جهازين: **آخر PATCH ناجح لكل حقل يفوز**؛ لا توجد version/ETag في v1، وهو قرار مفتوح لإصدار تالٍ إن لزم تحكم تنافسي. تعود الاستجابة بقيمة الخادم canonical بعد الحفظ؛ لا تعتمد الواجهة قيمة النص قبل التطبيع.\n\n## بيانات المصادقة والخطوط الحمراء\n\nتُطبّق قيود الوصول على الخادم، ولا يقبل `localAccess` أو `guest` بوصفهما Bearer token. مصدر `phoneE164` هو تدفق Auth الحالي للقراءة فقط. لا يغيّر هذا العقد `/auth/me` ولا يدعم تعديل الهاتف/إعادة OTP أو حذف الحساب أو محفظة أو عناوين أو إعدادًا للغة على الخادم.\n\n## أمثلة وتطابق Mock\n\n`examples/profile-get-success.json`, `examples/preferences-get-success.json`, `examples/profile-patch-request.json`, `examples/preferences-patch-request.json`, `examples/validation-error.json` تماثل أسماء الحقول في `SettingsWireMapper` و`SettingsFixtures`. تُستخدم نفس القواعد للتحقق بالعميل. المستودع الحقيقي لم يُنفّذ بعد؛ عند تنفيذ HTTP، يحوّل طبقة data أخطاء HTTP/DTO إلى `SettingsFailure` domain فقط، ولا يمررها Widgets مباشرة.\n\n## نقاط للموافقة قبل API production\n\n1. مكان خدمة صور الحساب مستقبلًا وحدود URL المسموح؛ حاليًا لا كتابة للصور.\n2. هل نحتاج تعارض تعديل من عدة أجهزة (revision/ETag) لاحقًا؟\n3. هل تفضيل إشعارات الحساب سيطبّق على الرسائل داخل التطبيق فقط أم لاحقًا Push؟ لا تفعّل Push في هذه الدفعة.\n",
       "auth": {
         "type": "bearer",
@@ -13455,7 +14123,7 @@
       ]
     },
     {
-      "name": "13 — تغيير الرقم وحذف الحساب",
+      "name": "14 — تغيير الرقم وحذف الحساب",
       "description": "المصدر: account_management/account_management-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـaccount_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# تم — إدارة رقم الحساب وحذفه، عقد v1\n\nالحالة: مقترح للتنفيذ، غير متصل بخادم حي. هذا امتداد مستقل عن مسارات Auth\nالستة؛ لا يستخدم تحقق عملية حساسة لتسجيل دخول أو إصدار جلسة جديدة.\nbase_url يشمل /api/v1. النجاح data، والفشل error.code وmessage.ar/en.\nكل الأوقات ISO8601 UTC Z بتقويم صحيح. المعرفات opaque وغير فارغة.\n\n## التدفقات والقرارات\n\nتغيير رقم سوري: إدخال الجديد، OTP للرقم الجديد، تأكيد ثم إنهاء الجلسة.\nالحذف: تأكيد صريح من المستخدم، OTP لرقمه الحالي، تنفيذ الحذف ثم إنهاء\nالجلسة. لا دمج حسابين ولا تغيير رقم دون تحقق. المحفظة والدفع والكوبونات\nمؤجلة. ليست هذه سياسة احتفاظ قانونية؛ النصوص المعتمدة مسؤولية صاحب المنتج.\n\nيمنع الخادم العمليتين أثناء أي رحلة غير منتهية، بما فيها scheduled.\nيفحص ذلك عند إنشاء التحقق ومجددًا داخل معاملة التنفيذ؛ لا يعتمد على UI.\nهذه سياسة الإصدار الأول المتبعة في المحاكاة، وقابلة للتعديل بالتنسيق.\nالضيف والدخول المؤقت ليسا جلسة API. المحاكاة تحاكي ملكية الرقم المدخل محليًا\nولا تنشئ حسابًا أو توكنًا موثقًا. تجاوز OTP الدخول المؤقت لا ينطبق على هذه العمليات.\n\n## العمليات\n\n| الفعل | Repository | HTTP |\n|---|---|---|\n| أهلية الإدارة | eligibility | GET /me/account/eligibility |\n| بدء تحقق تغيير أو حذف | start | POST /me/account/challenges |\n| إعادة إرسال | resend | POST /me/account/challenges/{challenge_id}/resend |\n| تأكيد العملية | confirm | POST /me/account/challenges/{challenge_id}/confirm |\n| حسم فقد الرد | operation | GET /account/operations/{operation_id} |\n\nAccept:application/json؛ Content-Type:application/json لطلبات POST.\nأول أربع عمليات تتطلب Bearer صالحًا وملكية الحساب والتحقق. عملية الحسم\nالأخيرة لا تتطلب جلسة حساب، لكنها **ليست عامة بلا اعتماد**: تحتاج\nX-Operation-Token سريًا محدود الصلاحية بالعملية نفسها. التأكيد يحتاجه كذلك.\nإعادة تأكيد عملية مكتملة بعد إبطال الجلسة يسمح بها فقط لاسترجاع نتيجتها\nبنفس token والعملية والتحقق والحمولة، دون أي تعديل جديد. أول أثر يتطلب\nBearer صالحًا دائمًا؛ recovery token وحده لا ينفذ حذفًا أو تغييرًا.\n\nGET eligibility: data.phone_e164 مطلوب string سوري canonical؛\ndata.active_trip_ids قائمة معرفات فريدة للرحلات غير المنتهية. الخادم الحقيقي\nلا يعيد guest success؛ مثال phone_e164:null يصف أهلية المحاكاة للضيف فقط،\nولا يوجد نجاح كهذا محفوظ في طلب Postman الخادمي.\n\nPOST challenge body: operation_id مطلوب `[A-Za-z0-9_-]{16,128}`؛ العميل يولد\n48hex من مصدر آمن. purpose مطلوب change_phone|delete_account.\nnew_phone_e164 مطلوب لتغيير الرقم بصيغة +9639 ثم8 أرقام، ويجب أن يختلف\nعن الحالي وألا يخص حسابًا آخر. للحذف يغيب أو يكون null. يثبت الخادم\nهوية الحساب والهدف والغرض في التحقق، لا يقبل تبديلها عند التأكيد.\n\n200 data: challenge_id وoperation_id وpurpose وphone_e164 (هدف OTP)،\nexpires_at وresend_at، attempts_remaining:int0..5، revision:int≥1،\nوrecovery_token:64hex عشوائي آمن. الأخير اعتماد استعادة، يخزنه محول API\nخصوصيًا في data خلال عمر الصفحة؛ لا tokens في Cubit state أو logs أو URL.\nممنوع إعادة استخدامه للوصول للملف أو الرحلات أو بدء عملية أخرى.\n\nرمز OTP ست خانات، صالح5 دقائق، وإعادة الإرسال بعد30 ثانية. خمسة أخطاء\nتفرض قفل15 دقيقة على الحساب/الهدف عبر التحققات الجديدة أيضًا. الخادم\nيطبق حدود إرسال مستقلة حسب الحساب/الهدف/المصدر؛429 وRetry-After للرفض.\nهذه حدود مقترحة مثبتة في AccountPolicy وتحتاج تنسيقًا عند تغييرها.\nالوقت والمحاولات مصدرهما الخادم؛ العميل لا يقرر نجاح الرمز من الساعة.\n\nPOST resend body: request_id آمن بنفس نمط operation_id، ثابت عند إعادة\nمحاولة الإرسال نفسها. يظل challenge_id ثابتًا وترتفع revision وتتجدد\nالمواعيد والمحاولات ضمن حدود المعدل. كل إعادة إرسال ناجحة تبطل الرمز السابق.\nإعادة نفس request_id للتحقق نفسه لا ترسل SMS جديدًا ولا تعيد ضبط الساعة؛\nمع تحقق مختلف409. تعرض الاستجابة أحدث challenge دون recovery_token.\n\nPOST confirm body: operation_id وcode. يتحقق الخادم من OTP والغرض والهدف\nوملكية الحساب وأهلية الرحلات وتوفر الرقم ذريًا مع التعديل. لا استهلاك جزئي\nلرمز مع نجاح تعديل غير مسجل؛ لا محاولة جديدة بمعرف مختلف بعد timeout.\n200 data: operation_id وchallenge_id وpurpose وstatus=completed وcompleted_at.\nيعاد نفس المورد لإعادة نفس العملية، دون تعديل جديد أو وقت جديد.\nنفس العملية ببيانات مختلفة409 IDEMPOTENCY_CONFLICT. تُقارن حمولة التأكيد\nالمطبعة بما فيها الرمز لإعادة عملية مكتملة، ولا تعاد محاولة OTP مستهلكة\nكمورد مستقل. عدم تطابق الغرض/التحقق/الهدف لا يغير حسابًا آخر.\n\nنجاح الحذف يعطل الوصول للحساب ويبطل جلساته؛ نجاح تغيير الرقم يحدث حسابه\nنفسه ويبطل جلساته أيضًا، ثم يعود المستخدم للدخول بالرقم الجديد. لا يصدر\nهذا endpoint access_token أوrefresh_token. تفاصيل الاحتفاظ والحذف لدى\nالمنظومة وتدقيق الموظفين خارج قرار العميل؛ لا نعد بزمن مسح قانوني مختلق.\n\nيحفظ الخادم سجل نتيجة وgrant استعادة محدودًا24 ساعة على الأقل مع\nidempotency، حتى بعد إبطال جلسة الحساب. GET operation يحتاج token مطابقًا\nلنفس العملية؛ لا يكشف رقمًا أو ملف مستخدم.200 data:null تعني لم تنفذ\nهذه العملية بعد، و200 مع receipt تعني مكتملة. token مجهول/منتهي/لعملية\nأخرى401 RECOVERY_INVALID دون كشف الوجود. لا تنفذ GET أثرًا ولا تعيد حسابًا\nمحذوفًا. لا تعمم استثناء جلسة ملغاة إلى بقية المسارات.\n\nعند فقد رد start يعاد نفس operation_id والغرض والهدف ويعود نفس التحقق\nوgrant؛ لا يرسل رمز جديد. عند فقد confirm يجمد العميل الرمز والنية،\nويقرأ receipt أو يعيد نفس confirm. لا يوجد outbox دائم في هذا الإصدار؛\nالمسودة والـgrant غير المقبولين لعمر الصفحة. بعد إعادة تشغيل التطبيق\nتحدد استعادة Auth وضع الحساب من الخادم، ولا يختلق العميل نجاح عملية مفقودة.\n\n## الأخطاء\n\n401 UNAUTHENTICATED أوRECOVERY_INVALID؛403 FORBIDDEN/ACCOUNT_REQUIRED؛\n404 CHALLENGE_NOT_FOUND؛409 ACTIVE_TRIP_EXISTS/PHONE_UNCHANGED/PHONE_IN_USE/\nIDEMPOTENCY_CONFLICT؛410 OTP_EXPIRED؛422 VALIDATION_ERROR/OTP_INVALID؛\n429 OTP_COOLDOWN/OTP_ATTEMPTS_EXCEEDED/RATE_LIMITED؛503 SERVICE_UNAVAILABLE.\nالرفض المعروف قبل الأثر يتيح التصحيح. timeout وإخفاق النقل أو استجابة\nغير مطابقة قد تعني أثرًا غير محسوم، فتظل نفس النية مقفلة حتى الحسم.\nلا تعرض تفاصيل الحساب الآخر عند PHONE_IN_USE. لا fallback إلىmock.\n\n## المحاكاة والاختبارات\n\nACCOUNT_MANAGEMENT_DATA_MODE يرث DATA_MODE؛ ACCOUNT_MOCK_SCENARIO:\nsuccess|offline|lost_response|phone_in_use. كود fixture الأول123456 وبعد\nأول resend654321، ثم تتزايد رموز المحاكاة دون إعادة رمز سابق داخل التحقق،\nبمعزل عن revision ومحاولات الإدخال. للاختبار المحلي فقط ولا يظهر في UI كسر نجاح خادمي.\nالتطبيق ينهي جلسة المحاكاة ويمسح بياناتها عند القبول؛ هذا ليس حذف حساب\nحقيقيًا. اختبارات العقد تطابق أمثلة التحقق والنتيجة بالمستودع والـmapper.\nلا SMS حقيقي أو اختبار خادم أو استيراد Postman فعلي ضمن الأدلة الحالية.\n",
       "auth": {
         "type": "bearer",
@@ -16989,7 +17657,7 @@
       ]
     },
     {
-      "name": "14 — الدعم والمحتوى القانوني",
+      "name": "15 — الدعم والمحتوى القانوني",
       "description": "المصدر: support/support-v1.postman_collection.json. المتغيرات التخصصية تبدأ بـsupport_.\nاقرأ قواعد العقد الموحد في وصف المجموعة أولًا؛ امتدادات Trip الحالية تطبق على أمثلة W1 القديمة.\n\n# TAM | تم — عقد الدعم والمحتوى القانوني v1\n\nالإصدار1.0، 2026-11-09. **مقترح للتنفيذ؛ لا يوجد خادم حي متصل.**\nهذا الملف يحدد المطلوب من الباكند ولا يغيّر عقد المصادقة القائم.\n\n## التدفقات والعمليات\n\n| الشاشة أو الفعل | Repository | HTTP بالنسبة إلى base_url |\n|---|---|---|\n| فتح نموذج عام أو بلاغ رحلة | options(tripId?) | GET /support/options?trip_id=… |\n| طلباتي للدعم، تحديث، تحميل المزيد | tickets(cursor?) | GET /support/tickets?limit=20&cursor=… |\n| تفاصيل طلب للقراءة | ticket(id) | GET /support/tickets/{id} |\n| إرسال النموذج أو إعادة محاولة نفس الطلب | create(...) | POST /support/tickets |\n| الشروط أو الخصوصية | legal(kind,languageCode) | GET /content/legal/{kind}?language=ar\\|en |\n\nbase_url مثال `https://example.invalid/api/v1`. يُرسل Accept:application/json؛\nPOST كذلك Content-Type:application/json. كل مسارات /support تتطلب\nAuthorization:Bearer والتفويض لمالك الحساب في **كل عملية**. لا يكفي امتلاك\nمعرّف الرحلة أو الطلب. guest/localAccess ليسا جلسة باكند. /content/legal عام\nبلا Authorization؛ لا تُشترط المصادقة لقراءة نص منشور.\n\nالنجاح `{\"data\":...}` والفشل `{\"error\":{\"code\":\"…\",\"message\":{\"ar\":\"…\",\"en\":\"…\"}}}`.\nلا يجتمع data وerror. معرّفات الموارد opaque nonempty strings وليست أسماء\nأشخاص. التواريخ ISO8601 UTC تنتهي بـZ. revision عدد صحيح يبدأ من1 ويتزايد\nمع تغيّر المورد؛ نفس revision يعني نفس المحتوى. النصوص تُعرض plain text.\n\n## الفئات والسياق\n\nGET /support/options يعيد data.trip_id:string|null وdata.categories:list.\nكل فئة تحتوي id:string وname:{ar:string,en:string} وtrip_required:bool.\nالمعرّفات فريدة، والأسماء غير فارغة. بدون trip_id تعاد فقط الفئات العامة.\nمع trip_id يتحقق الخادم من الملكية والوجود، ويعيد الفئات المسموحة في السياق\nالعام وسياق الرحلة. يعيد trip_id نفسه. لا توجد قائمة رحلات موازية في الدعم.\n\nفئات المحاكاة المرجعية: general وapp_issue لا تتطلبان رحلة؛ trip_issue\nتتطلب رحلة. الكتالوج مصدره الخادم؛ العميل لا يفترض حصر الفئات بهذه الثلاث.\nالمحاكاة تختار أول فئة افتراضيًا ويستطيع المستخدم تغييرها.\n\n## إنشاء طلب وإعادة المحاولة\n\nPOST body:\n\n```json\n{\n  \"client_request_id\": \"request-0000000001\",\n  \"category_id\": \"trip_issue\",\n  \"body\": \"Details of the issue\",\n  \"trip_id\": \"trip-1\"\n}\n```\n\nclient_request_id مطلوب ASCII مطابق `[A-Za-z0-9_-]{16,128}`؛ ينتج العميل\n48 حرفًا hex من Random.secure. ليس مشتقًا من ساعة الجهاز. category_id\nمطلوب من الكتالوج المسموح. body مطلوب string بعد trim بطول10..2000 Unicode\ncode points، لا UTF16 units ولا bytes. لا تُقص البيانات بصمت. trip_id اختياري\nnullable؛ إذا كانت الفئة trip_required فهو مطلوب. أي رحلة مُرسلة يجب أن\nتكون للحساب الحالي، حتى عندما تكون الفئة عامة. لا مرفقات في الإصدار1.\n\nالخادم ينفذ ذريًا: التفويض والتحقق ثم إنشاء تذكرة واحدة لكل\n(account,client_request_id). أول نجاح201؛ إعادة نفس البيانات المطبعة200\nبنفس المورد. نفس المعرّف ببيانات مختلفة409 IDEMPOTENCY_CONFLICT، دون إنشاء\nطلب ثانٍ أو تعديل الأول. تُحفظ رابطة idempotency طوال بقاء التذكرة، دون\nنافذة انتهاء أقصر منها. اختلاف الفئة أو trip_id أو النص المطبّع تعارض.\nتعاد التذكرة الحالية إن تغيّرت حالتها لاحقًا؛ هوية الطلب ومحتوى إنشائه ثابتة.\n\nانقطاع الشبكة ليس إثبات رفض: العميل يقفل الحمولة ويعيد نفس المعرّف، أو\nيتحقق من القائمة/التفاصيل عبر client_request_id. لا يفترض الوصول من أول\nصفحة دليلًا على غياب الطلب. لا endpoint بحث خاص ولا outbox دائم في النطاق.\nعند الخروج أو إغلاق النموذج تزول المسودة المحلية؛ المقبول يستعاد من\nRepository داخل الجلسة، ومن الخادم للحساب عند الربط الحقيقي.\n\n## شكل التذكرة والقائمة\n\nالاستجابة للتفاصيل والإنشاء data كائن يتضمن:\n\n| الحقل | النوع والقيود |\n|---|---|\n| id | string غير فارغ، ثابت |\n| client_request_id | string وفق النمط السابق، ثابت |\n| category_id | string غير فارغ، ثابت |\n| body | string مطبّع10..2000 code points، ثابت |\n| trip_id | string أوnull، ثابت |\n| status | open أوin_progress أوresolved |\n| created_at | UTC، ثابت |\n| updated_at | UTC، لا يسبق created_at |\n| revision | int≥1، يزداد مع تغيّر الحالة |\n\nالعميل يقرأ الحالات فقط؛ لا تعديل أو إغلاق أو مراسلة دعم ضمن هذا الإصدار.\nالجديد open. المحاكاة لا تدّعي معالجة فريق حقيقي. لا وعود استجابة أو SLA\nأو جهات اتصال مختلقة. أمثلة الحالات الأخرى لشرح استجابات الباكند واختبارها.\n\nGET /support/tickets يعيد data.tickets:list وdata.pagination:\n`{\"limit\":20,\"next_cursor\":null}`. limit افتراضي وثابت20؛ غيره422.\nالترتيب created_at تنازليًا ثمid تنازليًا عند التعادل، بمقارنة معرّف ثابتة\nمتفق عليها كترتيب ASCII للأمثلة. لا تكرار معرفات داخل الصفحة أو بين صفحات\nالمتابعة. cursor opaque مرتبط بالحساب وبآخر عنصر مرتب، دون offset؛ إدراج\nطلب أحدث لا يكرر أو يسقط الأقدم أثناء المتابعة. قد تتغير حالة عنصر قديم،\nلكن لا يُنقل بسبب updated_at. لا تكشف cursor حساب آخر؛422 INVALID_CURSOR.\nnext_cursor لا يكون غيرnull إلا إذا كانت الصفحة20 ويوجد المزيد.\nالمحاكاة تستخدم base64url لمؤشر جلسة/معرّف؛ لا يشترط تقليد ترميزه في الخادم.\n\n## المحتوى القانوني العام\n\nkind=terms|privacy وlanguage=ar|en، مطلوبان وصالحان؛ خلاف ذلك422.\nإذا لم ينشر صاحب المنتج نصًا معتمدًا للنوع واللغة:200 `{\"data\":null}`.\nلا نص بديل مولّد ولا ادعاء موافقة. عند نشر نص معتمد فقط تكون data:\nkind وlanguage وplain_text وversion نصوص غير فارغة وpublished_at بتوقيتUTC.\nplain_text نص بلا HTML أو سكربت أو تشغيل روابط. يُعاد النوع واللغة المطلوبان\nتمامًا؛ لا fallback صامت للغة أخرى. لا أحداث موافقة أو تغييرات Auth هنا.\nلا توجد أمثلة قانونية منشورة في الحزمة لأن النص المعتمد لم يُسلّم بعد.\n\n## الأخطاء\n\n| HTTP | code | السياق |\n|---|---|---|\n| 401 | UNAUTHENTICATED | جلسة مفقودة/منتهية في الدعم |\n| 403 | FORBIDDEN | منع الوصول إلى مورد أو سياق |\n| 404 | TRIP_NOT_FOUND | رحلة مفقودة أو مخفية بسياسة الملكية |\n| 404 | TICKET_NOT_FOUND | طلب مفقود أو مخفي بسياسة الملكية |\n| 409 | IDEMPOTENCY_CONFLICT | معرّف مكرر ببيانات مختلفة |\n| 422 | VALIDATION_ERROR | أنواع/أطوال/لغة/kind/limit/معرّف غير صالح |\n| 422 | INVALID_CATEGORY | فئة مجهولة أو غير مسموحة بالسياق |\n| 422 | INVALID_CURSOR | مؤشر غير صالح/سياق حساب مختلف |\n| 429 | RATE_LIMITED | الحد المؤقت؛ Retry-After عند توفره |\n| 503 | SERVICE_UNAVAILABLE | خدمة غير متاحة |\n\nلا تعاد أخطاء مصادقة على مسار المحتوى العام لمجرد عدم وجود جلسة. يجوز\nإخفاء الموارد الأجنبية404 بدل403 لمنع كشف الوجود، مع ثبات السياسة وعدم\nتسريب نصوصها. NETWORK_ERROR/INVALID_RESPONSE/SESSION_ENDED إخفاقات محلية،\nلا حالات نجاح من الخادم. لا fallback من API إلىmock عند خطأ.\n\n## مسؤوليات التسليم والتحقق\n\nالباكند مسؤول عن الملكية والتخزين والتزامن وidempotency والوقت وحالات\nالموظفين والنص المعتمد. Flutter مسؤول عن التحقق المبدئي والحمولة الثابتة\nوالترجمات وعرض الحالات وعزل الجلسات. AppConfig يملك اختيار المصدر والسياسة؛\nلا HTTP adapter فعلي بعد. أي تغيير للحدود أو الحقول ينسق مع Flutter قبل\nاعتماد الإصدار. اختبارات support_contract_test تربط الأمثلة بالـmapper\nوالمحاكاة وPostman؛ لا يُعد ذلك تحققًا حيًا أو استيرادًا فعليًا في Postman.\n",
       "auth": {
         "type": "bearer",

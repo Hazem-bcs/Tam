@@ -33,6 +33,8 @@ import 'package:tam_customer/features/completion/data/unavailable_completion_rep
 import 'package:tam_customer/features/completion/domain/completion_repository.dart';
 import 'package:tam_customer/features/driver_contact/data/driver_phone_dialer.dart';
 import 'package:tam_customer/features/driver_contact/data/mock/mock_driver_contact_repository.dart';
+import 'package:tam_customer/features/maps/maps_dependencies.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/notifications/data/mock/mock_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/data/unavailable_notifications_repository.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
@@ -74,6 +76,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final AuthRouterRefresh _refresh;
   late final GoRouter _router;
   late final AppLocaleController _locale;
+  late final MapsDependencies _maps;
   late final MockTripStore _mockTrips;
   late final MockNotificationsRepository _mockNotifications;
   late final MockAddressesRepository _mockAddresses;
@@ -101,6 +104,9 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     );
     _refresh = AuthRouterRefresh(_auth);
     _locale = AppLocaleController(widget.locale);
+    _maps = locator.isRegistered<MapsDependencies>()
+        ? locator<MapsDependencies>()
+        : MapsDependencies.configured(AppConfig.maps);
     _mockTrips = MockTripStore(seed: seedMockTrips(), now: widget.clock);
     final modes = widget.dataModes ?? AppConfig.featureDataModes;
     final ActiveTripRepository activeTrips =
@@ -241,6 +247,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _maps.dispose();
     WidgetsBinding.instance.removeObserver(this);
     _router.dispose();
     _refresh.dispose();
@@ -264,21 +271,24 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _auth,
-      child: ValueListenableBuilder<Locale>(
-        valueListenable: _locale,
-        builder: (context, locale, child) => MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          onGenerateTitle: (context) => AppLocalizations.of(context).appName,
-          routerConfig: _router,
-          theme: AppTheme.light,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale,
+      child: MapsScope(
+        dependencies: _maps,
+        child: ValueListenableBuilder<Locale>(
+          valueListenable: _locale,
+          builder: (context, locale, child) => MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            onGenerateTitle: (context) => AppLocalizations.of(context).appName,
+            routerConfig: _router,
+            theme: AppTheme.light,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: locale,
+          ),
         ),
       ),
     );

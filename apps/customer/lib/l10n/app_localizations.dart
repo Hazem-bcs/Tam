@@ -2815,6 +2815,156 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'انتهت الجلسة ولم يُفتح اتصال جديد.'**
   String get driverContactSessionEnded;
+
+  /// No description provided for @mapsNotConfigured.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُهيأ خدمة خريطة تم بعد.'**
+  String get mapsNotConfigured;
+
+  /// No description provided for @mapsTilesFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل الخريطة من خادم تم.'**
+  String get mapsTilesFailed;
+
+  /// No description provided for @mapsRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get mapsRetry;
+
+  /// No description provided for @mapsAttribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'© مساهمو OpenStreetMap'**
+  String get mapsAttribution;
+
+  /// No description provided for @mapsOrigin.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة الانطلاق'**
+  String get mapsOrigin;
+
+  /// No description provided for @mapsDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجهة'**
+  String get mapsDestination;
+
+  /// No description provided for @mapsDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع السائق'**
+  String get mapsDriver;
+
+  /// No description provided for @mapsZoomIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكبير الخريطة'**
+  String get mapsZoomIn;
+
+  /// No description provided for @mapsZoomOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصغير الخريطة'**
+  String get mapsZoomOut;
+
+  /// No description provided for @mapsPickLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار موقع على الخريطة'**
+  String get mapsPickLocation;
+
+  /// No description provided for @mapsUseMyLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدام موقعي الحالي'**
+  String get mapsUseMyLocation;
+
+  /// No description provided for @mapsLocationDisabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الموقع مغلقة. فعّلها من إعدادات الجهاز أو اختر نقطة يدويًا.'**
+  String get mapsLocationDisabled;
+
+  /// No description provided for @mapsPermissionDenied.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُسمح بالوصول للموقع. يمكنك اختيار نقطة يدويًا.'**
+  String get mapsPermissionDenied;
+
+  /// No description provided for @mapsPermissionPermanent.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذن الموقع مرفوض. يمكنك تفعيله من إعدادات التطبيق في الجهاز أو الاختيار يدويًا.'**
+  String get mapsPermissionPermanent;
+
+  /// No description provided for @mapsLocationUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديد موقعك الآن. حاول مجددًا أو اختر نقطة يدويًا.'**
+  String get mapsLocationUnavailable;
+
+  /// No description provided for @mapsNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نجد عنوانًا لهذه النقطة. اكتب وصف المكان يدويًا.'**
+  String get mapsNotFound;
+
+  /// No description provided for @mapsRateLimited.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات كثيرة. انتظر قليلًا ثم حاول مجددًا.'**
+  String get mapsRateLimited;
+
+  /// No description provided for @mapsServiceFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر الاتصال بخدمة الخريطة. يمكنك الاحتفاظ بالنقطة وتسميتها يدويًا.'**
+  String get mapsServiceFailed;
+
+  /// No description provided for @mapsTapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الخريطة لتحديد نقطة، ثم راجع وصف المكان قبل تأكيده.'**
+  String get mapsTapHint;
+
+  /// No description provided for @mapsAddressLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف المكان'**
+  String get mapsAddressLabel;
+
+  /// No description provided for @mapsAddressHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثل: أمام مدخل المبنى'**
+  String get mapsAddressHint;
+
+  /// No description provided for @mapsSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث عن مكان'**
+  String get mapsSearch;
+
+  /// No description provided for @mapsConfirmLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الموقع'**
+  String get mapsConfirmLocation;
+
+  /// No description provided for @mapsRouteFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل مسار الطريق من خدمة تم.'**
+  String get mapsRouteFailed;
+
+  /// No description provided for @mapsInvalidInput.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع الموقع أو نص البحث المدخل.'**
+  String get mapsInvalidInput;
 }
 
 class _AppLocalizationsDelegate

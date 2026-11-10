@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": {
+      "ar": "مدخلات غير صالحة",
+      "en": "Invalid input"
+    }
+  }
+}

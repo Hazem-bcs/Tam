@@ -1526,4 +1526,88 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get driverContactSessionEnded =>
       'The session ended. No new call was opened.';
+
+  @override
+  String get mapsNotConfigured => 'Tam map service is not configured yet.';
+
+  @override
+  String get mapsTilesFailed => 'Could not load map tiles from Tam servers.';
+
+  @override
+  String get mapsRetry => 'Retry';
+
+  @override
+  String get mapsAttribution => '© OpenStreetMap contributors';
+
+  @override
+  String get mapsOrigin => 'Pickup';
+
+  @override
+  String get mapsDestination => 'Destination';
+
+  @override
+  String get mapsDriver => 'Driver position';
+
+  @override
+  String get mapsZoomIn => 'Zoom in';
+
+  @override
+  String get mapsZoomOut => 'Zoom out';
+
+  @override
+  String get mapsPickLocation => 'Choose on map';
+
+  @override
+  String get mapsUseMyLocation => 'Use my current location';
+
+  @override
+  String get mapsLocationDisabled =>
+      'Location services are off. Enable them in device settings or select a point manually.';
+
+  @override
+  String get mapsPermissionDenied =>
+      'Location permission was denied. You can select a point manually.';
+
+  @override
+  String get mapsPermissionPermanent =>
+      'Location permission is blocked. Enable it in device app settings or choose manually.';
+
+  @override
+  String get mapsLocationUnavailable =>
+      'Your position is unavailable. Try again or select a point manually.';
+
+  @override
+  String get mapsNotFound =>
+      'No address was found for this point. Enter a location description manually.';
+
+  @override
+  String get mapsRateLimited =>
+      'Too many requests. Wait a moment and try again.';
+
+  @override
+  String get mapsServiceFailed =>
+      'The map service is unavailable. You can keep the point and label it manually.';
+
+  @override
+  String get mapsTapHint =>
+      'Tap the map to select a point, then review its description before confirming.';
+
+  @override
+  String get mapsAddressLabel => 'Location description';
+
+  @override
+  String get mapsAddressHint => 'For example: outside the building entrance';
+
+  @override
+  String get mapsSearch => 'Search for a place';
+
+  @override
+  String get mapsConfirmLocation => 'Confirm location';
+
+  @override
+  String get mapsRouteFailed =>
+      'Could not load the road route from Tam services.';
+
+  @override
+  String get mapsInvalidInput => 'Check the selected point or search input.';
 }

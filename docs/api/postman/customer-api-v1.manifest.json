@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "status": "BACKEND_HANDOFF_PROPOSAL",
-  "request_examples": 58,
+  "status": "REVIEW_REQUIRED",
+  "request_examples": 62,
   "scope": "Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons",
-  "overview_sha256": "4c213c269db0713e8afe47800558b0a219718301f6633d6f1e383e2179bf74ee",
+  "overview_sha256": "33bf52fab0e1db2263046b38a2b783650f4a373db8f8a513e7acfafa47290020",
   "sources": [
     {
       "namespace": "auth",
@@ -60,6 +60,14 @@
       "collection_sha256": "29d80acbe3dc1238057598bd7028506e4c719390a01efdde85541fee3eeedc90",
       "contract_sha256": "d738afa92c5c83d3d00f7bab0da43d24f611e3e0609b6b5756fe26e8ea85409a",
       "request_examples": 6
+    },
+    {
+      "namespace": "maps",
+      "collection": "maps/maps-v1.postman_collection.json",
+      "contract": "maps/maps-v1.md",
+      "collection_sha256": "123da2aaeff66f3e5d419eab088ca7ebcf472231bc878f0f74d6f7503e4997d4",
+      "contract_sha256": "fd14ca47def6d43c2358bbdf30d4cfc225f068f890f9c0c27eb697e53cfbc892",
+      "request_examples": 4
     },
     {
       "namespace": "contact",

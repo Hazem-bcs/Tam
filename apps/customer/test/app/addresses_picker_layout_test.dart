@@ -29,7 +29,8 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(RidePlacePicker), findsOneWidget);
         expect(tester.takeException(), isNull);
-        await tester.ensureVisible(
+        await revealPageWidget(
+          tester,
           find.byKey(const Key('ride-saved-addresses')),
         );
         await tester.pumpAndSettle();
@@ -37,7 +38,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         final saved = find.byKey(const Key('saved-address-address-home-001'));
-        await tester.ensureVisible(saved);
+        await revealPageWidget(tester, saved);
         await tester.pumpAndSettle();
         expect(saved.hitTestable(), findsOneWidget);
         tester.view.resetViewInsets();

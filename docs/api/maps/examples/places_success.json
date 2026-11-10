@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": "place-1",
+      "label": "المزة، شارع الجلاء",
+      "label_en": "Mezzeh, Al Jalaa Street",
+      "latitude": 33.5,
+      "longitude": 36.25
+    }
+  ],
+  "meta": {
+    "next_cursor": null
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": {
+      "ar": "طلبات كثيرة",
+      "en": "Too many requests"
+    }
+  }
+}

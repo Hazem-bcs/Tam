@@ -1,4 +1,5 @@
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/account_management/domain/account_management_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
@@ -7,6 +8,11 @@ import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
 abstract final class AppConfig {
+  static MapConfiguration get maps => MapConfiguration.parse(
+    tileUrl: const String.fromEnvironment('MAP_TILES_URL_TEMPLATE'),
+    apiBaseUrl: const String.fromEnvironment('MAP_API_BASE_URL'),
+    allowLocalHttp: const bool.fromEnvironment('MAP_ALLOW_LOCAL_HTTP'),
+  );
   static const rideSchedulePolicy = RideSchedulePolicy();
   static const activeTripPolicy = ActiveTripPolicy();
   static const chatPolicy = ChatPolicy();

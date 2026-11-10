@@ -19,9 +19,9 @@ class CustomerPostmanTest(unittest.TestCase):
         for name, value in [(builder.OUTPUT, self.collection), (builder.MANIFEST, self.manifest)]:
             self.assertEqual(json.loads((ROOT / 'docs/api' / name).read_text()), value)
         self.assertEqual(builder.build(ROOT), (self.collection, self.manifest))
-        self.assertEqual(len(self.collection['item']), 14)
-        self.assertEqual(self.manifest['request_examples'], 58)
-        self.assertEqual(len({item['collection'] for item in self.manifest['sources']}), 14)
+        self.assertEqual(len(self.collection['item']), 15)
+        self.assertEqual(self.manifest['request_examples'], 62)
+        self.assertEqual(len({item['collection'] for item in self.manifest['sources']}), 15)
         self.assertEqual(sum(item['namespace'] == 'auth' for item in self.manifest['sources']), 1)
 
     def test_effective_auth_preserves_public_and_protected_operations(self):
@@ -29,7 +29,7 @@ class CustomerPostmanTest(unittest.TestCase):
             for item in builder.request_items(folder['item']):
                 request = item['request']
                 raw = request['url']['raw'] if isinstance(request['url'], dict) else request['url']
-                public = any(path in raw for path in ['/home', '/places?', '/content/legal/'])
+                public = any(path in raw for path in ['/home', '/places?', '/content/legal/', '/map/reverse?', '/map/routes', 'maps_tiles_base_url'])
                 auth = request.get('auth', folder['auth'])
                 header = [h for h in request['header'] if h['key'].lower() == 'authorization']
                 if public:
@@ -95,6 +95,20 @@ class CustomerPostmanTest(unittest.TestCase):
                         self.assertIn(code, {'SESSION_INVALID', 'SESSION_REVOKED'})
                     else:
                         self.assertIn(code, {'UNAUTHENTICATED', 'RECOVERY_INVALID'})
+
+    def test_binary_tile_example_cannot_hide_an_error_or_fabricated_payload(self):
+        tile = next(item for folder in self.collection['item']
+                    for item in builder.request_items(folder['item'])
+                    if any(h['value'] == 'image/png' for response in item['response']
+                           for h in response.get('header', [])))
+        for field, value in [('code', 503), ('body', 'fabricated PNG')]:
+            invalid = copy.deepcopy(self.collection)
+            altered = next(item for folder in invalid['item']
+                           for item in builder.request_items(folder['item'])
+                           if item['name'] == tile['name'])
+            altered['response'][0][field] = value
+            with self.assertRaises(ValueError):
+                builder.validate(invalid)
 
 
 if __name__ == '__main__':

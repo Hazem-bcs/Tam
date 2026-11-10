@@ -15,6 +15,7 @@ SOURCES = [
     ('trips', 'طلباتي', 'trips/trips-v1.postman_collection.json', 'trips/trips-v1.md'),
     ('active', 'متابعة الرحلة — امتداد Trip', 'active_trip/active_trip-v1.postman_collection.json', 'active_trip/active_trip-v1.md'),
     ('addresses', 'العناوين المحفوظة', 'addresses/addresses-v1.postman_collection.json', 'addresses/addresses-v1.md'),
+    ('maps', 'الخرائط المستضافة ذاتيًا', 'maps/maps-v1.postman_collection.json', 'maps/maps-v1.md'),
     ('contact', 'الاتصال بالسائق', 'driver_contact/driver_contact-v1.postman_collection.json', 'driver_contact/driver_contact-v1.md'),
     ('chat', 'المحادثة', 'chat/chat-v1.postman_collection.json', 'chat/chat-v1.md'),
     ('completion', 'إنهاء الرحلة والتقييم', 'completion/completion-v1.postman_collection.json', 'completion/completion-v1.md'),
@@ -83,6 +84,12 @@ def validate(collection):
                     if response.get('body', ''):
                         raise ValueError('204 must be bodyless')
                     continue
+                binary = any(h['key'].lower() == 'content-type' and h['value'] == 'image/png'
+                             for h in response.get('header', []))
+                if binary:
+                    if response['code'] != 200 or item['request']['method'] != 'GET' or response.get('body'):
+                        raise ValueError('Binary tile example must be bodyless GET 200')
+                    continue
                 body = json.loads(response['body'])
                 if ('data' in body) == ('error' in body):
                     raise ValueError('Expected exactly one envelope kind')
@@ -126,13 +133,13 @@ def build(root):
             'request_examples': sum(1 for _ in request_items(items)),
         })
     collection = {
-        'info': {'name': 'TAM | تم — Customer API Contract v1 — BACKEND HANDOFF PROPOSAL',
+        'info': {'name': 'TAM | تم — Customer API Contract v1 — REVIEW REQUIRED',
                  'description': description,
                  'schema': 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'},
         'auth': {'type': 'noauth'}, 'variable': variables, 'item': folders,
     }
     validate(collection)
-    manifest = {'version': 1, 'status': 'BACKEND_HANDOFF_PROPOSAL',
+    manifest = {'version': 1, 'status': 'REVIEW_REQUIRED',
                 'request_examples': sum(entry['request_examples'] for entry in entries),
                 'scope': 'Customer rides + account deletion + phone change + driver contact; no wallet, electronic payments or coupons',
                 'overview_sha256': hashlib.sha256((api / 'customer-api-v1.md').read_bytes()).hexdigest(),

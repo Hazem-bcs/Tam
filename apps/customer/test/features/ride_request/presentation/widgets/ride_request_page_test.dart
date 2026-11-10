@@ -158,7 +158,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(bloc.state.quote?.fare.amountMinor, 27000);
     await screenshot(tester, 'ride-ar-390.png');
-    await tester.drag(find.byType(ListView).first, const Offset(0, -700));
+    // Start outside the interactive map so the page scrolls instead of panning.
+    await tester.dragFrom(
+      tester.getTopLeft(find.byType(ListView).first) + const Offset(8, 80),
+      const Offset(0, -700),
+    );
     await tester.pumpAndSettle();
     await screenshot(tester, 'ride-ar-390-details.png');
     await tester.tap(find.text('تأكيد طلب الرحلة'));
@@ -183,7 +187,10 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(bloc.state.quote, isNotNull);
-    await tester.drag(find.byType(ListView).first, const Offset(0, -700));
+    await tester.dragFrom(
+      tester.getTopLeft(find.byType(ListView).first) + const Offset(8, 80),
+      const Offset(0, -700),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Cash'), findsOneWidget);
     await screenshot(tester, 'ride-en-390.png');

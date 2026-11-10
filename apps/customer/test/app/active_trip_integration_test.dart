@@ -67,11 +67,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(restored.state.trip!.status, TripStatus.cancelled);
       final rebook = find.byKey(const Key('active-rebook'));
-      await tester.scrollUntilVisible(
-        rebook,
-        180,
-        scrollable: find.byType(Scrollable).first,
-      );
+      await revealPageWidget(tester, rebook);
       await tester.ensureVisible(rebook);
       await tester.pumpAndSettle();
       await tester.tap(rebook);

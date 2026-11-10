@@ -1,0 +1,32 @@
+{
+  "data": {
+    "origin": {
+      "latitude": 33.5,
+      "longitude": 36.25
+    },
+    "destination": {
+      "latitude": 33.519,
+      "longitude": 36.283
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          36.25,
+          33.5
+        ],
+        [
+          36.27,
+          33.51
+        ],
+        [
+          36.283,
+          33.519
+        ]
+      ]
+    },
+    "distance_meters": 5019,
+    "duration_seconds": 1080,
+    "provider": "osrm"
+  }
+}

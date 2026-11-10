@@ -44,11 +44,7 @@ void main() {
     await tester.pump(const Duration(seconds: 18));
     await tester.pumpAndSettle();
     final openChat = find.byKey(const Key('active-chat'));
-    await tester.scrollUntilVisible(
-      openChat,
-      180,
-      scrollable: find.byType(Scrollable).first,
-    );
+    await revealPageWidget(tester, openChat);
     await tester.ensureVisible(openChat);
     await tester.pumpAndSettle();
     await tester.tap(openChat);
