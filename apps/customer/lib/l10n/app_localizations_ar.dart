@@ -1574,4 +1574,8 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsInvalidInput => 'راجع الموقع أو نص البحث المدخل.';
+
+  @override
+  String get mapsAttributionUnavailable =>
+      'تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.';
 }

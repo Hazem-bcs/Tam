@@ -65,6 +65,7 @@ class _MapLocationPickerPageState extends State<MapLocationPickerPage> {
                     height: 300,
                     child: TamMapCanvas(
                       configuration: widget.dependencies.configuration,
+                      onAttribution: widget.dependencies.attribution.open,
                       tileProviderFactory:
                           widget.dependencies.tileProviderFactory,
                       origin: state.point,

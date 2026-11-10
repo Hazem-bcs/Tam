@@ -2965,6 +2965,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'راجع الموقع أو نص البحث المدخل.'**
   String get mapsInvalidInput;
+
+  /// No description provided for @mapsAttributionUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.'**
+  String get mapsAttributionUnavailable;
 }
 
 class _AppLocalizationsDelegate

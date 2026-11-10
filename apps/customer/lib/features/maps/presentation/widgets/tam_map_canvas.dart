@@ -6,6 +6,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import '../../domain/maps_repository.dart';
+import 'map_attribution_link.dart';
 import 'map_feedback.dart';
 import 'private_tile_layer.dart';
 
@@ -19,12 +20,14 @@ class TamMapCanvas extends StatefulWidget {
     this.route,
     this.onSelected,
     this.tileProviderFactory,
+    this.onAttribution,
   });
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
   final MapRoute? route;
   final ValueChanged<GeoPoint>? onSelected;
   final TileProvider Function(String)? tileProviderFactory;
+  final Future<void> Function()? onAttribution;
   @override
   State<TamMapCanvas> createState() => _TamMapCanvasState();
 }
@@ -242,19 +245,7 @@ class _TamMapCanvasState extends State<TamMapCanvas> {
               ],
             ),
           ),
-          Material(
-            color: colors.surfaceContainer,
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.xs),
-                child: Text(
-                  l.mapsAttribution,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ),
-          ),
+          MapAttributionLink(onOpen: widget.onAttribution),
         ],
       ),
     );

@@ -24,5 +24,6 @@
   "mapsSearch": "Search for a place",
   "mapsConfirmLocation": "Confirm location",
   "mapsRouteFailed": "Could not load the road route from Tam services.",
-  "mapsInvalidInput": "Check the selected point or search input."
+  "mapsInvalidInput": "Check the selected point or search input.",
+  "mapsAttributionUnavailable": "Could not open map license information. Please try again."
 }
