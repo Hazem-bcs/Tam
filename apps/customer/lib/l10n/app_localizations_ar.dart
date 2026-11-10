@@ -1503,7 +1503,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mapsRetry => 'إعادة المحاولة';
 
   @override
-  String get mapsAttribution => '© مساهمو OpenStreetMap';
+  String get mapsAttribution => 'OpenStreetMap';
 
   @override
   String get mapsOrigin => 'نقطة الانطلاق';
@@ -1578,4 +1578,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get mapsAttributionUnavailable =>
       'تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.';
+
+  @override
+  String get mapsShowAttribution => 'معلومات مصدر الخريطة';
 }

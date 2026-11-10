@@ -104,148 +104,129 @@ class _TamMapCanvasState extends State<TamMapCanvas> {
     );
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppRadii.lg),
-      child: Column(
+      child: Stack(
         children: [
-          Expanded(
-            child: Stack(
+          Positioned.fill(
+            child: FlutterMap(
+              mapController: _controller,
+              options: MapOptions(
+                initialCenter: _latLng(center),
+                initialZoom: 13,
+                minZoom: 3,
+                maxZoom: 19,
+                backgroundColor: colors.surfaceContainer,
+                onMapReady: () {
+                  _ready = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) => _fit());
+                },
+                onTap: widget.onSelected == null
+                    ? null
+                    : (_, p) => widget.onSelected!(
+                        GeoPoint(latitude: p.latitude, longitude: p.longitude),
+                      ),
+              ),
               children: [
-                Positioned.fill(
-                  child: FlutterMap(
-                    mapController: _controller,
-                    options: MapOptions(
-                      initialCenter: _latLng(center),
-                      initialZoom: 13,
-                      minZoom: 3,
-                      maxZoom: 19,
-                      backgroundColor: colors.surfaceContainer,
-                      onMapReady: () {
-                        _ready = true;
-                        WidgetsBinding.instance.addPostFrameCallback(
-                          (_) => _fit(),
-                        );
-                      },
-                      onTap: widget.onSelected == null
-                          ? null
-                          : (_, p) => widget.onSelected!(
-                              GeoPoint(
-                                latitude: p.latitude,
-                                longitude: p.longitude,
-                              ),
-                            ),
-                    ),
-                    children: [
-                      if (widget.configuration.hasTiles)
-                        PrivateTileLayer(
-                          key: ValueKey((
-                            widget.configuration.tileUrl,
-                            _generation,
-                          )),
-                          url: widget.configuration.tileUrl,
-                          providerFactory: widget.tileProviderFactory!,
-                          onLoaded: () {
-                            if (!_loaded) setState(() => _loaded = true);
-                          },
-                          onFailure: () {
-                            if (!_failed) setState(() => _failed = true);
-                          },
-                        ),
-                      if (widget.route != null)
-                        PolylineLayer(
-                          polylines: [
-                            Polyline(
-                              points: widget.route!.points
-                                  .map(_latLng)
-                                  .toList(),
-                              strokeWidth: 5,
-                              color: colors.primary,
-                            ),
-                          ],
-                        ),
-                      MarkerLayer(
-                        markers: [
-                          if (widget.origin != null)
-                            marker(
-                              widget.origin!,
-                              Icons.trip_origin,
-                              l.mapsOrigin,
-                            ),
-                          if (widget.destination != null)
-                            marker(
-                              widget.destination!,
-                              Icons.location_on,
-                              l.mapsDestination,
-                            ),
-                          if (widget.driver != null)
-                            marker(
-                              widget.driver!,
-                              Icons.local_taxi,
-                              l.mapsDriver,
-                            ),
-                        ],
+                if (widget.configuration.hasTiles)
+                  PrivateTileLayer(
+                    key: ValueKey((widget.configuration.tileUrl, _generation)),
+                    url: widget.configuration.tileUrl,
+                    providerFactory: widget.tileProviderFactory!,
+                    onLoaded: () {
+                      if (!_loaded) setState(() => _loaded = true);
+                    },
+                    onFailure: () {
+                      if (!_failed) setState(() => _failed = true);
+                    },
+                  ),
+                if (widget.route != null)
+                  PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: widget.route!.points.map(_latLng).toList(),
+                        strokeWidth: 5,
+                        color: colors.primary,
                       ),
                     ],
                   ),
-                ),
-                if (!widget.configuration.hasTiles || _failed)
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    right: 8,
-                    child: IgnorePointer(
-                      ignoring: !widget.configuration.hasTiles,
-                      child: MapFeedback(
-                        text: widget.configuration.hasTiles
-                            ? l.mapsTilesFailed
-                            : l.mapsNotConfigured,
-                        onRetry: !widget.configuration.hasTiles
-                            ? null
-                            : () => setState(() {
-                                _generation++;
-                                _failed = _loaded = false;
-                              }),
+                MarkerLayer(
+                  markers: [
+                    if (widget.origin != null)
+                      marker(widget.origin!, Icons.trip_origin, l.mapsOrigin),
+                    if (widget.destination != null)
+                      marker(
+                        widget.destination!,
+                        Icons.location_on,
+                        l.mapsDestination,
                       ),
-                    ),
-                  ),
-                if (widget.configuration.hasTiles && !_failed && !_loaded)
-                  const Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: LinearProgressIndicator(),
-                  ),
-                PositionedDirectional(
-                  bottom: 4,
-                  end: 4,
-                  child: Material(
-                    color: colors.surfaceContainer,
-                    borderRadius: BorderRadius.circular(AppRadii.sm),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          tooltip: l.mapsZoomIn,
-                          icon: const Icon(Icons.add),
-                          onPressed: () => _controller.move(
-                            _controller.camera.center,
-                            (_controller.camera.zoom + 1).clamp(3, 19),
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: l.mapsZoomOut,
-                          icon: const Icon(Icons.remove),
-                          onPressed: () => _controller.move(
-                            _controller.camera.center,
-                            (_controller.camera.zoom - 1).clamp(3, 19),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                    if (widget.driver != null)
+                      marker(widget.driver!, Icons.local_taxi, l.mapsDriver),
+                  ],
                 ),
               ],
             ),
           ),
-          MapAttributionLink(onOpen: widget.onAttribution),
+          if (!widget.configuration.hasTiles || _failed)
+            Positioned(
+              top: 8,
+              left: 8,
+              right: 8,
+              child: IgnorePointer(
+                ignoring: !widget.configuration.hasTiles,
+                child: MapFeedback(
+                  text: widget.configuration.hasTiles
+                      ? l.mapsTilesFailed
+                      : l.mapsNotConfigured,
+                  onRetry: !widget.configuration.hasTiles
+                      ? null
+                      : () => setState(() {
+                          _generation++;
+                          _failed = _loaded = false;
+                        }),
+                ),
+              ),
+            ),
+          if (widget.configuration.hasTiles && !_failed && !_loaded)
+            const Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: LinearProgressIndicator(),
+            ),
+          PositionedDirectional(
+            bottom: 4,
+            end: 4,
+            child: Material(
+              color: colors.surfaceContainer,
+              borderRadius: BorderRadius.circular(AppRadii.sm),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: l.mapsZoomIn,
+                    icon: const Icon(Icons.add),
+                    onPressed: () => _controller.move(
+                      _controller.camera.center,
+                      (_controller.camera.zoom + 1).clamp(3, 19),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: l.mapsZoomOut,
+                    icon: const Icon(Icons.remove),
+                    onPressed: () => _controller.move(
+                      _controller.camera.center,
+                      (_controller.camera.zoom - 1).clamp(3, 19),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          PositionedDirectional(
+            bottom: AppSpacing.xs,
+            start: AppSpacing.xs,
+            end: AppDimensions.minTapTarget + AppSpacing.sm,
+            child: MapAttributionLink(onOpen: widget.onAttribution),
+          ),
         ],
       ),
     );

@@ -1537,7 +1537,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapsRetry => 'Retry';
 
   @override
-  String get mapsAttribution => '© OpenStreetMap contributors';
+  String get mapsAttribution => 'OpenStreetMap';
 
   @override
   String get mapsOrigin => 'Pickup';
@@ -1614,4 +1614,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mapsAttributionUnavailable =>
       'Could not open map license information. Please try again.';
+
+  @override
+  String get mapsShowAttribution => 'Map data information';
 }

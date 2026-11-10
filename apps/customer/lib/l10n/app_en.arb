@@ -650,7 +650,7 @@
   "mapsNotConfigured": "Tam map service is not configured yet.",
   "mapsTilesFailed": "Could not load map tiles from Tam servers.",
   "mapsRetry": "Retry",
-  "mapsAttribution": "© OpenStreetMap contributors",
+  "mapsAttribution": "OpenStreetMap",
   "mapsOrigin": "Pickup",
   "mapsDestination": "Destination",
   "mapsDriver": "Driver position",
@@ -672,5 +672,6 @@
   "mapsConfirmLocation": "Confirm location",
   "mapsRouteFailed": "Could not load the road route from Tam services.",
   "mapsInvalidInput": "Check the selected point or search input.",
-  "mapsAttributionUnavailable": "Could not open map license information. Please try again."
+  "mapsAttributionUnavailable": "Could not open map license information. Please try again.",
+  "mapsShowAttribution": "Map data information"
 }

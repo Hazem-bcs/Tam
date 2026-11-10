@@ -197,3 +197,9 @@ format360/0 وanalyze وكامل667 اختبارًا وPython7 و227JSON وschem
 الكود وAPI/scripts مطابقان للاعتماد.676 اختبارًا و38 UI وPython7 سليمة؛
 Postman BACKEND_HANDOFF_PROPOSAL بـ15/62، نُسخ إلى سطح المكتب.
 لا خدمات حية بعد؛ لا push/main/Actions.
+
+W4-MAPS-ATTRIBUTION: INTEGRATED، root، أساس3dcd151؛
+طلب المستخدم تصغير الإسناد وطيه مع بقاء الحقوق متاحة.
+[البطاقة](tasks/W4-MAPS-ATTRIBUTION.md). لا تغييرات API أو استضافة.
+
+تحقق تعديل الإسناد: 679 اختبارًا و38 مقارنة UI والتنسيق والتحليل سليمة.

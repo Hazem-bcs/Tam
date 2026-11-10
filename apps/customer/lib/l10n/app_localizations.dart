@@ -2837,7 +2837,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapsAttribution.
   ///
   /// In ar, this message translates to:
-  /// **'© مساهمو OpenStreetMap'**
+  /// **'OpenStreetMap'**
   String get mapsAttribution;
 
   /// No description provided for @mapsOrigin.
@@ -2971,6 +2971,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.'**
   String get mapsAttributionUnavailable;
+
+  /// No description provided for @mapsShowAttribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات مصدر الخريطة'**
+  String get mapsShowAttribution;
 }
 
 class _AppLocalizationsDelegate

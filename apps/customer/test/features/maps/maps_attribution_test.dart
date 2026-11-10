@@ -61,4 +61,68 @@ void main() {
       findsOneWidget,
     );
   });
+  for (final language in ['ar', 'en']) {
+    testWidgets(
+      '$language attribution collapses after reading and can reopen',
+      (tester) async {
+        var calls = 0;
+        tester.view.physicalSize = const Size(320, 740);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: AppTheme.light,
+            locale: Locale(language),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(2)),
+              child: child!,
+            ),
+            home: Scaffold(
+              body: MapAttributionLink(onOpen: () async => calls++),
+            ),
+          ),
+        );
+        final text = find.byKey(const Key('map-attribution'));
+        final toggle = find.byKey(const Key('map-attribution-toggle'));
+        await tester.pump(const Duration(milliseconds: 4900));
+        expect(text, findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(text, findsNothing);
+        expect(tester.getSize(toggle).width, greaterThanOrEqualTo(48));
+        await tester.tap(toggle);
+        await tester.pump();
+        expect(text, findsOneWidget);
+        await tester.tap(text);
+        await tester.pump();
+        expect(calls, 1);
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+        await tester.pump(const Duration(seconds: 6));
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+  testWidgets('accessible navigation keeps the attribution readable', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(accessibleNavigation: true),
+          child: child!,
+        ),
+        home: const Scaffold(body: MapAttributionLink()),
+      ),
+    );
+    await tester.pump(const Duration(seconds: 6));
+    expect(find.byKey(const Key('map-attribution')), findsOneWidget);
+  });
 }

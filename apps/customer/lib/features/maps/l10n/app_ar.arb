@@ -3,7 +3,7 @@
   "mapsNotConfigured": "لم تُهيأ خدمة خريطة تم بعد.",
   "mapsTilesFailed": "تعذر تحميل الخريطة من خادم تم.",
   "mapsRetry": "إعادة المحاولة",
-  "mapsAttribution": "© مساهمو OpenStreetMap",
+  "mapsAttribution": "OpenStreetMap",
   "mapsOrigin": "نقطة الانطلاق",
   "mapsDestination": "الوجهة",
   "mapsDriver": "موقع السائق",
@@ -25,5 +25,6 @@
   "mapsConfirmLocation": "تأكيد الموقع",
   "mapsRouteFailed": "تعذر تحميل مسار الطريق من خدمة تم.",
   "mapsInvalidInput": "راجع الموقع أو نص البحث المدخل.",
-  "mapsAttributionUnavailable": "تعذر فتح معلومات حقوق الخريطة. حاول مجددًا."
+  "mapsAttributionUnavailable": "تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.",
+  "mapsShowAttribution": "معلومات مصدر الخريطة"
 }
