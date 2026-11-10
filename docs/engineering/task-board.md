@@ -10,7 +10,7 @@
 
 ## الحالات والحجز
 
-التكليف الجاري W4-MAPS: IN_REVIEW، المشرف root، فرع codex/customer-maps
+اكتمل التكليف W4-MAPS: INTEGRATED، المشرف root، فرع codex/customer-maps
 منb599713؛ [البطاقة](tasks/W4-MAPS.md). تأكيد المستخدم: خدماتنا غير جاهزة،
 تجهيز العميل والعقود دون استخدام خدمات خرائط عامة. لا كاتب متزامن في ملكيتها.
 
@@ -192,3 +192,8 @@ codex/customer-backend-handoff. تحقق المشرف من تطابق الكود
 format360/0 وanalyze وكامل667 اختبارًا وPython7 و227JSON وschema/l10n ناجحة.
 نجح اختيار نقطة فعلية في Android وإعادتها إلى الحجز بوصف يدوي؛ خدمات
 الخريطة غير مهيأة ولا شوارع حية بعد. لا push/main/Actions.
+
+أغلق W4-MAPS: اعتماد مستقل `8c7087253e07c4a94eb1c0abb52a6ed36a6c49df`، تقرير de67a8b، دمج `06a914c68bf2a59d0ecd8c0586664d7e5416859f`.
+الكود وAPI/scripts مطابقان للاعتماد.676 اختبارًا و38 UI وPython7 سليمة؛
+Postman BACKEND_HANDOFF_PROPOSAL بـ15/62، نُسخ إلى سطح المكتب.
+لا خدمات حية بعد؛ لا push/main/Actions.

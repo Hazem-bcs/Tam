@@ -1,6 +1,6 @@
 # W4-MAPS — عميل الخرائط المستضافة ذاتيًا
 
-الحالة READY_FOR_REVIEW بعد IMPLEMENTING؛ المشرف root مالك التنفيذ والتكامل.
+الحالة INTEGRATED بعد المراجعة المستقلة؛ المشرف root مالك التنفيذ والتكامل.
 الأساس b5997137e842a464a2edf386fb30677ea574e513؛ الفرع codex/customer-maps.
 اقرأ AGENTS والبروتوكول وADR0001/0003 ونظام التصميم والتنقل وسياسة mock/API
 والمرحلتين وتسليم الباكند. Git وFlutter وAndroid وعرض الصور متاحة.
@@ -36,3 +36,6 @@ format/analyze/full tests وl10n/JSON/Postman/Python؛ صور Android فعلية
 عقد عربي versioned وأمثلة وPostman وأوامر الربط وفحوص خادم ينجزها الباكند.
 مراجعة مستقلة على SHA محدد عند الجاهزية؛ المشرف وحده يحدّث اللوحة ويجمع.
 لا push/main/Actions؛ تحديث نسخة سطح المكتب بعد الاعتماد.
+
+اعتُمد الكود عند 8c7087253e07c4a94eb1c0abb52a6ed36a6c49df؛676 اختبارًا و38 مقارنة UI ناجحة.
+انظر deliveries/W4-MAPS/HANDOFF.md وREVIEW.md للتفاصيل والقيود.
