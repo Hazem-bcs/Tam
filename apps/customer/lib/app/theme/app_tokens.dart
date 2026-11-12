@@ -33,6 +33,16 @@ abstract final class AppDimensions {
   static const double focusBorderWidth = 2;
 }
 
+/// Shared duration and easing tokens for presentation-only transitions.
+/// The device's reduced-motion preference takes precedence in each widget.
+abstract final class AppMotion {
+  static const short = Duration(milliseconds: 180);
+  static const medium = Duration(milliseconds: 300);
+  static const long = Duration(milliseconds: 450);
+  static const easeOut = Curves.easeOutCubic;
+  static const easeIn = Curves.easeInCubic;
+}
+
 /// Prefer borders to shadows. Use Material elevation for raised surfaces.
 abstract final class AppElevation {
   static const double flat = 0;

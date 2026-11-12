@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_progress.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_location_fields.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_quote_review.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_route_motion_preview.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_schedule_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -33,6 +34,14 @@ class RideRequestPage extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      sheetAnimationStyle: AnimationStyle(
+        duration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : AppMotion.long,
+        reverseDuration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : AppMotion.medium,
+      ),
       builder: (_) => BlocProvider.value(
         value: bloc,
         child: RidePlacePicker(
@@ -69,6 +78,7 @@ class RideRequestPage extends StatelessWidget {
                 child: ListView(
                   padding: AppSpacing.pagePadding,
                   children: [
+                    RideJourneyProgress(state: state),
                     RideLocationFields(
                       pickup: state.pickup,
                       destination: state.destination,
@@ -78,12 +88,6 @@ class RideRequestPage extends StatelessWidget {
                           _pickLocation(context, pickup: false),
                     ),
                     const SizedBox(height: AppSpacing.md),
-                    RouteMapView(
-                      height: 210,
-                      origin: state.pickup?.point,
-                      destination: state.destination?.point,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
                     RideSchedulePicker(
                       scheduledAt: state.scheduledAt,
                       enabled: !locked,
@@ -93,6 +97,8 @@ class RideRequestPage extends StatelessWidget {
                         RideScheduleChanged(time),
                       ),
                     ),
+                    const SizedBox(height: AppSpacing.md),
+                    RideRouteMotionPreview(state: state),
                     const SizedBox(height: AppSpacing.xl),
                     RideVehiclePicker(
                       selected: state.vehicleClass,

@@ -20,6 +20,10 @@ class RideVehiclePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : AppMotion.medium;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -27,45 +31,76 @@ class RideVehiclePicker extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         for (final vehicle in RideVehicleClass.values) ...[
           TamCard(
-            padding: const EdgeInsetsDirectional.all(AppSpacing.md),
+            padding: EdgeInsets.zero,
             onTap: enabled ? () => onSelected(vehicle) : null,
-            child: Row(
-              children: [
-                Icon(
-                  _icon(vehicle),
-                  size: 32,
+            child: AnimatedContainer(
+              key: Key('ride-vehicle-${vehicle.name}'),
+              duration: duration,
+              curve: AppMotion.easeOut,
+              margin: const EdgeInsetsDirectional.all(AppSpacing.xs),
+              padding: const EdgeInsetsDirectional.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                border: Border.all(
                   color: selected == vehicle
                       ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurfaceVariant,
+                      : theme.colorScheme.outlineVariant,
+                  width: selected == vehicle
+                      ? AppDimensions.focusBorderWidth
+                      : AppDimensions.borderWidth,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _name(l10n, vehicle),
-                        style: theme.textTheme.titleSmall,
-                      ),
-                      Text(
-                        _description(l10n, vehicle),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+              ),
+              child: Row(
+                children: [
+                  AnimatedScale(
+                    duration: duration,
+                    curve: AppMotion.easeOut,
+                    scale: selected == vehicle ? 1 : 0.91,
+                    child: Icon(
+                      _icon(vehicle),
+                      size: 32,
+                      color: selected == vehicle
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Icon(
-                  selected == vehicle
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
-                  color: selected == vehicle
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.outline,
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _name(l10n, vehicle),
+                          style: theme.textTheme.titleSmall,
+                        ),
+                        Text(
+                          _description(l10n, vehicle),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  AnimatedSwitcher(
+                    duration: duration,
+                    switchInCurve: AppMotion.easeOut,
+                    switchOutCurve: AppMotion.easeIn,
+                    transitionBuilder: (child, animation) =>
+                        ScaleTransition(scale: animation, child: child),
+                    child: Icon(
+                      selected == vehicle
+                          ? Icons.radio_button_checked
+                          : Icons.radio_button_unchecked,
+                      key: ValueKey(selected == vehicle),
+                      color: selected == vehicle
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
