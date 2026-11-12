@@ -48,20 +48,20 @@ void main() {
     await tester.pumpWidget(harness(const RideDraftState()));
     await tester.pumpAndSettle();
     expect(find.text('نقطة الانطلاق'), findsOneWidget);
-    expect(find.text('1/4'), findsOneWidget);
+    expect(find.text('1/3'), findsOneWidget);
     expect(find.byKey(const Key('ride-stage-progress')), findsOneWidget);
 
     await tester.pumpWidget(harness(RideDraftState(pickup: pickup)));
     await tester.pumpAndSettle();
     expect(find.text('الوجهة'), findsOneWidget);
-    expect(find.text('2/4'), findsOneWidget);
+    expect(find.text('2/3'), findsOneWidget);
 
     await tester.pumpWidget(
       harness(RideDraftState(pickup: pickup, destination: destination)),
     );
     await tester.pumpAndSettle();
     expect(find.text('حدد نوع الرحلة'), findsOneWidget);
-    expect(find.text('3/4'), findsOneWidget);
+    expect(find.text('3/3'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

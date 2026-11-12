@@ -14,8 +14,9 @@ class RideJourneyProgress extends StatelessWidget {
   int get activeIndex {
     if (state.pickup == null) return 0;
     if (state.destination == null) return 1;
-    if (state.quote == null) return 2;
-    return 3;
+    // A quote is fetched automatically. It does not mean the user reviewed
+    // or explicitly accepted the vehicle; keep the UI on the choice step.
+    return 2;
   }
 
   @override
@@ -26,7 +27,6 @@ class RideJourneyProgress extends StatelessWidget {
       l.rideRequestPickup,
       l.rideRequestDestination,
       l.rideRequestChooseClass,
-      l.rideRequestReview,
     ];
     final active = activeIndex;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);

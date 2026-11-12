@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
-import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_state.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_route_motion_preview.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -11,11 +10,11 @@ import 'package:tam_customer/shared/domain/trip.dart';
 
 void main() {
   final pickup = TripLocation(
-    label: 'Pickup',
+    label: 'Pickup place',
     point: GeoPoint(latitude: 36.20, longitude: 37.12),
   );
   final destination = TripLocation(
-    label: 'Destination',
+    label: 'Destination place',
     point: GeoPoint(latitude: 36.22, longitude: 37.15),
   );
 
@@ -42,22 +41,24 @@ void main() {
     );
   }
 
-  testWidgets('map preview grows only when an actual route is selected', (
+  testWidgets('unconfigured maps show truthful pickup/destination summary', (
     tester,
   ) async {
     await tester.pumpWidget(harness(const RideDraftState()));
     await tester.pumpAndSettle();
-    expect(tester.widget<RouteMapView>(find.byType(RouteMapView)).height, 184);
+    expect(find.byKey(const Key('ride-map-fallback')), findsOneWidget);
+    expect(find.text('Pickup place'), findsNothing);
 
     await tester.pumpWidget(harness(RideDraftState(pickup: pickup)));
     await tester.pumpAndSettle();
-    expect(tester.widget<RouteMapView>(find.byType(RouteMapView)).height, 184);
+    expect(find.text('Pickup place'), findsOneWidget);
 
     await tester.pumpWidget(
       harness(RideDraftState(pickup: pickup, destination: destination)),
     );
     await tester.pumpAndSettle();
-    expect(tester.widget<RouteMapView>(find.byType(RouteMapView)).height, 248);
+    expect(find.text('Destination place'), findsOneWidget);
+    expect(find.byKey(const Key('ride-map-fallback')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

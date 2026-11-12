@@ -41,14 +41,9 @@ class RideVehiclePicker extends StatelessWidget {
               padding: const EdgeInsetsDirectional.all(AppSpacing.md),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppRadii.md),
-                border: Border.all(
-                  color: selected == vehicle
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.outlineVariant,
-                  width: selected == vehicle
-                      ? AppDimensions.focusBorderWidth
-                      : AppDimensions.borderWidth,
-                ),
+                color: selected == vehicle
+                    ? theme.colorScheme.primaryContainer
+                    : theme.colorScheme.surfaceContainerLowest,
               ),
               child: Row(
                 children: [
