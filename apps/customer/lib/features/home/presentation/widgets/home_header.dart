@@ -43,7 +43,9 @@ class HomeHeader extends StatelessWidget {
                     : isAuthenticated
                     ? t.authSignedInTitle
                     : t.homePhoneTitle,
-                style: text.titleLarge,
+                style: text.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               if (phoneE164 != null) ...[
                 const SizedBox(height: AppSpacing.xs),
@@ -61,13 +63,26 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
         ),
-        notificationsButton ??
-            IconButton(
-              key: const Key('home-notifications'),
-              onPressed: onNotifications,
-              tooltip: t.navNotifications,
-              icon: const Icon(Icons.notifications_none_outlined),
-            ),
+        const SizedBox(width: AppSpacing.md),
+        Container(
+          width: AppDimensions.minTapTarget + AppSpacing.xs,
+          height: AppDimensions.minTapTarget + AppSpacing.xs,
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(AppRadii.lg),
+            border: Border.all(color: scheme.outlineVariant),
+          ),
+          child: Center(
+            child:
+                notificationsButton ??
+                IconButton(
+                  key: const Key('home-notifications'),
+                  onPressed: onNotifications,
+                  tooltip: t.navNotifications,
+                  icon: const Icon(Icons.notifications_none_outlined),
+                ),
+          ),
+        ),
       ],
     );
   }

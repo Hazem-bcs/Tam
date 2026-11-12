@@ -22,27 +22,36 @@ class RideLocationFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     return TamCard(
-      padding: const EdgeInsetsDirectional.all(AppSpacing.sm),
-      child: Column(
-        children: [
-          _PlaceField(
-            icon: Icons.radio_button_checked,
-            title: l10n.rideRequestPickup,
-            value: pickup?.label ?? l10n.rideRequestPickupHint,
-            selected: pickup != null,
-            onTap: enabled ? onPickup : null,
-          ),
-          const Divider(height: 1),
-          _PlaceField(
-            icon: Icons.location_on_outlined,
-            title: l10n.rideRequestDestination,
-            value: destination?.label ?? l10n.rideRequestDestinationHint,
-            selected: destination != null,
-            onTap: enabled ? onDestination : null,
-          ),
-        ],
+      padding: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.all(AppSpacing.sm),
+        child: Column(
+          children: [
+            _PlaceField(
+              icon: Icons.radio_button_checked,
+              title: l.rideRequestPickup,
+              value: pickup?.label ?? l.rideRequestPickupHint,
+              selected: pickup != null,
+              onTap: enabled ? onPickup : null,
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              child: Divider(height: 1, color: colors.outlineVariant),
+            ),
+            _PlaceField(
+              icon: Icons.location_on_rounded,
+              title: l.rideRequestDestination,
+              value: destination?.label ?? l.rideRequestDestinationHint,
+              selected: destination != null,
+              onTap: enabled ? onDestination : null,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -56,6 +65,7 @@ class _PlaceField extends StatelessWidget {
     required this.selected,
     required this.onTap,
   });
+
   final IconData icon;
   final String title;
   final String value;
@@ -65,43 +75,70 @@ class _PlaceField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : AppMotion.short;
     return Semantics(
       button: true,
       enabled: onTap != null,
       label: '$title: $value',
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadii.md),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: AppDimensions.minTapTarget,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        child: AnimatedContainer(
+          duration: duration,
+          curve: AppMotion.easeOut,
+          constraints: const BoxConstraints(minHeight: 86),
+          padding: const EdgeInsetsDirectional.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: selected
+                ? colors.primaryContainer.withValues(alpha: 0.25)
+                : colors.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(AppRadii.lg),
           ),
-          child: Padding(
-            padding: const EdgeInsetsDirectional.all(AppSpacing.md),
-            child: Row(
-              children: [
-                Icon(icon, color: theme.colorScheme.primary),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: theme.textTheme.labelMedium),
-                      Text(
-                        value,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: selected
-                              ? theme.colorScheme.onSurface
-                              : theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
+          child: Row(
+            children: [
+              Container(
+                height: 44,
+                width: 44,
+                decoration: BoxDecoration(
+                  color: colors.primaryContainer,
+                  borderRadius: BorderRadius.circular(AppRadii.md),
                 ),
-                const SizedBox(width: AppSpacing.sm),
-                const Icon(Icons.edit_outlined),
-              ],
-            ),
+                child: Icon(icon, color: colors.primary),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      value,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: selected ? FontWeight.w700 : null,
+                        color: selected
+                            ? colors.onSurface
+                            : colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Icon(
+                Icons.edit_outlined,
+                color: colors.onSurfaceVariant,
+                size: AppDimensions.iconSize,
+              ),
+            ],
           ),
         ),
       ),

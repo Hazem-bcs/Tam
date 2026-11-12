@@ -81,22 +81,26 @@ class HomePage extends StatelessWidget {
                     isGuest: isGuest,
                     notificationsButton: notificationsButton,
                   ),
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: TextButton.icon(
-                      key: const Key('home-addresses'),
-                      onPressed: navigation.openAddresses,
-                      icon: const Icon(Icons.bookmark_border),
-                      label: Text(t.addressesTitle),
-                    ),
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      TextButton.icon(
+                        key: const Key('home-addresses'),
+                        onPressed: navigation.openAddresses,
+                        icon: const Icon(Icons.bookmark_border_rounded),
+                        label: Text(t.addressesTitle),
+                      ),
+                      TextButton.icon(
+                        key: const Key('home-active-trip'),
+                        onPressed: () => navigation.openActiveTrip(),
+                        icon: const Icon(Icons.route_outlined),
+                        label: Text(t.activeTripFollow),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSpacing.xl),
-                  TextButton.icon(
-                    key: const Key('home-active-trip'),
-                    onPressed: () => navigation.openActiveTrip(),
-                    icon: const Icon(Icons.route_outlined),
-                    label: Text(t.activeTripFollow),
-                  ),
+                  const SizedBox(height: AppSpacing.lg),
                   BlocBuilder<HomeCubit, HomeState>(
                     builder: (context, state) => _body(context, state),
                   ),
@@ -158,16 +162,16 @@ class HomePage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (rideAvailable) ...[
+              HomeRideEntry(onRideRequest: navigation.openRideRequest),
+              const SizedBox(height: AppSpacing.lg),
+            ],
             for (final promo in heroes) ...[
               HomePromotionCard(
                 key: Key('home-promo-${promo.id}'),
                 promotion: promo,
                 onRideRequest: navigation.openRideRequest,
               ),
-              const SizedBox(height: AppSpacing.lg),
-            ],
-            if (rideAvailable) ...[
-              HomeRideEntry(onRideRequest: navigation.openRideRequest),
               const SizedBox(height: AppSpacing.xl),
             ],
             if (data.services.isNotEmpty) ...[

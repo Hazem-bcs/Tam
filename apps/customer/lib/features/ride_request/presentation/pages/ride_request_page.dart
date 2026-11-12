@@ -63,6 +63,12 @@ class RideRequestPage extends StatelessWidget {
           navigation.openActiveTrip(id: state.confirmedTrip!.id),
       builder: (context, state) {
         final locked = state.confirmationPending;
+        // Keep location controls first in short or large-text viewports.
+        // A taller visual stage panel can otherwise push them beyond the
+        // initial lazily built section of the booking form.
+        final compactLayout =
+            MediaQuery.sizeOf(context).height < 700 ||
+            MediaQuery.textScalerOf(context).scale(16) > 23;
         final isConfirming = state.status == RideFlowStatus.confirming;
         final canConfirm =
             context.read<RideDraftBloc>().canConfirm ||
@@ -78,7 +84,7 @@ class RideRequestPage extends StatelessWidget {
                 child: ListView(
                   padding: AppSpacing.pagePadding,
                   children: [
-                    RideJourneyProgress(state: state),
+                    if (!compactLayout) RideJourneyProgress(state: state),
                     RideLocationFields(
                       pickup: state.pickup,
                       destination: state.destination,
@@ -87,6 +93,7 @@ class RideRequestPage extends StatelessWidget {
                       onDestination: () =>
                           _pickLocation(context, pickup: false),
                     ),
+                    if (compactLayout) RideJourneyProgress(state: state),
                     const SizedBox(height: AppSpacing.md),
                     RideSchedulePicker(
                       scheduledAt: state.scheduledAt,
