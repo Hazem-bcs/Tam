@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0b121d" />
+<title>TAM — Motion Prototype / تم</title>
+<style>
+:root {
+  --canvas: #090f18;
+  --ink: #eef3fa;
+  --muted: #8998ae;
+  --line: #273448;
+  --panel: #121d2b;
+  --spring: cubic-bezier(.22,.92,.22,1);
+  color-scheme: dark;
+}
+* {box-sizing:border-box}
+html,body {margin:0;min-height:100%;background:var(--canvas);color:var(--ink)}
+body {overflow-x:hidden;font-family:"Cairo","Noto Sans Arabic","Noto Sans Arabic UI",Tahoma,sans-serif;line-height:1.6}
+button,input {font:inherit}
+button {cursor:pointer}
+button:focus-visible,input:focus-visible {outline:3px solid #f5ba7c;outline-offset:4px}
+::selection {background:#72e9be;color:#10222b}
+.site {max-width:1440px;margin:auto;padding:30px 44px 36px;overflow-x:clip}
+.head {display:flex;align-items:center;justify-content:space-between;gap:26px;border-bottom:1px solid #263243;padding-bottom:24px}
+.logo {display:flex;gap:12px;align-items:center}
+.logo-symbol {display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:#1b2c37;color:#91f5cb;font-weight:900;font-size:32px}
+.logo-copy {display:flex;flex-direction:column;line-height:1.3}
+.eyebrow {font-family:Inter,Arial,sans-serif;font-size:11px;letter-spacing:2.6px;font-weight:800;color:#81dbc0;direction:ltr}
+.logo-copy strong {font-weight:800;font-size:23px;color:#fff}
+.version {direction:ltr;letter-spacing:1px;font-family:Inter,Arial,sans-serif;font-size:12px;color:#8c9bb1}
+.intro {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:30px;margin:30px 0 25px}
+.intro h1 {font-size:clamp(30px,3.3vw,49px);line-height:1.28;margin:6px 0 8px;letter-spacing:-1px;font-weight:850}
+.intro p {font-size:15px;color:#9eadbd;max-width:580px;margin:0}
+.concept-switch {display:flex;flex-wrap:wrap;gap:8px;background:#111b29;padding:7px;border:1px solid #293549;border-radius:20px}
+.concept-switch button {border:0;background:transparent;color:#aab8c9;border-radius:14px;padding:10px 15px;text-align:right;min-width:168px;transition:background .25s,color .25s,transform .25s}
+.concept-switch button:active{transform:scale(.97)}
+.concept-switch button[aria-pressed="true"] {background:#213d41;color:#9bf0d1}
+.concept-switch button[data-variant="fluid"][aria-pressed="true"] {background:#38345f;color:#d7d0ff}
+.concept-switch button strong {font-size:13px;display:block;white-space:nowrap}
+.concept-switch button span {font-family:Inter,Arial,sans-serif;font-size:10px;letter-spacing:1px;display:block;direction:ltr;text-align:right;margin-top:3px}
+.workbench {display:grid;grid-template-columns:minmax(265px,1fr) 490px minmax(265px,1fr);align-items:center;gap:26px;direction:rtl}
+.card {border:1px solid #263449;border-radius:28px;background:linear-gradient(145deg,#141f2d 0%,#101925 100%);padding:28px 27px;min-height:395px;box-shadow:0 24px 60px #0002}
+.card .card-kicker {font-family:Inter,Arial,sans-serif;letter-spacing:2px;font-size:11px;font-weight:750;direction:ltr;text-align:right;color:#80b8ae}
+.card h2 {font-size:24px;line-height:1.45;margin:13px 0;color:#f0f5fc}
+.card p {color:#a3b2c4;font-size:14px;margin:0 0 23px}
+.card .big-stat {font-size:47px;color:#f7fafc;letter-spacing:-2px;font-weight:800;line-height:1.2}
+.card .big-stat span {font-size:13px;color:#8b9eb6;letter-spacing:0;font-weight:500}
+.details {display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:18px 0}
+.details .mini {border:1px solid #34435a;padding:12px 13px;border-radius:16px;background:#172638}
+.details .mini strong{display:block;color:#f3f8fa;font-family:Inter,Arial,sans-serif;font-size:16px;direction:ltr}
+.details .mini small{display:block;color:#9aaec0;font-size:11px}
+.button-quiet {padding:10px 17px;background:#22384a;border:1px solid #3a5067;color:#e2f7f1;border-radius:14px;width:100%;font-size:13px;font-weight:700;transition:transform .25s,background .25s}
+.button-quiet:hover {background:#2c4856}
+.button-quiet:active {transform:scale(.97)}
+.guide {display:flex;gap:12px;margin:16px 0 18px;align-items:flex-start}
+.guide .g-icon {height:35px;width:35px;min-width:35px;border:1px solid #36505c;background:#1e3742;color:#b2f7e0;border-radius:13px;display:grid;place-items:center;font-size:19px}
+.guide strong {color:#ebf5fb;font-size:13px}
+.guide p{font-size:12px;margin:2px 0;color:#90a2b7}
+.steps {display:grid;gap:9px;padding:0;list-style:none;margin:18px 0 22px}
+.step {display:grid;grid-template-columns:35px 1fr 16px;align-items:center;gap:12px;padding:9px 11px;border-radius:14px;color:#92a3b7;background:#172230;border:1px solid transparent;cursor:pointer;transition:background .2s,border .2s}
+.step.active {background:#223842;border-color:#3b655e;color:#f3fff9}
+.step.done .step-num {background:#3e7664;color:#ebfff5}
+.step .step-num {font-family:Inter,Arial,sans-serif;font-size:10px;border-radius:10px;background:#28374b;color:#91a8b7;padding:9px 0;text-align:center;direction:ltr}
+.step .step-label{font-size:13px;font-weight:700}
+.step .step-check{font-size:17px;color:#7adcb6}
+.stage-note {border-top:1px solid #314155;padding-top:16px;color:#9cb3c4;font-size:12px}
+.state-flag {display:inline-flex;border-radius:40px;border:1px solid #37554b;padding:4px 12px;color:#91e6c8;font-family:Inter,Arial,sans-serif;font-size:10px;letter-spacing:1px;direction:ltr}
+.device-col {display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;min-height:850px;min-width:0;max-width:100%}
+.ambient {position:absolute;pointer-events:none;width:520px;height:760px;background:radial-gradient(ellipse at center,#33695d38 0%,#1c3a7030 42%,transparent 68%);filter:blur(36px);opacity:.7}
+.ambient.fluid {background:radial-gradient(ellipse at center,#7163d542 0%,#a7b3f625 40%,transparent 68%)}
+.device-rim {position:relative;padding:8px;border-radius:46px;background:linear-gradient(140deg,#3e4f5e,#09131a 47%,#37485a);box-shadow:0 32px 100px #0009,0 4px 19px #0006,0 0 0 1px #5e6c7447;z-index:1}
+.device {position:relative;width:390px;height:780px;border-radius:39px;overflow:hidden;background:var(--map-bg);transition:background .45s;isolation:isolate;user-select:none;
+ --map-bg:#122735;--map-road:#2c4858;--block:#254152;--sheet-bg:#1b303d;--sheet-text:#f4f9f8;--sheet-sub:#9cb5c0;--field:#294654;--label:#e8f7f2;--accent:#72e9be;--on-accent:#123730;--dimmer:#a8bac6;--shadow-sheet:rgba(0,0,0,.16);--card-alt:#264451;--border-card:rgba(255,255,255,.08);
+}
+.device[data-theme="fluid"] {
+ --map-bg:#e9eefb;--map-road:#ffffff;--block:#c9d8ed;--sheet-bg:#ffffff;--sheet-text:#292257;--sheet-sub:#697398;--field:#f0f1fc;--label:#454070;--accent:#786bef;--on-accent:#ffffff;--dimmer:#686ba4;--shadow-sheet:rgba(61,49,132,.08);--card-alt:#f0effb;--border-card:rgba(78,65,165,.06);
+}
+.device:after {content:"";position:absolute;left:144px;bottom:5px;width:102px;height:4px;background:var(--sheet-sub);border-radius:3px;opacity:.7;z-index:12}
+.map {position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--map-bg);transition:background .5s}
+.map-art {position:absolute;top:0;right:0;left:0;height:585px;transform:translateY(0);transition:transform .74s var(--spring);width:100%;overflow:visible}
+.device:is([data-step="route"],[data-step="confirm"],[data-step="searching"]) .map-art {transform:translateY(-118px)}
+.map-block {fill:var(--block);opacity:.54;transition:fill .5s}
+.map-road {stroke:var(--map-road);fill:none;stroke-linecap:round;transition:stroke .5s}
+.map-lane {stroke:var(--map-bg);opacity:.24;fill:none;stroke-linecap:round}
+.map-glow {fill:var(--accent);opacity:.10}
+.map-pickup-outer {fill:var(--accent);opacity:.19}
+.map-pickup-mid {fill:var(--accent);opacity:.45}
+.map-pickup-core {fill:var(--accent)}
+.map-destination {fill:#ff9875;opacity:0;transition:opacity .4s}
+.map-destination.glow {opacity:0}
+.route-path {fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:350;stroke-dashoffset:350;filter:drop-shadow(0 4px 8px #0002);transition:stroke-dashoffset 1.05s cubic-bezier(.2,.75,.1,1),stroke .4s}
+.device:is([data-step="route"],[data-step="confirm"],[data-step="searching"]) .route-path {stroke-dashoffset:0}
+.device:is([data-step="route"],[data-step="confirm"],[data-step="searching"]) .map-destination {opacity:1}
+.device[data-theme="fluid"] .map-orb {opacity:1}
+.map-orb {opacity:0;transition:opacity .5s}
+.status {position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;direction:ltr;z-index:5;color:var(--sheet-text);font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:800}
+.status-right {display:flex;align-items:center;gap:5px}
+.signal {display:block;height:9px;width:7px;background:var(--sheet-text);border-radius:2px}
+.signal:nth-child(2) {height:12px}
+.battery {display:block;border:1.5px solid var(--sheet-text);height:11px;width:20px;border-radius:3px;position:relative;margin-left:6px}
+.battery:before{content:"";position:absolute;inset:2px;background:var(--sheet-text);border-radius:1px}
+.battery:after{content:"";position:absolute;left:-4px;top:3px;width:3px;height:3px;background:var(--sheet-text)}
+.map-header {position:absolute;top:64px;right:25px;left:25px;z-index:4;display:flex;align-items:center;justify-content:space-between;min-height:72px;transition:background .35s,box-shadow .35s,padding .35s,border-radius .35s}
+.device[data-theme="fluid"] .map-header {background:#ffffff;padding:13px 18px;border-radius:23px;box-shadow:0 10px 26px #706bce15}
+.map-header .brand {font-size:38px;font-weight:900;line-height:1;color:var(--sheet-text);letter-spacing:-2px}
+.device[data-theme="fluid"] .map-header .brand{color:#594ac7}
+.map-header .address {font-size:13px;font-weight:700;color:var(--sheet-sub)}
+.map-label {position:absolute;left:24px;top:225px;background:#25424f;color:#d6f8eb;font-size:12px;padding:10px 16px;border-radius:21px;z-index:3;transition:opacity .3s}
+.device[data-theme="fluid"] .map-label{background:#fff;color:#625bb9}
+.device:not([data-step="home"]) .map-label{opacity:0}
+.map-back {position:absolute;top:147px;left:22px;z-index:7;min-width:76px;border:0;border-radius:18px;padding:7px 13px;background:var(--sheet-bg);color:var(--sheet-text);box-shadow:0 4px 10px #0001;font-size:12px;font-weight:750;transition:opacity .28s,transform .28s;opacity:0;pointer-events:none}
+.device:not([data-step="home"]) .map-back {opacity:1;pointer-events:auto}
+.map-back:active {transform:scale(.95)}
+.sheet {position:absolute;bottom:0;right:0;left:0;z-index:6;background:var(--sheet-bg);color:var(--sheet-text);height:298px;border-radius:35px 35px 0 0;box-shadow:0 -18px 40px var(--shadow-sheet);transition:height .62s var(--spring),background .45s,color .45s,border-radius .45s;overflow:hidden}
+.device[data-theme="fluid"] .sheet{border-radius:38px 38px 0 0}
+.device[data-step="search"] .sheet {height:590px}
+.device[data-step="route"] .sheet {height:420px}
+.device[data-step="confirm"] .sheet {height:398px}
+.device[data-step="searching"] .sheet {height:348px}
+.handle {position:absolute;top:13px;left:calc(50% - 25px);height:5px;width:50px;border-radius:5px;background:var(--sheet-sub);opacity:.52;z-index:3}
+.sheet-body {padding:32px 26px 24px;animation:content-in .42s var(--spring) both}
+@keyframes content-in {from {opacity:0;transform:translateY(14px);filter:blur(2px)} to {opacity:1;transform:translateY(0);filter:blur(0)}}
+.device[data-step="search"] .sheet-body {height:100%;overflow-y:auto;scrollbar-width:none;padding-bottom:25px}
+.device[data-step="search"] .sheet-body::-webkit-scrollbar{display:none}
+.sheet h2 {font-size:27px;font-weight:850;line-height:1.45;letter-spacing:-.65px;margin:0 0 3px}
+.sheet p.sub {font-size:13px;line-height:1.5;color:var(--sheet-sub);margin:0 0 19px}
+.search-box {width:100%;height:59px;border-radius:17px;background:var(--field);display:flex;align-items:center;justify-content:space-between;padding:0 17px;color:var(--label);font-size:16px;font-weight:750;border:1px solid transparent;transition:transform .2s,border .2s,background .2s;min-width:0}
+.device[data-theme="fluid"] .search-box {border-radius:23px;height:64px}
+.search-box:is(button):hover {border-color:var(--accent);transform:translateY(-1px)}
+.dot {width:15px;height:15px;flex:0 0 15px;background:var(--accent);border-radius:50%}
+.row-of-shortcuts {display:flex;gap:13px;margin-top:13px}
+.shortcut {display:grid;place-items:center;flex:1;min-height:37px;border-radius:17px;background:var(--card-alt);color:var(--label);border:1px solid var(--border-card);font-size:12px;font-weight:700;transition:transform .2s,border .2s}
+.shortcut:hover,.vehicle:hover,.suggestion:hover {transform:translateY(-2px);border-color:var(--accent)}
+.shortcut:active,.vehicle:active,.suggestion:active {transform:scale(.985)}
+.action {width:100%;height:49px;border:0;border-radius:17px;background:var(--accent);color:var(--on-accent);font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:12px;transition:transform .24s,filter .24s,box-shadow .24s}
+.action:hover{filter:brightness(1.055);box-shadow:0 7px 22px color-mix(in srgb,var(--accent) 30%,transparent)}
+.action:active {transform:scale(.976)}
+.action.secondary {background:var(--card-alt);color:var(--sheet-text);border:1px solid var(--border-card)}
+.home-action {margin-top:13px}
+.field-input {height:60px;width:100%;padding:0 18px;border-radius:17px;background:var(--field);border:1px solid var(--border-card);color:var(--label);text-align:right;direction:rtl;outline:none;font-weight:700;font-size:16px}
+.field-input::placeholder {color:var(--dimmer);opacity:1}
+.field-input:focus {border-color:var(--accent)}
+.small-cap {font-size:12px;font-weight:700;color:var(--sheet-sub);margin:17px 0 11px}
+.suggestion {width:100%;height:77px;border:1px solid var(--border-card);background:var(--card-alt);color:var(--sheet-text);border-radius:19px;padding:11px 15px;margin-bottom:10px;display:flex;align-items:center;gap:13px;text-align:right;transition:transform .2s,border .2s}
+.suggestion .suggest-icon {display:grid;place-items:center;width:31px;height:31px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:17px;flex:0 0 31px}
+.suggestion .suggest-data{display:flex;flex-direction:column;min-width:0}
+.suggestion strong{font-size:16px;font-weight:800}
+.suggestion small{font-size:11px;color:var(--sheet-sub);margin-top:1px}
+.search-helper {font-size:11px;color:var(--sheet-sub);margin:7px 0 9px;line-height:1.45}
+.search-bottom {margin-top:10px}
+.route-detail{display:flex;gap:9px;justify-content:center;align-items:center;border-radius:13px;padding:7px 12px;background:var(--field);font-size:12px;color:var(--sheet-sub);font-weight:700}
+.vehicle {height:77px;display:flex;align-items:center;gap:15px;border-radius:19px;background:var(--card-alt);padding:10px 15px;text-align:right;color:var(--sheet-text);border:1px solid var(--border-card);margin-top:10px;width:100%;transition:background .2s,transform .2s,border .2s}
+.vehicle[data-selected="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card-alt))}
+.vehicle .car-avatar{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 18%,var(--card-alt));color:var(--accent);font-size:22px}
+.vehicle .vehicle-text{display:flex;flex-direction:column;flex:1}
+.vehicle .vehicle-text strong{font-size:17px;font-weight:850}
+.vehicle .vehicle-text small{color:var(--sheet-sub);font-size:11px}
+.vehicle .check{color:var(--accent);font-size:20px}
+.vehicle-footnote {font-size:10px;color:var(--sheet-sub);margin:7px 0 7px}
+.route-action{margin-top:10px}
+.summary{border-radius:19px;background:var(--card-alt);padding:15px 16px 12px;border:1px solid var(--border-card)}
+.summary-item{display:flex;align-items:center;gap:12px;min-height:47px;position:relative}
+.summary-item:first-child:after{content:"";position:absolute;width:2px;height:25px;background:var(--sheet-sub);opacity:.45;right:7px;top:32px}
+.summary-dot{height:16px;width:16px;flex:0 0 16px;background:var(--accent);border-radius:50%}
+.summary-dot.end{background:#ff9b79}
+.summary-item strong{font-size:15px}
+.summary-foot{font-size:12px;color:var(--sheet-sub);border-top:1px solid var(--border-card);margin-top:6px;padding-top:10px}
+.disclaimer{font-size:11px;color:var(--sheet-sub);margin:12px 0}
+.confirm-action{height:52px;margin-top:13px}
+.radar {background:var(--field);border-radius:22px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;padding:9px 10px;height:145px}
+.radar-ring-wrap {position:relative;width:70px;height:70px;display:grid;place-items:center}
+.radar-ring {position:absolute;border:2px solid var(--accent);border-radius:50%;height:30px;width:30px;animation:radar 2.3s ease-out infinite;opacity:.65}
+.radar-ring:nth-child(2){animation-delay:.7s}
+.radar-core{background:var(--accent);width:22px;height:22px;border-radius:50%;box-shadow:0 0 0 9px color-mix(in srgb,var(--accent) 23%,transparent)}
+@keyframes radar {from {transform:scale(.2);opacity:.5} to {transform:scale(2.8);opacity:0}}
+.radar span{font-size:12px;color:var(--sheet-sub);font-weight:700}
+.searching-action{margin-top:14px}
+.map-chip {position:absolute;right:22px;top:370px;z-index:4;color:var(--label);background:var(--sheet-bg);padding:12px 16px;border-radius:18px;font-weight:700;font-size:11px;opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s}
+.device[data-step="route"] .map-chip,.device[data-step="confirm"] .map-chip {opacity:1;transform:translateY(0)}
+.device[data-step="route"] .map-chip {top:280px}
+.device[data-step="confirm"] .map-chip {top:300px}
+.device[data-theme="fluid"] .map-chip {box-shadow:0 7px 20px #645bc524}
+.device[data-step="searching"] .map-chip{opacity:0}
+.phone-footnote{font-size:11px;letter-spacing:.5px;text-align:center;color:#8799ab;margin-top:18px;direction:ltr;font-family:Inter,Arial,sans-serif}
+.footer {border-top:1px solid #263547;margin-top:34px;padding-top:19px;display:flex;gap:22px;justify-content:space-between;color:#7e93aa;font-size:12px}
+.footer a{color:#9aebd5;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+@media (max-width:1270px) {
+ .workbench {grid-template-columns:1fr 430px;gap:24px}
+ .right-card {grid-row:2;grid-column:1/-1;min-height:auto}
+ .device-col {grid-row:1;grid-column:2}
+ .left-card {grid-row:1;grid-column:1}
+ .card {min-height:0}
+ .device-col{min-height:850px}
+}
+@media (max-width:900px) {
+ .site{padding:22px 20px}
+ .workbench {grid-template-columns:1fr}
+ .device-col,.left-card,.right-card {grid-column:1;grid-row:auto}
+ .device-col{grid-row:1}
+ .intro{grid-template-columns:1fr}
+ .concept-switch{width:fit-content}
+ .device-col {min-height:840px}
+ .card{max-width:680px;width:100%;margin:auto}
+ .head{padding-bottom:19px}
+ .version{display:none}
+}
+@media (max-width:440px) {
+ .site{padding:13px}
+ .intro h1 {font-size:27px}
+ .intro p {font-size:12px}
+ .head {padding-bottom:14px}
+ .logo-symbol {width:46px;height:46px;font-size:27px}
+ .logo-copy strong {font-size:19px}
+ .eyebrow{font-size:9px}
+ .intro {margin:19px 0 12px}
+ .concept-switch{width:100%}
+ .concept-switch button{flex:1;min-width:0;padding:9px}
+ .concept-switch button strong{font-size:11px}
+ .concept-switch button span {font-size:9px}
+ .device-col{min-height:750px;overflow-x:clip}
+ .device-rim{transform:scale(.86);transform-origin:center top;margin-bottom:-104px}
+ .card{padding:21px}
+ .footer{display:block}
+}
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after {animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+ .route-path{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<div class="site">
+ <header class="head">
+   <div class="logo"><div class="logo-symbol" aria-hidden="true">تم</div><div class="logo-copy"><small class="eyebrow">TAM / MOTION LAB</small><strong>رحلة تبدأ من التفاصيل</strong></div></div>
+   <div class="version">DESIGN EXPLORATION · 01 / NOV 2026</div>
+ </header>
+ <div class="intro">
+   <div>
+    <div class="eyebrow">INTERACTIVE EXPERIENCE / EXPERIMENT 01</div>
+    <h1>ما بين الفكرة والحركة، تولد التجربة.</h1>
+    <p>مساران إبداعيان لتصميم تطبيق «تم». اختبر الانتقالات بنفسك، وانتقل من تحديد الوجهة إلى تأكيد الرحلة.</p>
+   </div>
+   <div class="concept-switch" aria-label="اتجاه التصميم">
+    <button data-variant="urban" aria-pressed="true"><strong>نبض المدينة</strong><span>01 / URBAN PULSE</span></button>
+    <button data-variant="fluid" aria-pressed="false"><strong>استمرارية مرنة</strong><span>02 / FLUID CONTINUITY</span></button>
+   </div>
+ </div>
+ <main class="workbench">
+  <aside class="card left-card" aria-labelledby="direction-title">
+   <div class="card-kicker">CREATIVE DIRECTION</div>
+   <h2 id="direction-title">نبض المدينة</h2>
+   <p id="direction-description">هوية حضرية هادئة تجعل الخريطة جزءاً من لغة المنتج. يظهر المسار عند تحديد الوجهة، وتتحول اللوحة إلى الخطوة التالية دون قفزات.</p>
+   <div class="details">
+    <div class="mini"><strong id="motion-speed">420 ms</strong><small>انتقال البطاقة</small></div>
+    <div class="mini"><strong>SVG</strong><small>رسم المسار</small></div>
+   </div>
+   <div class="guide">
+    <div class="g-icon" aria-hidden="true">↗</div>
+    <div><strong>حركة ذات معنى</strong><p>النقل بين الحالات مرتبط بتغير مهمة المستخدم، لا بمجرد الزينة.</p></div>
+   </div>
+   <div class="guide">
+    <div class="g-icon" aria-hidden="true">◉</div>
+    <div><strong>مرجع تفاعلي لا شاشة ثابتة</strong><p>جميع الأزرار الرئيسية في المسار قابلة للتجربة، والأسعار والمعالم توضيحية.</p></div>
+   </div>
+   <button class="button-quiet" id="replay" type="button">↻ &nbsp; إعادة التجربة من البداية</button>
+  </aside>
+  <div class="device-col">
+   <div class="ambient" id="ambient" aria-hidden="true"></div>
+   <div class="device-rim">
+     <section class="device" id="device" data-theme="urban" data-step="home" aria-label="نموذج تطبيق تم التفاعلي">
+       <div class="map" aria-hidden="true">
+        <svg class="map-art" viewBox="0 0 390 585" xmlns="http://www.w3.org/2000/svg" role="presentation">
+         <g class="map-orb"><circle cx="329" cy="216" r="117" fill="#b7a9fb" fill-opacity=".23"/><circle cx="63" cy="393" r="131" fill="#8ce0d8" fill-opacity=".2"/></g>
+         <g class="map-block"><rect x="43" y="188" width="73" height="87" rx="14"/><rect x="224" y="134" width="117" height="110" rx="17"/><rect x="211" y="347" width="114" height="89" rx="18"/><rect x="5" y="327" width="104" height="89" rx="14"/></g>
+         <g class="map-road" stroke-width="14"><path d="M-55 194L430 -38"/><path d="M-61 344L470 101"/><path d="M36 -40L468 423"/><path d="M-84 477L469 224"/><path d="M30 565L410 188"/><path d="M-45 90L424 545"/></g>
+         <g class="map-road" stroke-width="9" opacity=".55"><path d="M-55 270L440 332"/><path d="M242 -50L278 620"/></g>
+         <path class="route-path" d="M123 405 C151 381 146 346 185 329 C219 307 262 334 281 292 Q295 266 304 220"/>
+         <circle class="map-pickup-outer" cx="123" cy="405" r="26"/>
+         <circle class="map-pickup-mid" cx="123" cy="405" r="15"/>
+         <circle class="map-pickup-core" cx="123" cy="405" r="8"/>
+         <circle cx="123" cy="405" r="3" fill="#ffffff"/>
+         <circle class="map-destination glow" cx="304" cy="220" r="19"/>
+         <circle class="map-destination" cx="304" cy="220" r="8"/>
+        </svg>
+       </div>
+       <div class="status"><span>9:41</span><div class="status-right"><i class="signal"></i><i class="signal"></i><span class="battery"></span></div></div>
+       <div class="map-header"><div><div class="brand">تم</div></div><div class="address">حلب &nbsp; / &nbsp; الزهراء</div></div>
+       <div class="map-label">من هون، بتبدأ الحكاية</div>
+       <button class="map-back" data-action="back" aria-label="العودة للخطوة السابقة">← رجوع</button>
+       <div class="map-chip" id="map-chip">الزهراء ← قلعة حلب</div>
+       <section class="sheet" aria-live="polite">
+         <div class="handle"></div>
+         <div class="sheet-body" id="sheet-body"></div>
+       </section>
+     </section>
+   </div>
+   <div class="phone-footnote">390 × 780 / CONCEPTUAL MAP / NO LIVE BACKEND</div>
+  </div>
+  <aside class="card right-card" aria-labelledby="journey-title">
+   <div class="card-kicker">THE GOLDEN FLOW</div>
+   <h2 id="journey-title">جرّب خطوات المشوار</h2>
+   <p>انقر على الزر الرئيسي داخل الهاتف، أو اختر أي حالة من المخطط لمراجعتها.</p>
+   <div class="state-flag" id="current-flag">CURRENT / HOME</div>
+   <ol class="steps" id="steps">
+    <li class="step active" data-jump="home"><span class="step-num">01</span><span class="step-label">الرئيسية</span><span class="step-check">•</span></li>
+    <li class="step" data-jump="search"><span class="step-num">02</span><span class="step-label">اختيار الوجهة</span><span class="step-check">•</span></li>
+    <li class="step" data-jump="route"><span class="step-num">03</span><span class="step-label">المسار ونوع السيارة</span><span class="step-check">•</span></li>
+    <li class="step" data-jump="confirm"><span class="step-num">04</span><span class="step-label">تأكيد تفاصيل الرحلة</span><span class="step-check">•</span></li>
+    <li class="step" data-jump="searching"><span class="step-num">05</span><span class="step-label">البحث عن سائق</span><span class="step-check">•</span></li>
+   </ol>
+   <div class="stage-note" id="stage-note">اضغط على «ابدأ رحلتك» داخل النموذج للانتقال إلى البحث عن الوجهة.</div>
+  </aside>
+ </main>
+ <footer class="footer"><span>تصميم تجريبي مستقل عن الـ Domain والـ Backend — لا تُرسل طلبات حقيقية.</span><span>Reduced motion supported · Keyboard: ← → Esc · <a href="https://www.figma.com/design/dW6LCuvdifCDLZp7bHQD0y" target="_blank" rel="noopener">Figma art direction ↗</a></span></footer>
+</div>
+<script>
+(() => {
+"use strict";
+const device=document.getElementById("device");
+const sheet=document.getElementById("sheet-body");
+const mapChip=document.getElementById("map-chip");
+const desc=document.getElementById("direction-description");
+const title=document.getElementById("direction-title");
+const speed=document.getElementById("motion-speed");
+const note=document.getElementById("stage-note");
+const flag=document.getElementById("current-flag");
+const ambient=document.getElementById("ambient");
+const order=["home","search","route","confirm","searching"];
+const state={theme:"urban",step:"home",destination:"قلعة حلب",vehicle:"اقتصادية",typed:""};
+const places=[
+ {name:"قلعة حلب",info:"حلب القديمة • معلم تاريخي"},
+ {name:"جامعة حلب",info:"الفرقان • موقع جامعي"},
+ {name:"ساحة سعد الله الجابري",info:"وسط المدينة • ساحة عامة"}
+];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nextLabel={home:"HOME",search:"DESTINATION",route:"ROUTE & VEHICLE",confirm:"CONFIRMATION",searching:"DRIVER SEARCH"};
+const notes={
+ home:"البدء من شاشة هادئة؛ تحديد الوجهة هو أهم إجراء.",
+ search:"توسّع البطاقة فوق الخريطة، مع قائمة وجهات يمكنك البحث فيها.",
+ route:"تتحرك الخريطة للأعلى ويُرسم المسار. اختر نوع السيارة ثم تابع.",
+ confirm:"تُعرض البيانات النهائية بشكل يمكن قراءته سريعاً قبل التأكيد.",
+ searching:"تنتهي الرحلة التجريبية بحالة بحث بصري، دون الاتصال بخادم."
+};
+const topText=()=>state.theme==="urban"?"لوين مشوارك؟":"جاهز نتحرك؟";
+function header(t,sub){return `<h2>${t}</h2><p class="sub">${sub}</p>`;}
+function btn(label,action,cls=""){return `<button class="action ${cls}" data-action="${action}" type="button">${label}</button>`;}
+function drawSuggestions(term=""){
+ const results=places.filter(p=>p.name.includes(term.trim()) || p.info.includes(term.trim()));
+ return results.map((p,i)=>`<button class="suggestion" type="button" data-action="choose-destination" data-place="${esc(p.name)}"><span class="suggest-icon">${i===0?"⌖":"↗"}</span><span class="suggest-data"><strong>${esc(p.name)}</strong><small>${esc(p.info)}</small></span></button>`).join("") || `<div class="search-helper">لم نجد اسماً مطابقاً في النموذج. جرّب «قلعة حلب».</div>`;
+}
+function render(){
+ const s=state.step;device.dataset.theme=state.theme;device.dataset.step=s;
+ mapChip.textContent=`الزهراء ← ${state.destination}`;
+ document.querySelectorAll(".concept-switch button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.variant===state.theme)));
+ title.textContent=state.theme==="urban"?"نبض المدينة":"استمرارية مرنة";
+ desc.textContent=state.theme==="urban"
+ ? "هوية حضرية هادئة تجعل الخريطة جزءاً من لغة المنتج. يظهر المسار عند تحديد الوجهة، وتتحول اللوحة إلى الخطوة التالية دون قفزات."
+ : "واجهة فاتحة تعتمد على البطاقات المرنة والألوان البنفسجية. تتمدد اللوحة وتصغر بحسب الحاجة، بينما تحافظ الخريطة على السياق.";
+ speed.textContent=state.theme==="urban"?"420 ms":"540 ms";
+ ambient.classList.toggle("fluid",state.theme==="fluid");
+ flag.textContent="CURRENT / "+nextLabel[s];
+ note.textContent=notes[s];
+ document.querySelectorAll(".step").forEach(n=>{
+  const idx=order.indexOf(n.dataset.jump), cur=order.indexOf(s);
+  n.classList.toggle("active",idx===cur);
+  n.classList.toggle("done",idx<cur);
+  n.querySelector(".step-check").textContent=idx<cur?"✓":idx===cur?"●":"";
+ });
+ let content="";
+ if(s==="home"){
+  content=header(topText(),state.theme==="urban"?"اختار وجهتك، والباقي علينا":"خلّينا نوصلك لمطرحك");
+  content+=`<button type="button" data-action="go-search" class="search-box" aria-label="البحث عن وجهة"><span>لوين وجهتك؟</span><span class="dot"></span></button>`;
+  if(state.theme==="urban")content+=`<div class="row-of-shortcuts"><button type="button" class="shortcut" data-action="go-search">⌂ &nbsp; البيت</button><button type="button" class="shortcut" data-action="go-search">✦ &nbsp; العمل</button></div>`;
+  content+=`<div class="home-action">${btn(state.theme==="urban"?"ابدأ رحلتك &nbsp; ←":"يلا، تم! &nbsp; ←","go-search")}</div>`;
+ }else if(s==="search"){
+  content=header("لوين بدك توصل؟","اختار وجهتك — بحث تجريبي في حلب");
+  content+=`<input type="search" class="field-input" id="destination-query" aria-label="اسم الوجهة" placeholder="اكتب اسم المكان..." autocomplete="off" value="${esc(state.typed)}" />`;
+  content+=`<div class="small-cap">وجهات مقترحة</div><div id="suggestion-results">${drawSuggestions(state.typed)}</div>`;
+  content+=`<div class="search-helper">اختر أي وجهة من القائمة لمتابعة التجربة.</div><div class="search-bottom">${btn("رجوع للرئيسية","home","secondary")}</div>`;
+ }else if(s==="route"){
+  content=header("اختار نوع المشوار","من الزهراء إلى "+esc(state.destination));
+  content+=`<div class="route-detail"><span>◷</span><span>المسار والأزمنة المعروضة توضيحية فقط</span></div>`;
+  for(const vehicle of ["اقتصادية","مريح"]){
+   const selected=vehicle===state.vehicle;
+   content+=`<button class="vehicle" type="button" data-action="select-vehicle" data-vehicle="${vehicle}" data-selected="${selected}" aria-pressed="${selected}"><span class="car-avatar" aria-hidden="true">🚘</span><span class="vehicle-text"><strong>${vehicle}</strong><small>${vehicle==="اقتصادية"?"خيار عملي لكل يوم":"راحة إضافية في مشوارك"}</small></span><span class="check" aria-hidden="true">${selected?"✓":"○"}</span></button>`;
+  }
+  content+=`<div class="vehicle-footnote">اختر الفئة المناسبة — لا تُحتسب أجور حقيقية.</div><div class="route-action">${btn("متابعة اختيارك &nbsp; ←","confirm")}</div>`;
+ }else if(s==="confirm"){
+  content=header("تأكيد تفاصيل الرحلة","راجع المشوار قبل تأكيده");
+  content+=`<div class="summary"><div class="summary-item"><span class="summary-dot"></span><strong>الانطلاق &nbsp; • &nbsp; الزهراء</strong></div><div class="summary-item"><span class="summary-dot end"></span><strong>الوجهة &nbsp; • &nbsp; ${esc(state.destination)}</strong></div><div class="summary-foot">الفئة: <b>${esc(state.vehicle)}</b> &nbsp; | &nbsp; بيانات تجريبية</div></div>`;
+  content+=`<div class="disclaimer">نموذج تصميم — لن يتم إرسال أي طلب حقيقي.</div>${btn("تم! تأكيد طلب الرحلة","searching","confirm-action")}`;
+ }else if(s==="searching"){
+  content=header("طلبك تمّ ✨","الآن نبحث عن أقرب سائق لك");
+  content+=`<div class="radar"><div class="radar-ring-wrap"><span class="radar-ring"></span><span class="radar-ring"></span><span class="radar-core"></span></div><span>بحث نشط — محاكاة بصرية فقط</span></div>`;
+  content+=`<div class="searching-action">${btn("إلغاء والعودة للرئيسية","home","secondary")}</div>`;
+ }
+ sheet.innerHTML=content;
+ sheet.setAttribute("data-stage",s);
+}
+function navigate(step){
+ if(!order.includes(step))return;
+ state.step=step;
+ if(step==="home"){state.typed="";state.destination="قلعة حلب";}
+ render();
+}
+function changeTheme(theme){
+ if(theme!=="urban"&&theme!=="fluid")return;
+ state.theme=theme;
+ state.step="home";
+ state.typed="";
+ state.vehicle=theme==="urban"?"اقتصادية":"مريح";
+ state.destination="قلعة حلب";
+ render();
+}
+document.addEventListener("click",(e)=>{
+ const swap=e.target.closest("[data-variant]");
+ if(swap){changeTheme(swap.dataset.variant);return;}
+ const progress=e.target.closest("[data-jump]");
+ if(progress){navigate(progress.dataset.jump);return;}
+ const act=e.target.closest("[data-action]");
+ if(!act)return;
+ switch(act.dataset.action){
+ case "go-search":navigate("search");break;
+ case "choose-destination":state.destination=act.dataset.place;navigate("route");break;
+ case "select-vehicle":state.vehicle=act.dataset.vehicle;render();break;
+ case "confirm":navigate("confirm");break;
+ case "searching":navigate("searching");break;
+ case "home":navigate("home");break;
+ case "back":navigate(order[Math.max(0,order.indexOf(state.step)-1)]);break;
+ }
+});
+sheet.addEventListener("input",e=>{
+ if(e.target.id==="destination-query"){
+  state.typed=e.target.value;
+  const el=document.getElementById("suggestion-results");
+  if(el)el.innerHTML=drawSuggestions(state.typed);
+ }
+});
+document.getElementById("replay").addEventListener("click",()=>navigate("home"));
+document.addEventListener("keydown",e=>{
+ if(e.target.matches("input,textarea")||e.altKey||e.ctrlKey||e.metaKey)return;
+ if(e.key==="Escape")navigate("home");
+ if(e.key==="ArrowLeft"){e.preventDefault();navigate(order[Math.max(0,order.indexOf(state.step)-1)]);}
+ if(e.key==="ArrowRight"){e.preventDefault();navigate(order[Math.min(order.length-1,order.indexOf(state.step)+1)]);}
+});
+render();
+})();
+</script>
+</body>
+</html>
