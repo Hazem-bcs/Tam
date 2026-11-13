@@ -16,6 +16,8 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   int settings = 0;
   int notifications = 0;
   int home = 0;
+  int addresses = 0;
+  int activeTrip = 0;
   @override
   void openCompletion(String tripId) {}
   @override
@@ -27,7 +29,7 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id}) {}
+  void openActiveTrip({String? id}) => activeTrip++;
   @override
   void openAccountPhone() {}
   @override
@@ -45,7 +47,7 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   @override
   void openNotifications() => notifications++;
   @override
-  void openAddresses() {}
+  void openAddresses() => addresses++;
   @override
   void openSettings() => settings++;
 }
@@ -60,6 +62,7 @@ Future<void> pumpHome(
   bool guest = false,
   VoidCallback? onLogout,
   ThemeData? renderTheme,
+  bool settle = true,
 }) async {
   await tester.pumpWidget(
     BlocProvider(
@@ -86,5 +89,9 @@ Future<void> pumpHome(
       ),
     ),
   );
-  await tester.pumpAndSettle();
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
 }

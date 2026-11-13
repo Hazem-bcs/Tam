@@ -44,6 +44,7 @@ class RideSchedulePicker extends StatelessWidget {
           runSpacing: AppSpacing.sm,
           children: [
             ChoiceChip(
+              showCheckmark: false,
               key: const Key('ride-immediate'),
               avatar: const Icon(Icons.bolt_outlined),
               label: Text(l.rideRequestImmediate),
@@ -51,6 +52,7 @@ class RideSchedulePicker extends StatelessWidget {
               onSelected: enabled ? (_) => onChanged(null) : null,
             ),
             ChoiceChip(
+              showCheckmark: false,
               key: const Key('ride-scheduled'),
               avatar: const Icon(Icons.calendar_month_outlined),
               label: Text(l.rideRequestScheduled),

@@ -10,8 +10,10 @@ class RideVehiclePicker extends StatelessWidget {
     required this.selected,
     required this.enabled,
     required this.onSelected,
+    this.showHeading = true,
   });
 
+  final bool showHeading;
   final RideVehicleClass selected;
   final bool enabled;
   final ValueChanged<RideVehicleClass> onSelected;
@@ -27,8 +29,10 @@ class RideVehiclePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l10n.rideRequestChooseClass, style: theme.textTheme.titleMedium),
-        const SizedBox(height: AppSpacing.md),
+        if (showHeading) ...[
+          Text(l10n.rideRequestChooseClass, style: theme.textTheme.titleMedium),
+          const SizedBox(height: AppSpacing.md),
+        ],
         for (final vehicle in RideVehicleClass.values) ...[
           TamCard(
             padding: EdgeInsets.zero,
@@ -65,7 +69,7 @@ class RideVehiclePicker extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _name(l10n, vehicle),
+                          labelFor(l10n, vehicle),
                           style: theme.textTheme.titleSmall,
                         ),
                         Text(
@@ -111,7 +115,7 @@ class RideVehiclePicker extends StatelessWidget {
     RideVehicleClass.motorbike => Icons.two_wheeler_outlined,
   };
 
-  String _name(AppLocalizations l, RideVehicleClass vehicle) =>
+  static String labelFor(AppLocalizations l, RideVehicleClass vehicle) =>
       switch (vehicle) {
         RideVehicleClass.standard => l.rideRequestStandard,
         RideVehicleClass.comfort => l.rideRequestComfort,

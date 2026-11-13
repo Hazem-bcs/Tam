@@ -836,6 +836,78 @@ abstract class AppLocalizations {
   /// **'أدخل قيمة صحيحة ضمن المجال.'**
   String get rideRequestTimeInvalid;
 
+  /// No description provided for @rideRequestFlowStartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوين مشوارك؟'**
+  String get rideRequestFlowStartTitle;
+
+  /// No description provided for @rideRequestFlowStartSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار وجهتك، والباقي علينا'**
+  String get rideRequestFlowStartSubtitle;
+
+  /// No description provided for @rideRequestFlowStartAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ رحلتك'**
+  String get rideRequestFlowStartAction;
+
+  /// No description provided for @rideRequestFlowPickupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'من وين بدك تنطلق؟'**
+  String get rideRequestFlowPickupTitle;
+
+  /// No description provided for @rideRequestFlowDestinationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوين بدك توصل؟'**
+  String get rideRequestFlowDestinationTitle;
+
+  /// No description provided for @rideRequestFlowChoosePlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد الانطلاق والوجهة'**
+  String get rideRequestFlowChoosePlaces;
+
+  /// No description provided for @rideRequestFlowContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة اختيارك'**
+  String get rideRequestFlowContinue;
+
+  /// No description provided for @rideRequestFlowReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد تفاصيل الرحلة'**
+  String get rideRequestFlowReviewTitle;
+
+  /// No description provided for @rideRequestFlowReviewSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع مشوارك قبل تأكيده'**
+  String get rideRequestFlowReviewSubtitle;
+
+  /// No description provided for @rideRequestFlowVisualMap.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخطط توضيحي • الخرائط الحية غير متصلة'**
+  String get rideRequestFlowVisualMap;
+
+  /// No description provided for @rideRequestFlowSubmitted.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبك تمّ'**
+  String get rideRequestFlowSubmitted;
+
+  /// No description provided for @rideRequestFlowStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطوة {current} من {total}'**
+  String rideRequestFlowStep(int current, int total);
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:

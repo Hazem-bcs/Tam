@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/app.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
@@ -15,6 +16,7 @@ void main() {
   testWidgets(
     'real Home entry opens registered routes and retains local Auth',
     (tester) async {
+      final semantics = tester.ensureSemantics();
       final store = MemoryAuthSessionStore();
       await tester.pumpWidget(
         TamApp(
@@ -27,7 +29,17 @@ void main() {
       await tester.enterText(find.byKey(const Key('auth-phone')), '0941234567');
       await tester.tap(find.text('متابعة'));
       await tester.pumpAndSettle();
+      expect(
+        find.bySemanticsLabel('الإشعارات، غير المقروء: 4'),
+        findsOneWidget,
+        reason: 'The badge count must not replace the notification action name',
+      );
+      semantics.dispose();
       final home = tester.element(find.byType(HomePage));
+      expect(
+        Theme.of(tester.element(find.byType(Scaffold))).colorScheme.primary,
+        isNot(AppTheme.light.colorScheme.primary),
+      );
       final auth = home.read<AuthCubit>();
       final router = GoRouter.of(home);
       expect(auth.state.status, AuthStatus.localAccess);
@@ -50,6 +62,15 @@ void main() {
         expect(
           router.routerDelegate.currentConfiguration.last.matchedLocation,
           path,
+        );
+        expect(
+          Theme.of(
+            tester.element(find.byType(Scaffold).last),
+          ).colorScheme.primary,
+          path == AppRoutes.rideRequest
+              ? AppTheme.rideJourney(AppTheme.light).colorScheme.primary
+              : AppTheme.light.colorScheme.primary,
+          reason: 'Each route installs only its own central theme',
         );
         expect(tester.takeException(), isNull);
         router.pop();

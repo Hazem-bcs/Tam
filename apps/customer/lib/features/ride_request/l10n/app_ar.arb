@@ -75,5 +75,27 @@
   "rideRequestHour": "الساعة",
   "rideRequestMinuteInput": "الدقيقة",
   "rideRequestTimeFormat": "الوقت بنظام 24 ساعة (00–23).",
-  "rideRequestTimeInvalid": "أدخل قيمة صحيحة ضمن المجال."
+  "rideRequestTimeInvalid": "أدخل قيمة صحيحة ضمن المجال.",
+  "rideRequestFlowStartTitle": "لوين مشوارك؟",
+  "rideRequestFlowStartSubtitle": "اختار وجهتك، والباقي علينا",
+  "rideRequestFlowStartAction": "ابدأ رحلتك",
+  "rideRequestFlowPickupTitle": "من وين بدك تنطلق؟",
+  "rideRequestFlowDestinationTitle": "لوين بدك توصل؟",
+  "rideRequestFlowChoosePlaces": "حدد الانطلاق والوجهة",
+  "rideRequestFlowContinue": "متابعة اختيارك",
+  "rideRequestFlowReviewTitle": "تأكيد تفاصيل الرحلة",
+  "rideRequestFlowReviewSubtitle": "راجع مشوارك قبل تأكيده",
+  "rideRequestFlowVisualMap": "مخطط توضيحي • الخرائط الحية غير متصلة",
+  "rideRequestFlowSubmitted": "طلبك تمّ",
+  "rideRequestFlowStep": "الخطوة {current} من {total}",
+  "@rideRequestFlowStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

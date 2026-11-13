@@ -3,6 +3,19 @@ import 'package:flutter/material.dart';
 /// Native platform fonts/fallbacks shape Arabic and Latin without a font package.
 /// No tracking is added to Arabic, and the user's text scale is never capped.
 abstract final class AppTypography {
+  /// Bundled, OFL-licensed Arabic sans. This does not affect other pages.
+  static TextTheme home(TextTheme ambient) {
+    final text = ambient.apply(
+      fontFamily: 'TamSansArabic',
+      fontFamilyFallback: const ['TamSansLatin'],
+    );
+    return text.copyWith(
+      displayLarge: text.displayLarge?.copyWith(fontWeight: FontWeight.w700),
+      displayMedium: text.displayMedium?.copyWith(fontWeight: FontWeight.w700),
+      displaySmall: text.displaySmall?.copyWith(fontWeight: FontWeight.w700),
+    );
+  }
+
   static const textTheme = TextTheme(
     displayLarge: TextStyle(
       fontSize: 40,

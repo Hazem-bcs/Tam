@@ -7,12 +7,33 @@ import 'package:tam_customer/app/theme/app_typography.dart';
 abstract final class AppTheme {
   static final ThemeData light = _build(AppColors.light, AppColors.lightStatus);
 
+  /// Central, route-local opt-in; pushed pages keep their ambient app theme.
+  static ThemeData home(ThemeData ambient) => _build(
+    AppColors.home,
+    ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
+    textTheme: AppTypography.home(ambient.textTheme),
+  );
+
+  static ThemeData rideJourney(ThemeData ambient) => _build(
+    AppColors.urban,
+    ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
+    textTheme: AppTypography.home(ambient.textTheme).apply(
+      bodyColor: AppColors.urban.onSurface,
+      displayColor: AppColors.urban.onSurface,
+    ),
+  );
+
   // A future dark palette can use the same component and typography rules.
-  static ThemeData _build(ColorScheme colors, AppStatusColors status) {
+  static ThemeData _build(
+    ColorScheme colors,
+    AppStatusColors status, {
+    TextTheme? textTheme,
+  }) {
     final base = ThemeData(
       useMaterial3: true,
+      brightness: colors.brightness,
       colorScheme: colors,
-      textTheme: AppTypography.textTheme,
+      textTheme: textTheme ?? AppTypography.textTheme,
       extensions: [status],
       visualDensity: VisualDensity.standard,
       materialTapTargetSize: MaterialTapTargetSize.padded,

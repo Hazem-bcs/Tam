@@ -12,18 +12,24 @@ class HomeNotificationsButton extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<HomeUnreadCountCubit, int?>(
     builder: (context, count) {
       final t = AppLocalizations.of(context);
+      final label = count == null
+          ? t.navNotifications
+          : t.homeUnreadNotifications(count);
       return IconButton(
         key: const Key('home-notifications'),
         onPressed: onPressed,
-        tooltip: count == null
-            ? t.navNotifications
-            : t.homeUnreadNotifications(count),
-        icon: Badge(
-          isLabelVisible: count != null && count > 0,
-          label: Text(
-            MaterialLocalizations.of(context).formatDecimal(count ?? 0),
+        tooltip: label,
+        icon: Semantics(
+          label: label,
+          child: ExcludeSemantics(
+            child: Badge(
+              isLabelVisible: count != null && count > 0,
+              label: Text(
+                MaterialLocalizations.of(context).formatDecimal(count ?? 0),
+              ),
+              child: const Icon(Icons.notifications_none_outlined),
+            ),
           ),
-          child: const Icon(Icons.notifications_none_outlined),
         ),
       );
     },

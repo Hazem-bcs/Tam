@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_card.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_route_map.dart';
+import 'package:tam_customer/features/active_trip/presentation/widgets/active_search_journey.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_actions.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_display.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
@@ -46,6 +49,26 @@ class _ActiveTripPageState extends State<ActiveTripPage>
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final searching = context.select<ActiveTripCubit, bool>(
+      (cubit) => cubit.state.trip?.status == TripStatus.requested,
+    );
+    if (searching) {
+      return Theme(
+        data: AppTheme.rideJourney(Theme.of(context)),
+        child: Builder(
+          builder: (context) => Scaffold(
+            body: SafeArea(
+              child: BlocBuilder<ActiveTripCubit, ActiveTripState>(
+                builder: (context, state) => ActiveSearchJourney(
+                  state: state,
+                  navigation: widget.navigation,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(l.activeTripTitle),

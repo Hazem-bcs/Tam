@@ -415,6 +415,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestTimeInvalid => 'Enter a valid value in range.';
 
   @override
+  String get rideRequestFlowStartTitle => 'Where are we going?';
+
+  @override
+  String get rideRequestFlowStartSubtitle =>
+      'Choose your destination. We’ll take it from there.';
+
+  @override
+  String get rideRequestFlowStartAction => 'Start your ride';
+
+  @override
+  String get rideRequestFlowPickupTitle => 'Where should we pick you up?';
+
+  @override
+  String get rideRequestFlowDestinationTitle => 'Where would you like to go?';
+
+  @override
+  String get rideRequestFlowChoosePlaces => 'Choose pickup and destination';
+
+  @override
+  String get rideRequestFlowContinue => 'Continue';
+
+  @override
+  String get rideRequestFlowReviewTitle => 'Review your ride';
+
+  @override
+  String get rideRequestFlowReviewSubtitle =>
+      'Everything in one place before you confirm.';
+
+  @override
+  String get rideRequestFlowVisualMap =>
+      'Journey illustration • live maps are not connected';
+
+  @override
+  String get rideRequestFlowSubmitted => 'Your ride is requested';
+
+  @override
+  String rideRequestFlowStep(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
   String get tripsAll => 'All';
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
@@ -77,6 +78,13 @@ class RideQuoteReview extends StatelessWidget {
                 value: quote?.destination.label ?? '—',
               ),
               const Divider(),
+              if (quote != null) ...[
+                _ReviewLine(
+                  label: l.tripsVehicleClass,
+                  value: RideVehiclePicker.labelFor(l, quote!.vehicleClass),
+                ),
+                const SizedBox(height: AppSpacing.md),
+              ],
               _ReviewLine(
                 label: l.rideRequestScheduleTime,
                 value: quote?.scheduledAt == null

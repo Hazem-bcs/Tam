@@ -189,6 +189,28 @@
   "rideRequestMinuteInput": "Minute",
   "rideRequestTimeFormat": "24-hour time (00–23).",
   "rideRequestTimeInvalid": "Enter a valid value in range.",
+  "rideRequestFlowStartTitle": "Where are we going?",
+  "rideRequestFlowStartSubtitle": "Choose your destination. We’ll take it from there.",
+  "rideRequestFlowStartAction": "Start your ride",
+  "rideRequestFlowPickupTitle": "Where should we pick you up?",
+  "rideRequestFlowDestinationTitle": "Where would you like to go?",
+  "rideRequestFlowChoosePlaces": "Choose pickup and destination",
+  "rideRequestFlowContinue": "Continue",
+  "rideRequestFlowReviewTitle": "Review your ride",
+  "rideRequestFlowReviewSubtitle": "Everything in one place before you confirm.",
+  "rideRequestFlowVisualMap": "Journey illustration • live maps are not connected",
+  "rideRequestFlowSubmitted": "Your ride is requested",
+  "rideRequestFlowStep": "Step {current} of {total}",
+  "@rideRequestFlowStep": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",

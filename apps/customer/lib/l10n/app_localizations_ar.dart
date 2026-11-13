@@ -407,6 +407,45 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestTimeInvalid => 'أدخل قيمة صحيحة ضمن المجال.';
 
   @override
+  String get rideRequestFlowStartTitle => 'لوين مشوارك؟';
+
+  @override
+  String get rideRequestFlowStartSubtitle => 'اختار وجهتك، والباقي علينا';
+
+  @override
+  String get rideRequestFlowStartAction => 'ابدأ رحلتك';
+
+  @override
+  String get rideRequestFlowPickupTitle => 'من وين بدك تنطلق؟';
+
+  @override
+  String get rideRequestFlowDestinationTitle => 'لوين بدك توصل؟';
+
+  @override
+  String get rideRequestFlowChoosePlaces => 'حدد الانطلاق والوجهة';
+
+  @override
+  String get rideRequestFlowContinue => 'متابعة اختيارك';
+
+  @override
+  String get rideRequestFlowReviewTitle => 'تأكيد تفاصيل الرحلة';
+
+  @override
+  String get rideRequestFlowReviewSubtitle => 'راجع مشوارك قبل تأكيده';
+
+  @override
+  String get rideRequestFlowVisualMap =>
+      'مخطط توضيحي • الخرائط الحية غير متصلة';
+
+  @override
+  String get rideRequestFlowSubmitted => 'طلبك تمّ';
+
+  @override
+  String rideRequestFlowStep(int current, int total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
   String get tripsAll => 'الكل';
 
   @override
