@@ -8,10 +8,12 @@ class AuthHeaderArtwork extends StatelessWidget {
     super.key,
     required this.artwork,
     this.compact = false,
+    this.onDark = false,
   });
 
   final AuthArtwork artwork;
   final bool compact;
+  final bool onDark;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,23 @@ class AuthHeaderArtwork extends StatelessWidget {
               : artwork == AuthArtwork.route
               ? 80
               : 92,
-          child: CustomPaint(
-            painter: _HeaderPainter(artwork, colors.primary, colors.surface),
+          width: double.infinity,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: 1),
+            duration:
+                artwork == AuthArtwork.route &&
+                    !MediaQuery.disableAnimationsOf(context)
+                ? const Duration(milliseconds: 880)
+                : Duration.zero,
+            curve: Curves.easeOutCubic,
+            builder: (context, progress, child) => CustomPaint(
+              painter: _HeaderPainter(
+                artwork,
+                onDark ? colors.onPrimary : colors.primary,
+                onDark ? colors.primary : colors.surface,
+                progress,
+              ),
+            ),
           ),
         ),
       ),
@@ -33,66 +50,12 @@ class AuthHeaderArtwork extends StatelessWidget {
   }
 }
 
-class AuthBackground extends StatelessWidget {
-  const AuthBackground({super.key});
-
-  @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-    child: IgnorePointer(
-      child: CustomPaint(
-        painter: _BackgroundPainter(
-          Theme.of(context).colorScheme.primaryContainer,
-        ),
-      ),
-    ),
-  );
-}
-
-class _BackgroundPainter extends CustomPainter {
-  const _BackgroundPainter(this.accent);
-  final Color accent;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final height = size.height.clamp(0.0, 270.0);
-    final wave = Path()
-      ..lineTo(0, height * .73)
-      ..cubicTo(
-        size.width * .32,
-        height * .39,
-        size.width * .48,
-        height * 1.07,
-        size.width,
-        height * .68,
-      )
-      ..lineTo(size.width, 0)
-      ..close();
-    canvas.drawPath(wave, Paint()..color = accent.withValues(alpha: .56));
-    final secondWave = Path()
-      ..lineTo(0, height * .83)
-      ..cubicTo(
-        size.width * .37,
-        height * .53,
-        size.width * .58,
-        height,
-        size.width,
-        height * .77,
-      )
-      ..lineTo(size.width, 0)
-      ..close();
-    canvas.drawPath(secondWave, Paint()..color = accent.withValues(alpha: .24));
-  }
-
-  @override
-  bool shouldRepaint(_BackgroundPainter oldDelegate) =>
-      accent != oldDelegate.accent;
-}
-
 class _HeaderPainter extends CustomPainter {
-  const _HeaderPainter(this.artwork, this.primary, this.surface);
+  const _HeaderPainter(this.artwork, this.primary, this.surface, this.progress);
   final AuthArtwork artwork;
   final Color primary;
   final Color surface;
+  final double progress;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -161,14 +124,16 @@ class _HeaderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
     for (final metric in path.computeMetrics()) {
-      for (double distance = 0; distance < metric.length; distance += 10) {
+      final visible = metric.length * progress;
+      for (double distance = 0; distance < visible; distance += 10) {
         canvas.drawPath(
-          metric.extractPath(distance, (distance + 5).clamp(0, metric.length)),
+          metric.extractPath(distance, (distance + 5).clamp(0.0, visible)),
           line,
         );
       }
     }
-    for (final point in [start, end]) {
+    final points = progress > 0.92 ? [start, end] : [start];
+    for (final point in points) {
       canvas.drawOval(
         Rect.fromCenter(center: point.translate(0, 4), width: 24, height: 5),
         Paint()..color = primary.withValues(alpha: .08),
@@ -208,5 +173,6 @@ class _HeaderPainter extends CustomPainter {
   bool shouldRepaint(_HeaderPainter oldDelegate) =>
       artwork != oldDelegate.artwork ||
       primary != oldDelegate.primary ||
-      surface != oldDelegate.surface;
+      surface != oldDelegate.surface ||
+      progress != oldDelegate.progress;
 }
