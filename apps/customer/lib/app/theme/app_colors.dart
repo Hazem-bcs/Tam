@@ -80,37 +80,6 @@ abstract final class AppColors {
     surfaceTint: const Color(0xFF5145CD),
   );
 
-  /// Urban Pulse booking surfaces, selected from the user's flow reference.
-  static final urban = home.copyWith(
-    brightness: Brightness.dark,
-    primary: const Color(0xFF72E9BE),
-    onPrimary: const Color(0xFF123730),
-    primaryContainer: const Color(0xFF294D4B),
-    onPrimaryContainer: const Color(0xFFE8FFF6),
-    secondary: const Color(0xFFB1CDC8),
-    onSecondary: const Color(0xFF123730),
-    secondaryContainer: const Color(0xFF294654),
-    onSecondaryContainer: const Color(0xFFE8F7F2),
-    tertiary: const Color(0xFFFFB49A),
-    tertiaryContainer: const Color(0xFF51372F),
-    onTertiaryContainer: const Color(0xFFFFE5DB),
-    surface: const Color(0xFF122735),
-    onSurface: const Color(0xFFF4F9F8),
-    onSurfaceVariant: const Color(0xFFA9C2CC),
-    surfaceContainerLowest: const Color(0xFF1B303D),
-    surfaceContainerLow: const Color(0xFF1B303D),
-    surfaceContainer: const Color(0xFF233E4C),
-    surfaceContainerHigh: const Color(0xFF294654),
-    surfaceContainerHighest: const Color(0xFF31515F),
-    outline: const Color(0xFF7997A2),
-    outlineVariant: const Color(0xFF3A5865),
-    error: const Color(0xFFFFB4AB),
-    onError: const Color(0xFF601410),
-    errorContainer: const Color(0xFF65312F),
-    onErrorContainer: const Color(0xFFFFDAD6),
-    surfaceTint: const Color(0xFF72E9BE),
-  );
-
   static const lightStatus = AppStatusColors(
     success: Color(0xFF22643D),
     onSuccess: Color(0xFFFFFFFF),

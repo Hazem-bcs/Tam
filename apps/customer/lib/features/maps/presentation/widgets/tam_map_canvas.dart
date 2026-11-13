@@ -196,7 +196,7 @@ class _TamMapCanvasState extends State<TamMapCanvas> {
             bottom: 4,
             end: 4,
             child: Material(
-              color: colors.surfaceContainer,
+              color: colors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppRadii.sm),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -225,7 +225,10 @@ class _TamMapCanvasState extends State<TamMapCanvas> {
             bottom: AppSpacing.xs,
             start: AppSpacing.xs,
             end: AppDimensions.minTapTarget + AppSpacing.sm,
-            child: MapAttributionLink(onOpen: widget.onAttribution),
+            child: MapAttributionLink(
+              onOpen: widget.onAttribution,
+              permanent: widget.configuration.usesOsmCommunityTiles,
+            ),
           ),
         ],
       ),

@@ -419,10 +419,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rideRequestFlowStartSubtitle =>
-      'Choose your destination. We’ll take it from there.';
+      'Choose your pickup and destination in a few simple steps';
 
   @override
-  String get rideRequestFlowStartAction => 'Start your ride';
+  String get rideRequestFlowStartAction => 'Plan your ride';
 
   @override
   String get rideRequestFlowPickupTitle => 'Where should we pick you up?';
@@ -1572,7 +1572,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapsNotConfigured => 'Tam map service is not configured yet.';
 
   @override
-  String get mapsTilesFailed => 'Could not load map tiles from Tam servers.';
+  String get mapsTilesFailed =>
+      'Could not load the map. Check your connection and try again.';
 
   @override
   String get mapsRetry => 'Retry';
@@ -1658,4 +1659,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsShowAttribution => 'Map data information';
+
+  @override
+  String get mapsOsmAttribution => '© OpenStreetMap contributors';
 }

@@ -19,3 +19,14 @@ foreground وبطلب صريح. AppConfig يملك العناوين والتحق
 
 المراجع الأولية: https://docs.fleaflet.dev/layers/raster-tile-layer.md
 وhttps://pub.dev/documentation/geolocator/latest/ .
+
+
+## تعديل مؤقت 2026-11-13 — معاينة الخريطة العامة
+
+طلب المستخدم الآن خريطة OSM حقيقية مباشرة حتى تجهيز سيرفره. لهذا
+يختار AppConfig البلاطات العامة افتراضيًا، مع بقاء override السيرفر الخاص
+والتعطيل الصريح. لا fallback أو خدمة بحث/توجيه عامة مضافة.
+OsmTileProvider يستخدم تخزين HTTP-aware دائمًا ومعرّف التطبيق، دون تنزيل
+مسبق، وبقاء نسبة المصدر ثابتة فوق الخريطة. PrivateTileProvider يحتفظ
+بسلوكه السابق عند ضبط العنوان الخاص. انظر README.ar.md في docs/api/maps
+وتسليم TAM-RIDE-ENTRY-02 للمشاهد وحدود المعاينة.

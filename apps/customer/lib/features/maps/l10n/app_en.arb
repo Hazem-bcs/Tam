@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
   "mapsNotConfigured": "Tam map service is not configured yet.",
-  "mapsTilesFailed": "Could not load map tiles from Tam servers.",
+  "mapsTilesFailed": "Could not load the map. Check your connection and try again.",
   "mapsRetry": "Retry",
   "mapsAttribution": "OpenStreetMap",
   "mapsOrigin": "Pickup",
@@ -26,5 +26,6 @@
   "mapsRouteFailed": "Could not load the road route from Tam services.",
   "mapsInvalidInput": "Check the selected point or search input.",
   "mapsAttributionUnavailable": "Could not open map license information. Please try again.",
-  "mapsShowAttribution": "Map data information"
+  "mapsShowAttribution": "Map data information",
+  "mapsOsmAttribution": "© OpenStreetMap contributors"
 }

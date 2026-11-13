@@ -1,11 +1,14 @@
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
-/// Build-owned endpoints, never inferred from a public map provider.
+/// Explicitly configured tiles and independent search/routing endpoints.
 final class MapConfiguration {
+  static const osmCommunityTiles =
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   const MapConfiguration({this.tileUrl = '', this.apiBaseUrl = ''});
   final String tileUrl, apiBaseUrl;
   bool get hasTiles => tileUrl.isNotEmpty;
   bool get hasServices => apiBaseUrl.isNotEmpty;
+  bool get usesOsmCommunityTiles => tileUrl == osmCommunityTiles;
   GeoPoint get initialCenter => GeoPoint(latitude: 33.5138, longitude: 36.2765);
 
   factory MapConfiguration.parse({
@@ -34,7 +37,7 @@ final class MapConfiguration {
                       .any(
                         (m) => !{'{z}', '{x}', '{y}'}.contains(m.group(0)),
                       )))) {
-        throw ArgumentError('Invalid private map endpoint');
+        throw ArgumentError('Invalid map endpoint');
       }
     }
 

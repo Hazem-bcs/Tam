@@ -190,8 +190,8 @@
   "rideRequestTimeFormat": "الوقت بنظام 24 ساعة (00–23).",
   "rideRequestTimeInvalid": "أدخل قيمة صحيحة ضمن المجال.",
   "rideRequestFlowStartTitle": "لوين مشوارك؟",
-  "rideRequestFlowStartSubtitle": "اختار وجهتك، والباقي علينا",
-  "rideRequestFlowStartAction": "ابدأ رحلتك",
+  "rideRequestFlowStartSubtitle": "حدد الانطلاق والوجهة بخطوات بسيطة",
+  "rideRequestFlowStartAction": "تحديد مسار الرحلة",
   "rideRequestFlowPickupTitle": "من وين بدك تنطلق؟",
   "rideRequestFlowDestinationTitle": "لوين بدك توصل؟",
   "rideRequestFlowChoosePlaces": "حدد الانطلاق والوجهة",
@@ -670,7 +670,7 @@
   "driverContactOffline": "تعذر تجهيز الاتصال. تحقق من الشبكة وأعد المحاولة.",
   "driverContactSessionEnded": "انتهت الجلسة ولم يُفتح اتصال جديد.",
   "mapsNotConfigured": "لم تُهيأ خدمة خريطة تم بعد.",
-  "mapsTilesFailed": "تعذر تحميل الخريطة من خادم تم.",
+  "mapsTilesFailed": "تعذر تحميل الخريطة. تحقق من الاتصال وحاول مجددًا.",
   "mapsRetry": "إعادة المحاولة",
   "mapsAttribution": "OpenStreetMap",
   "mapsOrigin": "نقطة الانطلاق",
@@ -695,5 +695,6 @@
   "mapsRouteFailed": "تعذر تحميل مسار الطريق من خدمة تم.",
   "mapsInvalidInput": "راجع الموقع أو نص البحث المدخل.",
   "mapsAttributionUnavailable": "تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.",
-  "mapsShowAttribution": "معلومات مصدر الخريطة"
+  "mapsShowAttribution": "معلومات مصدر الخريطة",
+  "mapsOsmAttribution": "© OpenStreetMap contributors"
 }

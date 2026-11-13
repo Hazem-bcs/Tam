@@ -5,8 +5,8 @@ import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.d
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
-/// A labelled, non-geographic journey illustration until private tiles exist.
-/// Its endpoint labels are the actual draft; it never claims GPS, ETA or a route.
+/// Uses configured live tiles; an explicitly labelled illustration is retained
+/// only when tiles are disabled. Draft labels never claim device GPS or an ETA.
 class RideJourneyBackdrop extends StatelessWidget {
   const RideJourneyBackdrop({
     super.key,

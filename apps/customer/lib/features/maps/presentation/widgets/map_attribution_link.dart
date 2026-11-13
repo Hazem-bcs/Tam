@@ -5,8 +5,9 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 class MapAttributionLink extends StatefulWidget {
-  const MapAttributionLink({super.key, this.onOpen});
+  const MapAttributionLink({super.key, this.onOpen, this.permanent = false});
   final Future<void> Function()? onOpen;
+  final bool permanent;
   @override
   State<MapAttributionLink> createState() => _MapAttributionLinkState();
 }
@@ -24,7 +25,11 @@ class _MapAttributionLinkState extends State<MapAttributionLink> {
   void _scheduleCollapse() {
     _timer?.cancel();
     // Keep the notice available to users who need longer to read it.
-    if (!_expanded || MediaQuery.accessibleNavigationOf(context)) return;
+    if (widget.permanent ||
+        !_expanded ||
+        MediaQuery.accessibleNavigationOf(context)) {
+      return;
+    }
     _timer = Timer(const Duration(seconds: 5), () {
       if (mounted) setState(() => _expanded = false);
     });
@@ -63,12 +68,12 @@ class _MapAttributionLinkState extends State<MapAttributionLink> {
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Material(
-        color: theme.colorScheme.surfaceContainer,
+        color: theme.colorScheme.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(AppRadii.sm),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_expanded)
+            if (_expanded || widget.permanent)
               Flexible(
                 child: Semantics(
                   link: widget.onOpen != null,
@@ -88,13 +93,20 @@ class _MapAttributionLinkState extends State<MapAttributionLink> {
                     ),
                     onPressed: widget.onOpen == null ? null : _open,
                     child: Text(
-                      l.mapsAttribution,
-                      style: theme.textTheme.labelSmall,
+                      widget.permanent
+                          ? l.mapsOsmAttribution
+                          : l.mapsAttribution,
+                      textDirection: widget.permanent
+                          ? TextDirection.ltr
+                          : null,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ),
                 ),
               ),
-            if (!_expanded)
+            if (!_expanded && !widget.permanent)
               IconButton(
                 key: const Key('map-attribution-toggle'),
                 tooltip: l.mapsShowAttribution,

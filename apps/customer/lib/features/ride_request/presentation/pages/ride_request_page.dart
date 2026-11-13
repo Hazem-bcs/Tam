@@ -7,8 +7,9 @@ import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry_layout.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_header.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_stage.dart';
-import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 class RideRequestPage extends StatefulWidget {
@@ -105,7 +106,6 @@ class _RideRequestPageState extends State<RideRequestPage> {
           }
         },
         builder: (context, state) {
-          final t = AppLocalizations.of(context);
           final reduced = MediaQuery.disableAnimationsOf(context);
           final canConfirm =
               context.read<RideDraftBloc>().canConfirm ||
@@ -131,9 +131,9 @@ class _RideRequestPageState extends State<RideRequestPage> {
             child: AnnotatedRegion<SystemUiOverlayStyle>(
               value: SystemUiOverlayStyle(
                 statusBarColor: Theme.of(context).colorScheme.surface,
-                statusBarIconBrightness: Brightness.light,
+                statusBarIconBrightness: Brightness.dark,
                 systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-                systemNavigationBarIconBrightness: Brightness.light,
+                systemNavigationBarIconBrightness: Brightness.dark,
               ),
               child: Scaffold(
                 body: SafeArea(
@@ -166,41 +166,31 @@ class _RideRequestPageState extends State<RideRequestPage> {
                             savedAddressPickerBuilder:
                                 widget.savedAddressPickerBuilder,
                           );
-                          final header = Padding(
-                            padding: const EdgeInsets.all(AppSpacing.md),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  key: const Key('ride-flow-back'),
-                                  onPressed: state.confirmationPending
-                                      ? null
-                                      : _back,
-                                  tooltip: MaterialLocalizations.of(
-                                    context,
-                                  ).backButtonTooltip,
-                                  icon: const Icon(Icons.arrow_back_rounded),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    t.appName,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.headlineLarge,
-                                  ),
-                                ),
-                                Text(
-                                  t.rideRequestFlowStep(_step.index + 1, 5),
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ],
-                            ),
+                          final header = RideJourneyHeader(
+                            step: _step.index + 1,
+                            onBack: state.confirmationPending ? null : _back,
                           );
                           final backdrop = RideJourneyBackdrop(
                             pickup: state.pickup,
                             destination: state.destination,
                             compact: _step != RideJourneyStep.entry,
                           );
-                          if (short && bounds.maxWidth > 600 && !largeText) {
+                          if (_step == RideJourneyStep.entry) {
+                            return RideJourneyEntryLayout(
+                              header: header,
+                              map: backdrop,
+                              panel: sheet,
+                            );
+                          }
+                          if (largeText) {
+                            return Column(
+                              children: [
+                                header,
+                                Expanded(child: sheet),
+                              ],
+                            );
+                          }
+                          if (short && bounds.maxWidth > 600) {
                             return Column(
                               children: [
                                 header,
@@ -217,10 +207,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                           }
                           return Stack(
                             children: [
-                              Positioned.fill(
-                                bottom: height - 24,
-                                child: backdrop,
-                              ),
+                              Positioned.fill(bottom: height, child: backdrop),
                               Align(
                                 alignment: Alignment.topCenter,
                                 child: header,

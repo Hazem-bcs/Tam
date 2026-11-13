@@ -190,8 +190,8 @@
   "rideRequestTimeFormat": "24-hour time (00–23).",
   "rideRequestTimeInvalid": "Enter a valid value in range.",
   "rideRequestFlowStartTitle": "Where are we going?",
-  "rideRequestFlowStartSubtitle": "Choose your destination. We’ll take it from there.",
-  "rideRequestFlowStartAction": "Start your ride",
+  "rideRequestFlowStartSubtitle": "Choose your pickup and destination in a few simple steps",
+  "rideRequestFlowStartAction": "Plan your ride",
   "rideRequestFlowPickupTitle": "Where should we pick you up?",
   "rideRequestFlowDestinationTitle": "Where would you like to go?",
   "rideRequestFlowChoosePlaces": "Choose pickup and destination",
@@ -670,7 +670,7 @@
   "driverContactOffline": "The call could not be prepared. Check the network and retry.",
   "driverContactSessionEnded": "The session ended. No new call was opened.",
   "mapsNotConfigured": "Tam map service is not configured yet.",
-  "mapsTilesFailed": "Could not load map tiles from Tam servers.",
+  "mapsTilesFailed": "Could not load the map. Check your connection and try again.",
   "mapsRetry": "Retry",
   "mapsAttribution": "OpenStreetMap",
   "mapsOrigin": "Pickup",
@@ -695,5 +695,6 @@
   "mapsRouteFailed": "Could not load the road route from Tam services.",
   "mapsInvalidInput": "Check the selected point or search input.",
   "mapsAttributionUnavailable": "Could not open map license information. Please try again.",
-  "mapsShowAttribution": "Map data information"
+  "mapsShowAttribution": "Map data information",
+  "mapsOsmAttribution": "© OpenStreetMap contributors"
 }

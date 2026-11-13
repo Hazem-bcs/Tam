@@ -38,31 +38,32 @@ class RouteMapView extends StatelessWidget {
       key: ValueKey((repository, origin, destination)),
       create: (_) => MapRouteCubit(repository)..load(origin, destination),
       child: BlocBuilder<MapRouteCubit, MapRouteState>(
-        builder: (context, state) => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: height,
-              child: TamMapCanvas(
-                configuration: dependencies.configuration,
-                onAttribution: dependencies.attribution.open,
-                tileProviderFactory: dependencies.tileProviderFactory,
-                origin: origin,
-                destination: destination,
-                driver: driver,
-                route: state.route,
+        builder: (context, state) => SizedBox(
+          height: height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: TamMapCanvas(
+                  configuration: dependencies.configuration,
+                  onAttribution: dependencies.attribution.open,
+                  tileProviderFactory: dependencies.tileProviderFactory,
+                  origin: origin,
+                  destination: destination,
+                  driver: driver,
+                  route: state.route,
+                ),
               ),
-            ),
-            if (state.busy) const LinearProgressIndicator(),
-            if (state.failure != null &&
-                (state.failure != 'MAP_NOT_CONFIGURED' ||
-                    dependencies.configuration.hasTiles))
-              MapFeedback(
-                text: AppLocalizations.of(context).mapsRouteFailed,
-                onRetry: () =>
-                    context.read<MapRouteCubit>().load(origin, destination),
-              ),
-          ],
+              if (state.busy) const LinearProgressIndicator(),
+              if (state.failure != null &&
+                  state.failure != 'MAP_NOT_CONFIGURED')
+                MapFeedback(
+                  text: AppLocalizations.of(context).mapsRouteFailed,
+                  onRetry: () =>
+                      context.read<MapRouteCubit>().load(origin, destination),
+                ),
+            ],
+          ),
         ),
       ),
     );

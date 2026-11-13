@@ -125,4 +125,30 @@ void main() {
     await tester.pump(const Duration(seconds: 6));
     expect(find.byKey(const Key('map-attribution')), findsOneWidget);
   });
+
+  testWidgets('public OSM attribution stays visible and opens its source', (
+    tester,
+  ) async {
+    var calls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: MapAttributionLink(
+            permanent: true,
+            onOpen: () async => calls++,
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(seconds: 10));
+    expect(find.text('© OpenStreetMap contributors'), findsOneWidget);
+    expect(find.byKey(const Key('map-attribution-toggle')), findsNothing);
+    await tester.tap(find.byKey(const Key('map-attribution')));
+    await tester.pump();
+    expect(calls, 1);
+  });
 }

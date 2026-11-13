@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/app.dart';
+import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+import 'package:tam_customer/features/maps/maps_dependencies.dart';
 
 import '../../support/fake_auth_repository.dart';
 import '../../support/page_scroll.dart';
@@ -16,6 +19,14 @@ Future<void> launchCustomerApp(
   WidgetTester tester, {
   DateTime Function()? clock,
 }) async {
+  // App previews now use public tiles. Integration fixtures stay network-free;
+  // tests that exercise maps can still inject their own dependencies first.
+  if (!locator.isRegistered<MapsDependencies>()) {
+    locator.registerFactory<MapsDependencies>(
+      () => MapsDependencies.configured(const MapConfiguration()),
+    );
+    addTearDown(() => locator.unregister<MapsDependencies>());
+  }
   final testNow = DateTime.now().toUtc();
   await tester.pumpWidget(
     TamApp(

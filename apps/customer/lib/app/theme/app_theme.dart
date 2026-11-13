@@ -15,11 +15,11 @@ abstract final class AppTheme {
   );
 
   static ThemeData rideJourney(ThemeData ambient) => _build(
-    AppColors.urban,
+    AppColors.light,
     ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
     textTheme: AppTypography.home(ambient.textTheme).apply(
-      bodyColor: AppColors.urban.onSurface,
-      displayColor: AppColors.urban.onSurface,
+      bodyColor: AppColors.light.onSurface,
+      displayColor: AppColors.light.onSurface,
     ),
   );
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_locations.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_sheet.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
@@ -37,6 +38,15 @@ class RideJourneyStage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    if (step == RideJourneyStep.entry) {
+      return RideJourneyEntry(
+        pickup: state.pickup,
+        destination: state.destination,
+        onPickup: onPickup,
+        onDestination: onDestination,
+        onContinue: onContinue,
+      );
+    }
     final title = switch (step) {
       RideJourneyStep.entry => t.rideRequestFlowStartTitle,
       RideJourneyStep.places =>

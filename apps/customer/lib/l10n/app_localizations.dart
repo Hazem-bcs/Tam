@@ -845,13 +845,13 @@ abstract class AppLocalizations {
   /// No description provided for @rideRequestFlowStartSubtitle.
   ///
   /// In ar, this message translates to:
-  /// **'اختار وجهتك، والباقي علينا'**
+  /// **'حدد الانطلاق والوجهة بخطوات بسيطة'**
   String get rideRequestFlowStartSubtitle;
 
   /// No description provided for @rideRequestFlowStartAction.
   ///
   /// In ar, this message translates to:
-  /// **'ابدأ رحلتك'**
+  /// **'تحديد مسار الرحلة'**
   String get rideRequestFlowStartAction;
 
   /// No description provided for @rideRequestFlowPickupTitle.
@@ -2897,7 +2897,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapsTilesFailed.
   ///
   /// In ar, this message translates to:
-  /// **'تعذر تحميل الخريطة من خادم تم.'**
+  /// **'تعذر تحميل الخريطة. تحقق من الاتصال وحاول مجددًا.'**
   String get mapsTilesFailed;
 
   /// No description provided for @mapsRetry.
@@ -3049,6 +3049,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'معلومات مصدر الخريطة'**
   String get mapsShowAttribution;
+
+  /// No description provided for @mapsOsmAttribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'© OpenStreetMap contributors'**
+  String get mapsOsmAttribution;
 }
 
 class _AppLocalizationsDelegate

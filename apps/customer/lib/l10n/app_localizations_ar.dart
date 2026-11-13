@@ -410,10 +410,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestFlowStartTitle => 'لوين مشوارك؟';
 
   @override
-  String get rideRequestFlowStartSubtitle => 'اختار وجهتك، والباقي علينا';
+  String get rideRequestFlowStartSubtitle =>
+      'حدد الانطلاق والوجهة بخطوات بسيطة';
 
   @override
-  String get rideRequestFlowStartAction => 'ابدأ رحلتك';
+  String get rideRequestFlowStartAction => 'تحديد مسار الرحلة';
 
   @override
   String get rideRequestFlowPickupTitle => 'من وين بدك تنطلق؟';
@@ -1536,7 +1537,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mapsNotConfigured => 'لم تُهيأ خدمة خريطة تم بعد.';
 
   @override
-  String get mapsTilesFailed => 'تعذر تحميل الخريطة من خادم تم.';
+  String get mapsTilesFailed =>
+      'تعذر تحميل الخريطة. تحقق من الاتصال وحاول مجددًا.';
 
   @override
   String get mapsRetry => 'إعادة المحاولة';
@@ -1620,4 +1622,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsShowAttribution => 'معلومات مصدر الخريطة';
+
+  @override
+  String get mapsOsmAttribution => '© OpenStreetMap contributors';
 }

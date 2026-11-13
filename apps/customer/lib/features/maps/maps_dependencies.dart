@@ -5,6 +5,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'data/api_maps_repository.dart';
 import 'data/device_location_adapter.dart';
 import 'data/maps_attribution_adapter.dart';
+import 'data/osm_tile_provider.dart';
 import 'data/private_tile_provider.dart';
 import 'domain/maps_repository.dart';
 
@@ -44,7 +45,9 @@ final class MapsDependencies {
           : ApiMapsRepository(dio),
       deviceLocation: DeviceLocationAdapter(),
       client: dio,
-      tileProviderFactory: PrivateTileProvider.new,
+      tileProviderFactory: configuration.usesOsmCommunityTiles
+          ? OsmTileProvider.new
+          : PrivateTileProvider.new,
     );
   }
   void dispose() => client?.close(force: true);
