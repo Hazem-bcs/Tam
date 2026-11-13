@@ -31,6 +31,7 @@ Widget tripsTestApp(Widget child, {String language = 'ar', double scale = 1}) =>
 
 class TripsNavigationSpy implements CustomerNavigation {
   String? lastTripId;
+  String? lastActiveTripId;
   TripPrefill? prefill;
   bool openedTrips = false;
 
@@ -45,7 +46,7 @@ class TripsNavigationSpy implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id}) {}
+  void openActiveTrip({String? id}) => lastActiveTripId = id;
   @override
   void openTrip(String id) => lastTripId = id;
   @override

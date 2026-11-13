@@ -4,54 +4,126 @@ import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/trips/domain/trips_repository.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trips_list_cubit.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trip_card.dart';
-import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
+import 'package:tam_customer/features/trips/presentation/widgets/trip_history_list.dart';
+import 'package:tam_customer/features/trips/presentation/widgets/trips_activity_navigation.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/presentation/trip_display.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
+/// Activity screen, reference: customer "نشاطي" trips history.
 class TripsListPage extends StatelessWidget {
   const TripsListPage({super.key, required this.navigation});
   final CustomerNavigation navigation;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(l.navTrips)),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 1,
-        onDestinationSelected: (index) {
-          if (index == 0) navigation.openHome();
-          if (index == 2) navigation.openSettings();
-        },
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(Icons.home_outlined),
-            label: l.navHome,
+      backgroundColor: theme.colorScheme.surfaceContainerLowest,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: theme.colorScheme.surfaceContainerLowest,
+        toolbarHeight: 72,
+        title: Text(
+          l.tripsActivityTitle,
+          style: theme.textTheme.headlineMedium,
+        ),
+        actions: [
+          PopupMenuButton<TripsFilter>(
+            key: const Key('trips-filter-control'),
+            tooltip: l.tripsFilterLabel,
+            icon: const Icon(Icons.tune_rounded),
+            initialValue: context.select(
+              (TripsListCubit bloc) => bloc.state.filter,
+            ),
+            onSelected: context.read<TripsListCubit>().selectFilter,
+            itemBuilder: (context) => [
+              for (final (filter, label) in [
+                (TripsFilter.all, l.tripsAll),
+                (TripsFilter.active, l.tripsActive),
+                (TripsFilter.completed, l.tripsCompletedFilter),
+                (TripsFilter.cancelled, l.tripsCancelledFilter),
+              ])
+                PopupMenuItem(
+                  key: Key('trips-filter-${filter.name}'),
+                  value: filter,
+                  child: Text(label),
+                ),
+            ],
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.history),
-            label: l.navTrips,
+          IconButton(
+            key: const Key('trips-notifications'),
+            onPressed: navigation.openNotifications,
+            tooltip: l.navNotifications,
+            icon: const Icon(Icons.notifications_none_outlined),
           ),
-          NavigationDestination(
-            icon: const Icon(Icons.person_outline),
-            label: l.navSettings,
-          ),
+          const SizedBox(width: AppSpacing.sm),
         ],
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Column(
+      bottomNavigationBar: TripsActivityNavigation(navigation: navigation),
+      body: SafeArea(
+        top: false,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 660),
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(
+                    AppSpacing.lg,
+                    AppSpacing.sm,
+                    AppSpacing.lg,
+                    AppSpacing.md,
+                  ),
+                  child: _ActivityServices(),
+                ),
+                Expanded(
+                  child: BlocBuilder<TripsListCubit, TripsListState>(
+                    builder: (context, state) =>
+                        TripHistoryList(state: state, navigation: navigation),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Disabled service tabs are clearly marked as upcoming, never fake navigation.
+class _ActivityServices extends StatelessWidget {
+  const _ActivityServices();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadii.md),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        child: IntrinsicHeight(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const _FilterBar(),
               Expanded(
-                child: BlocBuilder<TripsListCubit, TripsListState>(
-                  builder: (context, state) =>
-                      _TripResults(state: state, navigation: navigation),
+                child: _ServiceTab(label: l.tripsServiceRides, selected: true),
+              ),
+              Expanded(
+                child: _ServiceTab(
+                  label: l.tripsServiceShopping,
+                  subtitle: l.tripsSoon,
+                ),
+              ),
+              Expanded(
+                child: _ServiceTab(
+                  label: l.tripsServiceFood,
+                  subtitle: l.tripsSoon,
                 ),
               ),
             ],
@@ -62,176 +134,50 @@ class TripsListPage extends StatelessWidget {
   }
 }
 
-class _FilterBar extends StatelessWidget {
-  const _FilterBar();
+class _ServiceTab extends StatelessWidget {
+  const _ServiceTab({
+    required this.label,
+    this.subtitle,
+    this.selected = false,
+  });
+  final String label;
+  final String? subtitle;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final labels = {
-      TripsFilter.all: l.tripsAll,
-      TripsFilter.active: l.tripsActive,
-      TripsFilter.completed: l.tripsCompletedFilter,
-      TripsFilter.cancelled: l.tripsCancelledFilter,
-    };
-    final current = context.select(
-      (TripsListCubit cubit) => cubit.state.filter,
-    );
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final fg = selected ? colors.onPrimary : colors.onSurface;
     return Semantics(
-      label: l.tripsTripList,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+      selected: selected,
+      enabled: selected,
+      button: true,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 58),
         padding: const EdgeInsetsDirectional.symmetric(
-          horizontal: AppSpacing.lg,
+          horizontal: AppSpacing.xs,
           vertical: AppSpacing.sm,
         ),
-        child: Row(
+        color: selected ? colors.primary : colors.surfaceContainerLowest,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            for (final filter in TripsFilter.values) ...[
-              ChoiceChip(
-                key: Key('trips-filter-${filter.name}'),
-                label: Text(labels[filter]!),
-                selected: current == filter,
-                onSelected: (_) =>
-                    context.read<TripsListCubit>().selectFilter(filter),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TripResults extends StatelessWidget {
-  const _TripResults({required this.state, required this.navigation});
-
-  final TripsListState state;
-  final CustomerNavigation navigation;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final cubit = context.read<TripsListCubit>();
-    if (state.isLoading && state.items.isEmpty) {
-      return Center(child: TamLoadingIndicator(semanticLabel: l.tripsLoading));
-    }
-    final results = RefreshIndicator(
-      onRefresh: () => cubit.refresh(),
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.extentAfter < 240 &&
-              notification is ScrollUpdateNotification) {
-            cubit.loadMore();
-          }
-          return false;
-        },
-        child: state.items.isEmpty
-            ? ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                children: [_EmptyOrError(state: state)],
-              )
-            : ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsetsDirectional.fromSTEB(
-                  AppSpacing.lg,
-                  AppSpacing.md,
-                  AppSpacing.lg,
-                  AppSpacing.xxl,
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.labelMedium?.copyWith(color: fg),
+            ),
+            if (subtitle != null)
+              Text(
+                subtitle!,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colors.onSurfaceVariant,
                 ),
-                itemCount:
-                    state.items.length +
-                    (state.nextCursor != null || state.moreErrorCode != null
-                        ? 1
-                        : 0),
-                separatorBuilder: (_, _) =>
-                    const SizedBox(height: AppSpacing.md),
-                itemBuilder: (context, index) {
-                  if (index == state.items.length) {
-                    return Column(
-                      children: [
-                        if (state.moreErrorCode != null)
-                          Text(tripsErrorLabel(l, state.moreErrorCode)),
-                        TamButton.secondary(
-                          label: state.moreErrorCode == null
-                              ? l.tripsLoadMore
-                              : l.tripsRetry,
-                          isLoading: state.isLoadingMore,
-                          onPressed: state.isLoadingMore
-                              ? null
-                              : cubit.loadMore,
-                        ),
-                      ],
-                    );
-                  }
-                  final trip = state.items[index];
-                  return TripCard(
-                    key: ValueKey(trip.id),
-                    trip: trip,
-                    onTap: () => navigation.openTrip(trip.id),
-                  );
-                },
               ),
-      ),
-    );
-    if (state.errorCode == null || state.items.isEmpty) return results;
-    return Column(
-      children: [
-        TripsFailureBanner(
-          errorCode: state.errorCode!,
-          onRetry: () => cubit.refresh(),
-        ),
-        Expanded(child: results),
-      ],
-    );
-  }
-}
-
-class _EmptyOrError extends StatelessWidget {
-  const _EmptyOrError({required this.state});
-  final TripsListState state;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final hasError = state.errorCode != null;
-    final theme = Theme.of(context);
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            hasError ? Icons.wifi_off_outlined : Icons.receipt_long_outlined,
-            size: 44,
-            color: theme.colorScheme.primary,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            hasError ? l.tripsErrorTitle : l.tripsEmptyTitle,
-            style: theme.textTheme.titleMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            hasError
-                ? tripsErrorLabel(l, state.errorCode)
-                : l.tripsEmptyDescription,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          if (hasError) ...[
-            const SizedBox(height: AppSpacing.lg),
-            TamButton.secondary(
-              label: l.tripsRetry,
-              fullWidth: false,
-              onPressed: () => context.read<TripsListCubit>().refresh(),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }
