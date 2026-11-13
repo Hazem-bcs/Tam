@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
@@ -16,9 +17,21 @@ class RouteMapView extends StatelessWidget {
     this.destination,
     this.driver,
     this.height = 260,
+    this.bottomInset,
+    this.selection,
+    this.onSelected,
+    this.onLocate,
+    this.locating = false,
+    this.markerIconSize = 36,
   });
   final GeoPoint? origin, destination, driver;
   final double height;
+  final ValueListenable<double>? bottomInset;
+  final GeoPoint? selection;
+  final ValueChanged<GeoPoint>? onSelected;
+  final VoidCallback? onLocate;
+  final bool locating;
+  final double markerIconSize;
   @override
   Widget build(BuildContext context) {
     final dependencies = MapsScope.maybeOf(context);
@@ -27,6 +40,12 @@ class RouteMapView extends StatelessWidget {
         height: height,
         child: TamMapCanvas(
           configuration: const MapConfiguration(),
+          bottomInset: bottomInset,
+          selection: selection,
+          onSelected: onSelected,
+          onLocate: onLocate,
+          locating: locating,
+          markerIconSize: markerIconSize,
           origin: origin,
           destination: destination,
           driver: driver,
@@ -46,6 +65,12 @@ class RouteMapView extends StatelessWidget {
               Expanded(
                 child: TamMapCanvas(
                   configuration: dependencies.configuration,
+                  bottomInset: bottomInset,
+                  selection: selection,
+                  onSelected: onSelected,
+                  onLocate: onLocate,
+                  locating: locating,
+                  markerIconSize: markerIconSize,
                   onAttribution: dependencies.attribution.open,
                   tileProviderFactory: dependencies.tileProviderFactory,
                   origin: origin,

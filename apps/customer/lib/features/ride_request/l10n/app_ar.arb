@@ -77,7 +77,7 @@
   "rideRequestTimeFormat": "الوقت بنظام 24 ساعة (00–23).",
   "rideRequestTimeInvalid": "أدخل قيمة صحيحة ضمن المجال.",
   "rideRequestFlowStartTitle": "لوين مشوارك؟",
-  "rideRequestFlowStartSubtitle": "حدد الانطلاق والوجهة بخطوات بسيطة",
+  "rideRequestFlowStartSubtitle": "المس وجهتك على الخريطة، أو ابحث عنها",
   "rideRequestFlowStartAction": "تحديد مسار الرحلة",
   "rideRequestFlowPickupTitle": "من وين بدك تنطلق؟",
   "rideRequestFlowDestinationTitle": "لوين بدك توصل؟",
@@ -97,5 +97,18 @@
         "type": "int"
       }
     }
-  }
+  },
+  "rideRequestExpandPanel": "إظهار تفاصيل المشوار",
+  "rideRequestCollapsePanel": "طي التفاصيل وتوسيع الخريطة",
+  "rideRequestProgressPlan": "خطط لمشوارك",
+  "rideRequestProgressVehicle": "اختيار المركبة",
+  "rideRequestProgressReview": "مراجعة المشوار",
+  "rideRequestProgressMatching": "نبحث عن سائقك",
+  "rideRequestMapPoint": "نقطة على الخريطة",
+  "rideRequestMapPointTitle": "هذا المكان…",
+  "rideRequestMapPointHint": "تريده وجهة الوصول أم نقطة الانطلاق؟",
+  "rideRequestMapPointDescription": "وصف المكان (اختياري)",
+  "rideRequestMapPointCancel": "إلغاء اختيار النقطة",
+  "rideRequestUseAsDestination": "اجعلها الوجهة",
+  "rideRequestUseAsPickup": "اجعلها نقطة الانطلاق"
 }

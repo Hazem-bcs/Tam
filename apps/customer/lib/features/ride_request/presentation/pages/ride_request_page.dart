@@ -1,15 +1,16 @@
-import 'dart:math' as math;
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
-import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry_layout.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_header.dart';
+import 'package:tam_customer/features/ride_request/presentation/bloc/ride_location_cubit.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_body.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_stage.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_location_access_prompt.dart';
+import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 class RideRequestPage extends StatefulWidget {
@@ -24,23 +25,57 @@ class RideRequestPage extends StatefulWidget {
   State<RideRequestPage> createState() => _RideRequestPageState();
 }
 
-class _RideRequestPageState extends State<RideRequestPage> {
+class _RideRequestPageState extends State<RideRequestPage>
+    with WidgetsBindingObserver {
   late RideJourneyStep _step;
-  bool _pickingPickup = true;
-  bool _selectionPending = false;
+  RideLocationCubit? _location;
+  bool _pickingPickup = true, _selectionPending = false, _forceFix = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _step = context.read<RideDraftBloc>().state.hasRoute
         ? RideJourneyStep.vehicle
         : RideJourneyStep.entry;
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final maps = MapsScope.maybeOf(context);
+    if (_location != null || maps == null) return;
+    _location = RideLocationCubit(
+      repository: maps.repository,
+      device: maps.deviceLocation,
+      settings: maps.locationSettings,
+      language: Localizations.localeOf(context).languageCode,
+    );
+    if (context.read<RideDraftBloc>().state.pickup == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _location?.locate();
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _location?.resumed();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_location?.close());
+    super.dispose();
+  }
+
   void _back() {
     if (context.read<RideDraftBloc>().state.confirmationPending) return;
     FocusScope.of(context).unfocus();
-    if (_step == RideJourneyStep.entry) {
+    if (_location?.state.point != null) {
+      _location?.clearPoint();
+    } else if (_step == RideJourneyStep.entry) {
       Navigator.of(context).maybePop();
     } else {
       setState(() => _step = RideJourneyStep.values[_step.index - 1]);
@@ -49,10 +84,16 @@ class _RideRequestPageState extends State<RideRequestPage> {
 
   void _pick(bool pickup) {
     if (context.read<RideDraftBloc>().state.confirmationPending) return;
+    _location?.clearPoint();
     setState(() {
       _pickingPickup = pickup;
       _step = RideJourneyStep.places;
     });
+  }
+
+  void _manualPickup() {
+    _forceFix = false;
+    _location?.keepManualPickup();
   }
 
   void _select(TripLocation value) {
@@ -61,17 +102,33 @@ class _RideRequestPageState extends State<RideRequestPage> {
       return;
     }
     FocusScope.of(context).unfocus();
+    if (_pickingPickup) _manualPickup();
     _selectionPending = true;
     bloc.add(
       _pickingPickup ? PickupSelected(value) : DestinationSelected(value),
     );
   }
 
+  void _useMapPoint(TripLocation value, {required bool pickup}) {
+    final bloc = context.read<RideDraftBloc>();
+    if (bloc.state.confirmationPending) return;
+    FocusScope.of(context).unfocus();
+    if (pickup) _manualPickup();
+    _selectionPending = false;
+    _location?.clearPoint();
+    bloc.add(pickup ? PickupSelected(value) : DestinationSelected(value));
+    setState(() => _step = RideJourneyStep.entry);
+  }
+
   void _continue(RideDraftState state) {
     FocusScope.of(context).unfocus();
     switch (_step) {
       case RideJourneyStep.entry:
-        _pick(state.pickup == null);
+        if (state.hasRoute) {
+          setState(() => _step = RideJourneyStep.vehicle);
+        } else {
+          _pick(state.pickup == null);
+        }
       case RideJourneyStep.places:
         if (state.hasRoute) setState(() => _step = RideJourneyStep.vehicle);
       case RideJourneyStep.vehicle:
@@ -81,11 +138,40 @@ class _RideRequestPageState extends State<RideRequestPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) => Theme(
-    data: AppTheme.rideJourney(Theme.of(context)),
-    child: Builder(
-      builder: (context) => BlocConsumer<RideDraftBloc, RideDraftState>(
+  void _locationChanged(BuildContext context, RideLocationState state) {
+    final bloc = context.read<RideDraftBloc>();
+    if (state.fix != null &&
+        !state.locating &&
+        state.failure == null &&
+        !bloc.state.confirmationPending) {
+      if (_forceFix || bloc.state.pickup == null) {
+        bloc.add(
+          PickupSelected(
+            TripLocation(
+              label: AppLocalizations.of(context).mapsCurrentLocation,
+              point: state.fix!,
+            ),
+          ),
+        );
+      }
+      _forceFix = false;
+    }
+    if (state.failure == 'LOCATION_DISABLED' ||
+        state.failure == 'LOCATION_DENIED_FOREVER') {
+      unawaited(_promptSettings(context, state.failure!));
+    }
+  }
+
+  Future<void> _promptSettings(
+    BuildContext themedContext,
+    String failure,
+  ) async {
+    final open = await showRideLocationAccessPrompt(themedContext, failure);
+    if (mounted && open) await _location?.openSettings();
+  }
+
+  Widget _draft(BuildContext context, RideLocationState location) =>
+      BlocConsumer<RideDraftBloc, RideDraftState>(
         listenWhen: (previous, current) =>
             previous.confirmedTrip?.id != current.confirmedTrip?.id ||
             (_selectionPending &&
@@ -106,7 +192,6 @@ class _RideRequestPageState extends State<RideRequestPage> {
           }
         },
         builder: (context, state) {
-          final reduced = MediaQuery.disableAnimationsOf(context);
           final canConfirm =
               context.read<RideDraftBloc>().canConfirm ||
               (state.failureStep == RideFailureStep.confirmation &&
@@ -124,128 +209,63 @@ class _RideRequestPageState extends State<RideRequestPage> {
           };
           return PopScope(
             canPop:
-                _step == RideJourneyStep.entry && !state.confirmationPending,
+                _step == RideJourneyStep.entry &&
+                location.point == null &&
+                !state.confirmationPending,
             onPopInvokedWithResult: (didPop, _) {
               if (!didPop) _back();
             },
             child: AnnotatedRegion<SystemUiOverlayStyle>(
-              value: SystemUiOverlayStyle(
+              value: SystemUiOverlayStyle.dark.copyWith(
                 statusBarColor: Theme.of(context).colorScheme.surface,
-                statusBarIconBrightness: Brightness.dark,
                 systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-                systemNavigationBarIconBrightness: Brightness.dark,
               ),
               child: Scaffold(
                 body: SafeArea(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 1000),
-                      child: LayoutBuilder(
-                        builder: (context, bounds) {
-                          final short = bounds.maxHeight < 500;
-                          final largeText =
-                              MediaQuery.textScalerOf(context).scale(16) > 24;
-                          final fraction = switch (_step) {
-                            RideJourneyStep.entry => .46,
-                            RideJourneyStep.places => .80,
-                            RideJourneyStep.vehicle => .70,
-                            RideJourneyStep.review => .68,
-                          };
-                          final height = math.min(
-                            math.max(bounds.maxHeight * fraction, 330.0),
-                            math.max(160.0, bounds.maxHeight - 80),
-                          );
-                          final sheet = RideJourneyStage(
-                            step: _step,
-                            state: state,
-                            pickingPickup: _pickingPickup,
-                            onPickup: () => _pick(true),
-                            onDestination: () => _pick(false),
-                            onSelected: _select,
-                            onContinue: enabled ? () => _continue(state) : null,
-                            savedAddressPickerBuilder:
-                                widget.savedAddressPickerBuilder,
-                          );
-                          final header = RideJourneyHeader(
-                            step: _step.index + 1,
-                            onBack: state.confirmationPending ? null : _back,
-                          );
-                          final backdrop = RideJourneyBackdrop(
-                            pickup: state.pickup,
-                            destination: state.destination,
-                            compact: _step != RideJourneyStep.entry,
-                          );
-                          if (_step == RideJourneyStep.entry) {
-                            return RideJourneyEntryLayout(
-                              header: header,
-                              map: backdrop,
-                              panel: sheet,
-                            );
-                          }
-                          if (largeText) {
-                            return Column(
-                              children: [
-                                header,
-                                Expanded(child: sheet),
-                              ],
-                            );
-                          }
-                          if (short && bounds.maxWidth > 600) {
-                            return Column(
-                              children: [
-                                header,
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Expanded(child: backdrop),
-                                      Expanded(child: sheet),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                          return Stack(
-                            children: [
-                              Positioned.fill(bottom: height, child: backdrop),
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: header,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: AnimatedContainer(
-                                  duration: reduced
-                                      ? Duration.zero
-                                      : AppMotion.long,
-                                  curve: AppMotion.easeOut,
-                                  height: largeText
-                                      ? bounds.maxHeight - 80
-                                      : height,
-                                  child: AnimatedSwitcher(
-                                    duration: reduced
-                                        ? Duration.zero
-                                        : AppMotion.medium,
-                                    switchInCurve: AppMotion.easeOut,
-                                    child: KeyedSubtree(
-                                      key: ValueKey(_step),
-                                      child: sheet,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
+                  child: RideJourneyBody(
+                    step: _step,
+                    draft: state,
+                    location: location,
+                    pickingPickup: _pickingPickup,
+                    onBack: _back,
+                    onPickup: () => _pick(true),
+                    onDestination: () => _pick(false),
+                    onSelected: _select,
+                    onContinue: enabled ? () => _continue(state) : null,
+                    onMapPoint: (point) => _location?.selectPoint(point),
+                    onMapPickup: (value) => _useMapPoint(value, pickup: true),
+                    onMapDestination: (value) =>
+                        _useMapPoint(value, pickup: false),
+                    onClearPoint: () => _location?.clearPoint(),
+                    onLocate: _location == null
+                        ? null
+                        : () {
+                            _forceFix = true;
+                            _location!.locate();
+                          },
+                    onSettings: _location?.openSettings,
+                    savedAddressPickerBuilder: widget.savedAddressPickerBuilder,
                   ),
                 ),
               ),
             ),
           );
         },
-      ),
+      );
+
+  @override
+  Widget build(BuildContext context) => Theme(
+    data: AppTheme.rideJourney(Theme.of(context)),
+    child: Builder(
+      builder: (context) => _location == null
+          ? _draft(context, const RideLocationState())
+          : BlocConsumer<RideLocationCubit, RideLocationState>(
+              bloc: _location,
+              listenWhen: (a, b) =>
+                  a.fixRevision != b.fixRevision || a.failure != b.failure,
+              listener: _locationChanged,
+              builder: (context, state) => _draft(context, state),
+            ),
     ),
   );
 }

@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/account_routes.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/app/router/ride_journey_page.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
 import 'package:tam_customer/app/router/support_routes.dart';
 import 'package:tam_customer/core/config/app_config.dart';
@@ -121,13 +122,18 @@ GoRouter createAppRouter(
       for (final path in [AppRoutes.activeTrip, AppRoutes.activeTripDetails])
         GoRoute(
           path: path,
-          builder: (context, state) => buildActiveTripFeature(
-            repository: activeTrips,
-            navigation: navigation(context),
-            policy: AppConfig.activeTripPolicy,
-            now: clock,
-            tripId: state.pathParameters['tripId'],
-          ),
+          pageBuilder: (context, state) {
+            final child = buildActiveTripFeature(
+              repository: activeTrips,
+              navigation: navigation(context),
+              policy: AppConfig.activeTripPolicy,
+              now: clock,
+              tripId: state.pathParameters['tripId'],
+            );
+            return path == AppRoutes.activeTrip
+                ? rideJourneyPage(context, state, child)
+                : MaterialPage<void>(key: state.pageKey, child: child);
+          },
         ),
       GoRoute(
         path: AppRoutes.home,
@@ -142,15 +148,19 @@ GoRouter createAppRouter(
       ),
       GoRoute(
         path: AppRoutes.rideRequest,
-        builder: (context, state) => buildRideRequestFeature(
+        pageBuilder: (context, state) => rideJourneyPage(
           context,
-          navigation: navigation(context),
-          dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
-          mockTrips: trips,
-          addresses: addresses,
-          prefill: state.extra is TripPrefill
-              ? state.extra as TripPrefill
-              : null,
+          state,
+          buildRideRequestFeature(
+            context,
+            navigation: navigation(context),
+            dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
+            mockTrips: trips,
+            addresses: addresses,
+            prefill: state.extra is TripPrefill
+                ? state.extra as TripPrefill
+                : null,
+          ),
         ),
       ),
       GoRoute(

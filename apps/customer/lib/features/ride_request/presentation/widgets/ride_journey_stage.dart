@@ -26,7 +26,9 @@ class RideJourneyStage extends StatelessWidget {
     required this.onSelected,
     required this.onContinue,
     this.savedAddressPickerBuilder,
+    this.locationStatus,
   });
+  final Widget? locationStatus;
   final RideJourneyStep step;
   final RideDraftState state;
   final bool pickingPickup;
@@ -39,12 +41,15 @@ class RideJourneyStage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     if (step == RideJourneyStep.entry) {
-      return RideJourneyEntry(
-        pickup: state.pickup,
-        destination: state.destination,
-        onPickup: onPickup,
-        onDestination: onDestination,
-        onContinue: onContinue,
+      return SingleChildScrollView(
+        child: RideJourneyEntry(
+          pickup: state.pickup,
+          destination: state.destination,
+          onPickup: onPickup,
+          onDestination: onDestination,
+          onContinue: onContinue,
+          status: locationStatus,
+        ),
       );
     }
     final title = switch (step) {

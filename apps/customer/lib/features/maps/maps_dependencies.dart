@@ -4,6 +4,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 
 import 'data/api_maps_repository.dart';
 import 'data/device_location_adapter.dart';
+import 'data/device_location_settings_adapter.dart';
 import 'data/maps_attribution_adapter.dart';
 import 'data/osm_tile_provider.dart';
 import 'data/private_tile_provider.dart';
@@ -14,6 +15,7 @@ final class MapsDependencies {
     required this.configuration,
     required this.repository,
     required this.deviceLocation,
+    this.locationSettings = const DeviceLocationSettingsAdapter(),
     this.attribution = const MapsAttributionAdapter(),
     this.client,
     this.tileProviderFactory,
@@ -21,6 +23,7 @@ final class MapsDependencies {
   final MapConfiguration configuration;
   final MapsRepository repository;
   final DeviceLocation deviceLocation;
+  final DeviceLocationSettings locationSettings;
   final MapAttribution attribution;
   final Dio? client;
   final TileProvider Function(String)? tileProviderFactory;

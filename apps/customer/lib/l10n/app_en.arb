@@ -190,7 +190,7 @@
   "rideRequestTimeFormat": "24-hour time (00–23).",
   "rideRequestTimeInvalid": "Enter a valid value in range.",
   "rideRequestFlowStartTitle": "Where are we going?",
-  "rideRequestFlowStartSubtitle": "Choose your pickup and destination in a few simple steps",
+  "rideRequestFlowStartSubtitle": "Tap your destination on the map, or search for it",
   "rideRequestFlowStartAction": "Plan your ride",
   "rideRequestFlowPickupTitle": "Where should we pick you up?",
   "rideRequestFlowDestinationTitle": "Where would you like to go?",
@@ -211,6 +211,19 @@
       }
     }
   },
+  "rideRequestExpandPanel": "Show ride details",
+  "rideRequestCollapsePanel": "Fold details to expand the map",
+  "rideRequestProgressPlan": "Plan your ride",
+  "rideRequestProgressVehicle": "Choose a vehicle",
+  "rideRequestProgressReview": "Review your ride",
+  "rideRequestProgressMatching": "Finding your driver",
+  "rideRequestMapPoint": "Point on the map",
+  "rideRequestMapPointTitle": "Use this place…",
+  "rideRequestMapPointHint": "Is this your destination or your pickup?",
+  "rideRequestMapPointDescription": "Place description (optional)",
+  "rideRequestMapPointCancel": "Dismiss selected point",
+  "rideRequestUseAsDestination": "Use as destination",
+  "rideRequestUseAsPickup": "Use as pickup",
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
@@ -696,5 +709,10 @@
   "mapsInvalidInput": "Check the selected point or search input.",
   "mapsAttributionUnavailable": "Could not open map license information. Please try again.",
   "mapsShowAttribution": "Map data information",
-  "mapsOsmAttribution": "© OpenStreetMap contributors"
+  "mapsOsmAttribution": "© OpenStreetMap contributors",
+  "mapsSelectedPoint": "Selected map point",
+  "mapsCurrentLocation": "My current location",
+  "mapsLocating": "Finding your pickup location…",
+  "mapsEnableLocation": "Turn on location for your pickup",
+  "mapsOpenSettings": "Open settings"
 }

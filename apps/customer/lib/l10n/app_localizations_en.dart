@@ -419,7 +419,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rideRequestFlowStartSubtitle =>
-      'Choose your pickup and destination in a few simple steps';
+      'Tap your destination on the map, or search for it';
 
   @override
   String get rideRequestFlowStartAction => 'Plan your ride';
@@ -454,6 +454,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String rideRequestFlowStep(int current, int total) {
     return 'Step $current of $total';
   }
+
+  @override
+  String get rideRequestExpandPanel => 'Show ride details';
+
+  @override
+  String get rideRequestCollapsePanel => 'Fold details to expand the map';
+
+  @override
+  String get rideRequestProgressPlan => 'Plan your ride';
+
+  @override
+  String get rideRequestProgressVehicle => 'Choose a vehicle';
+
+  @override
+  String get rideRequestProgressReview => 'Review your ride';
+
+  @override
+  String get rideRequestProgressMatching => 'Finding your driver';
+
+  @override
+  String get rideRequestMapPoint => 'Point on the map';
+
+  @override
+  String get rideRequestMapPointTitle => 'Use this place…';
+
+  @override
+  String get rideRequestMapPointHint =>
+      'Is this your destination or your pickup?';
+
+  @override
+  String get rideRequestMapPointDescription => 'Place description (optional)';
+
+  @override
+  String get rideRequestMapPointCancel => 'Dismiss selected point';
+
+  @override
+  String get rideRequestUseAsDestination => 'Use as destination';
+
+  @override
+  String get rideRequestUseAsPickup => 'Use as pickup';
 
   @override
   String get tripsAll => 'All';
@@ -1662,4 +1702,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsOsmAttribution => '© OpenStreetMap contributors';
+
+  @override
+  String get mapsSelectedPoint => 'Selected map point';
+
+  @override
+  String get mapsCurrentLocation => 'My current location';
+
+  @override
+  String get mapsLocating => 'Finding your pickup location…';
+
+  @override
+  String get mapsEnableLocation => 'Turn on location for your pickup';
+
+  @override
+  String get mapsOpenSettings => 'Open settings';
 }

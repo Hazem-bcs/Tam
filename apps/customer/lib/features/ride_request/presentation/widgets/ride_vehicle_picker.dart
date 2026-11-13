@@ -57,7 +57,7 @@ class RideVehiclePicker extends StatelessWidget {
                     scale: selected == vehicle ? 1 : 0.91,
                     child: Icon(
                       _icon(vehicle),
-                      size: 32,
+                      size: 24,
                       color: selected == vehicle
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurfaceVariant,

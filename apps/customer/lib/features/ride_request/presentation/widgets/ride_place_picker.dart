@@ -182,16 +182,22 @@ class _RidePlacePickerState extends State<RidePlacePicker> {
       children: [
         for (final place in state.suggestions) ...[
           Material(
-            color: colors.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(AppRadii.lg),
+            color: colors.surfaceContainerLowest,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadii.md),
+              side: BorderSide(color: colors.outlineVariant),
+            ),
             clipBehavior: Clip.antiAlias,
             child: ListTile(
-              contentPadding: const EdgeInsets.all(AppSpacing.md),
-              leading: CircleAvatar(
-                backgroundColor: colors.primary,
-                foregroundColor: colors.onPrimary,
-                radius: 18,
-                child: const Icon(Icons.near_me_outlined, size: 20),
+              minTileHeight: 56,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              leading: Icon(
+                Icons.near_me_outlined,
+                size: 20,
+                color: colors.primary,
               ),
               title: Text(
                 ar ? place.location.label : place.englishLabel,

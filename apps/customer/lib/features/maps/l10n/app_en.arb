@@ -27,5 +27,10 @@
   "mapsInvalidInput": "Check the selected point or search input.",
   "mapsAttributionUnavailable": "Could not open map license information. Please try again.",
   "mapsShowAttribution": "Map data information",
-  "mapsOsmAttribution": "© OpenStreetMap contributors"
+  "mapsOsmAttribution": "© OpenStreetMap contributors",
+  "mapsSelectedPoint": "Selected map point",
+  "mapsCurrentLocation": "My current location",
+  "mapsLocating": "Finding your pickup location…",
+  "mapsEnableLocation": "Turn on location for your pickup",
+  "mapsOpenSettings": "Open settings"
 }

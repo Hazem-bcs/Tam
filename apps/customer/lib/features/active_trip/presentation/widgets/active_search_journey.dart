@@ -6,6 +6,8 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_actions.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_header.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_shell.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 
@@ -28,123 +30,98 @@ class ActiveSearchJourney extends StatelessWidget {
         final theme = Theme.of(context);
         final colors = theme.colorScheme;
         final trip = state.trip!;
-        return LayoutBuilder(
-          builder: (context, bounds) {
-            final height = bounds.maxHeight;
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: Row(
-                    children: [
-                      Text(t.appName, style: theme.textTheme.headlineLarge),
-                      const Spacer(),
-                      IconButton(
-                        tooltip: t.activeTripHome,
-                        onPressed: navigation.openHome,
-                        icon: const Icon(Icons.home_outlined),
-                      ),
-                    ],
-                  ),
-                ),
-                if (height > 580)
-                  Expanded(
-                    child: RideJourneyBackdrop(
-                      pickup: trip.booking.pickup,
-                      destination: trip.booking.destination,
-                      compact: true,
+        return RideJourneyShell(
+          stageKey: 'matching',
+          preferredExtent: .46,
+          collapsedLabel: t.rideRequestProgressMatching,
+          header: RideJourneyHeader(
+            step: 5,
+            label: t.rideRequestProgressMatching,
+            onBack: navigation.openHome,
+            backLabel: t.activeTripHome,
+            backIcon: Icons.home_outlined,
+          ),
+          mapBuilder: (inset) => RideJourneyBackdrop(
+            pickup: trip.booking.pickup,
+            destination: trip.booking.destination,
+            bottomInset: inset,
+          ),
+          panel: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.xl,
+                0,
+                AppSpacing.xl,
+                AppSpacing.xl,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      t.rideRequestFlowSubmitted,
+                      style: theme.textTheme.headlineMedium,
                     ),
                   ),
-                Flexible(
-                  flex: height > 580 ? 2 : 1,
-                  child: Material(
-                    color: colors.surfaceContainerLowest,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(32),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    t.activeTripSearchingHint,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    decoration: BoxDecoration(
+                      color: colors.surfaceContainerLow,
+                      borderRadius: BorderRadius.circular(AppRadii.sheet),
                     ),
-                    child: ListView(
-                      padding: const EdgeInsets.all(AppSpacing.xl),
+                    child: Column(
                       children: [
-                        Center(
-                          child: Container(
-                            width: 50,
-                            height: 4,
-                            decoration: BoxDecoration(
-                              color: colors.outline,
-                              borderRadius: BorderRadius.circular(AppRadii.sm),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
-                        Semantics(
-                          liveRegion: true,
-                          child: Text(
-                            t.rideRequestFlowSubmitted,
-                            style: theme.textTheme.headlineMedium,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(
-                          t.activeTripSearchingHint,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        const SizedBox(height: AppSpacing.xl),
-                        Container(
-                          padding: const EdgeInsets.all(AppSpacing.xl),
-                          decoration: BoxDecoration(
-                            color: colors.surfaceContainerHigh,
-                            borderRadius: BorderRadius.circular(AppRadii.sheet),
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox.square(
-                                dimension: 56,
-                                child: MediaQuery.disableAnimationsOf(context)
-                                    ? Icon(
-                                        Icons.radar_rounded,
-                                        color: colors.primary,
-                                        size: 48,
-                                      )
-                                    : CircularProgressIndicator(
-                                        strokeWidth: 3,
-                                        semanticsLabel:
-                                            t.activeTripSearchingHint,
-                                      ),
-                              ),
-                              const SizedBox(height: AppSpacing.lg),
-                              Text(
-                                t.rideRequestSimulationNotice,
-                                textAlign: TextAlign.center,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colors.onSurfaceVariant,
+                        SizedBox.square(
+                          dimension: 36,
+                          child: MediaQuery.disableAnimationsOf(context)
+                              ? Icon(
+                                  Icons.radar_rounded,
+                                  color: colors.primary,
+                                  size: 32,
+                                )
+                              : CircularProgressIndicator(
+                                  strokeWidth: AppDimensions.progressStroke,
+                                  semanticsLabel: t.activeTripSearchingHint,
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
-                        if (state.offline) ...[
-                          const SizedBox(height: AppSpacing.md),
-                          Text(t.activeTripConnectionLost),
-                          TamButton.secondary(
-                            label: t.activeTripRefresh,
-                            onPressed: () =>
-                                context.read<ActiveTripCubit>().refresh(),
-                          ),
-                        ],
                         const SizedBox(height: AppSpacing.lg),
-                        ActiveTripActions(state: state, navigation: navigation),
-                        const SizedBox(height: AppSpacing.md),
-                        TamButton.secondary(
-                          label: t.activeTripHome,
-                          onPressed: navigation.openHome,
+                        Text(
+                          t.rideRequestSimulationNotice,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colors.onSurfaceVariant,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                  if (state.offline) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Text(t.activeTripConnectionLost),
+                    TamButton.secondary(
+                      label: t.activeTripRefresh,
+                      onPressed: () =>
+                          context.read<ActiveTripCubit>().refresh(),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.lg),
+                  ActiveTripActions(state: state, navigation: navigation),
+                  const SizedBox(height: AppSpacing.md),
+                  TamButton.secondary(
+                    label: t.activeTripHome,
+                    onPressed: navigation.openHome,
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     ),

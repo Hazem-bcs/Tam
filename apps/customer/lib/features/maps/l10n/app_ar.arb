@@ -27,5 +27,10 @@
   "mapsInvalidInput": "راجع الموقع أو نص البحث المدخل.",
   "mapsAttributionUnavailable": "تعذر فتح معلومات حقوق الخريطة. حاول مجددًا.",
   "mapsShowAttribution": "معلومات مصدر الخريطة",
-  "mapsOsmAttribution": "© OpenStreetMap contributors"
+  "mapsOsmAttribution": "© OpenStreetMap contributors",
+  "mapsSelectedPoint": "نقطة محددة على الخريطة",
+  "mapsCurrentLocation": "موقعي الحالي",
+  "mapsLocating": "جارٍ تحديد نقطة الانطلاق من موقعك…",
+  "mapsEnableLocation": "فعّل الموقع لتحديد الانطلاق",
+  "mapsOpenSettings": "فتح الإعدادات"
 }

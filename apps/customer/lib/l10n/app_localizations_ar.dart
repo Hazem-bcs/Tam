@@ -411,7 +411,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get rideRequestFlowStartSubtitle =>
-      'حدد الانطلاق والوجهة بخطوات بسيطة';
+      'المس وجهتك على الخريطة، أو ابحث عنها';
 
   @override
   String get rideRequestFlowStartAction => 'تحديد مسار الرحلة';
@@ -445,6 +445,45 @@ class AppLocalizationsAr extends AppLocalizations {
   String rideRequestFlowStep(int current, int total) {
     return 'الخطوة $current من $total';
   }
+
+  @override
+  String get rideRequestExpandPanel => 'إظهار تفاصيل المشوار';
+
+  @override
+  String get rideRequestCollapsePanel => 'طي التفاصيل وتوسيع الخريطة';
+
+  @override
+  String get rideRequestProgressPlan => 'خطط لمشوارك';
+
+  @override
+  String get rideRequestProgressVehicle => 'اختيار المركبة';
+
+  @override
+  String get rideRequestProgressReview => 'مراجعة المشوار';
+
+  @override
+  String get rideRequestProgressMatching => 'نبحث عن سائقك';
+
+  @override
+  String get rideRequestMapPoint => 'نقطة على الخريطة';
+
+  @override
+  String get rideRequestMapPointTitle => 'هذا المكان…';
+
+  @override
+  String get rideRequestMapPointHint => 'تريده وجهة الوصول أم نقطة الانطلاق؟';
+
+  @override
+  String get rideRequestMapPointDescription => 'وصف المكان (اختياري)';
+
+  @override
+  String get rideRequestMapPointCancel => 'إلغاء اختيار النقطة';
+
+  @override
+  String get rideRequestUseAsDestination => 'اجعلها الوجهة';
+
+  @override
+  String get rideRequestUseAsPickup => 'اجعلها نقطة الانطلاق';
 
   @override
   String get tripsAll => 'الكل';
@@ -1625,4 +1664,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsOsmAttribution => '© OpenStreetMap contributors';
+
+  @override
+  String get mapsSelectedPoint => 'نقطة محددة على الخريطة';
+
+  @override
+  String get mapsCurrentLocation => 'موقعي الحالي';
+
+  @override
+  String get mapsLocating => 'جارٍ تحديد نقطة الانطلاق من موقعك…';
+
+  @override
+  String get mapsEnableLocation => 'فعّل الموقع لتحديد الانطلاق';
+
+  @override
+  String get mapsOpenSettings => 'فتح الإعدادات';
 }

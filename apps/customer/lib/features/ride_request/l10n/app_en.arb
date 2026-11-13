@@ -77,7 +77,7 @@
   "rideRequestTimeFormat": "24-hour time (00–23).",
   "rideRequestTimeInvalid": "Enter a valid value in range.",
   "rideRequestFlowStartTitle": "Where are we going?",
-  "rideRequestFlowStartSubtitle": "Choose your pickup and destination in a few simple steps",
+  "rideRequestFlowStartSubtitle": "Tap your destination on the map, or search for it",
   "rideRequestFlowStartAction": "Plan your ride",
   "rideRequestFlowPickupTitle": "Where should we pick you up?",
   "rideRequestFlowDestinationTitle": "Where would you like to go?",
@@ -97,5 +97,18 @@
         "type": "int"
       }
     }
-  }
+  },
+  "rideRequestExpandPanel": "Show ride details",
+  "rideRequestCollapsePanel": "Fold details to expand the map",
+  "rideRequestProgressPlan": "Plan your ride",
+  "rideRequestProgressVehicle": "Choose a vehicle",
+  "rideRequestProgressReview": "Review your ride",
+  "rideRequestProgressMatching": "Finding your driver",
+  "rideRequestMapPoint": "Point on the map",
+  "rideRequestMapPointTitle": "Use this place…",
+  "rideRequestMapPointHint": "Is this your destination or your pickup?",
+  "rideRequestMapPointDescription": "Place description (optional)",
+  "rideRequestMapPointCancel": "Dismiss selected point",
+  "rideRequestUseAsDestination": "Use as destination",
+  "rideRequestUseAsPickup": "Use as pickup"
 }

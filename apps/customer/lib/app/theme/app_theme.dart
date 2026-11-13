@@ -17,7 +17,8 @@ abstract final class AppTheme {
   static ThemeData rideJourney(ThemeData ambient) => _build(
     AppColors.light,
     ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
-    textTheme: AppTypography.home(ambient.textTheme).apply(
+    compactControls: true,
+    textTheme: AppTypography.rideJourney(ambient.textTheme).apply(
       bodyColor: AppColors.light.onSurface,
       displayColor: AppColors.light.onSurface,
     ),
@@ -28,6 +29,7 @@ abstract final class AppTheme {
     ColorScheme colors,
     AppStatusColors status, {
     TextTheme? textTheme,
+    bool compactControls = false,
   }) {
     final base = ThemeData(
       useMaterial3: true,
@@ -39,6 +41,11 @@ abstract final class AppTheme {
       materialTapTargetSize: MaterialTapTargetSize.padded,
     );
     final text = base.textTheme;
+    final controlHeight = compactControls
+        ? AppDimensions.minTapTarget
+        : AppDimensions.controlMinHeight;
+    final controlPadding = compactControls ? AppSpacing.sm : AppSpacing.md;
+    final iconSize = compactControls ? 20.0 : AppDimensions.iconSize;
     final disabledForeground = colors.onSurface.withValues(alpha: 0.38);
     final disabledBackground = colors.onSurface.withValues(alpha: 0.08);
     const controlShape = RoundedRectangleBorder(
@@ -55,9 +62,9 @@ abstract final class AppTheme {
     return base.copyWith(
       scaffoldBackgroundColor: colors.surface,
       disabledColor: disabledForeground,
-      iconTheme: IconThemeData(
-        color: colors.onSurfaceVariant,
-        size: AppDimensions.iconSize,
+      iconTheme: IconThemeData(color: colors.onSurfaceVariant, size: iconSize),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(iconSize: iconSize),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: colors.surface,
@@ -74,13 +81,10 @@ abstract final class AppTheme {
           foregroundColor: colors.onPrimary,
           disabledBackgroundColor: disabledBackground,
           disabledForegroundColor: disabledForeground,
-          minimumSize: const Size(
-            AppDimensions.minTapTarget,
-            AppDimensions.controlMinHeight,
-          ),
-          padding: const EdgeInsetsDirectional.symmetric(
+          minimumSize: Size(AppDimensions.minTapTarget, controlHeight),
+          padding: EdgeInsetsDirectional.symmetric(
             horizontal: AppSpacing.xl,
-            vertical: AppSpacing.md,
+            vertical: controlPadding,
           ),
           shape: controlShape,
           textStyle: text.labelLarge,
@@ -92,13 +96,10 @@ abstract final class AppTheme {
             OutlinedButton.styleFrom(
               foregroundColor: colors.primary,
               disabledForegroundColor: disabledForeground,
-              minimumSize: const Size(
-                AppDimensions.minTapTarget,
-                AppDimensions.controlMinHeight,
-              ),
-              padding: const EdgeInsetsDirectional.symmetric(
+              minimumSize: Size(AppDimensions.minTapTarget, controlHeight),
+              padding: EdgeInsetsDirectional.symmetric(
                 horizontal: AppSpacing.xl,
-                vertical: AppSpacing.md,
+                vertical: controlPadding,
               ),
               shape: controlShape,
               textStyle: text.labelLarge,
@@ -131,7 +132,10 @@ abstract final class AppTheme {
               ? colors.surfaceContainer
               : colors.surfaceContainerLowest,
         ),
-        contentPadding: const EdgeInsetsDirectional.all(AppSpacing.lg),
+        contentPadding: EdgeInsetsDirectional.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: compactControls ? AppSpacing.md : AppSpacing.lg,
+        ),
         labelStyle: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
         floatingLabelStyle: WidgetStateTextStyle.resolveWith((states) {
           final color = states.contains(WidgetState.error)
@@ -168,9 +172,7 @@ abstract final class AppTheme {
         ),
         prefixIconColor: colors.onSurfaceVariant,
         suffixIconColor: colors.onSurfaceVariant,
-        constraints: const BoxConstraints(
-          minHeight: AppDimensions.controlMinHeight,
-        ),
+        constraints: BoxConstraints(minHeight: controlHeight),
       ),
       cardTheme: CardThemeData(
         color: colors.surfaceContainerLowest,

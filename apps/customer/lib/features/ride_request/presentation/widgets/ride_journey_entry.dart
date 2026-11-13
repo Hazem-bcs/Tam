@@ -10,10 +10,12 @@ class RideJourneyEntry extends StatelessWidget {
     super.key,
     this.pickup,
     this.destination,
+    this.status,
     required this.onPickup,
     required this.onDestination,
     required this.onContinue,
   });
+  final Widget? status;
   final TripLocation? pickup, destination;
   final VoidCallback onPickup, onDestination;
   final VoidCallback? onContinue;
@@ -29,7 +31,12 @@ class RideJourneyEntry extends StatelessWidget {
         top: Radius.circular(AppRadii.sheet),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          0,
+          AppSpacing.xl,
+          AppSpacing.lg,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -48,9 +55,13 @@ class RideJourneyEntry extends StatelessWidget {
                 color: colors.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            if (status != null) ...[
+              const SizedBox(height: AppSpacing.md),
+              status!,
+            ],
+            const SizedBox(height: AppSpacing.lg),
             Material(
-              color: colors.surfaceContainerLow,
+              color: colors.surfaceContainerLowest,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadii.lg),
                 side: BorderSide(color: colors.outlineVariant),
@@ -78,10 +89,12 @@ class RideJourneyEntry extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: AppSpacing.lg),
             TamButton.primary(
               key: const Key('ride-flow-continue'),
-              label: t.rideRequestFlowStartAction,
+              label: destination == null
+                  ? t.rideRequestFlowStartAction
+                  : t.rideRequestFlowContinue,
               icon: Icons.arrow_forward_rounded,
               onPressed: onContinue,
             ),
@@ -108,11 +121,13 @@ class _LocationRow extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     return ListTile(
+      minTileHeight: 60,
+      minVerticalPadding: AppSpacing.xs,
       contentPadding: const EdgeInsetsDirectional.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.xs,
+        vertical: 0,
       ),
-      leading: Icon(icon, color: colors.primary),
+      leading: Icon(icon, size: 20, color: colors.primary),
       title: Text(
         caption,
         style: theme.textTheme.labelSmall?.copyWith(

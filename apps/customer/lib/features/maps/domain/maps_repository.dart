@@ -35,8 +35,13 @@ abstract interface class MapsRepository {
 }
 
 abstract interface class DeviceLocation {
-  /// A single foreground fix after an explicit user action.
+  /// A single foreground fix after a user action or an opted-in journey entry.
   Future<GeoPoint> locate();
+}
+
+abstract interface class DeviceLocationSettings {
+  Future<bool> openLocationSettings();
+  Future<bool> openAppSettings();
 }
 
 abstract interface class MapAttribution {

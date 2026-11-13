@@ -19,14 +19,19 @@ class RideJourneyLocations extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     return Material(
-      color: colors.surfaceContainerHigh,
+      color: colors.surfaceContainerLow,
       borderRadius: BorderRadius.circular(AppRadii.lg),
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           ListTile(
             dense: true,
-            leading: Icon(Icons.radio_button_checked, color: colors.primary),
+            minTileHeight: 48,
+            leading: Icon(
+              Icons.radio_button_checked,
+              size: 20,
+              color: colors.primary,
+            ),
             title: Text(pickup?.label ?? t.rideRequestPickupHint),
             subtitle: pickup == null ? null : Text(t.rideRequestPickup),
             onTap: onPickup,
@@ -42,7 +47,8 @@ class RideJourneyLocations extends StatelessWidget {
           ),
           ListTile(
             dense: true,
-            leading: Icon(Icons.place_rounded, color: colors.tertiary),
+            minTileHeight: 48,
+            leading: Icon(Icons.place_rounded, size: 20, color: colors.primary),
             title: Text(destination?.label ?? t.rideRequestDestinationHint),
             subtitle: destination == null
                 ? null

@@ -16,6 +16,52 @@ abstract final class AppTypography {
     );
   }
 
+  /// A quieter, denser scale for the five-stage ride journey.
+  static TextTheme rideJourney(TextTheme ambient) {
+    final text = home(ambient);
+    return text.copyWith(
+      headlineLarge: text.headlineLarge?.copyWith(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineMedium: text.headlineMedium?.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      headlineSmall: text.headlineSmall?.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+      ),
+      titleLarge: text.titleLarge?.copyWith(
+        fontSize: 17,
+        fontWeight: FontWeight.w500,
+      ),
+      titleMedium: text.titleMedium?.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+      ),
+      titleSmall: text.titleSmall?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
+      bodyLarge: text.bodyLarge?.copyWith(fontSize: 16),
+      bodyMedium: text.bodyMedium?.copyWith(fontSize: 14),
+      bodySmall: text.bodySmall?.copyWith(fontSize: 12),
+      labelLarge: text.labelLarge?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      ),
+      labelMedium: text.labelMedium?.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
+      labelSmall: text.labelSmall?.copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+  }
+
   static const textTheme = TextTheme(
     displayLarge: TextStyle(
       fontSize: 40,

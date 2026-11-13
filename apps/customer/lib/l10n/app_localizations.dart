@@ -845,7 +845,7 @@ abstract class AppLocalizations {
   /// No description provided for @rideRequestFlowStartSubtitle.
   ///
   /// In ar, this message translates to:
-  /// **'حدد الانطلاق والوجهة بخطوات بسيطة'**
+  /// **'المس وجهتك على الخريطة، أو ابحث عنها'**
   String get rideRequestFlowStartSubtitle;
 
   /// No description provided for @rideRequestFlowStartAction.
@@ -907,6 +907,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الخطوة {current} من {total}'**
   String rideRequestFlowStep(int current, int total);
+
+  /// No description provided for @rideRequestExpandPanel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار تفاصيل المشوار'**
+  String get rideRequestExpandPanel;
+
+  /// No description provided for @rideRequestCollapsePanel.
+  ///
+  /// In ar, this message translates to:
+  /// **'طي التفاصيل وتوسيع الخريطة'**
+  String get rideRequestCollapsePanel;
+
+  /// No description provided for @rideRequestProgressPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطط لمشوارك'**
+  String get rideRequestProgressPlan;
+
+  /// No description provided for @rideRequestProgressVehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار المركبة'**
+  String get rideRequestProgressVehicle;
+
+  /// No description provided for @rideRequestProgressReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة المشوار'**
+  String get rideRequestProgressReview;
+
+  /// No description provided for @rideRequestProgressMatching.
+  ///
+  /// In ar, this message translates to:
+  /// **'نبحث عن سائقك'**
+  String get rideRequestProgressMatching;
+
+  /// No description provided for @rideRequestMapPoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة على الخريطة'**
+  String get rideRequestMapPoint;
+
+  /// No description provided for @rideRequestMapPointTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا المكان…'**
+  String get rideRequestMapPointTitle;
+
+  /// No description provided for @rideRequestMapPointHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تريده وجهة الوصول أم نقطة الانطلاق؟'**
+  String get rideRequestMapPointHint;
+
+  /// No description provided for @rideRequestMapPointDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف المكان (اختياري)'**
+  String get rideRequestMapPointDescription;
+
+  /// No description provided for @rideRequestMapPointCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء اختيار النقطة'**
+  String get rideRequestMapPointCancel;
+
+  /// No description provided for @rideRequestUseAsDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعلها الوجهة'**
+  String get rideRequestUseAsDestination;
+
+  /// No description provided for @rideRequestUseAsPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعلها نقطة الانطلاق'**
+  String get rideRequestUseAsPickup;
 
   /// No description provided for @tripsAll.
   ///
@@ -3055,6 +3133,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'© OpenStreetMap contributors'**
   String get mapsOsmAttribution;
+
+  /// No description provided for @mapsSelectedPoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة محددة على الخريطة'**
+  String get mapsSelectedPoint;
+
+  /// No description provided for @mapsCurrentLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقعي الحالي'**
+  String get mapsCurrentLocation;
+
+  /// No description provided for @mapsLocating.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحديد نقطة الانطلاق من موقعك…'**
+  String get mapsLocating;
+
+  /// No description provided for @mapsEnableLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل الموقع لتحديد الانطلاق'**
+  String get mapsEnableLocation;
+
+  /// No description provided for @mapsOpenSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الإعدادات'**
+  String get mapsOpenSettings;
 }
 
 class _AppLocalizationsDelegate

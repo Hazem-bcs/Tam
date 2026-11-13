@@ -39,17 +39,6 @@ class RideJourneySheet extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Container(
-                width: 50,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: colors.outline,
-                  borderRadius: BorderRadius.circular(AppRadii.sm),
-                ),
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
             Expanded(
               child: ListView(
                 key: ValueKey(title),

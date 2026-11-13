@@ -63,7 +63,10 @@ class TamButton extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
         ] else if (icon != null) ...[
-          Icon(icon, size: AppDimensions.iconSize),
+          Icon(
+            icon,
+            size: IconTheme.of(context).size ?? AppDimensions.iconSize,
+          ),
           const SizedBox(width: AppSpacing.sm),
         ],
         Flexible(
