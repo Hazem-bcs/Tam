@@ -4,7 +4,14 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 final class MapConfiguration {
   static const osmCommunityTiles =
       'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-  const MapConfiguration({this.tileUrl = '', this.apiBaseUrl = ''});
+  static const libertyStyleAsset = 'assets/maps/liberty.json';
+  const MapConfiguration({
+    this.tileUrl = '',
+    this.apiBaseUrl = '',
+    this.vectorStyleAsset = '',
+  });
+  final String vectorStyleAsset;
+  bool get hasVectorStyle => vectorStyleAsset.isNotEmpty;
   final String tileUrl, apiBaseUrl;
   bool get hasTiles => tileUrl.isNotEmpty;
   bool get hasServices => apiBaseUrl.isNotEmpty;
@@ -14,6 +21,7 @@ final class MapConfiguration {
   factory MapConfiguration.parse({
     required String tileUrl,
     required String apiBaseUrl,
+    String vectorStyleAsset = '',
     bool allowLocalHttp = false,
   }) {
     void validate(String value, {bool tile = false}) {
@@ -41,8 +49,18 @@ final class MapConfiguration {
       }
     }
 
+    if (vectorStyleAsset.isNotEmpty &&
+        (!vectorStyleAsset.startsWith('assets/maps/') ||
+            vectorStyleAsset.contains('..') ||
+            !vectorStyleAsset.endsWith('.json'))) {
+      throw ArgumentError('Invalid bundled map style');
+    }
     validate(tileUrl, tile: true);
     validate(apiBaseUrl);
-    return MapConfiguration(tileUrl: tileUrl, apiBaseUrl: apiBaseUrl);
+    return MapConfiguration(
+      tileUrl: tileUrl,
+      apiBaseUrl: apiBaseUrl,
+      vectorStyleAsset: vectorStyleAsset,
+    );
   }
 }

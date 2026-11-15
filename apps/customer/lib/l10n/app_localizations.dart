@@ -3283,6 +3283,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.'**
   String get mapsLocationInaccurate;
+
+  /// No description provided for @mapsNativeUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخريطة المتجهة متاحة على Android وiOS والويب.'**
+  String get mapsNativeUnavailable;
 }
 
 class _AppLocalizationsDelegate

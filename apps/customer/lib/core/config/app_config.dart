@@ -11,11 +11,15 @@ import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 abstract final class AppConfig {
   static const locationPolicy = LocationPolicy();
   static MapConfiguration get maps => MapConfiguration.parse(
-    // Temporary public tiles, explicitly selected for the design preview.
-    // Override with the private server URL when it is available (or '' to disable).
+    // Liberty uses OpenFreeMap vector tiles. Legacy raster requires explicitly
+    // disabling the vector asset; errors never fall back to another provider.
+    vectorStyleAsset: const String.fromEnvironment(
+      'MAP_VECTOR_STYLE_ASSET',
+      defaultValue: MapConfiguration.libertyStyleAsset,
+    ),
     tileUrl: const String.fromEnvironment(
       'MAP_TILES_URL_TEMPLATE',
-      defaultValue: MapConfiguration.osmCommunityTiles,
+      defaultValue: '',
     ),
     apiBaseUrl: const String.fromEnvironment('MAP_API_BASE_URL'),
     allowLocalHttp: const bool.fromEnvironment('MAP_ALLOW_LOCAL_HTTP'),

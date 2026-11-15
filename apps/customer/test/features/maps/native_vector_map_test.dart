@@ -1,0 +1,131 @@
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:tam_customer/app/theme/app_theme.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/vector/native_vector_map.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/vector/vector_map_scene.dart';
+import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'maps_test_support.dart';
+import 'support/vector_platform_probe.dart';
+
+void main() {
+  final platforms = <VectorPlatformProbe>[];
+  setUp(() {
+    final previous = MapLibrePlatform.createInstance;
+    addTearDown(() => MapLibrePlatform.createInstance = previous);
+    platforms.clear();
+    MapLibrePlatform.createInstance = () {
+      final probe = VectorPlatformProbe();
+      platforms.add(probe);
+      return probe;
+    };
+  });
+  Future<void> show(
+    WidgetTester tester,
+    VectorMapScene scene, {
+    ValueNotifier<double>? inset,
+    ValueChanged<GeoPoint>? select,
+  }) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: NativeVectorMap(
+            style: '{"version":8,"sources":{},"layers":[]}',
+            initialCenter: origin,
+            scene: scene,
+            markerImageLoader: (_, _) async => Uint8List(8),
+            bottomInset: inset,
+            onSelected: select,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+  }
+
+  Future<void> load(WidgetTester tester) async {
+    await tester.pump();
+    tester
+        .widget<MapLibreMap>(find.byType(MapLibreMap))
+        .onStyleLoadedCallback!();
+    await tester.pump();
+    expect(platforms.last.installed.isCompleted, isTrue);
+    tester.widget<MapLibreMap>(find.byType(MapLibreMap)).onMapIdle!();
+    await tester.pump();
+  }
+
+  testWidgets('selection and driver updates preserve map, sprites and camera', (
+    tester,
+  ) async {
+    GeoPoint? chosen;
+    final inset = ValueNotifier<double>(200);
+    addTearDown(inset.dispose);
+    await show(
+      tester,
+      VectorMapScene(origin: origin, destination: destination),
+      inset: inset,
+      select: (p) => chosen = p,
+    );
+    await load(tester);
+    final firstMap = tester.element(find.byType(MapLibreMap));
+    final native = tester.widget<MapLibreMap>(find.byType(MapLibreMap));
+    expect(native.myLocationEnabled, isFalse);
+    expect(native.attributionButtonPosition, isNotNull);
+    native.onMapClick!(const Point(20, 40), const LatLng(33.5, 36.3));
+    expect(chosen?.latitude, closeTo(33.5, 1e-10));
+    expect(chosen?.longitude, closeTo(36.3, 1e-10));
+    final cameraCalls = platforms.single.cameras.length;
+    await show(
+      tester,
+      VectorMapScene(origin: origin, destination: destination, driver: origin),
+      inset: inset,
+    );
+    await tester.pump();
+    expect(
+      identical(firstMap, tester.element(find.byType(MapLibreMap))),
+      isTrue,
+    );
+    expect(platforms, hasLength(1));
+    expect(platforms.single.images, 2);
+    expect(platforms.single.cameras.length, cameraCalls);
+    expect((platforms.single.scenes.last['features'] as List).length, 3);
+    final paddingCalls = platforms.single.insets.length;
+    for (var i = 0; i < 30; i++) {
+      inset.value = 200 + i.toDouble();
+    }
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(platforms.single.insets.length - paddingCalls, lessThanOrEqualTo(2));
+    await tester.pumpWidget(const SizedBox.shrink());
+    expect(platforms.single.disposed, 1);
+    await tester.pump(const Duration(seconds: 30));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('native failure is visible and retry recreates the failed view', (
+    tester,
+  ) async {
+    await show(tester, VectorMapScene(origin: origin));
+    await load(tester);
+    platforms.single.failUpdates = true;
+    await show(tester, VectorMapScene(origin: origin, driver: origin));
+    await tester.pump();
+    expect(
+      find.text('تعذر تحميل الخريطة. تحقق من الاتصال وحاول مجددًا.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('إعادة المحاولة'));
+    await tester.pump();
+    expect(platforms, hasLength(2));
+    expect(platforms.first.disposed, 1);
+    await tester.pumpWidget(const SizedBox.shrink());
+    expect(platforms.last.disposed, 1);
+    expect(tester.takeException(), isNull);
+  });
+}

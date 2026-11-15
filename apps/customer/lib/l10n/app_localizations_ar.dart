@@ -1743,4 +1743,8 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get mapsLocationInaccurate =>
       'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.';
+
+  @override
+  String get mapsNativeUnavailable =>
+      'الخريطة المتجهة متاحة على Android وiOS والويب.';
 }

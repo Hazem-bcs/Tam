@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_map_colors.dart';
 
 /// Palette definitions belong here; widgets consume the ambient ColorScheme.
 abstract final class AppColors {
@@ -78,6 +79,32 @@ abstract final class AppColors {
     onInverseSurface: const Color(0xFFF5F4EF),
     inversePrimary: const Color(0xFFC8C1FF),
     surfaceTint: const Color(0xFF5145CD),
+  );
+
+  static const mapLight = AppMapColors(
+    land: Color(0xFFF0F2F2),
+    building: Color(0xFFDFE4E6),
+    buildingOutline: Color(0xFFD0D7DA),
+    road: Color(0xFFFFFFFF),
+    roadCasing: Color(0xFFD8DEE1),
+    majorRoad: Color(0xFFFAFBFC),
+    water: Color(0xFFD5E6EF),
+    green: Color(0xFFE3EBE2),
+    text: Color(0xFF34434B),
+    secondaryText: Color(0xFF667680),
+  );
+
+  static const mapDark = AppMapColors(
+    land: Color(0xFF182023),
+    building: Color(0xFF303B42),
+    buildingOutline: Color(0xFF354149),
+    road: Color(0xFF44515A),
+    roadCasing: Color(0xFF222D33),
+    majorRoad: Color(0xFF53636D),
+    water: Color(0xFF213D49),
+    green: Color(0xFF243C31),
+    text: Color(0xFFE2E9EC),
+    secondaryText: Color(0xFFA5B3BB),
   );
 
   static const lightStatus = AppStatusColors(

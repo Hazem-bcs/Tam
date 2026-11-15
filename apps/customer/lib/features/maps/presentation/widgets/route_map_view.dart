@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,7 @@ import '../maps_scope.dart';
 import 'map_feedback.dart';
 import 'tam_map_canvas.dart';
 
-class RouteMapView extends StatelessWidget {
+class RouteMapView extends StatefulWidget {
   const RouteMapView({
     super.key,
     this.origin,
@@ -33,49 +34,86 @@ class RouteMapView extends StatelessWidget {
   final bool locating;
   final double markerIconSize;
   @override
+  State<RouteMapView> createState() => _RouteMapViewState();
+}
+
+class _RouteMapViewState extends State<RouteMapView> {
+  MapRouteCubit? _routes;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final repository = MapsScope.maybeOf(context)?.repository;
+    if (repository != _routes?.repository) {
+      if (_routes != null) unawaited(_routes!.close());
+      _routes = repository == null ? null : MapRouteCubit(repository);
+      _load();
+    }
+  }
+
+  @override
+  void didUpdateWidget(RouteMapView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.origin != widget.origin ||
+        oldWidget.destination != widget.destination) {
+      _load();
+    }
+  }
+
+  void _load() {
+    if (_routes != null) {
+      unawaited(_routes!.load(widget.origin, widget.destination));
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_routes != null) unawaited(_routes!.close());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dependencies = MapsScope.maybeOf(context);
     if (dependencies == null) {
       return SizedBox(
-        height: height,
+        height: widget.height,
         child: TamMapCanvas(
           configuration: const MapConfiguration(),
-          bottomInset: bottomInset,
-          selection: selection,
-          onSelected: onSelected,
-          onLocate: onLocate,
-          locating: locating,
-          markerIconSize: markerIconSize,
-          origin: origin,
-          destination: destination,
-          driver: driver,
+          bottomInset: widget.bottomInset,
+          selection: widget.selection,
+          onSelected: widget.onSelected,
+          onLocate: widget.onLocate,
+          locating: widget.locating,
+          markerIconSize: widget.markerIconSize,
+          origin: widget.origin,
+          destination: widget.destination,
+          driver: widget.driver,
         ),
       );
     }
-    final repository = dependencies.repository;
-    return BlocProvider(
-      key: ValueKey((repository, origin, destination)),
-      create: (_) => MapRouteCubit(repository)..load(origin, destination),
+    return BlocProvider.value(
+      value: _routes!,
       child: BlocBuilder<MapRouteCubit, MapRouteState>(
         builder: (context, state) => SizedBox(
-          height: height,
+          height: widget.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: TamMapCanvas(
                   configuration: dependencies.configuration,
-                  bottomInset: bottomInset,
-                  selection: selection,
-                  onSelected: onSelected,
-                  onLocate: onLocate,
-                  locating: locating,
-                  markerIconSize: markerIconSize,
+                  bottomInset: widget.bottomInset,
+                  selection: widget.selection,
+                  onSelected: widget.onSelected,
+                  onLocate: widget.onLocate,
+                  locating: widget.locating,
+                  markerIconSize: widget.markerIconSize,
                   onAttribution: dependencies.attribution.open,
                   tileProviderFactory: dependencies.tileProviderFactory,
-                  origin: origin,
-                  destination: destination,
-                  driver: driver,
+                  origin: widget.origin,
+                  destination: widget.destination,
+                  driver: widget.driver,
                   route: state.route,
                 ),
               ),
@@ -84,8 +122,10 @@ class RouteMapView extends StatelessWidget {
                   state.failure != 'MAP_NOT_CONFIGURED')
                 MapFeedback(
                   text: AppLocalizations.of(context).mapsRouteFailed,
-                  onRetry: () =>
-                      context.read<MapRouteCubit>().load(origin, destination),
+                  onRetry: () => context.read<MapRouteCubit>().load(
+                    widget.origin,
+                    widget.destination,
+                  ),
                 ),
             ],
           ),

@@ -36,7 +36,12 @@ abstract final class AppTheme {
       brightness: colors.brightness,
       colorScheme: colors,
       textTheme: textTheme ?? AppTypography.textTheme,
-      extensions: [status],
+      extensions: [
+        status,
+        colors.brightness == Brightness.dark
+            ? AppColors.mapDark
+            : AppColors.mapLight,
+      ],
       visualDensity: VisualDensity.standard,
       materialTapTargetSize: MaterialTapTargetSize.padded,
     );

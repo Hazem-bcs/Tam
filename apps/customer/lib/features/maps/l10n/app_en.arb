@@ -33,5 +33,6 @@
   "mapsLocating": "Finding your pickup location…",
   "mapsEnableLocation": "Turn on location for your pickup",
   "mapsOpenSettings": "Open settings",
-  "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map."
+  "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.",
+  "mapsNativeUnavailable": "Vector maps are available on Android, iOS and web."
 }

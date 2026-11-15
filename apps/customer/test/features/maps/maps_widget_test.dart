@@ -198,7 +198,7 @@ void main() {
           repository: MapsProbe(),
           deviceLocation: LocationProbe(),
         );
-    Widget content(TripLocation location) => MapsScope(
+    Widget content(TripLocation location, {bool swap = false}) => MapsScope(
       dependencies: MapsDependencies(
         configuration: deps.configuration,
         repository: repo,
@@ -206,19 +206,29 @@ void main() {
       ),
       child: Scaffold(
         body: RouteMapView(
-          origin: origin,
-          destination: destination,
+          origin: swap ? destination : origin,
+          destination: swap ? origin : destination,
           driver: location.point,
         ),
       ),
     );
     await pump(tester, content(TripLocation(label: 'driver', point: origin)));
     expect(repo.routes, 1);
+    final canvas = tester.element(find.byType(TamMapCanvas));
     await pump(
       tester,
       content(TripLocation(label: 'driver', point: destination)),
     );
     expect(repo.routes, 1);
+    await pump(
+      tester,
+      content(TripLocation(label: 'driver', point: destination), swap: true),
+    );
+    expect(repo.routes, 2);
+    expect(
+      identical(canvas, tester.element(find.byType(TamMapCanvas))),
+      isTrue,
+    );
     await tester.pumpWidget(const SizedBox());
   });
 }

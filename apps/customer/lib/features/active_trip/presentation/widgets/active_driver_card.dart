@@ -3,6 +3,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
+import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
 class ActiveDriverCard extends StatelessWidget {
   const ActiveDriverCard({super.key, required this.driver});
@@ -26,7 +27,7 @@ class ActiveDriverCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(Icons.directions_car_outlined, size: 48),
+                const TamVehicleIcon(size: 48),
                 const SizedBox(height: AppSpacing.md),
                 Text(vehicle),
                 const SizedBox(height: AppSpacing.md),

@@ -1781,4 +1781,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mapsLocationInaccurate =>
       'The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.';
+
+  @override
+  String get mapsNativeUnavailable =>
+      'Vector maps are available on Android, iOS and web.';
 }
