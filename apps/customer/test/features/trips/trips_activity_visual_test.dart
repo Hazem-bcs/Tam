@@ -40,4 +40,29 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('next-journey prompt opens the real booking flow', (
+    tester,
+  ) async {
+    tripsViewport(tester, const Size(390, 844));
+    final store = MockTripStore(seed: seedMockTrips());
+    addTearDown(store.dispose);
+    final navigation = TripsNavigationSpy();
+    await tester.pumpWidget(
+      tripsTestApp(
+        BlocProvider(
+          create: (_) => TripsListCubit(MockTripsRepository(store)),
+          child: TripsListPage(navigation: navigation),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('trips-new-ride')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('trips-new-ride')));
+    await tester.pump();
+    expect(navigation.rideRequestOpened, isTrue);
+    expect(store.trips, hasLength(2));
+    expect(tester.takeException(), isNull);
+  });
 }

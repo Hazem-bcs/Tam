@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/trips/domain/trips_repository.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trips_list_cubit.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/active_trip_card.dart';
+import 'package:tam_customer/features/trips/presentation/widgets/next_trip_prompt.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_card.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -13,7 +14,6 @@ import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
-/// One scrollable feed: active journeys first, then history grouped by date.
 class TripHistoryList extends StatelessWidget {
   const TripHistoryList({
     super.key,
@@ -30,29 +30,49 @@ class TripHistoryList extends StatelessWidget {
     if (state.isLoading && state.items.isEmpty) {
       return Center(child: TamLoadingIndicator(semanticLabel: l.tripsLoading));
     }
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 240);
 
     final content = RefreshIndicator(
       onRefresh: cubit.refresh,
       child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification is ScrollUpdateNotification &&
-              notification.metrics.extentAfter < 240) {
+        onNotification: (notice) {
+          if (notice is ScrollUpdateNotification &&
+              notice.metrics.extentAfter < 240) {
             cubit.loadMore();
           }
           return false;
         },
-        child: ListView(
-          key: const Key('trips-activity-feed'),
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsetsDirectional.fromSTEB(
-            AppSpacing.lg,
-            AppSpacing.sm,
-            AppSpacing.lg,
-            AppSpacing.xxl,
+        child: AnimatedSwitcher(
+          duration: duration,
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, .025),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
           ),
-          children: state.items.isEmpty
-              ? [_EmptyResult(state: state)]
-              : _tripSections(context, cubit),
+          child: ListView(
+            key: ValueKey(
+              'trips-activity-${state.filter.name}-${state.items.isEmpty}',
+            ),
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.xxl,
+            ),
+            children: state.items.isEmpty
+                ? [_EmptyResult(state: state)]
+                : _sections(context, cubit),
+          ),
         ),
       ),
     );
@@ -65,55 +85,72 @@ class TripHistoryList extends StatelessWidget {
     );
   }
 
-  List<Widget> _tripSections(BuildContext context, TripsListCubit cubit) {
+  List<Widget> _sections(BuildContext context, TripsListCubit cubit) {
     final l = AppLocalizations.of(context);
-    final active = state.items.where((trip) => trip.status.isActive).toList()
+    final live = state.items.where((trip) => trip.status.isActive).toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
     final history = state.items.where((trip) => !trip.status.isActive).toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    final children = <Widget>[];
 
-    for (final trip in active) {
+    final children = <Widget>[];
+    var position = 0;
+    if (live.isNotEmpty) {
       children.add(
-        ActiveTripCard(
-          key: ValueKey('active-${trip.id}'),
-          trip: trip,
-          onFollow: () => navigation.openActiveTrip(id: trip.id),
+        _SectionHeading(
+          label: l.tripsLiveHeading,
+          icon: Icons.radio_button_checked_rounded,
         ),
       );
       children.add(const SizedBox(height: AppSpacing.md));
-    }
-
-    DateTime? previousDay;
-    for (final trip in history) {
-      final day = trip.createdAt.toLocal();
-      if (previousDay == null || !DateUtils.isSameDay(previousDay, day)) {
+      for (final trip in live) {
         children.add(
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              top: AppSpacing.sm,
-              bottom: AppSpacing.sm,
-            ),
-            child: Text(
-              _dateHeader(context, day),
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+          _Reveal(
+            order: position++,
+            child: ActiveTripCard(
+              key: ValueKey('active-${trip.id}'),
+              trip: trip,
+              onFollow: () => navigation.openActiveTrip(id: trip.id),
             ),
           ),
         );
-        previousDay = day;
+        children.add(const SizedBox(height: AppSpacing.md));
       }
+    }
+    if (history.isNotEmpty) {
       children.add(
-        TripCard(
-          key: ValueKey(trip.id),
-          trip: trip,
-          onTap: () => navigation.openTrip(trip.id),
+        _SectionHeading(
+          label: l.tripsHistoryHeading,
+          count: l.tripsVisibleCount(history.length),
+          icon: Icons.route_rounded,
+        ),
+      );
+      children.add(const SizedBox(height: AppSpacing.md));
+      for (final trip in history) {
+        children.add(
+          _Reveal(
+            order: position++,
+            child: TripCard(
+              key: ValueKey(trip.id),
+              trip: trip,
+              onTap: () => navigation.openTrip(trip.id),
+            ),
+          ),
+        );
+        children.add(const SizedBox(height: AppSpacing.md));
+      }
+    }
+    if (state.filter == TripsFilter.all &&
+        live.isEmpty &&
+        history.isNotEmpty &&
+        state.nextCursor == null) {
+      children.add(
+        _Reveal(
+          order: position++,
+          child: NextTripPrompt(onRequestRide: navigation.openRideRequest),
         ),
       );
       children.add(const SizedBox(height: AppSpacing.md));
     }
-
     if (state.nextCursor != null || state.moreErrorCode != null) {
       children.add(
         Column(
@@ -133,16 +170,78 @@ class TripHistoryList extends StatelessWidget {
     }
     return children;
   }
+}
 
-  String _dateHeader(BuildContext context, DateTime date) {
-    final l = AppLocalizations.of(context);
-    final now = DateTime.now();
-    if (DateUtils.isSameDay(date, now)) return l.tripsToday;
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-    if (DateUtils.isSameDay(date, yesterday)) return l.tripsYesterday;
-    return DateFormat.yMMMd(
-      Localizations.localeOf(context).languageCode,
-    ).format(date);
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({required this.label, required this.icon, this.count});
+  final String label;
+  final IconData icon;
+  final String? count;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: AppSpacing.sm,
+      runSpacing: AppSpacing.xs,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.primaryContainer,
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Icon(icon, color: colors.primary, size: 18),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(
+              label,
+              style: text.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                color: colors.onSurface,
+              ),
+            ),
+          ],
+        ),
+        if (count != null)
+          Text(
+            count!,
+            style: text.labelSmall?.copyWith(color: colors.onSurfaceVariant),
+          ),
+      ],
+    );
+  }
+}
+
+class _Reveal extends StatelessWidget {
+  const _Reveal({required this.order, required this.child});
+  final int order;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(milliseconds: 240 + (order * 55).clamp(0, 275)),
+      curve: Curves.easeOutCubic,
+      builder: (context, progress, child) => Opacity(
+        opacity: progress,
+        child: Transform.translate(
+          offset: Offset(0, 14 * (1 - progress)),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
   }
 }
 
@@ -154,21 +253,29 @@ class _EmptyResult extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     final hasError = state.errorCode != null;
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(vertical: AppSpacing.xxl),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            hasError ? Icons.wifi_off_outlined : Icons.route_outlined,
-            size: 44,
-            color: theme.colorScheme.primary,
+          Container(
+            width: 82,
+            height: 82,
+            decoration: BoxDecoration(
+              color: colors.primaryContainer,
+              borderRadius: BorderRadius.circular(27),
+            ),
+            child: Icon(
+              hasError ? Icons.wifi_off_rounded : Icons.route_rounded,
+              color: colors.primary,
+              size: 36,
+            ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             hasError ? l.tripsErrorTitle : l.tripsEmptyTitle,
-            style: theme.textTheme.titleMedium,
+            style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -177,7 +284,7 @@ class _EmptyResult extends StatelessWidget {
                 ? tripsErrorLabel(l, state.errorCode)
                 : l.tripsEmptyDescription,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+              color: colors.onSurfaceVariant,
             ),
             textAlign: TextAlign.center,
           ),

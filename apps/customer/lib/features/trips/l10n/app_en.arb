@@ -80,5 +80,13 @@
   "tripsActiveJourney": "Ongoing trip",
   "tripsFollowJourney": "Follow trip",
   "tripsToday": "Today",
-  "tripsYesterday": "Yesterday"
+  "tripsYesterday": "Yesterday",
+  "tripsActivitySubtitle": "Every journey, all the details",
+  "tripsHistoryHeading": "Recent journeys",
+  "tripsLiveHeading": "On the move now",
+  "tripsVisibleCount": "{count} shown",
+  "@tripsVisibleCount": {"placeholders": {"count": {"type": "int"}}},
+  "tripsNextPrompt": "Ready for your next ride?",
+  "tripsNextSubtitle": "Your next destination is just a tap away",
+  "tripsCurrencySyp": "SYP"
 }

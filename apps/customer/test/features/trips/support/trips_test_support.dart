@@ -34,6 +34,7 @@ class TripsNavigationSpy implements CustomerNavigation {
   String? lastActiveTripId;
   TripPrefill? prefill;
   bool openedTrips = false;
+  bool rideRequestOpened = false;
 
   @override
   void openCompletion(String tripId) {}
@@ -50,7 +51,11 @@ class TripsNavigationSpy implements CustomerNavigation {
   @override
   void openTrip(String id) => lastTripId = id;
   @override
-  void openRideRequest({TripPrefill? prefill}) => this.prefill = prefill;
+  void openRideRequest({TripPrefill? prefill}) {
+    rideRequestOpened = true;
+    this.prefill = prefill;
+  }
+
   @override
   void openTrips() => openedTrips = true;
   @override
