@@ -23,48 +23,48 @@ void main() {
       expect(tester.widget<Text>(phone).textDirection, TextDirection.ltr);
     },
   );
-  testWidgets('Arabic Home shows sections and uses only navigation callbacks', (
-    tester,
-  ) async {
-    final nav = RecordingHomeNavigation();
-    var logouts = 0;
-    await pumpHome(
-      tester,
-      repository: const MockHomeRepository(latency: Duration.zero),
-      navigation: nav,
-      onLogout: () => logouts++,
-    );
-    expect(find.byType(HomePage), findsOneWidget);
-    expect(find.text('تم تسجيل الدخول'), findsOneWidget);
-    expect(find.text('+963941234567'), findsOneWidget);
-    expect(find.text('مشوارك أسهل مع تم'), findsOneWidget);
-    expect(find.text('مزايا جديدة في الطريق'), findsOneWidget);
-    expect(find.text('اختر خدمتك'), findsOneWidget);
-    expect(find.text('قريبًا'), findsNWidgets(3));
+  testWidgets(
+    'Arabic Home focuses on a single ride action and working shortcuts',
+    (tester) async {
+      final nav = RecordingHomeNavigation();
+      await pumpHome(
+        tester,
+        repository: const MockHomeRepository(latency: Duration.zero),
+        navigation: nav,
+      );
+      expect(find.byType(HomePage), findsOneWidget);
+      expect(find.text('تم تسجيل الدخول'), findsOneWidget);
+      expect(find.text('+963941234567'), findsOneWidget);
+      expect(find.text('وين رايح اليوم؟'), findsOneWidget);
+      expect(find.text('خدمات تم'), findsOneWidget);
+      expect(find.text('قريبًا'), findsNWidgets(2));
+      expect(find.text('مزايا جديدة في الطريق'), findsNothing);
+      expect(find.text('مشوارك أسهل مع تم'), findsNothing);
+      expect(find.text('تسجيل الخروج'), findsNothing);
+      expect(find.text('تسجيل الدخول'), findsNothing);
 
-    await tester.tap(find.byKey(const Key('home-notifications')));
-    expect(nav.notifications, 1);
-    await tester.ensureVisible(
-      find.text('حدد نقطة الانطلاق والوجهة لطلب رحلة'),
-    );
-    await tester.tap(find.text('حدد نقطة الانطلاق والوجهة لطلب رحلة'));
-    expect(nav.ride, 1);
-    await tester.ensureVisible(find.text('مشوار'));
-    await tester.tap(find.text('مشوار'));
-    expect(nav.ride, 2);
-    await tester.ensureVisible(find.text('الطعام'));
-    await tester.tap(find.text('الطعام'));
-    expect(nav.ride, 2, reason: 'Unavailable service must not navigate');
+      await tester.tap(find.byKey(const Key('home-notifications')));
+      expect(nav.notifications, 1);
+      final rideAction = find.byKey(const Key('home-ride-entry'));
+      await tester.ensureVisible(rideAction);
+      await tester.tap(rideAction);
+      expect(nav.ride, 1);
+      await tester.ensureVisible(find.text('لوين المشوار؟'));
+      await tester.tap(find.text('لوين المشوار؟'));
+      expect(nav.ride, 2);
 
-    await tester.tap(find.text('طلباتي'));
-    await tester.tap(find.text('الإعدادات'));
-    expect(nav.trips, 1);
-    expect(nav.settings, 1);
-    await tester.ensureVisible(find.text('تسجيل الخروج'));
-    await tester.tap(find.text('تسجيل الخروج'));
-    expect(logouts, 1);
-    expect(tester.takeException(), isNull);
-  });
+      await tester.ensureVisible(find.byKey(const Key('home-addresses')));
+      await tester.tap(find.byKey(const Key('home-addresses')));
+      expect(nav.addresses, 1);
+      await tester.ensureVisible(find.byKey(const Key('home-active-trip')));
+      await tester.tap(find.byKey(const Key('home-active-trip')));
+      expect(nav.activeTrip, 1);
+      await tester.ensureVisible(find.text('الطعام'));
+      await tester.tap(find.text('الطعام'));
+      expect(nav.ride, 2, reason: 'Unavailable service must not navigate');
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'English Home uses localized labels and respects guest identity',
@@ -80,10 +80,10 @@ void main() {
         guest: true,
       );
       expect(find.text('You are browsing as a guest'), findsOneWidget);
-      expect(find.text('Where to?'), findsOneWidget);
-      expect(find.text('Coming soon'), findsNWidgets(3));
-      expect(find.text('Ride'), findsOneWidget);
-      expect(find.text('Sign in'), findsOneWidget);
+      expect(find.text('Where to today?'), findsOneWidget);
+      expect(find.text('Coming soon'), findsNWidgets(2));
+      expect(find.text('Book a ride'), findsOneWidget);
+      expect(find.text('Sign in'), findsNothing);
       expect(tester.takeException(), isNull);
     },
   );
@@ -147,10 +147,8 @@ void main() {
           navigation: RecordingHomeNavigation(),
           language: language,
         );
-        final target = language == 'ar'
-            ? 'مشوارك أسهل مع تم'
-            : 'Getting there is easier with Tam';
-        await tester.ensureVisible(find.text(target));
+        final target = find.byKey(const Key('home-ride-entry'));
+        await tester.ensureVisible(target);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         await tester.ensureVisible(

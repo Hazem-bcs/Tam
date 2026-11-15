@@ -792,6 +792,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationsOpenNotification => 'فتح الإشعار';
 
   @override
+  String get notificationsFeedTitle => 'كل جديد في طريقك';
+
+  @override
+  String get notificationsFeedSubtitle => 'رحلاتك وتحديثات تم في مكان واحد';
+
+  @override
+  String get notificationsAllFilter => 'الكل';
+
+  @override
+  String get notificationsUnreadFilter => 'غير المقروءة';
+
+  @override
+  String get notificationsNoUnread => 'أنت على اطلاع بكل جديد';
+
+  @override
+  String get notificationsShowAll => 'عرض كل الإشعارات';
+
+  @override
   String get settingsTitle => 'حسابي';
 
   @override

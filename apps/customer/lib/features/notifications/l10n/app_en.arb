@@ -2,7 +2,13 @@
   "@@locale": "en",
   "notificationsMarkAll": "Mark all as read",
   "notificationsUnreadCount": "Unread: {count}",
-  "@notificationsUnreadCount": {"placeholders": {"count": {"type": "int"}}},
+  "@notificationsUnreadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notificationsUnknownCount": "Count unavailable",
   "notificationsToday": "Today",
   "notificationsYesterday": "Yesterday",
@@ -22,5 +28,11 @@
   "notificationsRead": "Read",
   "notificationsUnread": "Unread",
   "notificationsLoading": "Loading notifications",
-  "notificationsOpenNotification": "Open notification"
+  "notificationsOpenNotification": "Open notification",
+  "notificationsFeedTitle": "Updates along your way",
+  "notificationsFeedSubtitle": "Trips and TAM updates, all in one place",
+  "notificationsAllFilter": "All",
+  "notificationsUnreadFilter": "Unread",
+  "notificationsNoUnread": "You are all caught up",
+  "notificationsShowAll": "View all notifications"
 }

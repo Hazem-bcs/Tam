@@ -2,7 +2,13 @@
   "@@locale": "ar",
   "notificationsMarkAll": "تعيين الكل كمقروء",
   "notificationsUnreadCount": "غير مقروء: {count}",
-  "@notificationsUnreadCount": {"placeholders": {"count": {"type": "int"}}},
+  "@notificationsUnreadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notificationsUnknownCount": "العدد غير متاح",
   "notificationsToday": "اليوم",
   "notificationsYesterday": "أمس",
@@ -22,5 +28,11 @@
   "notificationsRead": "مقروء",
   "notificationsUnread": "غير مقروء",
   "notificationsLoading": "جاري تحميل الإشعارات",
-  "notificationsOpenNotification": "فتح الإشعار"
+  "notificationsOpenNotification": "فتح الإشعار",
+  "notificationsFeedTitle": "كل جديد في طريقك",
+  "notificationsFeedSubtitle": "رحلاتك وتحديثات تم في مكان واحد",
+  "notificationsAllFilter": "الكل",
+  "notificationsUnreadFilter": "غير المقروءة",
+  "notificationsNoUnread": "أنت على اطلاع بكل جديد",
+  "notificationsShowAll": "عرض كل الإشعارات"
 }
