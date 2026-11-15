@@ -5,9 +5,14 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 /// One departure surface, with a non-geographic direction sculpture.
 /// Entrance animation runs once; press/focus uses native Material feedback.
 class HomeDeparturePortal extends StatefulWidget {
-  const HomeDeparturePortal({super.key, required this.onRideRequest});
+  const HomeDeparturePortal({
+    super.key,
+    required this.onRideRequest,
+    this.child,
+  });
 
   final VoidCallback onRideRequest;
+  final Widget? child;
 
   @override
   State<HomeDeparturePortal> createState() => _HomeDeparturePortalState();
@@ -18,6 +23,7 @@ class _HomeDeparturePortalState extends State<HomeDeparturePortal> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.child != null) return widget.child!;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final t = AppLocalizations.of(context);
