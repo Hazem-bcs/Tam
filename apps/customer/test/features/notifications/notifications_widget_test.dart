@@ -30,7 +30,7 @@ class _NavigationSpy implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id}) {}
+  void openActiveTrip({String? id, bool replaceCurrent = false}) {}
   @override
   void openAccountPhone() {}
   @override

@@ -29,7 +29,8 @@ final class RecordingHomeNavigation implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id}) => activeTrip++;
+  void openActiveTrip({String? id, bool replaceCurrent = false}) =>
+      activeTrip++;
   @override
   void openAccountPhone() {}
   @override

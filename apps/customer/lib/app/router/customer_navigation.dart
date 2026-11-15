@@ -15,7 +15,7 @@ abstract interface class CustomerNavigation {
   void openNotifications();
   void openSettings();
   void openAddresses();
-  void openActiveTrip({String? id});
+  void openActiveTrip({String? id, bool replaceCurrent = false});
   void openChat(String tripId);
   void openCompletion(String tripId);
   void openSupport({String? tripId});
@@ -55,11 +55,17 @@ final class RouterCustomerNavigation implements CustomerNavigation {
   void openChat(String tripId) =>
       unawaited(router.push<void>(AppRoutes.chatLocation(tripId)));
   @override
-  void openActiveTrip({String? id}) => unawaited(
-    router.push<void>(
-      id == null ? AppRoutes.activeTrip : AppRoutes.activeTripLocation(id),
-    ),
-  );
+  void openActiveTrip({String? id, bool replaceCurrent = false}) {
+    final location = id == null
+        ? AppRoutes.activeTrip
+        : AppRoutes.activeTripLocation(id);
+    unawaited(
+      replaceCurrent
+          ? router.pushReplacement<void>(location)
+          : router.push<void>(location),
+    );
+  }
+
   @override
   void openHome() => router.go(AppRoutes.home);
   @override

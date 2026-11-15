@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/maps/domain/maps_repository.dart';
@@ -11,11 +13,14 @@ import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_body.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_stage.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_map_point_panel.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+
 import '../../../maps/maps_test_support.dart';
 import '../../scheduling/schedule_widget_support.dart';
 
@@ -26,11 +31,23 @@ class _Settings implements DeviceLocationSettings {
   Future<bool> openLocationSettings() async => true;
 }
 
+class _BookingNavigation extends Fake implements CustomerNavigation {
+  int homes = 0;
+  bool replaced = false;
+  @override
+  void openHome() => homes++;
+  @override
+  void openActiveTrip({String? id, bool replaceCurrent = false}) {
+    replaced = replaceCurrent;
+  }
+}
+
 void main() {
   Future<RideDraftBloc> launch(
     WidgetTester tester,
     LocationProbe gps, {
     double scale = 1,
+    CustomerNavigation? navigation,
   }) async {
     final store = MockTripStore();
     final bloc = RideDraftBloc(
@@ -61,7 +78,9 @@ void main() {
           ),
           child: BlocProvider.value(
             value: bloc,
-            child: const RideRequestPage(navigation: ScheduleTestNavigation()),
+            child: RideRequestPage(
+              navigation: navigation ?? const ScheduleTestNavigation(),
+            ),
           ),
         ),
       ),
@@ -174,6 +193,61 @@ void main() {
       await tester.pumpAndSettle();
     }
   }
+
+  testWidgets('back from collapsed review returns through the journey stages', (
+    tester,
+  ) async {
+    phone(tester);
+    final bloc = await launch(tester, LocationProbe());
+    await tester.pumpAndSettle();
+    await review(tester, bloc);
+    expect(find.text('تأكيد تفاصيل الرحلة'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('ride-sheet-toggle')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('ride-flow-back')));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<RideJourneyBody>(find.byType(RideJourneyBody)).step,
+      RideJourneyStep.vehicle,
+    );
+    expect(find.byTooltip('طي التفاصيل وتوسيع الخريطة'), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('من وين بدك تنطلق؟'), findsOneWidget);
+    expect(bloc.state.confirmedTrip, isNull);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    await tester.runAsync(bloc.close);
+  });
+
+  testWidgets(
+    'back can leave an already confirmed draft without changing its trip',
+    (tester) async {
+      phone(tester);
+      final navigation = _BookingNavigation();
+      final bloc = await launch(
+        tester,
+        LocationProbe(),
+        navigation: navigation,
+      );
+      await tester.pumpAndSettle();
+      await review(tester, bloc);
+      bloc.add(const RideConfirmationRequested());
+      await tester.pumpAndSettle();
+      final trip = bloc.state.confirmedTrip;
+      expect(trip, isNotNull);
+      expect(navigation.replaced, isTrue);
+      await tester.tap(find.byKey(const Key('ride-flow-back')));
+      await tester.pumpAndSettle();
+      expect(navigation.homes, 1);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(navigation.homes, 2);
+      expect(bloc.state.confirmedTrip, same(trip));
+      await tester.pumpWidget(const SizedBox());
+      await tester.runAsync(bloc.close);
+    },
+  );
 
   for (final moved in [false, true]) {
     testWidgets(

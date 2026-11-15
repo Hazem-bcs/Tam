@@ -31,7 +31,8 @@ final class _Nav implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id}) => openedTrip = id;
+  void openActiveTrip({String? id, bool replaceCurrent = false}) =>
+      openedTrip = id;
   @override
   void openAccountPhone() {}
   @override

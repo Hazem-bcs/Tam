@@ -71,7 +71,12 @@ class _RideRequestPageState extends State<RideRequestPage>
   }
 
   void _back() {
-    if (context.read<RideDraftBloc>().state.confirmationPending) return;
+    final draft = context.read<RideDraftBloc>().state;
+    if (draft.confirmedTrip != null) {
+      widget.navigation.openHome();
+      return;
+    }
+    if (draft.confirmationPending) return;
     FocusScope.of(context).unfocus();
     if (_location?.state.point != null) {
       _location?.clearPoint();
@@ -211,7 +216,10 @@ class _RideRequestPageState extends State<RideRequestPage>
                 previous.destination != current.destination)),
     listener: (context, state) {
       if (state.confirmedTrip != null) {
-        widget.navigation.openActiveTrip(id: state.confirmedTrip!.id);
+        widget.navigation.openActiveTrip(
+          id: state.confirmedTrip!.id,
+          replaceCurrent: true,
+        );
       } else if (_selectionPending && !state.searching) {
         _selectionPending = false;
         setState(() {
