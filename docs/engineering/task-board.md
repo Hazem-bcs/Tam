@@ -213,5 +213,7 @@ IMPLEMENTED بواسطة root على أساس `d35efab` في
 تحقق MainShell:81 اختبارًا محددًا ناجحًا، وformat/analyze/l10n سليمة، ومراجعة Android للصفحات الثلاث.
 المجموعة الكاملة غير ناجحة؛ [التفاصيل والحدود](deliveries/TAM-MAIN-SHELL-01/HANDOFF.md).
 
-TAM-VECTOR-MAPS-01: READY → تنفيذ root على36413be، [البطاقة](tasks/TAM-VECTOR-MAPS-01.md).
+TAM-VECTOR-MAPS-01: IMPLEMENTED بواسطة root على36413be، [البطاقة](tasks/TAM-VECTOR-MAPS-01.md).
 خرائط MapLibre/OpenFreeMap وثيم مركزي ورموز متجهة، دون تغيير Auth أو الحجز.
+105 اختبارات محددة والتحليل والتنسيق سليمة؛ عُرضت نسخة Android المجمعة مع main
+على المحاكي. [التسليم وحدود خدمة المسارات والمجموعة الكاملة](deliveries/TAM-VECTOR-MAPS-01/HANDOFF.md).
