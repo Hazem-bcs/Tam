@@ -13,21 +13,37 @@ import '../../domain/notifications_repository.dart';
 import '../bloc/notifications_cubit.dart';
 import '../bloc/notifications_state.dart';
 import '../widgets/notification_tile.dart';
+import '../widgets/notifications_overview.dart';
 
-class NotificationsPage extends StatelessWidget {
+class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key, required this.navigation, this.clock});
   final CustomerNavigation navigation;
   final DateTime Function()? clock;
 
   @override
+  State<NotificationsPage> createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  bool _unreadOnly = false;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Scaffold(
+      backgroundColor: const Color(0xFFFCF9F8),
       appBar: AppBar(
+        toolbarHeight: 60,
+        backgroundColor: const Color(0xFFFCF9F8),
         title: Text(
           l10n.navNotifications,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontSize: 19,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF291C21),
+          ),
         ),
         actions: [
           BlocBuilder<NotificationsCubit, NotificationsState>(
@@ -104,30 +120,54 @@ class NotificationsPage extends StatelessWidget {
       );
     }
 
-    final now = (clock?.call() ?? DateTime.now()).toLocal();
+    final now = (widget.clock?.call() ?? DateTime.now()).toLocal();
+    final visible = _unreadOnly
+        ? state.items.where((item) => item.isUnread).toList(growable: false)
+        : state.items;
     final entries = <Widget>[];
     String? previousGroup;
-    for (final notification in state.items) {
+    for (final notification in visible) {
       final group = _group(notification.createdAt.toLocal(), now);
       if (group != previousGroup) {
         previousGroup = group;
         entries.add(
           Padding(
-            padding: const EdgeInsetsDirectional.only(
-              top: AppSpacing.lg,
-              bottom: AppSpacing.sm,
+            padding: const EdgeInsetsDirectional.fromSTEB(5, 14, 5, 8),
+            child: Row(
+              children: [
+                Container(
+                  height: 6,
+                  width: 6,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF8D153A),
+                  ),
+                ),
+                const SizedBox(width: 9),
+                Text(
+                  switch (group) {
+                    'today' => l10n.notificationsToday,
+                    'yesterday' => l10n.notificationsYesterday,
+                    _ => l10n.notificationsEarlier,
+                  },
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF5E4C53),
+                  ),
+                ),
+                const SizedBox(width: 11),
+                const Expanded(
+                  child: Divider(color: Color(0xFFEADFE2), thickness: 1),
+                ),
+              ],
             ),
-            child: Text(switch (group) {
-              'today' => l10n.notificationsToday,
-              'yesterday' => l10n.notificationsYesterday,
-              _ => l10n.notificationsEarlier,
-            }, style: Theme.of(context).textTheme.titleSmall),
           ),
         );
       }
       entries.add(
         Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: AppSpacing.md),
+          padding: const EdgeInsetsDirectional.only(bottom: 5),
           child: NotificationTile(
             notification: notification,
             isPending:
@@ -138,46 +178,85 @@ class NotificationsPage extends StatelessWidget {
         ),
       );
     }
+
     return RefreshIndicator(
       onRefresh: () => cubit.load(refresh: true),
       child: ListView(
         key: const Key('notifications-list'),
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsetsDirectional.fromSTEB(
-          AppSpacing.lg,
-          AppSpacing.sm,
-          AppSpacing.lg,
-          AppSpacing.xl,
-        ),
+        padding: const EdgeInsetsDirectional.fromSTEB(18, 8, 18, 28),
         children: [
+          NotificationsOverview(unreadCount: state.unreadCount),
+          const SizedBox(height: 15),
           Row(
             children: [
               Expanded(
-                child: Text(
-                  state.unreadCount == null
-                      ? l10n.notificationsUnknownCount
-                      : l10n.notificationsUnreadCount(state.unreadCount!),
-                  style: Theme.of(context).textTheme.labelLarge,
+                child: _filterTab(
+                  key: const Key('notifications-filter-all'),
+                  label: l10n.notificationsAllFilter,
+                  selected: !_unreadOnly,
+                  onTap: () => setState(() => _unreadOnly = false),
                 ),
               ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: _filterTab(
+                  key: const Key('notifications-filter-unread'),
+                  label: l10n.notificationsUnreadFilter,
+                  selected: _unreadOnly,
+                  onTap: () => setState(() => _unreadOnly = true),
+                ),
+              ),
+              const SizedBox(width: 5),
               IconButton(
+                key: const Key('notifications-refresh'),
                 tooltip: l10n.notificationsRefresh,
                 onPressed: state.isBusy
                     ? null
                     : () => unawaited(cubit.load(refresh: true)),
                 icon: state.refreshing
                     ? const TamLoadingIndicator(size: AppDimensions.iconSize)
-                    : const Icon(Icons.refresh_outlined),
+                    : const Icon(Icons.refresh_rounded, size: 21),
+                color: const Color(0xFF8D153A),
               ),
             ],
           ),
           if (state.error != null || state.mutationError != null) ...[
+            const SizedBox(height: 9),
             _MessageBanner(
               message: state.mutationError != null
                   ? l10n.notificationsMutationError
                   : _errorMessage(l10n, state.error),
             ),
-            const SizedBox(height: AppSpacing.sm),
+          ],
+          if (_unreadOnly && visible.isEmpty) ...[
+            const SizedBox(height: 26),
+            Center(
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.check_circle_outline_rounded,
+                    size: 35,
+                    color: Color(0xFF8D153A),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.notificationsNoUnread,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontSize: 14,
+                      color: const Color(0xFF5E4C53),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    key: const Key('notifications-show-all'),
+                    onPressed: () => setState(() => _unreadOnly = false),
+                    child: Text(l10n.notificationsShowAll),
+                  ),
+                ],
+              ),
+            ),
           ],
           ...entries,
           if (state.moreError != null) ...[
@@ -194,6 +273,47 @@ class NotificationsPage extends StatelessWidget {
                   : () => unawaited(cubit.loadMore()),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _filterTab({
+    required Key key,
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        key: key,
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: AnimatedContainer(
+          duration: reduceMotion
+              ? Duration.zero
+              : const Duration(milliseconds: 170),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
+            color: selected ? const Color(0xFF8D153A) : const Color(0xFFF3ECEE),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          constraints: const BoxConstraints(minHeight: 43),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 9),
+          child: Text(
+            label,
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              fontSize: 12,
+              fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+              color: selected ? Colors.white : const Color(0xFF685760),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -225,11 +345,11 @@ class NotificationsPage extends StatelessWidget {
     }
     switch (target.destination) {
       case NotificationDestination.home:
-        navigation.openHome();
+        widget.navigation.openHome();
       case NotificationDestination.trips:
-        navigation.openTrips();
+        widget.navigation.openTrips();
       case NotificationDestination.trip:
-        navigation.openTrip(target.tripId!);
+        widget.navigation.openTrip(target.tripId!);
       case NotificationDestination.unknown:
         break;
     }
