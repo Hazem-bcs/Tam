@@ -203,7 +203,7 @@ class HomePage extends StatelessWidget {
 
   Widget _hero(BuildContext context, bool ar) {
     return SizedBox(
-      height: 210,
+      height: 194,
       child: Stack(
         clipBehavior: Clip.none,
         fit: StackFit.expand,
@@ -367,7 +367,7 @@ class HomePage extends StatelessWidget {
         onTap: navigation.openRideRequest,
         borderRadius: BorderRadius.circular(18),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           child: Row(
             children: [
               CircleAvatar(
@@ -458,7 +458,7 @@ class HomePage extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(19),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
