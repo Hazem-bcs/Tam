@@ -1568,6 +1568,42 @@ abstract class AppLocalizations {
   /// **'فتح الإشعار'**
   String get notificationsOpenNotification;
 
+  /// No description provided for @notificationsFeedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل جديد في طريقك'**
+  String get notificationsFeedTitle;
+
+  /// No description provided for @notificationsFeedSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلاتك وتحديثات تم في مكان واحد'**
+  String get notificationsFeedSubtitle;
+
+  /// No description provided for @notificationsAllFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get notificationsAllFilter;
+
+  /// No description provided for @notificationsUnreadFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير المقروءة'**
+  String get notificationsUnreadFilter;
+
+  /// No description provided for @notificationsNoUnread.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت على اطلاع بكل جديد'**
+  String get notificationsNoUnread;
+
+  /// No description provided for @notificationsShowAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض كل الإشعارات'**
+  String get notificationsShowAll;
+
   /// No description provided for @settingsTitle.
   ///
   /// In ar, this message translates to:

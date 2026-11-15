@@ -206,6 +206,38 @@ void main() {
     );
   });
 
+  testWidgets(
+    'unread filter is local, read-all clears it, and all restores the feed',
+    (tester) async {
+      final repository = MockNotificationsRepository();
+      final cubit = await _pumpInbox(tester, repository, _NavigationSpy());
+      addTearDown(() async {
+        await cubit.close();
+        await repository.dispose();
+      });
+      expect(find.text('غير مقروء: 4'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('notifications-filter-unread')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const Key('notification-notice-trip-complete-001')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('notification-notice-account-001')),
+        findsNothing,
+      );
+      await tester.tap(find.byKey(const Key('notifications-mark-all')));
+      await tester.pumpAndSettle();
+      expect(find.text('غير مقروء: 0'), findsOneWidget);
+      expect(find.text('أنت على اطلاع بكل جديد'), findsOneWidget);
+      await tester.tap(find.byKey(const Key('notifications-show-all')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('notifications-list')), findsOneWidget);
+      expect(find.text('أنت على اطلاع بكل جديد'), findsNothing);
+      expect(await repository.getUnreadCount(), 0);
+    },
+  );
+
   testWidgets('initial error and retry, and empty list are honest UI states', (
     tester,
   ) async {

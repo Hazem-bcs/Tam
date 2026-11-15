@@ -806,6 +806,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsOpenNotification => 'Open notification';
 
   @override
+  String get notificationsFeedTitle => 'Updates along your way';
+
+  @override
+  String get notificationsFeedSubtitle =>
+      'Trips and TAM updates, all in one place';
+
+  @override
+  String get notificationsAllFilter => 'All';
+
+  @override
+  String get notificationsUnreadFilter => 'Unread';
+
+  @override
+  String get notificationsNoUnread => 'You are all caught up';
+
+  @override
+  String get notificationsShowAll => 'View all notifications';
+
+  @override
   String get settingsTitle => 'My account';
 
   @override
