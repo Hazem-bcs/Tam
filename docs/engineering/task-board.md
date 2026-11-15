@@ -217,3 +217,7 @@ TAM-VECTOR-MAPS-01: IMPLEMENTED بواسطة root على36413be، [البطاق�
 خرائط MapLibre/OpenFreeMap وثيم مركزي ورموز متجهة، دون تغيير Auth أو الحجز.
 105 اختبارات محددة والتحليل والتنسيق سليمة؛ عُرضت نسخة Android المجمعة مع main
 على المحاكي. [التسليم وحدود خدمة المسارات والمجموعة الكاملة](deliveries/TAM-VECTOR-MAPS-01/HANDOFF.md).
+
+TAM-FLOATING-LOCATION-01: IMPLEMENTED بواسطة root على242cff7، بطاقات عائمة
+بحجم المحتوى وقائمة أماكن ورموز SVG أصلية. [البطاقة](tasks/TAM-FLOATING-LOCATION-01.md)،
+[التسليم والفحوص المؤجلة](deliveries/TAM-FLOATING-LOCATION-01/HANDOFF.md).

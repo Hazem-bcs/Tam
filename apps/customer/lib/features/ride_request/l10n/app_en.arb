@@ -111,5 +111,9 @@
   "rideRequestMapPointCancel": "Dismiss selected point",
   "rideRequestUseAsDestination": "Use as destination",
   "rideRequestUseAsPickup": "Use as pickup",
-  "rideRequestPickupMoved": "Your pickup location changed. We updated the route. Review the fare and details before confirming."
+  "rideRequestPickupMoved": "Your pickup location changed. We updated the route. Review the fare and details before confirming.",
+  "rideRequestPickFromMap": "Choose a point on the map",
+  "rideRequestPickFromMapHint": "Move the map and tap your place",
+  "rideRequestSuggestedPlaces": "Suggested places",
+  "rideRequestSearchResults": "Search results"
 }

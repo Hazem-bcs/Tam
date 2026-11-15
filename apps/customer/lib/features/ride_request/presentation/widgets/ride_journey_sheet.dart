@@ -14,12 +14,14 @@ class RideJourneySheet extends StatelessWidget {
     this.loading = false,
     this.loadingLabel,
     this.notice,
+    this.showAction = true,
   });
   final String title, subtitle, actionLabel;
   final String? notice, loadingLabel;
   final Widget content;
   final VoidCallback? onContinue;
   final bool loading;
+  final bool showAction;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,13 @@ class RideJourneySheet extends StatelessWidget {
           AppSpacing.md,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
+            Flexible(
+              fit: FlexFit.loose,
               child: ListView(
+                shrinkWrap: true,
                 key: ValueKey(title),
                 padding: EdgeInsets.zero,
                 keyboardDismissBehavior:
@@ -48,7 +53,7 @@ class RideJourneySheet extends StatelessWidget {
                 children: [
                   Semantics(
                     header: true,
-                    child: Text(title, style: theme.textTheme.headlineMedium),
+                    child: Text(title, style: theme.textTheme.titleLarge),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
@@ -72,14 +77,16 @@ class RideJourneySheet extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            TamButton.primary(
-              key: const Key('ride-flow-continue'),
-              label: actionLabel,
-              isLoading: loading,
-              loadingLabel: loadingLabel,
-              onPressed: onContinue,
-            ),
+            if (showAction) ...[
+              const SizedBox(height: AppSpacing.sm),
+              TamButton.primary(
+                key: const Key('ride-flow-continue'),
+                label: actionLabel,
+                isLoading: loading,
+                loadingLabel: loadingLabel,
+                onPressed: onContinue,
+              ),
+            ],
           ],
         ),
       ),

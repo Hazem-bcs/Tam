@@ -500,6 +500,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your pickup location changed. We updated the route. Review the fare and details before confirming.';
 
   @override
+  String get rideRequestPickFromMap => 'Choose a point on the map';
+
+  @override
+  String get rideRequestPickFromMapHint => 'Move the map and tap your place';
+
+  @override
+  String get rideRequestSuggestedPlaces => 'Suggested places';
+
+  @override
+  String get rideRequestSearchResults => 'Search results';
+
+  @override
   String get tripsAll => 'All';
 
   @override

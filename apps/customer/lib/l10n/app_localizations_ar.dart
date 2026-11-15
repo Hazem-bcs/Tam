@@ -490,6 +490,18 @@ class AppLocalizationsAr extends AppLocalizations {
       'تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.';
 
   @override
+  String get rideRequestPickFromMap => 'حدد نقطة من الخريطة';
+
+  @override
+  String get rideRequestPickFromMapHint => 'حرّك الخريطة والمس المكان';
+
+  @override
+  String get rideRequestSuggestedPlaces => 'أماكن مقترحة';
+
+  @override
+  String get rideRequestSearchResults => 'نتائج البحث';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override

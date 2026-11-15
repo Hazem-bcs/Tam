@@ -27,8 +27,10 @@ class RideJourneyStage extends StatelessWidget {
     required this.onContinue,
     this.savedAddressPickerBuilder,
     this.locationStatus,
+    this.onPickOnMap,
   });
   final Widget? locationStatus;
+  final VoidCallback? onPickOnMap;
   final RideJourneyStep step;
   final RideDraftState state;
   final bool pickingPickup;
@@ -83,6 +85,7 @@ class RideJourneyStage extends StatelessWidget {
               : t.rideRequestConfirm,
       },
       loading: state.status == RideFlowStatus.confirming,
+      showAction: step != RideJourneyStep.places || state.hasRoute,
       loadingLabel: t.rideRequestConfirming,
       onContinue: onContinue,
       notice: step == RideJourneyStep.review
@@ -105,6 +108,7 @@ class RideJourneyStage extends StatelessWidget {
             RideJourneyStep.places => Column(
               children: [
                 RideJourneyLocations(
+                  compact: true,
                   pickup: state.pickup,
                   destination: state.destination,
                   onPickup: onPickup,
@@ -115,6 +119,7 @@ class RideJourneyStage extends StatelessWidget {
                   key: ValueKey(pickingPickup),
                   pickup: pickingPickup,
                   embedded: true,
+                  onPickOnMap: onPickOnMap,
                   onSelected: onSelected,
                   savedAddressPickerBuilder: savedAddressPickerBuilder,
                 ),

@@ -992,6 +992,30 @@ abstract class AppLocalizations {
   /// **'تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.'**
   String get rideRequestPickupMoved;
 
+  /// No description provided for @rideRequestPickFromMap.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد نقطة من الخريطة'**
+  String get rideRequestPickFromMap;
+
+  /// No description provided for @rideRequestPickFromMapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرّك الخريطة والمس المكان'**
+  String get rideRequestPickFromMapHint;
+
+  /// No description provided for @rideRequestSuggestedPlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'أماكن مقترحة'**
+  String get rideRequestSuggestedPlaces;
+
+  /// No description provided for @rideRequestSearchResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج البحث'**
+  String get rideRequestSearchResults;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:

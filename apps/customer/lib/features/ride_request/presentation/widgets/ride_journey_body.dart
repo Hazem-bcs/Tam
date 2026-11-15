@@ -56,7 +56,7 @@ class RideJourneyBody extends StatelessWidget {
       builder: (context, bounds) {
         final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
         final entryHeight =
-            286 +
+            350 +
             (scale - 1) * 180 +
             (location.locating
                 ? 32
@@ -64,13 +64,13 @@ class RideJourneyBody extends StatelessWidget {
                 ? 68
                 : 0);
         final extent = selecting
-            ? .55
+            ? .64
             : switch (step) {
                 RideJourneyStep.entry => (entryHeight / bounds.maxHeight).clamp(
                   .30,
                   .85,
                 ),
-                RideJourneyStep.places => .82,
+                RideJourneyStep.places => .70,
                 RideJourneyStep.vehicle => .66,
                 RideJourneyStep.review => .64,
               };
@@ -94,7 +94,7 @@ class RideJourneyBody extends StatelessWidget {
             onLocate: draft.confirmationPending ? null : onLocate,
             locating: location.locating,
           ),
-          panel: selecting
+          panelBuilder: (collapse) => selecting
               ? RideMapPointPanel(
                   point: location.point!,
                   address: location.address,
@@ -110,6 +110,7 @@ class RideJourneyBody extends StatelessWidget {
                   onPickup: onPickup,
                   onDestination: onDestination,
                   onSelected: onSelected,
+                  onPickOnMap: collapse,
                   onContinue: onContinue,
                   locationStatus: location.locating || location.failure != null
                       ? RideLocationStatus(

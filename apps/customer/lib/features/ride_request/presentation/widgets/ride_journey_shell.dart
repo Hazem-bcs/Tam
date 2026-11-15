@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'ride_journey_panel_content.dart';
+import 'ride_panel_size_observer.dart';
 
 /// Only panel geometry and map controls listen to the short-lived animation.
 /// The tile renderer stays mounted while dragging or changing journey stages.
@@ -12,12 +13,15 @@ class RideJourneyShell extends StatefulWidget {
     super.key,
     required this.header,
     required this.mapBuilder,
-    required this.panel,
+    this.panel,
+    this.panelBuilder,
     required this.stageKey,
     required this.collapsedLabel,
     required this.preferredExtent,
-  });
-  final Widget header, panel;
+  }) : assert(panel != null || panelBuilder != null);
+  final Widget header;
+  final Widget? panel;
+  final Widget Function(VoidCallback collapse)? panelBuilder;
   final Widget Function(ValueListenable<double>) mapBuilder;
   final Object stageKey;
   final String collapsedLabel;
@@ -39,9 +43,8 @@ class _RideJourneyShellState extends State<RideJourneyShell>
 
   double get _preferred => widget.preferredExtent.clamp(_minimum, _maximum);
   void _changed() {
-    _mapInset.value = _extent.value * _height;
     final compact =
-        _mapInset.value < math.min(220, math.max(128, _height * .42));
+        _extent.value * _height < math.min(180, math.max(108, _height * .30));
     if (compact != _compact && mounted) setState(() => _compact = compact);
   }
 
@@ -116,94 +119,117 @@ class _RideJourneyShellState extends State<RideJourneyShell>
             AnimatedBuilder(
               animation: _extent,
               builder: (context, child) => Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: (_extent.value * _height).clamp(0, _height),
-                child: child!,
+                bottom: AppSpacing.md,
+                left: AppSpacing.md,
+                right: AppSpacing.md,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: (_extent.value * _height).clamp(0, _height),
+                  ),
+                  child: child!,
+                ),
               ),
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 600),
-                  child: Material(
-                    color: c.surfaceContainerLowest,
-                    elevation: AppElevation.raised,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(AppRadii.sheet),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onVerticalDragStart: (_) =>
-                              FocusScope.of(context).unfocus(),
-                          onVerticalDragUpdate: (details) {
-                            _extent.stop();
-                            _extent.value =
-                                (_extent.value - details.delta.dy / _height)
-                                    .clamp(_minimum, _maximum);
-                          },
-                          onVerticalDragEnd: (details) {
-                            final velocity = details.primaryVelocity ?? 0;
-                            final fold =
-                                velocity > 250 ||
-                                (velocity >= -250 &&
-                                    _extent.value <
-                                        (_minimum + _preferred) / 2);
-                            _move(fold ? _minimum : _preferred);
-                          },
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: AppDimensions.minTapTarget,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 36,
-                                  height: 4,
-                                  decoration: BoxDecoration(
-                                    color: c.outlineVariant,
-                                    borderRadius: BorderRadius.circular(
-                                      AppRadii.sm,
+                  child: RidePanelSizeObserver(
+                    onHeight: (height) {
+                      if (mounted) _mapInset.value = height + AppSpacing.md;
+                    },
+                    child: AnimatedSize(
+                      alignment: Alignment.bottomCenter,
+                      duration: MediaQuery.disableAnimationsOf(context)
+                          ? Duration.zero
+                          : AppMotion.medium,
+                      curve: AppMotion.easeOut,
+                      child: Material(
+                        color: c.surfaceContainerLowest,
+                        elevation: AppElevation.raised,
+                        borderRadius: BorderRadius.circular(AppRadii.sheet),
+                        clipBehavior: Clip.antiAlias,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onVerticalDragStart: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              onVerticalDragUpdate: (details) {
+                                _extent.stop();
+                                _extent.value =
+                                    (_extent.value - details.delta.dy / _height)
+                                        .clamp(_minimum, _maximum);
+                              },
+                              onVerticalDragEnd: (details) {
+                                final velocity = details.primaryVelocity ?? 0;
+                                final fold =
+                                    velocity > 250 ||
+                                    (velocity >= -250 &&
+                                        _extent.value <
+                                            (_minimum + _preferred) / 2);
+                                _move(fold ? _minimum : _preferred);
+                              },
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: AppDimensions.minTapTarget,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      width: 36,
+                                      height: 4,
+                                      decoration: BoxDecoration(
+                                        color: c.outlineVariant,
+                                        borderRadius: BorderRadius.circular(
+                                          AppRadii.sm,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                PositionedDirectional(
-                                  end: AppSpacing.sm,
-                                  child: IconButton(
-                                    key: const Key('ride-sheet-toggle'),
-                                    tooltip: _compact
-                                        ? t.rideRequestExpandPanel
-                                        : t.rideRequestCollapsePanel,
-                                    onPressed: () =>
-                                        _move(_compact ? _preferred : _minimum),
-                                    icon: Icon(
-                                      _compact
-                                          ? Icons.keyboard_arrow_up_rounded
-                                          : Icons.keyboard_arrow_down_rounded,
+                                    PositionedDirectional(
+                                      end: AppSpacing.sm,
+                                      child: IconButton(
+                                        key: const Key('ride-sheet-toggle'),
+                                        tooltip: _compact
+                                            ? t.rideRequestExpandPanel
+                                            : t.rideRequestCollapsePanel,
+                                        onPressed: () => _move(
+                                          _compact ? _preferred : _minimum,
+                                        ),
+                                        icon: Icon(
+                                          _compact
+                                              ? Icons.keyboard_arrow_up_rounded
+                                              : Icons
+                                                    .keyboard_arrow_down_rounded,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: RideJourneyPanelContent(
-                            compact: _compact,
-                            expandedHeight: math.max(
-                              240,
-                              _preferred * _height - AppDimensions.minTapTarget,
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: RideJourneyPanelContent(
+                                compact: _compact,
+                                expandedHeight: math.max(
+                                  240,
+                                  _preferred * _height -
+                                      AppDimensions.minTapTarget,
+                                ),
+                                stageKey: widget.stageKey,
+                                collapsedLabel: widget.collapsedLabel,
+                                onExpand: () => _move(_preferred),
+                                child:
+                                    widget.panelBuilder?.call(
+                                      () => _move(_minimum),
+                                    ) ??
+                                    widget.panel!,
+                              ),
                             ),
-                            stageKey: widget.stageKey,
-                            collapsedLabel: widget.collapsedLabel,
-                            onExpand: () => _move(_preferred),
-                            child: widget.panel,
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
