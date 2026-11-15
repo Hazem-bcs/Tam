@@ -89,8 +89,8 @@
   "homeServiceDescription": "Please check back later for service availability.",
   "navHome": "Home",
   "navRideRequest": "Request a ride",
-  "navTrips": "My trips",
+  "navTrips": "Activity",
   "navNotifications": "Notifications",
-  "navSettings": "Settings",
+  "navSettings": "Account",
   "featureNotConnected": "This feature is currently unavailable."
 }

@@ -168,13 +168,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navRideRequest => 'Request a ride';
 
   @override
-  String get navTrips => 'My trips';
+  String get navTrips => 'Activity';
 
   @override
   String get navNotifications => 'Notifications';
 
   @override
-  String get navSettings => 'Settings';
+  String get navSettings => 'Account';
 
   @override
   String get featureNotConnected => 'This feature is currently unavailable.';

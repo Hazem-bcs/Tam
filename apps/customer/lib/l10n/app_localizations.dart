@@ -383,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @navTrips.
   ///
   /// In ar, this message translates to:
-  /// **'طلباتي'**
+  /// **'نشاطي'**
   String get navTrips;
 
   /// No description provided for @navNotifications.
@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// No description provided for @navSettings.
   ///
   /// In ar, this message translates to:
-  /// **'الإعدادات'**
+  /// **'حسابي'**
   String get navSettings;
 
   /// No description provided for @featureNotConnected.

@@ -203,3 +203,12 @@ W4-MAPS-ATTRIBUTION: INTEGRATED، root، أساس3dcd151؛
 [البطاقة](tasks/W4-MAPS-ATTRIBUTION.md). لا تغييرات API أو استضافة.
 
 تحقق تعديل الإسناد: 679 اختبارًا و38 مقارنة UI والتنسيق والتحليل سليمة.
+
+## TAM-MAIN-SHELL-01 — تكليف المستخدم 2026-11-16
+
+IMPLEMENTED بواسطة root على أساس `d35efab` في
+`codex/unified-main-shell-20261116`؛ [بطاقة المهمة](tasks/TAM-MAIN-SHELL-01.md).
+توحيد شريط التنقّل تحت MainShell، دون تغيير البيانات أو المصادقة.
+
+تحقق MainShell:81 اختبارًا محددًا ناجحًا، وformat/analyze/l10n سليمة، ومراجعة Android للصفحات الثلاث.
+المجموعة الكاملة غير ناجحة؛ [التفاصيل والحدود](deliveries/TAM-MAIN-SHELL-01/HANDOFF.md).

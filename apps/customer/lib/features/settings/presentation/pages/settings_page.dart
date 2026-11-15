@@ -6,7 +6,6 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
-import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_navigation.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -20,12 +19,14 @@ class SettingsPage extends StatefulWidget {
     required this.locale,
     required this.logout,
     this.phoneE164,
+    this.onBack,
   });
 
   final CustomerNavigation navigation;
   final AppLocaleController locale;
   final Future<void> Function() logout;
   final String? phoneE164;
+  final VoidCallback? onBack;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -79,6 +80,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _handlePop(SettingsState state) async {
+    if (widget.onBack != null) {
+      widget.onBack!();
+      return;
+    }
     if (state.hasUnsavedChanges && await _confirmDiscard() && mounted) {
       setState(() => _allowPop = true);
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -189,13 +194,16 @@ class _SettingsPageState extends State<SettingsPage> {
           (current.successAction != previous.successAction &&
               current.successAction != null),
       builder: (context, state) => PopScope(
-        canPop: _allowPop || (!state.hasUnsavedChanges && !_loggingOut),
+        canPop:
+            widget.onBack == null &&
+            (_allowPop || (!state.hasUnsavedChanges && !_loggingOut)),
         onPopInvokedWithResult: (didPop, _) {
           if (!didPop && !_loggingOut) _handlePop(state);
         },
         child: Scaffold(
           appBar: AppBar(
             title: Text(t.settingsTitle),
+            automaticallyImplyLeading: false,
             actions: [
               IconButton(
                 tooltip: t.settingsNotifications,
@@ -214,10 +222,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-          ),
-          bottomNavigationBar: SettingsBottomNavigation(
-            onHome: () => _navigate(widget.navigation.openHome),
-            onTrips: () => _navigate(widget.navigation.openTrips),
           ),
         ),
       ),

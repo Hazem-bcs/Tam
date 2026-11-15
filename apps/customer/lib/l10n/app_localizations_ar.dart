@@ -165,13 +165,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navRideRequest => 'طلب رحلة';
 
   @override
-  String get navTrips => 'طلباتي';
+  String get navTrips => 'نشاطي';
 
   @override
   String get navNotifications => 'الإشعارات';
 
   @override
-  String get navSettings => 'الإعدادات';
+  String get navSettings => 'حسابي';
 
   @override
   String get featureNotConnected => 'هذه الميزة غير متاحة حاليًا.';

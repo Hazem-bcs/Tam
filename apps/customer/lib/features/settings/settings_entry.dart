@@ -34,6 +34,7 @@ Widget buildSettingsFeature(
   required AppLocaleController locale,
   required Future<void> Function() logout,
   String? phoneE164,
+  VoidCallback? onBack,
 }) {
   var selected = _repositories[locale];
   if (selected == null ||
@@ -51,6 +52,7 @@ Widget buildSettingsFeature(
     create: (_) => SettingsCubit(selected!.repository)..load(),
     child: SettingsPage(
       navigation: navigation,
+      onBack: onBack,
       locale: locale,
       logout: () async {
         await logout();

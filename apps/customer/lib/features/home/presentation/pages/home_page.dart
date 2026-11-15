@@ -43,7 +43,6 @@ class HomePage extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(scaffoldBackgroundColor: _canvas),
       child: Scaffold(
-        bottomNavigationBar: _bottomNav(context, t),
         body: SafeArea(
           child: Center(
             child: ConstrainedBox(
@@ -599,93 +598,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _bottomNav(BuildContext context, AppLocalizations t) {
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 4, 14, 6),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1395264C),
-                blurRadius: 16,
-                offset: Offset(0, -2),
-              ),
-            ],
-          ),
-          child: SizedBox(
-            height: (MediaQuery.textScalerOf(context).scale(66) * .65).clamp(
-              66.0,
-              110.0,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _navItem(t.navHome, Icons.home_rounded, true, null),
-                ),
-                Expanded(
-                  child: _navItem(
-                    t.navTrips,
-                    Icons.history_rounded,
-                    false,
-                    navigation.openTrips,
-                  ),
-                ),
-                Expanded(
-                  child: _navItem(
-                    t.navSettings,
-                    Icons.settings_outlined,
-                    false,
-                    navigation.openSettings,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _navItem(
-    String label,
-    IconData icon,
-    bool selected,
-    VoidCallback? action,
-  ) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: action,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 23, color: selected ? _wine : _muted),
-              const SizedBox(height: 2),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: _font,
-                  fontSize: 11,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected ? _wine : _muted,
-                ),
-              ),
             ],
           ),
         ),

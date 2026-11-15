@@ -72,7 +72,7 @@ final class RouterCustomerNavigation implements CustomerNavigation {
   void openRideRequest({TripPrefill? prefill}) =>
       unawaited(router.push<void>(AppRoutes.rideRequest, extra: prefill));
   @override
-  void openTrips() => unawaited(router.push<void>(AppRoutes.trips));
+  void openTrips() => router.go(AppRoutes.trips);
   @override
   void openTrip(String id) =>
       unawaited(router.push<void>(AppRoutes.tripLocation(id)));
@@ -80,7 +80,7 @@ final class RouterCustomerNavigation implements CustomerNavigation {
   void openNotifications() =>
       unawaited(router.push<void>(AppRoutes.notifications));
   @override
-  void openSettings() => unawaited(router.push<void>(AppRoutes.settings));
+  void openSettings() => router.go(AppRoutes.settings);
   @override
   void openAddresses() => unawaited(router.push<void>(AppRoutes.addresses));
 }

@@ -6,6 +6,7 @@ import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/account_routes.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/app/router/main_shell_route.dart';
 import 'package:tam_customer/app/router/ride_journey_page.dart';
 import 'package:tam_customer/app/router/route_access_policy.dart';
 import 'package:tam_customer/app/router/support_routes.dart';
@@ -66,6 +67,31 @@ GoRouter createAppRouter(
       policy: RouteAccessPolicy.forFeatures(dataModes),
     ),
     routes: [
+      buildMainShellRoute(
+        home: (context) => buildHomeFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.home),
+          phoneE164: phone(),
+          logout: auth.logout,
+          unreadCountSource: notifications,
+        ),
+        activity: (context) => buildTripsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.trips),
+          mockTrips: trips,
+        ),
+        account: (context) => buildSettingsFeature(
+          context,
+          navigation: navigation(context),
+          dataMode: dataModes.forFeature(CustomerFeature.settings),
+          locale: language,
+          phoneE164: phone(),
+          logout: auth.logout,
+          onBack: navigation(context).openHome,
+        ),
+      ),
       ...buildAccountRoutes(
         accounts: accounts,
         contacts: contacts,
@@ -136,17 +162,6 @@ GoRouter createAppRouter(
           },
         ),
       GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => buildHomeFeature(
-          context,
-          navigation: navigation(context),
-          dataMode: dataModes.forFeature(CustomerFeature.home),
-          phoneE164: phone(),
-          logout: auth.logout,
-          unreadCountSource: notifications,
-        ),
-      ),
-      GoRoute(
         path: AppRoutes.rideRequest,
         pageBuilder: (context, state) => rideJourneyPage(
           context,
@@ -161,15 +176,6 @@ GoRouter createAppRouter(
                 ? state.extra as TripPrefill
                 : null,
           ),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.trips,
-        builder: (context, state) => buildTripsFeature(
-          context,
-          navigation: navigation(context),
-          dataMode: dataModes.forFeature(CustomerFeature.trips),
-          mockTrips: trips,
         ),
       ),
       GoRoute(
@@ -188,17 +194,6 @@ GoRouter createAppRouter(
           context,
           navigation: navigation(context),
           repository: notifications,
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.settings,
-        builder: (context, state) => buildSettingsFeature(
-          context,
-          navigation: navigation(context),
-          dataMode: dataModes.forFeature(CustomerFeature.settings),
-          locale: language,
-          phoneE164: phone(),
-          logout: auth.logout,
         ),
       ),
       GoRoute(
