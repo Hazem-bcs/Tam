@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/features/home/domain/entities/home_content.dart';
 import 'package:tam_customer/features/home/presentation/bloc/home_cubit.dart';
@@ -204,17 +203,18 @@ class HomePage extends StatelessWidget {
 
   Widget _hero(BuildContext context, bool ar) {
     return SizedBox(
-      height: 224,
+      height: 210,
       child: Stack(
         clipBehavior: Clip.none,
         fit: StackFit.expand,
         children: [
-          SvgPicture.asset(
-            'assets/illustrations/tam_city_ride.svg',
+          Image.asset(
+            'assets/images/hero_aleppo.webp',
             fit: BoxFit.cover,
-            semanticsLabel: ar
-                ? 'رسم لسيارة وطريق وقلعة حلب'
-                : 'Car, road and Aleppo citadel',
+            filterQuality: FilterQuality.medium,
+            semanticLabel: ar
+                ? 'سيارة تم على طريق بالقرب من قلعة حلب'
+                : 'A car on a road by Aleppo Citadel',
           ),
           PositionedDirectional(
             start: 22,
@@ -510,7 +510,7 @@ class HomePage extends StatelessWidget {
               Expanded(
                 child: _serviceCard(
                   ar ? 'مشوار' : 'Ride',
-                  'car.svg',
+                  'ride_car.webp',
                   true,
                   ride?.available ?? false,
                   navigation.openRideRequest,
@@ -522,7 +522,7 @@ class HomePage extends StatelessWidget {
                 Expanded(
                   child: _serviceCard(
                     ar ? 'الطعام' : 'Food',
-                    'food.svg',
+                    'food.webp',
                     false,
                     food.available,
                     null,
@@ -535,7 +535,7 @@ class HomePage extends StatelessWidget {
                 Expanded(
                   child: _serviceCard(
                     ar ? 'التسوق' : 'Shopping',
-                    'shopping.svg',
+                    'shopping.webp',
                     false,
                     shop.available,
                     null,
@@ -570,10 +570,12 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                'assets/illustrations/$icon',
-                width: 80,
-                height: 64,
+              Image.asset(
+                'assets/images/$icon',
+                width: 94,
+                height: 70,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
               ),
               const SizedBox(height: 5),
               Text(
