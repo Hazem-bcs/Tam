@@ -295,6 +295,31 @@
   "tripsStatusNoDriver": "لا يوجد سائق",
   "tripsCompletion": "ملخص الرحلة وتقييمها",
   "tripsSupport": "المساعدة بخصوص الرحلة",
+  "tripsActivityTitle": "نشاطي",
+  "tripsAccountLabel": "حسابي",
+  "tripsServiceRides": "الرحلات",
+  "tripsServiceShopping": "التسوق",
+  "tripsServiceFood": "الطعام",
+  "tripsSoon": "قريباً",
+  "tripsFilterLabel": "تصفية الرحلات",
+  "tripsActiveJourney": "رحلة جارية",
+  "tripsFollowJourney": "متابعة الرحلة",
+  "tripsToday": "اليوم",
+  "tripsYesterday": "أمس",
+  "tripsActivitySubtitle": "كل مشوار، وتفاصيله معك",
+  "tripsHistoryHeading": "آخر مشاويرك",
+  "tripsLiveHeading": "على الطريق الآن",
+  "tripsVisibleCount": "{count} في السجل",
+  "@tripsVisibleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tripsNextPrompt": "جاهز لمشوار جديد؟",
+  "tripsNextSubtitle": "الوجهة الجاية أقرب مما تتخيل",
+  "tripsCurrencySyp": "ل.س",
   "notificationsMarkAll": "تعيين الكل كمقروء",
   "notificationsUnreadCount": "غير مقروء: {count}",
   "@notificationsUnreadCount": {

@@ -31,8 +31,10 @@ Widget tripsTestApp(Widget child, {String language = 'ar', double scale = 1}) =>
 
 class TripsNavigationSpy implements CustomerNavigation {
   String? lastTripId;
+  String? lastActiveTripId;
   TripPrefill? prefill;
   bool openedTrips = false;
+  bool rideRequestOpened = false;
 
   @override
   void openCompletion(String tripId) {}
@@ -45,11 +47,16 @@ class TripsNavigationSpy implements CustomerNavigation {
   @override
   void openChat(String tripId) {}
   @override
-  void openActiveTrip({String? id, bool replaceCurrent = false}) {}
+  void openActiveTrip({String? id, bool replaceCurrent = false}) =>
+      lastActiveTripId = id;
   @override
   void openTrip(String id) => lastTripId = id;
   @override
-  void openRideRequest({TripPrefill? prefill}) => this.prefill = prefill;
+  void openRideRequest({TripPrefill? prefill}) {
+    rideRequestOpened = true;
+    this.prefill = prefill;
+  }
+
   @override
   void openTrips() => openedTrips = true;
   @override

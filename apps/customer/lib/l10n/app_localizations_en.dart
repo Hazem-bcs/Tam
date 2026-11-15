@@ -678,6 +678,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripsSupport => 'Get help with this trip';
 
   @override
+  String get tripsActivityTitle => 'Activity';
+
+  @override
+  String get tripsAccountLabel => 'Account';
+
+  @override
+  String get tripsServiceRides => 'Trips';
+
+  @override
+  String get tripsServiceShopping => 'Shopping';
+
+  @override
+  String get tripsServiceFood => 'Food';
+
+  @override
+  String get tripsSoon => 'Soon';
+
+  @override
+  String get tripsFilterLabel => 'Filter trips';
+
+  @override
+  String get tripsActiveJourney => 'Ongoing trip';
+
+  @override
+  String get tripsFollowJourney => 'Follow trip';
+
+  @override
+  String get tripsToday => 'Today';
+
+  @override
+  String get tripsYesterday => 'Yesterday';
+
+  @override
+  String get tripsActivitySubtitle => 'Every journey, all the details';
+
+  @override
+  String get tripsHistoryHeading => 'Recent journeys';
+
+  @override
+  String get tripsLiveHeading => 'On the move now';
+
+  @override
+  String tripsVisibleCount(int count) {
+    return '$count shown';
+  }
+
+  @override
+  String get tripsNextPrompt => 'Ready for your next ride?';
+
+  @override
+  String get tripsNextSubtitle => 'Your next destination is just a tap away';
+
+  @override
+  String get tripsCurrencySyp => 'SYP';
+
+  @override
   String get notificationsMarkAll => 'Mark all as read';
 
   @override

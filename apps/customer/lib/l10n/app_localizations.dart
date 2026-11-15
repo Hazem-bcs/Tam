@@ -1328,6 +1328,114 @@ abstract class AppLocalizations {
   /// **'المساعدة بخصوص الرحلة'**
   String get tripsSupport;
 
+  /// No description provided for @tripsActivityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشاطي'**
+  String get tripsActivityTitle;
+
+  /// No description provided for @tripsAccountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get tripsAccountLabel;
+
+  /// No description provided for @tripsServiceRides.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلات'**
+  String get tripsServiceRides;
+
+  /// No description provided for @tripsServiceShopping.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسوق'**
+  String get tripsServiceShopping;
+
+  /// No description provided for @tripsServiceFood.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطعام'**
+  String get tripsServiceFood;
+
+  /// No description provided for @tripsSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريباً'**
+  String get tripsSoon;
+
+  /// No description provided for @tripsFilterLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية الرحلات'**
+  String get tripsFilterLabel;
+
+  /// No description provided for @tripsActiveJourney.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة جارية'**
+  String get tripsActiveJourney;
+
+  /// No description provided for @tripsFollowJourney.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الرحلة'**
+  String get tripsFollowJourney;
+
+  /// No description provided for @tripsToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get tripsToday;
+
+  /// No description provided for @tripsYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get tripsYesterday;
+
+  /// No description provided for @tripsActivitySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل مشوار، وتفاصيله معك'**
+  String get tripsActivitySubtitle;
+
+  /// No description provided for @tripsHistoryHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر مشاويرك'**
+  String get tripsHistoryHeading;
+
+  /// No description provided for @tripsLiveHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'على الطريق الآن'**
+  String get tripsLiveHeading;
+
+  /// No description provided for @tripsVisibleCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} في السجل'**
+  String tripsVisibleCount(int count);
+
+  /// No description provided for @tripsNextPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز لمشوار جديد؟'**
+  String get tripsNextPrompt;
+
+  /// No description provided for @tripsNextSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجهة الجاية أقرب مما تتخيل'**
+  String get tripsNextSubtitle;
+
+  /// No description provided for @tripsCurrencySyp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ل.س'**
+  String get tripsCurrencySyp;
+
   /// No description provided for @notificationsMarkAll.
   ///
   /// In ar, this message translates to:

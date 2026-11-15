@@ -32,6 +32,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.textContaining('المزة'), findsWidgets);
+    await tester.tap(find.byKey(const Key('trips-filter-control')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('trips-filter-active')));
     await tester.pumpAndSettle();
     expect(find.text('لا توجد رحلات هنا'), findsOneWidget);
@@ -41,8 +43,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.textContaining('المزة'), findsWidgets);
-    await tester.tap(find.byKey(ValueKey(newTrip.id)));
-    expect(nav.lastTripId, newTrip.id);
+    await tester.tap(find.byKey(Key('trips-active-${newTrip.id}')));
+    expect(nav.lastActiveTripId, newTrip.id);
     store.cancel(newTrip.id);
     await tester.pumpAndSettle();
     expect(find.text('لا توجد رحلات هنا'), findsOneWidget);

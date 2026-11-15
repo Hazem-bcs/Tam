@@ -665,6 +665,62 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripsSupport => 'المساعدة بخصوص الرحلة';
 
   @override
+  String get tripsActivityTitle => 'نشاطي';
+
+  @override
+  String get tripsAccountLabel => 'حسابي';
+
+  @override
+  String get tripsServiceRides => 'الرحلات';
+
+  @override
+  String get tripsServiceShopping => 'التسوق';
+
+  @override
+  String get tripsServiceFood => 'الطعام';
+
+  @override
+  String get tripsSoon => 'قريباً';
+
+  @override
+  String get tripsFilterLabel => 'تصفية الرحلات';
+
+  @override
+  String get tripsActiveJourney => 'رحلة جارية';
+
+  @override
+  String get tripsFollowJourney => 'متابعة الرحلة';
+
+  @override
+  String get tripsToday => 'اليوم';
+
+  @override
+  String get tripsYesterday => 'أمس';
+
+  @override
+  String get tripsActivitySubtitle => 'كل مشوار، وتفاصيله معك';
+
+  @override
+  String get tripsHistoryHeading => 'آخر مشاويرك';
+
+  @override
+  String get tripsLiveHeading => 'على الطريق الآن';
+
+  @override
+  String tripsVisibleCount(int count) {
+    return '$count في السجل';
+  }
+
+  @override
+  String get tripsNextPrompt => 'جاهز لمشوار جديد؟';
+
+  @override
+  String get tripsNextSubtitle => 'الوجهة الجاية أقرب مما تتخيل';
+
+  @override
+  String get tripsCurrencySyp => 'ل.س';
+
+  @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';
 
   @override
