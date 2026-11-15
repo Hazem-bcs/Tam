@@ -486,6 +486,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestUseAsPickup => 'اجعلها نقطة الانطلاق';
 
   @override
+  String get rideRequestPickupMoved =>
+      'تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override
@@ -1679,4 +1683,8 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsOpenSettings => 'فتح الإعدادات';
+
+  @override
+  String get mapsLocationInaccurate =>
+      'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.';
 }

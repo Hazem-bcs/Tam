@@ -10,10 +10,11 @@ sealed class RideDraftEvent extends Equatable {
 }
 
 final class PickupSelected extends RideDraftEvent {
-  const PickupSelected(this.location);
+  const PickupSelected(this.location, {this.fromDevice = false});
   final TripLocation location;
+  final bool fromDevice;
   @override
-  List<Object?> get props => [location];
+  List<Object?> get props => [location, fromDevice];
 }
 
 final class DestinationSelected extends RideDraftEvent {
@@ -66,6 +67,7 @@ enum RideFailureStep { places, quote, confirmation }
 final class RideDraftState extends Equatable {
   const RideDraftState({
     this.pickup,
+    this.pickupFromDevice = false,
     this.destination,
     this.vehicleClass = RideVehicleClass.standard,
     this.quote,
@@ -80,6 +82,7 @@ final class RideDraftState extends Equatable {
   });
 
   final TripLocation? pickup;
+  final bool pickupFromDevice;
   final TripLocation? destination;
   final RideVehicleClass vehicleClass;
   final RideQuote? quote;
@@ -123,6 +126,7 @@ final class RideDraftState extends Equatable {
 
   RideDraftState copyWith({
     TripLocation? pickup,
+    bool? pickupFromDevice,
     TripLocation? destination,
     RideVehicleClass? vehicleClass,
     RideQuote? quote,
@@ -140,6 +144,7 @@ final class RideDraftState extends Equatable {
     bool clearSchedule = false,
   }) => RideDraftState(
     pickup: pickup ?? this.pickup,
+    pickupFromDevice: pickupFromDevice ?? this.pickupFromDevice,
     destination: destination ?? this.destination,
     vehicleClass: vehicleClass ?? this.vehicleClass,
     quote: clearQuote ? null : quote ?? this.quote,
@@ -156,6 +161,7 @@ final class RideDraftState extends Equatable {
   @override
   List<Object?> get props => [
     pickup,
+    pickupFromDevice,
     destination,
     vehicleClass,
     quote,

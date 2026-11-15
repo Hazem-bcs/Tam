@@ -91,6 +91,10 @@ class RideJourneyStage extends StatelessWidget {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (locationStatus != null) ...[
+            locationStatus!,
+            const SizedBox(height: AppSpacing.md),
+          ],
           switch (step) {
             RideJourneyStep.entry => RideJourneyLocations(
               pickup: state.pickup,

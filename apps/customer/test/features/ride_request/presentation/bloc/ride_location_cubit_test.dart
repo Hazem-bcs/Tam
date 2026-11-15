@@ -149,6 +149,35 @@ void main() {
       expect(cubit.state.failure, 'LOCATION_UNAVAILABLE');
     },
   );
+  test(
+    'booking validation detects meaningful movement without quoting',
+    () async {
+      await cubit.locate();
+      gps.onLocate = () async => destination;
+      expect(await cubit.validatePickup(origin), PickupValidation.moved);
+      expect(gps.lastRequireFresh, isTrue);
+      expect(cubit.state.fix, destination);
+      expect(maps.routes, 0);
+    },
+  );
+  test('small GPS jitter preserves reviewed pickup', () async {
+    gps.onLocate = () async => GeoPoint(latitude: 33.50001, longitude: 36.25);
+    expect(await cubit.validatePickup(origin), PickupValidation.unchanged);
+  });
+  test('unavailable validation never authorizes confirmation', () async {
+    await cubit.locate();
+    gps.onLocate = () async => throw const MapsFailure('LOCATION_INACCURATE');
+    expect(await cubit.validatePickup(origin), PickupValidation.unavailable);
+    expect(cubit.state.failure, 'LOCATION_INACCURATE');
+  });
+  test('manual edit during validation wins the late result', () async {
+    final pending = Completer<GeoPoint>();
+    gps.onLocate = () => pending.future;
+    final checking = cubit.validatePickup(origin);
+    cubit.keepManualPickup();
+    pending.complete(destination);
+    expect(await checking, PickupValidation.unavailable);
+  });
   test('route disposal rejects late GPS and address work', () async {
     final fix = Completer<GeoPoint>(), address = Completer<TripLocation>();
     gps.onLocate = () => fix.future;

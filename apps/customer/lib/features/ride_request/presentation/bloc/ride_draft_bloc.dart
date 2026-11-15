@@ -28,7 +28,13 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
          ),
        ) {
     on<PickupSelected>(
-      (event, emit) => _edit(state.copyWith(pickup: event.location), emit),
+      (event, emit) => _edit(
+        state.copyWith(
+          pickup: event.location,
+          pickupFromDevice: event.fromDevice,
+        ),
+        emit,
+      ),
     );
     on<DestinationSelected>(
       (event, emit) => _edit(state.copyWith(destination: event.location), emit),

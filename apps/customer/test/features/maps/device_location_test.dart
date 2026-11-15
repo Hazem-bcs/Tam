@@ -28,7 +28,7 @@ class PlatformProbe extends GeolocatorPlatform {
     return Position(
       latitude: origin.latitude,
       longitude: origin.longitude,
-      timestamp: DateTime.utc(2026),
+      timestamp: DateTime.now(),
       accuracy: 10,
       altitude: 0,
       altitudeAccuracy: 0,

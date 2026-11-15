@@ -24,6 +24,23 @@ void main() {
   });
   tearDown(() async => trips.dispose());
 
+  test(
+    'pickup provenance survives draft edits and manual selection resets it',
+    () async {
+      final bloc = create();
+      addTearDown(bloc.close);
+      bloc.add(PickupSelected(mockRidePlaces[0].location, fromDevice: true));
+      await bloc.stream.firstWhere((s) => s.pickup != null);
+      expect(bloc.state.pickupFromDevice, isTrue);
+      bloc.add(DestinationSelected(mockRidePlaces[1].location));
+      await bloc.stream.firstWhere((s) => s.status == RideFlowStatus.ready);
+      expect(bloc.state.pickupFromDevice, isTrue);
+      bloc.add(PickupSelected(mockRidePlaces[0].location));
+      await bloc.stream.firstWhere((s) => !s.pickupFromDevice);
+      expect(bloc.state.pickupFromDevice, isFalse);
+    },
+  );
+
   test('route requires two distinct valid locations', () async {
     final bloc = create();
     addTearDown(bloc.close);

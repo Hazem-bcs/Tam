@@ -224,6 +224,7 @@
   "rideRequestMapPointCancel": "Dismiss selected point",
   "rideRequestUseAsDestination": "Use as destination",
   "rideRequestUseAsPickup": "Use as pickup",
+  "rideRequestPickupMoved": "Your pickup location changed. We updated the route. Review the fare and details before confirming.",
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
@@ -714,5 +715,6 @@
   "mapsCurrentLocation": "My current location",
   "mapsLocating": "Finding your pickup location…",
   "mapsEnableLocation": "Turn on location for your pickup",
-  "mapsOpenSettings": "Open settings"
+  "mapsOpenSettings": "Open settings",
+  "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map."
 }

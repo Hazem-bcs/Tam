@@ -986,6 +986,12 @@ abstract class AppLocalizations {
   /// **'اجعلها نقطة الانطلاق'**
   String get rideRequestUseAsPickup;
 
+  /// No description provided for @rideRequestPickupMoved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.'**
+  String get rideRequestPickupMoved;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:
@@ -3163,6 +3169,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فتح الإعدادات'**
   String get mapsOpenSettings;
+
+  /// No description provided for @mapsLocationInaccurate.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.'**
+  String get mapsLocationInaccurate;
 }
 
 class _AppLocalizationsDelegate

@@ -32,5 +32,6 @@
   "mapsCurrentLocation": "My current location",
   "mapsLocating": "Finding your pickup location…",
   "mapsEnableLocation": "Turn on location for your pickup",
-  "mapsOpenSettings": "Open settings"
+  "mapsOpenSettings": "Open settings",
+  "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map."
 }

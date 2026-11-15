@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 
 import 'data/api_maps_repository.dart';
@@ -8,6 +9,7 @@ import 'data/device_location_settings_adapter.dart';
 import 'data/maps_attribution_adapter.dart';
 import 'data/osm_tile_provider.dart';
 import 'data/private_tile_provider.dart';
+import 'domain/foreground_location.dart';
 import 'domain/maps_repository.dart';
 
 final class MapsDependencies {
@@ -18,11 +20,13 @@ final class MapsDependencies {
     this.locationSettings = const DeviceLocationSettingsAdapter(),
     this.attribution = const MapsAttributionAdapter(),
     this.client,
+    this.currentLocation,
     this.tileProviderFactory,
   });
   final MapConfiguration configuration;
   final MapsRepository repository;
   final DeviceLocation deviceLocation;
+  final ForegroundLocation? currentLocation;
   final DeviceLocationSettings locationSettings;
   final MapAttribution attribution;
   final Dio? client;
@@ -41,17 +45,25 @@ final class MapsDependencies {
             ),
           )
         : null;
+    final location = ForegroundLocation(
+      sensor: DeviceLocationAdapter(policy: AppConfig.locationPolicy),
+      policy: AppConfig.locationPolicy,
+    );
     return MapsDependencies(
       configuration: configuration,
       repository: dio == null
           ? const UnconfiguredMapsRepository()
           : ApiMapsRepository(dio),
-      deviceLocation: DeviceLocationAdapter(),
+      deviceLocation: location,
+      currentLocation: location,
       client: dio,
       tileProviderFactory: configuration.usesOsmCommunityTiles
           ? OsmTileProvider.new
           : PrivateTileProvider.new,
     );
   }
-  void dispose() => client?.close(force: true);
+  void dispose() {
+    currentLocation?.dispose();
+    client?.close(force: true);
+  }
 }

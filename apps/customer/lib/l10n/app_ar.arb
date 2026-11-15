@@ -224,6 +224,7 @@
   "rideRequestMapPointCancel": "إلغاء اختيار النقطة",
   "rideRequestUseAsDestination": "اجعلها الوجهة",
   "rideRequestUseAsPickup": "اجعلها نقطة الانطلاق",
+  "rideRequestPickupMoved": "تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.",
   "tripsAll": "الكل",
   "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",
@@ -714,5 +715,6 @@
   "mapsCurrentLocation": "موقعي الحالي",
   "mapsLocating": "جارٍ تحديد نقطة الانطلاق من موقعك…",
   "mapsEnableLocation": "فعّل الموقع لتحديد الانطلاق",
-  "mapsOpenSettings": "فتح الإعدادات"
+  "mapsOpenSettings": "فتح الإعدادات",
+  "mapsLocationInaccurate": "الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة."
 }

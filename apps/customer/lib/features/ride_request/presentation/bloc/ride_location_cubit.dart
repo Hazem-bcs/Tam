@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tam_customer/core/config/app_config.dart';
+import 'package:tam_customer/features/maps/domain/location_fix.dart';
 import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
@@ -37,27 +39,31 @@ final class RideLocationState {
   );
 }
 
-/// One foreground fix; map selections and manual pickup edits win races.
+enum PickupValidation { unchanged, moved, unavailable }
+
+/// Consumes the app's shared location; manual edits always win pending reads.
 final class RideLocationCubit extends Cubit<RideLocationState> {
   RideLocationCubit({
     required this.repository,
     required this.device,
     required this.settings,
     required this.language,
+    this.policy = AppConfig.locationPolicy,
   }) : super(const RideLocationState());
   final MapsRepository repository;
   final DeviceLocation device;
   final DeviceLocationSettings settings;
   final String language;
+  final LocationPolicy policy;
   int _fixEpoch = 0, _pointEpoch = 0;
   bool _returningFromSettings = false;
 
-  Future<void> locate() async {
+  Future<void> locate({bool requireFresh = false}) async {
     if (isClosed || state.locating) return;
     final epoch = ++_fixEpoch;
     emit(state.copy(locating: true, address: state.address));
     try {
-      final fix = await device.locate();
+      final fix = await device.locate(requireFresh: requireFresh);
       if (!isClosed && epoch == _fixEpoch) {
         emit(
           state.copy(
@@ -86,6 +92,24 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
     if (isClosed) return;
     _fixEpoch++;
     emit(state.copy(locating: false, address: state.address));
+  }
+
+  /// Revalidate a GPS-origin draft at the booking boundary. Small device jitter
+  /// preserves the reviewed pickup; meaningful movement requires a new quote.
+  Future<PickupValidation> validatePickup(GeoPoint pickup) async {
+    if (isClosed || state.locating) return PickupValidation.unavailable;
+    final revision = state.fixRevision;
+    await locate(requireFresh: true);
+    if (isClosed ||
+        state.failure != null ||
+        state.fixRevision == revision ||
+        state.fix == null) {
+      return PickupValidation.unavailable;
+    }
+    return locationDistanceMeters(pickup, state.fix!) >
+            policy.pickupMovementMeters
+        ? PickupValidation.moved
+        : PickupValidation.unchanged;
   }
 
   Future<void> selectPoint(GeoPoint point) async {

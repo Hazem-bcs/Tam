@@ -8,6 +8,7 @@ String mapFailureText(AppLocalizations l, String? code) => switch (code) {
   'LOCATION_DENIED' => l.mapsPermissionDenied,
   'LOCATION_DENIED_FOREVER' => l.mapsPermissionPermanent,
   'LOCATION_UNAVAILABLE' => l.mapsLocationUnavailable,
+  'LOCATION_INACCURATE' => l.mapsLocationInaccurate,
   'LOCATION_NOT_FOUND' => l.mapsNotFound,
   'RATE_LIMITED' => l.mapsRateLimited,
   'VALIDATION_ERROR' => l.mapsInvalidInput,

@@ -212,8 +212,10 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         AuthStatus.guest,
         AuthStatus.localAccess,
       ].contains(state.status)) {
+        _maps.currentLocation?.setSession(true);
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
+        _maps.currentLocation?.setSession(false);
         _mockTrips.resetSession();
         _mockActiveTrips?.resetSession();
         _mockChat?.resetSession();
@@ -238,7 +240,14 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _mockActiveTrips?.advance();
+    if (state == AppLifecycleState.resumed) {
+      _maps.currentLocation?.setForeground(true);
+      _mockActiveTrips?.advance();
+    } else if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden ||
+        state == AppLifecycleState.detached) {
+      _maps.currentLocation?.setForeground(false);
+    }
     if (state == AppLifecycleState.resumed &&
         _auth.state.status == AuthStatus.authenticated) {
       unawaited(_auth.restoreSession());

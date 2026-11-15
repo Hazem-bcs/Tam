@@ -4,10 +4,12 @@ import 'package:tam_customer/features/account_management/domain/account_manageme
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
 import 'package:tam_customer/features/completion/domain/completion_repository.dart';
+import 'package:tam_customer/features/maps/domain/location_fix.dart';
 import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 
 abstract final class AppConfig {
+  static const locationPolicy = LocationPolicy();
   static MapConfiguration get maps => MapConfiguration.parse(
     // Temporary public tiles, explicitly selected for the design preview.
     // Override with the private server URL when it is available (or '' to disable).

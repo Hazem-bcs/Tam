@@ -110,5 +110,6 @@
   "rideRequestMapPointDescription": "وصف المكان (اختياري)",
   "rideRequestMapPointCancel": "إلغاء اختيار النقطة",
   "rideRequestUseAsDestination": "اجعلها الوجهة",
-  "rideRequestUseAsPickup": "اجعلها نقطة الانطلاق"
+  "rideRequestUseAsPickup": "اجعلها نقطة الانطلاق",
+  "rideRequestPickupMoved": "تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد."
 }

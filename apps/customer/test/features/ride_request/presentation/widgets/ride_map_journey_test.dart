@@ -15,6 +15,7 @@ import 'package:tam_customer/features/ride_request/presentation/widgets/ride_map
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import '../../../maps/maps_test_support.dart';
 import '../../scheduling/schedule_widget_support.dart';
 
@@ -157,6 +158,64 @@ void main() {
       await tester.runAsync(bloc.close);
     },
   );
+
+  Future<void> review(WidgetTester tester, RideDraftBloc bloc) async {
+    bloc.add(
+      DestinationSelected(
+        TripLocation(label: 'Destination', point: destination),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
+    for (var i = 0; i < 2; i++) {
+      final next = find.byKey(const Key('ride-flow-continue'));
+      await tester.ensureVisible(next);
+      await tester.tap(next);
+      await tester.pumpAndSettle();
+    }
+  }
+
+  for (final moved in [false, true]) {
+    testWidgets(
+      moved
+          ? 'movement before confirmation updates pickup and requires another review'
+          : 'GPS failure before confirmation stays visible and never books',
+      (tester) async {
+        phone(tester);
+        final gps = LocationProbe();
+        final bloc = await launch(tester, gps);
+        await tester.pumpAndSettle();
+        await review(tester, bloc);
+        final updated = GeoPoint(
+          latitude: origin.latitude + .002,
+          longitude: origin.longitude,
+        );
+        gps.onLocate = () async {
+          if (!moved) throw const MapsFailure('LOCATION_INACCURATE');
+          return updated;
+        };
+        final confirm = find.byKey(const Key('ride-flow-continue'));
+        await tester.ensureVisible(confirm);
+        await tester.tap(confirm);
+        await tester.pumpAndSettle();
+        expect(bloc.state.confirmedTrip, isNull);
+        expect(bloc.state.pickup?.point, moved ? updated : origin);
+        if (moved) {
+          expect(
+            find.text(
+              'تغيّر موقع انطلاقك. حدّثنا المسار، راجع السعر والتفاصيل قبل التأكيد.',
+            ),
+            findsOneWidget,
+          );
+        } else {
+          expect(find.textContaining('الموقع غير دقيق'), findsOneWidget);
+        }
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+        await tester.runAsync(bloc.close);
+      },
+    );
+  }
 
   testWidgets(
     '320dp and large text keep the entry action reachable by scrolling',

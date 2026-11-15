@@ -496,6 +496,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestUseAsPickup => 'Use as pickup';
 
   @override
+  String get rideRequestPickupMoved =>
+      'Your pickup location changed. We updated the route. Review the fare and details before confirming.';
+
+  @override
   String get tripsAll => 'All';
 
   @override
@@ -1717,4 +1721,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsOpenSettings => 'Open settings';
+
+  @override
+  String get mapsLocationInaccurate =>
+      'The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.';
 }

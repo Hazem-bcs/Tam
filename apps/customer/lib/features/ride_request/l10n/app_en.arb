@@ -110,5 +110,6 @@
   "rideRequestMapPointDescription": "Place description (optional)",
   "rideRequestMapPointCancel": "Dismiss selected point",
   "rideRequestUseAsDestination": "Use as destination",
-  "rideRequestUseAsPickup": "Use as pickup"
+  "rideRequestUseAsPickup": "Use as pickup",
+  "rideRequestPickupMoved": "Your pickup location changed. We updated the route. Review the fare and details before confirming."
 }

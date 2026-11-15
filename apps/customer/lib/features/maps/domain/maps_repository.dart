@@ -35,8 +35,9 @@ abstract interface class MapsRepository {
 }
 
 abstract interface class DeviceLocation {
-  /// A single foreground fix after a user action or an opted-in journey entry.
-  Future<GeoPoint> locate();
+  /// Foreground location. Cached results must meet the central age/accuracy
+  /// policy. Booking verification bypasses cache with [requireFresh].
+  Future<GeoPoint> locate({bool requireFresh = false});
 }
 
 abstract interface class DeviceLocationSettings {

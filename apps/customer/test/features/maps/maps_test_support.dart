@@ -58,9 +58,11 @@ final class MapsProbe implements MapsRepository {
 
 final class LocationProbe implements DeviceLocation {
   int calls = 0;
+  bool lastRequireFresh = false;
   Future<GeoPoint> Function()? onLocate;
   @override
-  Future<GeoPoint> locate() async {
+  Future<GeoPoint> locate({bool requireFresh = false}) async {
+    lastRequireFresh = requireFresh;
     calls++;
     return onLocate == null ? origin : onLocate!();
   }
