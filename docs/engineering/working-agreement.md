@@ -22,7 +22,8 @@ session isolation, shared theme, responsiveness and accessibility still apply.
 
 - Default branch: `main`; use short-lived branches with the repository/tool's configured prefix. The current wave proposes `codex/w1-*`, independently of the agent provider. Start from the supervisor's exact baseline, not necessarily `main`.
 - Pull request should state scope, before/after images for UI, risks, test evidence and rollback plan.
-- Review requirements: `dart format`, `flutter analyze`, `flutter test` on touched project.
+- User preference, 2026-11-16: prioritize progress across features; batch broad checks at the agreed integration/delivery milestone. During implementation, use focused checks only for an observed error, sensitive change or concrete uncertainty. Avoid repeated builds, app launches and passing tests after small edits; record deferred verification honestly. See [the persistent iteration rule](../../.cursor/rules/iteration-pace.mdc).
+- Milestone review requirements: `dart format`, `flutter analyze`, `flutter test` on touched project.
 - No giant `utils.dart`, no global mutable state, no business rules in widgets, no magic string route names.
 - Repositories expose domain models and failures, not Dio exceptions or JSON.
 - Cache invalidation and error/offline states must be part of every feature's acceptance criteria.
