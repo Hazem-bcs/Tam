@@ -4,6 +4,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_otp_input.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
@@ -79,17 +80,48 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        challenge.phoneE164,
-                        textDirection: TextDirection.ltr,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      TextButton(
-                        onPressed: state.isBusy
-                            ? null
-                            : context.read<AuthCubit>().editPhone,
-                        child: Text(t.authEditPhone),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppRadii.lg),
+                          color: Theme.of(context).colorScheme.primaryContainer
+                              .withValues(alpha: 0.45),
+                        ),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: AppSpacing.sm,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.phone_iphone_outlined,
+                                  size: AppDimensions.iconSize,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: AppSpacing.sm),
+                                Flexible(
+                                  child: Text(
+                                    challenge.phoneE164,
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TextButton(
+                              onPressed: state.isBusy
+                                  ? null
+                                  : context.read<AuthCubit>().editPhone,
+                              child: Text(t.authEditPhone),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       AuthOtpInput(

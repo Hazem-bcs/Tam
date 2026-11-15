@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';

@@ -156,14 +156,32 @@ class _AuthOtpInputState extends State<AuthOtpInput> {
                                     : AppDimensions.borderWidth,
                               ),
                             ),
-                            child: Text(
-                              filled ? text[index] : '–',
-                              style: digitStyle.copyWith(
-                                color: widget.blocked
-                                    ? colors.onSurfaceVariant
-                                    : filled
-                                    ? colors.onSurface
-                                    : colors.outline,
+                            child: AnimatedSwitcher(
+                              duration: motion,
+                              switchInCurve: Curves.easeOutCubic,
+                              switchOutCurve: Curves.easeInCubic,
+                              transitionBuilder: (child, animation) =>
+                                  ScaleTransition(
+                                    scale: animation.drive(
+                                      Tween<double>(begin: 0.78, end: 1),
+                                    ),
+                                    child: FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    ),
+                                  ),
+                              child: Text(
+                                filled ? text[index] : '–',
+                                key: ValueKey(
+                                  '$index-${filled ? text[index] : 'empty'}',
+                                ),
+                                style: digitStyle.copyWith(
+                                  color: widget.blocked
+                                      ? colors.onSurfaceVariant
+                                      : filled
+                                      ? colors.onSurface
+                                      : colors.outline,
+                                ),
                               ),
                             ),
                           );
