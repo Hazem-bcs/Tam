@@ -22,6 +22,8 @@ void main() {
     await tester.tap(find.text('إدارة العناوين'));
     await tester.pumpAndSettle();
     expect(find.byType(AddressesPage), findsOneWidget);
+    await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('address-delete-address-home-001')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('حذف'));
