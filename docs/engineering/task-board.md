@@ -221,3 +221,7 @@ TAM-VECTOR-MAPS-01: IMPLEMENTED بواسطة root على36413be، [البطاق�
 TAM-FLOATING-LOCATION-01: IMPLEMENTED بواسطة root على242cff7، بطاقات عائمة
 بحجم المحتوى وقائمة أماكن ورموز SVG أصلية. [البطاقة](tasks/TAM-FLOATING-LOCATION-01.md)،
 [التسليم والفحوص المؤجلة](deliveries/TAM-FLOATING-LOCATION-01/HANDOFF.md).
+
+TAM-VEHICLE-ART-02: IMPLEMENTED بواسطة root على4777d6f، أربعة SVG أصلية
+بمنظور ثلاثي الأرباع بدل رسوم العربات السابقة. [البطاقة](tasks/TAM-VEHICLE-ART-02.md)،
+[معاينة الرسم وحدود التحقق](deliveries/TAM-VEHICLE-ART-02/HANDOFF.md).

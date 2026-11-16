@@ -1,1 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 80" fill="none"><ellipse cx="65" cy="68" rx="47" ry="4" fill="currentColor" opacity=".07"/><circle cx="31" cy="56" r="13" fill="currentColor" opacity=".12"/><circle cx="98" cy="56" r="13" fill="currentColor" opacity=".12"/><circle cx="31" cy="56" r="11" stroke="currentColor" stroke-width="3"/><circle cx="98" cy="56" r="11" stroke="currentColor" stroke-width="3"/><path d="M31 56 47 35h20l14 17H53L42 44M52 52l-3 7h19l13-7M98 56 86 27h-9M84 27l-4-10H68M87 33h9l6 9H91" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M48 36h22l8 10H50Z" fill="currentColor" opacity=".3"/><path d="M42 31h23" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M24 37h18v10H21Z" fill="currentColor" opacity=".19"/><path d="M19 34h20v13H19Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 176" fill="none">
+ <!-- Original TAM vehicle illustration: curved bodywork, three-quarter view. -->
+ <defs>
+ <linearGradient id="moto-body" x1="72" y1="43" x2="139" y2="131" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFFFF"/><stop offset=".48" stop-color="#F1F4F7"/><stop offset="1" stop-color="#B9C3CF"/></linearGradient>
+ <linearGradient id="moto-side" x1="128" y1="64" x2="163" y2="133" gradientUnits="userSpaceOnUse"><stop stop-color="#EBEFF4"/><stop offset=".52" stop-color="#C7D0DA"/><stop offset="1" stop-color="#91A0B0"/></linearGradient>
+ <linearGradient id="moto-nose" x1="38" y1="88" x2="48" y2="131" gradientUnits="userSpaceOnUse"><stop stop-color="#EFF3F7"/><stop offset="1" stop-color="#A9B6C4"/></linearGradient>
+ <linearGradient id="moto-glass" x1="112" y1="45" x2="126" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#7D95AA"/><stop offset=".42" stop-color="#43596E"/><stop offset="1" stop-color="#243749"/></linearGradient>
+ <linearGradient id="moto-rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F8FAFC"/><stop offset=".5" stop-color="#C0CAD6"/><stop offset="1" stop-color="#7C8B9E"/></linearGradient>
+ </defs><ellipse cx="128" cy="144" rx="104" ry="10" fill="#27384A" opacity=".08"/><g transform="rotate(14 65 123)"><ellipse cx="67" cy="123" rx="19" ry="23" fill="#202B39"/><ellipse cx="64" cy="123" rx="17" ry="22" fill="#354253"/><ellipse cx="63" cy="123" rx="14" ry="19" fill="url(#moto-rim)"/><ellipse cx="63" cy="123" rx="12" ry="17" fill="#627183"/>
+ <path d="M63 106v34m-12 -17h24" stroke="#E7ECF2" stroke-width="2"/><ellipse cx="63" cy="123" rx="2.5" ry="3" fill="#E7ECF2"/></g><g transform="rotate(14 190 113)"><ellipse cx="192" cy="113" rx="18" ry="24" fill="#202B39"/><ellipse cx="189" cy="113" rx="16" ry="23" fill="#354253"/><ellipse cx="188" cy="113" rx="13" ry="20" fill="url(#moto-rim)"/><ellipse cx="188" cy="113" rx="11" ry="18" fill="#627183"/>
+ <path d="M188 95v36m-11 -18h22" stroke="#E7ECF2" stroke-width="2"/><ellipse cx="188" cy="113" rx="2.5" ry="3" fill="#E7ECF2"/></g>
+ <path d="m72 115 39 10 36-12 23-22-35-11-39 8Z" fill="#9EACBA"/>
+ <path d="m94 114 43 10 24-17-12-7-47 6Z" fill="#2E4151"/>
+ <path d="m93 78 27-6 42 16-10 14-51 3-18-11Z" fill="url(#moto-body)"/>
+ <path d="m102 82 15-4 39 12-10 7-43 2Z" fill="currentColor" opacity=".75"/>
+ <path d="m150 99 21-20 18 31" stroke="#A6B5C4" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="m153 101 19-18 18 30" stroke="#EAF0F6" stroke-width="2.5" stroke-linecap="round"/>
+ <path d="m61 120 34-29 10 15-22 20" stroke="#A1B1BF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="m61 120 34-29" stroke="#EDF2F7" stroke-width="1.5"/>
+ <path d="m169 78-6-32-20-7" stroke="#35495B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="m163 47 14-6 6 6-18 9Z" fill="url(#moto-glass)"/>
+ <path d="m169 69 13-1 6 8-17 5Z" fill="#DFE7EF" stroke="#AABAC8" stroke-width="1.5" stroke-linejoin="round"/>
+ <path d="m173 72 9-1 2 4-10 3Z" fill="#FFFFFF"/>
+ <path d="m171 90 14-4 18 7 7 13-11 2-10-9-18 1Z" fill="url(#moto-body)"/>
+ <path d="m48 91 15-13 30 7-3 9-25-7-11 11Z" fill="url(#moto-side)"/>
+ <path d="m79 75 17-6 41 12-13 7-43-8Z" fill="#2B3C4D"/>
+ <path d="m81 74 16-3 37 11" stroke="#63798C" stroke-width="2" stroke-linecap="round"/>
+ <path d="m129 112 10 4 21-8 4 6-24 10-13-5Z" fill="#D5DEE7"/>
+ <path d="m61 56 25-6 20 8v22l-24 7-23-9Z" fill="url(#moto-side)"/>
+ <path d="m59 56 26-7 21 9-25 7Z" fill="#F4F7FA"/>
+ <path d="m81 65 25-7v22l-24 7Z" fill="url(#moto-nose)"/>
+ <path d="m59 61 21 7v15l-21-6Z" fill="currentColor"/>
+ <path d="m64 64 10 3m-10 5 10 3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+ <path d="m142 39-5-13m22 16 5-15" stroke="#677D8F" stroke-width="2" stroke-linecap="round"/>
+ <ellipse cx="135" cy="24" rx="6" ry="4" fill="#354B5D"/><ellipse cx="168" cy="25" rx="6" ry="4" fill="#354B5D"/>
+</svg>

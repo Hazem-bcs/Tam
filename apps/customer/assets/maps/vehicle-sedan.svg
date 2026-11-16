@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 80" fill="none"><ellipse cx="66" cy="65" rx="50" ry="4" fill="currentColor" opacity=".07"/><path d="M14 51 20 40 40 35 52 22H80L99 38 112 43 117 55 111 60H15Z" fill="currentColor" opacity=".13"/><path d="M14 51 20 40 40 35 52 22H80L99 38 112 43 117 55 111 60H15Z" stroke="currentColor" stroke-width="2"/><path d="m45 35 10-10h23l13 12Z" fill="currentColor" opacity=".26"/><path d="m67 25 1 11M22 43l-3 7h12M102 43l10 4 2 5h-12M42 43h49M45 49h45M76 41h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path fill="currentColor" fill-rule="evenodd" d="M46 58a10 10 0 1 0 -20 0a10 10 0 1 0 20 0M40 58a4 4 0 1 0 -8 0a4 4 0 1 0 8 0"/><path fill="currentColor" fill-rule="evenodd" d="M107 58a10 10 0 1 0 -20 0a10 10 0 1 0 20 0M101 58a4 4 0 1 0 -8 0a4 4 0 1 0 8 0"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 176" fill="none">
+ <!-- Original TAM vehicle illustration: curved bodywork, three-quarter view. -->
+ <defs>
+ <linearGradient id="sedan-body" x1="72" y1="43" x2="139" y2="131" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFFFF"/><stop offset=".48" stop-color="#F1F4F7"/><stop offset="1" stop-color="#B9C3CF"/></linearGradient>
+ <linearGradient id="sedan-side" x1="128" y1="64" x2="163" y2="133" gradientUnits="userSpaceOnUse"><stop stop-color="#EBEFF4"/><stop offset=".52" stop-color="#C7D0DA"/><stop offset="1" stop-color="#91A0B0"/></linearGradient>
+ <linearGradient id="sedan-nose" x1="38" y1="88" x2="48" y2="131" gradientUnits="userSpaceOnUse"><stop stop-color="#EFF3F7"/><stop offset="1" stop-color="#A9B6C4"/></linearGradient>
+ <linearGradient id="sedan-glass" x1="112" y1="45" x2="126" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#7D95AA"/><stop offset=".42" stop-color="#43596E"/><stop offset="1" stop-color="#243749"/></linearGradient>
+ <linearGradient id="sedan-rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F8FAFC"/><stop offset=".5" stop-color="#C0CAD6"/><stop offset="1" stop-color="#7C8B9E"/></linearGradient>
+ </defs><ellipse cx="128" cy="144" rx="104" ry="10" fill="#27384A" opacity=".08"/><g transform="rotate(14 35 118)"><ellipse cx="37" cy="118" rx="10" ry="13" fill="#202B39"/><ellipse cx="34" cy="118" rx="8" ry="12" fill="#354253"/><ellipse cx="33" cy="118" rx="5" ry="9" fill="url(#sedan-rim)"/><ellipse cx="33" cy="118" rx="3" ry="7" fill="#627183"/>
+ <path d="M33 111v14m-3 -7h6" stroke="#E7ECF2" stroke-width="2"/><ellipse cx="33" cy="118" rx="2.5" ry="3" fill="#E7ECF2"/></g><g transform="rotate(14 194 110)"><ellipse cx="196" cy="110" rx="12" ry="16" fill="#202B39"/><ellipse cx="193" cy="110" rx="10" ry="15" fill="#354253"/><ellipse cx="192" cy="110" rx="7" ry="12" fill="url(#sedan-rim)"/><ellipse cx="192" cy="110" rx="5" ry="10" fill="#627183"/>
+ <path d="M192 100v20m-5 -10h10" stroke="#E7ECF2" stroke-width="2"/><ellipse cx="192" cy="110" rx="2.5" ry="3" fill="#E7ECF2"/></g><g transform="rotate(14 91 129)"><ellipse cx="93" cy="129" rx="15" ry="19" fill="#202B39"/><ellipse cx="90" cy="129" rx="13" ry="18" fill="#354253"/><ellipse cx="89" cy="129" rx="10" ry="15" fill="url(#sedan-rim)"/><ellipse cx="89" cy="129" rx="8" ry="13" fill="#627183"/>
+ <path d="M89 116v26m-8 -13h16" stroke="#E7ECF2" stroke-width="2"/><ellipse cx="89" cy="129" rx="2.5" ry="3" fill="#E7ECF2"/></g>
+ <path d="M27 101Q27 92 39 83L68 70 92 43Q96 38 105 36L149 29Q161 28 171 35L192 49 205 68 224 77Q231 80 230 91L228 107 211 114Q211 93 193 94Q176 96 178 121L107 138Q108 113 89 112Q73 113 75 139L39 131Q26 127 27 116Z" fill="url(#sedan-body)"/>
+ <path d="M76 110 230 81 228 107 211 114Q211 93 193 94Q176 96 178 121L107 138Q108 113 89 112Q73 113 75 139L75 125Z" fill="url(#sedan-side)"/>
+ <path d="M27 103 76 115 75 137 38 130Q27 126 27 117Z" fill="url(#sedan-nose)"/>
+ <path d="M39 83 68 72 115 85 76 109 30 99Z" fill="#F6F8FB"/>
+ <path d="m68 72 26-30 37 17-16 26Z" fill="url(#sedan-glass)" stroke="#D9E2EB" stroke-width="2" stroke-linejoin="round"/>
+ <path d="m96 40 51-8q9-2 16 2l25 15-55 10Z" fill="#FFFFFF"/>
+ <path d="m135 61 52-11 16 20-83 16Z" fill="url(#sedan-glass)"/>
+ <path d="m166 54 3 23m-37-12-10 17" stroke="#D8E0E8" stroke-width="3"/>
+ <path d="m139 63 16-3-15 19-14 3Z" fill="#FFFFFF" opacity=".16"/>
+ <path d="m80 107 141-27" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+ <path d="m128 87-5 36m46-43 1 32" stroke="#8D9CAA" stroke-width="1" opacity=".8"/>
+ <path d="m139 92 10-2m35-9 9-2" stroke="#718396" stroke-width="2.5" stroke-linecap="round"/>
+ <path d="m116 79 11-1 4 5-13 4-5-3Z" fill="currentColor"/>
+ <path d="m32 102 15 4v6l-16-5Zm29 8 12 3v6l-13-3Z" fill="#FFFFFF"/>
+ <path d="m33 117 34 8v4l-34-8Z" fill="#364858"/>
+ <path d="m35 117 30 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+ <path d="m45 119 12 3v4l-12-3Z" fill="#EFF3F7"/>
+ <path d="m216 81 10-2-1 5-10 2Z" fill="currentColor" opacity=".8"/>
+ <path d="m111 132 64-14" stroke="#728396" stroke-width="2.5" stroke-linecap="round"/>
+ <path d="m44 86 26-10m8 27 21-13" stroke="#D8E1E9" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

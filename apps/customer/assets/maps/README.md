@@ -13,9 +13,11 @@ renders the car directly in cards; MapLibre uploads each SVG as a native marker
 texture once per map style, rather than on each location update.
 
 The `vehicle-*.svg`, `map-select.svg` and `place-pin.svg` resources are also
-original TAM artwork. These use one inherited `currentColor` with tonal opacity
-and transparent cutouts, and are rendered directly as vectors in the location
-and vehicle selection interfaces.
+original TAM artwork, rendered directly as vectors in the location and vehicle
+selection interfaces. Vehicles use a consistent three-quarter view with neutral
+metal/glass materials and inherited `currentColor` accents. Map icons inherit
+their ink through `currentColor` and tonal opacity. Vehicle v2 replaces the older
+outline side views; these are actual paths and gradients, with no embedded bitmap.
 
 The default public provider is OpenFreeMap. MapLibre is the renderer and
 OpenStreetMap is the underlying map data. Source credits remain accessible from

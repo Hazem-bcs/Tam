@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 enum RideArtworkType { sedan, comfort, van, motorbike, mapSelect, place }
 
-/// Original vector illustrations. One ambient ink, with tonal depth encoded
-/// through opacity, keeps all vehicle classes and map actions in one family.
+/// Original vector illustrations. Vehicles share neutral body/glass materials;
+/// their accents and the map action ink follow the ambient theme.
 class RideArtwork extends StatelessWidget {
   const RideArtwork({
     super.key,

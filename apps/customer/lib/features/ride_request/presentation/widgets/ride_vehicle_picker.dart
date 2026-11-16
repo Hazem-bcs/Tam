@@ -68,8 +68,8 @@ class RideVehiclePicker extends StatelessWidget {
                       children: [
                         RideArtwork(
                           type: _artwork(vehicle),
-                          width: 68,
-                          height: 46,
+                          width: 80,
+                          height: 54,
                           color: selected == vehicle
                               ? theme.colorScheme.primary
                               : theme.colorScheme.onSurfaceVariant,
