@@ -37,7 +37,14 @@ void main() {
       semantics.dispose();
       final home = tester.element(find.byType(HomePage));
       expect(
-        Theme.of(tester.element(find.byType(Scaffold))).colorScheme.primary,
+        Theme.of(
+          tester.element(
+            find.descendant(
+              of: find.byType(HomePage),
+              matching: find.byType(Scaffold),
+            ).first,
+          ),
+        ).colorScheme.primary,
         isNot(AppTheme.light.colorScheme.primary),
       );
       final auth = home.read<AuthCubit>();
