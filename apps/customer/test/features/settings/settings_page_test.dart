@@ -63,6 +63,7 @@ Widget testApp({
 }) => ValueListenableBuilder<Locale>(
   valueListenable: locale,
   builder: (_, value, _) => MaterialApp(
+    debugShowCheckedModeBanner: false,
     theme: const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')
         ? _previewTheme(value)
         : AppTheme.light,
@@ -121,6 +122,13 @@ ThemeData _previewTheme(Locale locale) {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: base.outlinedButtonTheme.style?.copyWith(
+        textStyle: WidgetStatePropertyAll(
+          previewStyle(base.textTheme.labelLarge),
+        ),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: base.filledButtonTheme.style?.copyWith(
         textStyle: WidgetStatePropertyAll(
           previewStyle(base.textTheme.labelLarge),
         ),
@@ -378,6 +386,82 @@ void main() {
     await expectLater(
       find.byType(SettingsPage),
       matchesGoldenFile('goldens/settings_en_800.png'),
+    );
+  });
+
+  testWidgets('visual Arabic account actions below the fold', (tester) async {
+    if (!const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) return;
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const Key('settings-content')),
+      const Offset(0, -1300),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('settings-delete-account')), findsOneWidget);
+    await expectLater(
+      find.byType(SettingsPage),
+      matchesGoldenFile('goldens/settings_ar_actions_scrolled.png'),
+    );
+  });
+
+  testWidgets('visual Arabic language picker', (tester) async {
+    if (!const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) return;
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final picker = find.byKey(const Key('settings-language-tile'));
+    await tester.ensureVisible(picker);
+    await tester.pumpAndSettle();
+    await tester.tap(picker);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('settings-locale-ar')), findsOneWidget);
+    await expectLater(
+      find.byType(Overlay).first,
+      matchesGoldenFile('goldens/settings_ar_language_sheet.png'),
+    );
+  });
+
+  testWidgets('visual Arabic profile editor', (tester) async {
+    if (!const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) return;
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('تعديل الاسم'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('settings-name-field')));
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(SettingsPage),
+      matchesGoldenFile('goldens/settings_ar_profile_editor.png'),
     );
   });
 
