@@ -1,0 +1,148 @@
+{
+  "code_baseline": "a1b5fe0d71b8f3f3947ef0a04c9e6b94f09a4188",
+  "format": {
+    "files": 454,
+    "changes": 0
+  },
+  "analyze": {
+    "info": 42,
+    "warnings": 0,
+    "errors": 0,
+    "passed": false
+  },
+  "tests": {
+    "passed": 771,
+    "failed": 31,
+    "duration": "03:53",
+    "failures": [
+      {
+        "file": "apps/customer/test/app/scheduled_booking_integration_test.dart",
+        "test": "schedule with saved addresses, list, cancel, rebook and logout"
+      },
+      {
+        "file": "apps/customer/test/app/addresses_integration_test.dart",
+        "test": "CRUD integrates with saved pickup/destination and resets on logout"
+      },
+      {
+        "file": "apps/customer/test/app/customer_session_integration_test.dart",
+        "test": "Home logout resets account data before entry 0941234567"
+      },
+      {
+        "file": "apps/customer/test/app/customer_session_integration_test.dart",
+        "test": "Home logout resets account data before entry 0951234567"
+      },
+      {
+        "file": "apps/customer/test/app/customer_session_integration_test.dart",
+        "test": "Home logout resets account data before entry null"
+      },
+      {
+        "file": "apps/customer/test/app/router/app_router_test.dart",
+        "test": "production router blocks bare OTP and ignores an external return URL"
+      },
+      {
+        "file": "apps/customer/test/app/feature_foundation_test.dart",
+        "test": "changing app locale preserves the route and local phone state"
+      },
+      {
+        "file": "apps/customer/test/app/addresses_picker_layout_test.dart",
+        "test": "integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text"
+      },
+      {
+        "file": "apps/customer/test/app/addresses_picker_layout_test.dart",
+        "test": "integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text"
+      },
+      {
+        "file": "apps/customer/test/app/addresses_management_navigation_test.dart",
+        "test": "managing addresses from booking returns to the live picker"
+      },
+      {
+        "file": "apps/customer/test/app/account_management_integration_test.dart",
+        "test": "contact from assigned trip simulates without dialing fixture"
+      },
+      {
+        "file": "apps/customer/test/app/customer_booking_integration_test.dart",
+        "test": "book, list, cancel and rebook use one shared trip source"
+      },
+      {
+        "file": "apps/customer/test/app/after_trip_journey_test.dart",
+        "test": "completed booking can be rated and reported using the same trip"
+      },
+      {
+        "file": "apps/customer/test/app/chat_integration_test.dart",
+        "test": "driver chat survives navigation and clears on session exit"
+      },
+      {
+        "file": "apps/customer/test/features/notifications/notifications_contract_test.dart",
+        "test": "saved pages match exact mock fixtures and parse in Flutter"
+      },
+      {
+        "file": "apps/customer/test/app/maps_integration_test.dart",
+        "test": "logout disposes pending GPS and a new session starts without its point"
+      },
+      {
+        "file": "apps/customer/test/app/active_trip_integration_test.dart",
+        "test": "booking opens tracking, Home restores it, history cancellation stays in sync"
+      },
+      {
+        "file": "apps/customer/test/app/maps_integration_test.dart",
+        "test": "manual map pin reaches booking draft without a backend or public tiles"
+      },
+      {
+        "file": "apps/customer/test/features/auth/temporary_phone_entry_test.dart",
+        "test": "direct entry and clean home / ar"
+      },
+      {
+        "file": "apps/customer/test/features/auth/temporary_phone_entry_test.dart",
+        "test": "direct entry and clean home / en"
+      },
+      {
+        "file": "apps/customer/test/features/home/home_entry_integration_test.dart",
+        "test": "real Home entry opens registered routes and retains local Auth"
+      },
+      {
+        "file": "apps/customer/test/features/active_trip/active_trip_widget_test.dart",
+        "test": "cancel requires confirmation and updates the shared trip"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart",
+        "test": "time text input with keyboard keeps the schedule action reachable"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/scheduling/schedule_date_input_test.dart",
+        "test": "date text entry stays usable with keyboard and large text"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart",
+        "test": "Arabic 390: pick both places, show quote and open saved trip"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart",
+        "test": "English 390: prefill and quote in LTR"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart",
+        "test": "schedule picker Size(320.0, 780.0) ar x2.0"
+      },
+      {
+        "file": "apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart",
+        "test": "Small 320, 2x text, keyboard and place search"
+      },
+      {
+        "file": "apps/customer/test/features/trips/trips_widget_test.dart",
+        "test": "responsive list Size(320.0, 700.0) / ar / 2.0"
+      },
+      {
+        "file": "apps/customer/test/features/active_trip/active_trip_widget_test.dart",
+        "test": "scheduled tracking waits for due time before driver search"
+      },
+      {
+        "file": "apps/customer/test/features/active_trip/active_trip_widget_test.dart",
+        "test": "render requested at 390dp"
+      }
+    ]
+  },
+  "environment": {
+    "FLUTTER_TEST": "1",
+    "rive_native": "cached linux library under ignored build/"
+  }
+}

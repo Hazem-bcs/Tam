@@ -1,0 +1,82 @@
+{
+  "baseline_main": "a1b5fe0d71b8f3f3947ef0a04c9e6b94f09a4188",
+  "remote_main": "b99d31a59e5ddf7ddff533eccb5c0c9ca868d342",
+  "original_workspace_branch": "feat/tam-home-visual-20261115",
+  "original_workspace_commit": "4a6fe1f044670645fca5a3f154ab84dc0d264599",
+  "selection": "User selected committed main; exclude uncommitted work",
+  "features": [
+    {
+      "feature": "home",
+      "title_ar": "الرئيسية",
+      "source_commit": "0da2b9eadfada69463c2e105b5ce80cf1e7cac85",
+      "source_branch_or_commit": "feat/tam-home-destination-first-20261116",
+      "path": "apps/customer/lib/features/home",
+      "git_tree": "aa7e923ef7a0b7bccd74b6e97f50b319cd329e13",
+      "content_matches_source": true
+    },
+    {
+      "feature": "settings",
+      "title_ar": "الإعدادات والحساب",
+      "source_commit": "bea0f8022e900ee1fd0fe4e1310cb3f8beb9d056",
+      "source_branch_or_commit": "codex/tam-account-actions-polish-20261116",
+      "path": "apps/customer/lib/features/settings",
+      "git_tree": "4e0e6e63c56c5e16d5455c57349c217723a3de01",
+      "content_matches_source": true
+    },
+    {
+      "feature": "addresses",
+      "title_ar": "عناويني",
+      "source_commit": "70e1d7ade331bfed10fc810e90767e2a2ec85870",
+      "source_branch_or_commit": "codex/reuse-address-shortcut-icons",
+      "path": "apps/customer/lib/features/addresses",
+      "git_tree": "d40cc3578191a53a8b03d95bf775b9171199cfea",
+      "content_matches_source": true
+    },
+    {
+      "feature": "notifications",
+      "title_ar": "الإشعارات",
+      "source_commit": "6dddf9636699643cdeaed6c122563d985d265e31",
+      "source_branch_or_commit": "fix/notifications-appbar-clean-20261116",
+      "path": "apps/customer/lib/features/notifications",
+      "git_tree": "3cede8b3fdaf397ecf449d12835a2680c6fe5faa",
+      "content_matches_source": true
+    },
+    {
+      "feature": "trips",
+      "title_ar": "طلباتي",
+      "source_commit": "105b588a36c45dd34ef17a01e6080b2dfd38543c",
+      "source_branch_or_commit": "fix/trips-android-status-bar-20261116",
+      "path": "apps/customer/lib/features/trips",
+      "git_tree": "d3ed255536cbc25272e7274bd7980baafe817d7e",
+      "content_matches_source": true
+    },
+    {
+      "feature": "ride_request",
+      "title_ar": "اختيار الموقع والحجز",
+      "source_commit": "d16e643bb4a36c29be1e7b3afbaa93cf15602186",
+      "source_branch_or_commit": "codex/ride-panel-motion",
+      "path": "apps/customer/lib/features/ride_request",
+      "git_tree": "ed48152166c23f3236b708f39ced0e4bf2adf74d",
+      "content_matches_source": true
+    },
+    {
+      "feature": "maps",
+      "title_ar": "عارض الخرائط",
+      "source_commit": "a351c036d1eae05ca1b5e112e2fe4f4d676c8abf",
+      "source_branch_or_commit": "codex/ride-point-confirm-continuity",
+      "path": "apps/customer/lib/features/maps",
+      "git_tree": "047f4ea106f499f277173dbadbbc305be8f8c89d",
+      "content_matches_source": true
+    },
+    {
+      "feature": "auth",
+      "title_ar": "المصادقة",
+      "source_commit": "94dae085431fc2a80895872c8295a30b22fc8205",
+      "source_branch_or_commit": "94dae08",
+      "path": "apps/customer/lib/features/auth",
+      "git_tree": "5e08cba9025ea414d6d43d32e87976a35d29f8b9",
+      "content_matches_source": true
+    }
+  ],
+  "rive_asset_blob": "2dc41ca7250a333e89a0020a9d645c41322a87c3"
+}

@@ -1,0 +1,10 @@
+{
+  "code_baseline": "a1b5fe0d71b8f3f3947ef0a04c9e6b94f09a4188",
+  "apk_sha256": "7bb740f34f4292d03df59cc6750441ba521b063159c45c34b9c2d5c879ac006e",
+  "installed_apk_sha256": "7bb740f34f4292d03df59cc6750441ba521b063159c45c34b9c2d5c879ac006e",
+  "rive_matches_latest_main": true,
+  "rive_bytes": 1677459,
+  "device": "emulator-5554",
+  "mode": "debug",
+  "dart_defines": "committed defaults; no overrides"
+}
