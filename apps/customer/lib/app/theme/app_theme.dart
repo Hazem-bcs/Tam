@@ -14,6 +14,17 @@ abstract final class AppTheme {
     textTheme: AppTypography.home(ambient.textTheme),
   );
 
+  /// Account-only brand typography, using the ambient semantic colors.
+  /// Unlike a global theme change, this leaves other feature owners untouched.
+  static ThemeData account(ThemeData ambient) => _build(
+    ambient.colorScheme,
+    ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
+    textTheme: AppTypography.account(ambient.textTheme).apply(
+      bodyColor: ambient.colorScheme.onSurface,
+      displayColor: ambient.colorScheme.onSurface,
+    ),
+  );
+
   static ThemeData rideJourney(ThemeData ambient) => _build(
     AppColors.light,
     ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,

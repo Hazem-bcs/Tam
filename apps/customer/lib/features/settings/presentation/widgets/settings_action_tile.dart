@@ -35,16 +35,17 @@ class SettingsActionTile extends StatelessWidget {
         height: 42,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: danger ? colors.errorContainer : colors.primaryContainer,
+          color: (danger ? colors.errorContainer : colors.primaryContainer)
+              .withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(AppRadii.md),
         ),
         child: Icon(icon, color: accent),
       ),
       title: Text(
         title,
-        style: typography.bodyLarge?.copyWith(
+        style: typography.titleSmall?.copyWith(
           color: danger ? colors.error : colors.onSurface,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
       subtitle: subtitle == null

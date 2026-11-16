@@ -47,6 +47,23 @@ void main() {
 
     await tester.pumpWidget(app());
     await tester.pumpAndSettle();
+    // Actual app entry must apply the account font while leaving the rest of
+    // the global design system untouched.
+    final accountContext = tester.element(
+      find.byKey(const Key('settings-content')),
+    );
+    expect(
+      Theme.of(accountContext).textTheme.bodyLarge?.fontFamily,
+      'TamSansArabic',
+    );
+    expect(
+      Theme.of(accountContext).colorScheme.primary,
+      AppTheme.light.colorScheme.primary,
+    );
+    expect(
+      AppTheme.light.textTheme.bodyLarge?.fontFamily,
+      isNot('TamSansArabic'),
+    );
     cubit().nameChanged('First Account');
     await cubit().saveName();
     cubit().notificationsChanged(false);

@@ -16,6 +16,61 @@ abstract final class AppTypography {
     );
   }
 
+  /// A focused, readable type hierarchy for the account centre only.
+  ///
+  /// Uses the bundled brand font already used by Home; it does not replace the
+  /// typography of unrelated feature screens. Both scripts retain zero tracking.
+  static TextTheme account(TextTheme ambient) {
+    final text = home(ambient);
+    return text.copyWith(
+      headlineSmall: text.headlineSmall?.copyWith(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        height: 1.35,
+      ),
+      titleLarge: text.titleLarge?.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        height: 1.35,
+      ),
+      titleMedium: text.titleMedium?.copyWith(
+        fontSize: 17,
+        fontWeight: FontWeight.w700,
+        height: 1.35,
+      ),
+      titleSmall: text.titleSmall?.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        height: 1.4,
+      ),
+      bodyLarge: text.bodyLarge?.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        height: 1.45,
+      ),
+      bodyMedium: text.bodyMedium?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      ),
+      bodySmall: text.bodySmall?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.5,
+      ),
+      labelLarge: text.labelLarge?.copyWith(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        height: 1.4,
+      ),
+      labelMedium: text.labelMedium?.copyWith(
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        height: 1.4,
+      ),
+    );
+  }
+
   /// A quieter, denser scale for the five-stage ride journey.
   static TextTheme rideJourney(TextTheme ambient) {
     final text = home(ambient);
