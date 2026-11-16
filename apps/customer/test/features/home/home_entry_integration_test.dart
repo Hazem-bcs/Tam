@@ -42,7 +42,7 @@ void main() {
       );
       expect(
         Theme.of(tester.element(homeScaffold.first)).colorScheme.primary,
-        isNot(AppTheme.light.colorScheme.primary),
+        AppTheme.light.colorScheme.primary,
       );
       final auth = home.read<AuthCubit>();
       final router = GoRouter.of(home);
