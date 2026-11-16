@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// A compact brand bar, with predictable alignment at every text scale.
+/// Compact identity; phone details belong in Account, not the action-first home.
 class HomeMasthead extends StatelessWidget {
   const HomeMasthead({
     super.key,
     required this.onNotifications,
     required this.isGuest,
     required this.isAuthenticated,
-    this.phoneE164,
     this.notificationsButton,
   });
 
   final VoidCallback onNotifications;
   final bool isGuest;
   final bool isAuthenticated;
-  final String? phoneE164;
   final Widget? notificationsButton;
 
   @override
@@ -24,9 +22,8 @@ class HomeMasthead extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final type = Theme.of(context).textTheme;
-
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(20, 14, 20, 10),
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -35,23 +32,23 @@ class HomeMasthead extends StatelessWidget {
             style: type.headlineLarge?.copyWith(
               color: colors.primary,
               fontWeight: FontWeight.w900,
-              height: 1.05,
+              height: 1,
             ),
           ),
           const SizedBox(width: AppSpacing.md),
-          Container(width: 1, height: 36, color: colors.outlineVariant),
+          Container(width: 1, height: 32, color: colors.outlineVariant),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   t.homeGreeting,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: type.labelMedium?.copyWith(
-                    color: colors.primary,
+                    color: colors.onSurface,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -60,23 +57,13 @@ class HomeMasthead extends StatelessWidget {
                       ? t.authGuestTitle
                       : isAuthenticated
                       ? t.authSignedInTitle
-                      : t.homePhoneTitle,
+                      : t.homeBrowsingLabel,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: type.labelSmall?.copyWith(
                     color: colors.onSurfaceVariant,
                   ),
                 ),
-                if (phoneE164 != null)
-                  Text(
-                    phoneE164!,
-                    textDirection: TextDirection.ltr,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: type.labelSmall?.copyWith(
-                      color: colors.onSurfaceVariant,
-                    ),
-                  ),
               ],
             ),
           ),
@@ -84,8 +71,8 @@ class HomeMasthead extends StatelessWidget {
           notificationsButton ??
               IconButton(
                 key: const Key('home-notifications'),
-                tooltip: t.navNotifications,
                 onPressed: onNotifications,
+                tooltip: t.navNotifications,
                 style: IconButton.styleFrom(
                   backgroundColor: colors.surfaceContainerLowest,
                   foregroundColor: colors.primary,

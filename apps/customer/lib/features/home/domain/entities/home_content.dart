@@ -31,6 +31,7 @@ final class HomePromotion {
     required this.subtitle,
     required this.enabled,
     required this.action,
+    this.imageUrl,
   });
   final String id;
   final HomePromotionKind kind;
@@ -38,6 +39,9 @@ final class HomePromotion {
   final HomeLocalizedText subtitle;
   final bool enabled;
   final HomeAction? action;
+
+  /// Optional HTTPS first-party CDN creative. Text-only campaigns need none.
+  final String? imageUrl;
 }
 
 final class HomeContent {

@@ -27,6 +27,34 @@
           "ar": "تابعنا لمعرفة الخدمات الجديدة عند إطلاقها.",
           "en": "Look out for new services as they launch."
         },
+        "enabled": true,
+        "action": null
+      },
+      {
+        "id": "promo-partner-sample",
+        "kind": "announcement",
+        "title": {
+          "ar": "مساحة لإعلانات شركائنا",
+          "en": "A space for partner campaigns"
+        },
+        "subtitle": {
+          "ar": "نموذج تجريبي لشكل الإعلان، وليس عرضًا تجاريًا فعليًا.",
+          "en": "A sample advertisement layout, not a live offer."
+        },
+        "enabled": true,
+        "action": null
+      },
+      {
+        "id": "promo-disabled",
+        "kind": "announcement",
+        "title": {
+          "ar": "إعلان غير منشور",
+          "en": "Unpublished campaign"
+        },
+        "subtitle": {
+          "ar": "هذه الشريحة لا ينبغي ظهورها.",
+          "en": "This card must not be visible."
+        },
         "enabled": false,
         "action": null
       }

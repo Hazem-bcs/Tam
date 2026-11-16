@@ -251,6 +251,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeLatest => 'آخر الأخبار';
 
   @override
+  String get homeChooseDestination => 'حدد وجهتك';
+
+  @override
+  String get homePromotionsTitle => 'عروض وإعلانات';
+
+  @override
+  String get homePromotionEyebrow => 'جديد في تم';
+
+  @override
+  String get homeServicesComingSoon => 'قريباً في تم';
+
+  @override
+  String get homeBrowsingLabel => 'تصفح خدمات تم';
+
+  @override
   String get rideRequestTitle => 'احجز مشوارك';
 
   @override

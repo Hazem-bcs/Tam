@@ -3,33 +3,20 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/home/domain/entities/home_content.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// Only server-enabled promotions appear. Manual paging avoids auto-motion
-/// and uses existing local TAM mascot art instead of introducing new styles.
+/// A real swipeable ad slot, sourced from Home data rather than UI fixtures.
+/// No promo triggers ride navigation: the hero already owns that destination.
 class HomePromotionCarousel extends StatefulWidget {
-  const HomePromotionCarousel({
-    super.key,
-    required this.promotions,
-    required this.onRideRequest,
-    required this.rideAvailable,
-  });
+  const HomePromotionCarousel({super.key, required this.promotions});
 
   final List<HomePromotion> promotions;
-  final VoidCallback onRideRequest;
-  final bool rideAvailable;
 
   @override
   State<HomePromotionCarousel> createState() => _HomePromotionCarouselState();
 }
 
 class _HomePromotionCarouselState extends State<HomePromotionCarousel> {
-  late final PageController _controller;
+  late final PageController _controller = PageController(viewportFraction: .96);
   int _index = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = PageController();
-  }
 
   @override
   void dispose() {
@@ -43,168 +30,238 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel> {
         .where((promotion) => promotion.enabled)
         .toList(growable: false);
     if (items.isEmpty) return const SizedBox.shrink();
+
     final colors = Theme.of(context).colorScheme;
+    final type = Theme.of(context).textTheme;
+    final t = AppLocalizations.of(context);
+    final scale = MediaQuery.textScalerOf(context).scale(16);
+    final visibleIndex = _index.clamp(0, items.length - 1);
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(
+            bottom: 11,
+            start: 2,
+            end: 2,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  t.homePromotionsTitle,
+                  style: type.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: colors.onSurface,
+                  ),
+                ),
+              ),
+              if (items.length > 1)
+                Text(
+                  '${visibleIndex + 1} / ${items.length}',
+                  textDirection: TextDirection.ltr,
+                  style: type.labelMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+        ),
         SizedBox(
-          height: MediaQuery.textScalerOf(context).scale(172).clamp(172, 360),
+          height: scale > 24 ? scale * 12 : 182,
           child: PageView.builder(
+            key: const Key('home-promotions-slider'),
             controller: _controller,
+            padEnds: false,
             itemCount: items.length,
             onPageChanged: (index) => setState(() => _index = index),
-            itemBuilder: (context, index) {
-              final promo = items[index];
-              final interactive =
-                  widget.rideAvailable &&
-                  promo.action == HomeAction.rideRequest;
-              final showMascot =
-                  index == 0 &&
-                  promo.kind == HomePromotionKind.hero &&
-                  MediaQuery.sizeOf(context).width >= 355 &&
-                  MediaQuery.textScalerOf(context).scale(14) < 21;
-              return Semantics(
-                container: true,
-                child: Material(
-                  color: colors.primaryContainer,
-                  borderRadius: BorderRadius.circular(21),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: interactive ? widget.onRideRequest : null,
-                    child: Stack(
-                      children: [
-                        PositionedDirectional(
-                          end: -52,
-                          bottom: -80,
-                          child: ExcludeSemantics(
-                            child: Container(
-                              height: 170,
-                              width: 170,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 24,
-                                  color: colors.primary.withValues(alpha: .07),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            17,
-                            14,
-                            14,
-                            14,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context).homeLatest,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall
-                                          ?.copyWith(
-                                            color: colors.primary,
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      promo.title.forLanguage(
-                                        Localizations.localeOf(
-                                          context,
-                                        ).languageCode,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium
-                                          ?.copyWith(
-                                            color: colors.onPrimaryContainer,
-                                            fontWeight: FontWeight.w800,
-                                            height: 1.25,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      promo.subtitle.forLanguage(
-                                        Localizations.localeOf(
-                                          context,
-                                        ).languageCode,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: colors.onSurfaceVariant,
-                                            height: 1.35,
-                                          ),
-                                    ),
-                                    if (interactive) ...[
-                                      const SizedBox(height: 6),
-                                      Icon(
-                                        Icons.arrow_forward_rounded,
-                                        size: 18,
-                                        color: colors.primary,
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                              if (showMascot) ...[
-                                const SizedBox(width: AppSpacing.xs),
-                                ExcludeSemantics(
-                                  child: Image.asset(
-                                    'assets/images/tam_account_mascot.webp',
-                                    width: 101,
-                                    height: 111,
-                                    fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.medium,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsetsDirectional.only(end: 10),
+              child: _PromotionSlide(promotion: items[index], index: index),
+            ),
+          ),
+        ),
+        if (items.length > 1)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(top: 11),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < items.length; i++) ...[
+                  AnimatedContainer(
+                    duration: MediaQuery.disableAnimationsOf(context)
+                        ? Duration.zero
+                        : AppMotion.short,
+                    width: i == visibleIndex ? 20 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: i == visibleIndex
+                          ? colors.primary
+                          : colors.outlineVariant,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                ],
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _PromotionSlide extends StatelessWidget {
+  const _PromotionSlide({required this.promotion, required this.index});
+
+  final HomePromotion promotion;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final type = Theme.of(context).textTheme;
+    final t = AppLocalizations.of(context);
+    final isMedia = promotion.imageUrl != null;
+    final dark = isMedia || index.isOdd;
+    final fg = dark ? colors.onPrimary : colors.onPrimaryContainer;
+    final secondary = dark
+        ? colors.onPrimary.withValues(alpha: .82)
+        : colors.onSurfaceVariant;
+    final background = index.isOdd
+        ? colors.primary
+        : (index % 3 == 2
+              ? colors.secondaryContainer
+              : colors.primaryContainer);
+    final showArt =
+        !isMedia &&
+        MediaQuery.textScalerOf(context).scale(16) < 22 &&
+        MediaQuery.sizeOf(context).width >= 350;
+    final lang = Localizations.localeOf(context).languageCode;
+
+    return Semantics(
+      container: true,
+      label: promotion.title.forLanguage(lang),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: background,
+          borderRadius: BorderRadius.circular(23),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(23),
+          child: Stack(
+            children: [
+              if (isMedia) ...[
+                Positioned.fill(
+                  child: Image.network(
+                    promotion.imageUrl!,
+                    fit: BoxFit.cover,
+                    cacheWidth: 1000,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox.shrink(),
+                  ),
+                ),
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: AlignmentDirectional.topStart,
+                        end: AlignmentDirectional.bottomEnd,
+                        colors: [
+                          colors.scrim.withValues(alpha: .82),
+                          colors.scrim.withValues(alpha: .45),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-        if (items.length > 1) ...[
-          const SizedBox(height: 9),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var i = 0; i < items.length; i++) ...[
-                AnimatedContainer(
-                  duration: MediaQuery.disableAnimationsOf(context)
-                      ? Duration.zero
-                      : AppMotion.short,
-                  height: 5,
-                  width: i == _index ? 18 : 6,
-                  decoration: BoxDecoration(
-                    color: i == _index ? colors.primary : colors.outlineVariant,
-                    borderRadius: BorderRadius.circular(5),
+              ],
+              if (!isMedia)
+                PositionedDirectional(
+                  end: -25,
+                  bottom: -55,
+                  child: ExcludeSemantics(
+                    child: Container(
+                      width: 155,
+                      height: 155,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: fg.withValues(alpha: .09),
+                          width: 28,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 5),
-              ],
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(18, 16, 14, 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            t.homePromotionEyebrow,
+                            style: type.labelSmall?.copyWith(
+                              color: fg.withValues(alpha: .88),
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 7),
+                          Text(
+                            promotion.title.forLanguage(lang),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: type.titleMedium?.copyWith(
+                              color: fg,
+                              fontWeight: FontWeight.w900,
+                              height: 1.3,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            promotion.subtitle.forLanguage(lang),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: type.bodySmall?.copyWith(
+                              color: secondary,
+                              height: 1.45,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (showArt) ...[
+                      const SizedBox(width: 7),
+                      ExcludeSemantics(
+                        child: index == 0
+                            ? Image.asset(
+                                'assets/images/tam_account_mascot.webp',
+                                height: 111,
+                                width: 93,
+                                fit: BoxFit.contain,
+                              )
+                            : Icon(
+                                index.isOdd
+                                    ? Icons.campaign_outlined
+                                    : Icons.route_rounded,
+                                color: fg.withValues(alpha: .78),
+                                size: 60,
+                              ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ],
           ),
-        ],
-      ],
+        ),
+      ),
     );
   }
 }

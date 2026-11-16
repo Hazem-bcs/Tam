@@ -1,6 +1,6 @@
 # Tam Home API — v1
 
-**Status:** proposed backend contract (2026-11-07), NOT implemented or live-tested.
+**Status:** proposed backend contract (2026-11-07, revised 2026-11-16 for non-clickable campaigns and optional HTTPS creative), NOT implemented or live-tested.
 
 **Scope:** GET `/home`, presentation content only. No trips, quotes, current location, customer profile, notifications, purchases, payments or badge counts.
 
@@ -49,18 +49,19 @@ Full authoritative proposal examples: `examples/home-success.json` and `examples
 | `promotions[].id` | string | required / no | Non-empty, unique within the array, opaque stable id |
 | `promotions[].kind` | enum string | required / no | `hero` or `announcement` |
 | `promotions[].title`, `subtitle` | object | required / no | Both `ar` and `en` are required, non-empty strings; subtitle can be short but not null |
-| `promotions[].enabled` | boolean | required / no | `true` **only** when `action` is usable; otherwise `false` |
-| `promotions[].action` | enum string or null | required / **yes** | `ride_request` or `null`; **never a URL or arbitrary route** |
+| `promotions[].enabled` | boolean | required / no | Whether this campaign is approved for display, independent of clickability. |
+| `promotions[].action` | enum string or null | required / **yes** | `ride_request` or `null`; **never a URL or arbitrary route**. The home UI deliberately does not add a second route to the same ride flow. |
+| `promotions[].image_url` | HTTPS URL or null | optional / **yes** | Optional banner creative hosted by a trusted first-party CDN. Backend must enforce ownership, permitted hosts, dimensions, compression and content safety; client validates HTTPS and displays a text fallback on load failure. |
 | `services` | array<object> | required / no | At most one of each canonical service id; backend display order |
 | `services[].id` | enum string | required / no | `ride`, `food`, `shopping`; no duplicate ids |
 | `services[].available` | boolean | required / no | In wave one only `ride` may be true |
 | `services[].action` | enum string or null | required / **yes** | `ride_request` only for active ride; otherwise `null` |
 
-**Invariants:** `enabled == (action != null)` and `available == (action != null)`; unsupported food/shopping must remain false. The client uses a strict action allowlist mapped to `CustomerNavigation`, never executes route strings. Unknown enum/action or malformed JSON is an invalid response, not an invitation to navigate. The UI labels of canonical services are localized from app ARBs; backend is not a duplicate source.
+**Invariants:** promotions may be displayed when `enabled=true` and `action=null` (informational banners). Services still require `available == (action != null)`; unsupported food/shopping must remain false. The client uses a strict action allowlist mapped to `CustomerNavigation`, never executes route strings. Unknown enum/action or malformed JSON is an invalid response, not an invitation to navigate. The UI labels of canonical services are localized from app ARBs; backend is not a duplicate source.
 
 ### Ordering, size and pagination
 
-The endpoint is a single bounded snapshot. **No cursor, limit, offset or pagination.** Promotions and services retain server array order. The UI groups the hero before service tiles and announcement after; backend should send at most one active hero for clarity. Recommend payload < 20 KiB and normal UTF-8 strings. Dates and money are not present; no timezone, monetary rounding, or implicit price promises are needed.
+The endpoint is a single bounded snapshot. **No cursor, limit, offset or pagination.** Promotions and services retain server array order. The UI groups the hero before service tiles and announcement after; backend should send at most one active hero for clarity. The current mock uses multiple **clearly non-commercial** informational cards solely to verify paging. Recommend payload < 20 KiB and normal UTF-8 strings. Dates and money are not present; no timezone, monetary rounding, or implicit price promises are needed.
 
 ## Errors and recovery
 
@@ -77,7 +78,7 @@ Transport timeout/offline is a client failure, not an invented HTTP 200. Missing
 
 ## Mutations, consistency, privacy
 
-GET is read-only, safe and idempotent; repeated calls do **not** create bookings, coupons, wallet credits or notification-read events. Backend controls content revisions and availability; revocation of an offer/service takes effect in subsequent reads, while final booking permission/quote must be revalidated by Ride endpoints. Promotion text must not imply a real discount without product approval. Home header greeting and `phoneE164` come from existing client Auth/local-access state, **not** this response. Unread notification counts are owned by Notifications; do not put a number in GET /home.
+GET is read-only, safe and idempotent; repeated calls do **not** create bookings, coupons, wallet credits or notification-read events. Backend controls content revisions and availability; revocation of an offer/service takes effect in subsequent reads, while final booking permission/quote must be revalidated by Ride endpoints. Promotion text must not imply a real discount without product approval. Mock campaigns are not paid ads. For external advertiser landing pages, an additional reviewed destination allowlist/API version is required; v1 does not execute arbitrary URLs or provide advertiser analytics. Home header greeting and `phoneE164` come from existing client Auth/local-access state, **not** this response. Unread notification counts are owned by Notifications; do not put a number in GET /home.
 
 ## Flutter mapping
 

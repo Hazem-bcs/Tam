@@ -548,6 +548,36 @@ abstract class AppLocalizations {
   /// **'آخر الأخبار'**
   String get homeLatest;
 
+  /// No description provided for @homeChooseDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد وجهتك'**
+  String get homeChooseDestination;
+
+  /// No description provided for @homePromotionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروض وإعلانات'**
+  String get homePromotionsTitle;
+
+  /// No description provided for @homePromotionEyebrow.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد في تم'**
+  String get homePromotionEyebrow;
+
+  /// No description provided for @homeServicesComingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريباً في تم'**
+  String get homeServicesComingSoon;
+
+  /// No description provided for @homeBrowsingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفح خدمات تم'**
+  String get homeBrowsingLabel;
+
   /// No description provided for @rideRequestTitle.
   ///
   /// In ar, this message translates to:

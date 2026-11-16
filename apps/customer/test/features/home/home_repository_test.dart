@@ -78,7 +78,7 @@ void main() {
       scenario: HomeMockScenario.empty,
       latency: Duration.zero,
     ).load();
-    expect(success.promotions.length, 2);
+    expect(success.promotions.length, 4);
     expect(empty.isEmpty, isTrue);
     expect(
       const MockHomeRepository(
@@ -123,6 +123,28 @@ void main() {
       );
     });
   }
+
+  test('promotions can be approved without a clickable destination', () {
+    final content = HomeContentMapper.fromEnvelope(homeSuccessFixture);
+    expect(content.promotions[1].enabled, isTrue);
+    expect(content.promotions[1].action, isNull);
+  });
+
+  test('optional remote creative must be an HTTPS URL', () {
+    final value =
+        jsonDecode(jsonEncode(homeSuccessFixture)) as Map<String, dynamic>;
+    final promotions =
+        (value['data'] as Map<String, dynamic>)['promotions'] as List<dynamic>;
+    (promotions.first as Map<String, dynamic>)['image_url'] =
+        'http://untrusted.invalid/banner.png';
+    expect(() => HomeContentMapper.fromEnvelope(value), throwsFormatException);
+    (promotions.first as Map<String, dynamic>)['image_url'] =
+        'https://assets.example.invalid/approved/banner.webp';
+    expect(
+      HomeContentMapper.fromEnvelope(value).promotions.first.imageUrl,
+      'https://assets.example.invalid/approved/banner.webp',
+    );
+  });
 
   test('decoder rejects more than the contracted five promotions', () {
     final value =

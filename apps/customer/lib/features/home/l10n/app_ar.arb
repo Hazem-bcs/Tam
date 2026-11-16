@@ -30,5 +30,10 @@
   "homeServicesHeading": "خدمات تم",
   "homeServicesDescription": "خدمات جديدة لتسهّل يومك، قريبًا",
   "homeRideUnavailable": "خدمة المشوار غير متاحة حاليًا.",
-  "homeLatest": "آخر الأخبار"
+  "homeLatest": "آخر الأخبار",
+  "homeChooseDestination": "حدد وجهتك",
+  "homePromotionsTitle": "عروض وإعلانات",
+  "homePromotionEyebrow": "جديد في تم",
+  "homeServicesComingSoon": "قريباً في تم",
+  "homeBrowsingLabel": "تصفح خدمات تم"
 }

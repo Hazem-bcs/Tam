@@ -258,6 +258,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeLatest => 'What\'s new';
 
   @override
+  String get homeChooseDestination => 'Choose your destination';
+
+  @override
+  String get homePromotionsTitle => 'Offers & updates';
+
+  @override
+  String get homePromotionEyebrow => 'Discover TAM';
+
+  @override
+  String get homeServicesComingSoon => 'Coming soon to TAM';
+
+  @override
+  String get homeBrowsingLabel => 'Explore TAM services';
+
+  @override
   String get rideRequestTitle => 'Book a ride';
 
   @override

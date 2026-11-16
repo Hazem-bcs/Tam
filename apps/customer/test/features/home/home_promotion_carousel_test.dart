@@ -34,8 +34,6 @@ void main() {
   Future<void> pumpCarousel(
     WidgetTester tester, {
     required List<HomePromotion> promotions,
-    required VoidCallback onRideRequest,
-    bool rideAvailable = true,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -47,11 +45,7 @@ void main() {
           body: Center(
             child: SizedBox(
               width: 390,
-              child: HomePromotionCarousel(
-                promotions: promotions,
-                onRideRequest: onRideRequest,
-                rideAvailable: rideAvailable,
-              ),
+              child: HomePromotionCarousel(promotions: promotions),
             ),
           ),
         ),
@@ -60,49 +54,33 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('disabled or absent campaigns are not shown', (tester) async {
-    await pumpCarousel(
-      tester,
-      promotions: const [disabled],
-      onRideRequest: () {},
-    );
+  testWidgets('disabled campaigns are omitted entirely', (tester) async {
+    await pumpCarousel(tester, promotions: const [disabled]);
     expect(find.text('غير منشور'), findsNothing);
     expect(find.byType(PageView), findsNothing);
   });
 
-  testWidgets('only available ride promotions can trigger booking', (
-    tester,
-  ) async {
-    var taps = 0;
-    await pumpCarousel(
-      tester,
-      promotions: const [first],
-      onRideRequest: () => taps++,
-      rideAvailable: false,
-    );
-    await tester.tap(find.text('خبر تم الأول'));
-    expect(taps, 0);
-    await pumpCarousel(
-      tester,
-      promotions: const [first],
-      onRideRequest: () => taps++,
-    );
-    await tester.tap(find.text('خبر تم الأول'));
-    expect(taps, 1);
+  testWidgets('promotions do not duplicate ride navigation', (tester) async {
+    await pumpCarousel(tester, promotions: const [first]);
+    final slider = find.byKey(const Key('home-promotions-slider'));
+    expect(slider, findsOneWidget);
+    final firstSlide = find.text('خبر تم الأول');
+    expect(firstSlide, findsOneWidget);
+    expect(find.byType(InkWell), findsNothing);
   });
 
-  testWidgets('promotions swipe manually without fabricated slides', (
+  testWidgets('approved informational campaigns swipe manually', (
     tester,
   ) async {
-    await pumpCarousel(
-      tester,
-      promotions: const [first, second, disabled],
-      onRideRequest: () {},
-    );
+    await pumpCarousel(tester, promotions: const [first, second, disabled]);
     expect(find.text('خبر تم الأول'), findsOneWidget);
     expect(find.text('غير منشور'), findsNothing);
-    await tester.drag(find.byType(PageView), const Offset(300, 0));
+    await tester.drag(
+      find.byKey(const Key('home-promotions-slider')),
+      const Offset(310, 0),
+    );
     await tester.pumpAndSettle();
     expect(find.text('خبر تم الثاني'), findsOneWidget);
+    expect(find.text('2 / 2'), findsOneWidget);
   });
 }

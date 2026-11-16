@@ -30,5 +30,10 @@
   "homeServicesHeading": "TAM services",
   "homeServicesDescription": "More everyday services are on the way.",
   "homeRideUnavailable": "Ride requests are not currently available.",
-  "homeLatest": "What's new"
+  "homeLatest": "What's new",
+  "homeChooseDestination": "Choose your destination",
+  "homePromotionsTitle": "Offers & updates",
+  "homePromotionEyebrow": "Discover TAM",
+  "homeServicesComingSoon": "Coming soon to TAM",
+  "homeBrowsingLabel": "Explore TAM services"
 }

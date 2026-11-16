@@ -16,6 +16,7 @@ abstract final class HomeContentMapper {
         subtitle: _text(v['subtitle']),
         enabled: _bool(v['enabled']),
         action: _requiredAction(v),
+        imageUrl: _imageUrl(v['image_url']),
       );
     }).toList();
     final services = _array(data['services']).map((item) {
@@ -34,7 +35,6 @@ abstract final class HomeContentMapper {
     if (promos.length > 5 ||
         promos.map((e) => e.id).toSet().length != promos.length ||
         services.map((e) => e.id).toSet().length != services.length ||
-        promos.any((e) => e.enabled != (e.action != null)) ||
         services.any((e) => e.available != (e.action != null)) ||
         services.any((e) => e.available && e.id != HomeServiceId.ride)) {
       throw const FormatException('Invalid Home availability/IDs');
@@ -59,6 +59,22 @@ abstract final class HomeContentMapper {
   static String _string(Object? value) {
     if (value is String && value.trim().isNotEmpty) return value;
     throw const FormatException('Expected non-empty string');
+  }
+
+  static String? _imageUrl(Object? value) {
+    if (value == null) return null;
+    if (value is! String) {
+      throw const FormatException('Invalid campaign image URL');
+    }
+    final url = Uri.tryParse(value);
+    if (url == null ||
+        url.scheme != 'https' ||
+        url.host.isEmpty ||
+        url.userInfo.isNotEmpty ||
+        url.hasFragment) {
+      throw const FormatException('Invalid campaign image URL');
+    }
+    return value;
   }
 
   static bool _bool(Object? value) {
