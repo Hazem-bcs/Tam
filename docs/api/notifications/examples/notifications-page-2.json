@@ -2,6 +2,7 @@
   "data": [
     {
       "id": "notice-trips-001",
+      "type": "ride.history",
       "kind": "trip",
       "title": {
         "ar": "راجع رحلاتك السابقة",
@@ -19,6 +20,7 @@
     },
     {
       "id": "notice-account-001",
+      "type": "account.welcome",
       "kind": "account",
       "title": {
         "ar": "مرحبًا بك في تم",
