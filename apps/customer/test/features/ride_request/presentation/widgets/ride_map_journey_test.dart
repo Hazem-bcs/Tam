@@ -10,6 +10,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/features/maps/maps_dependencies.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
@@ -188,6 +189,63 @@ void main() {
     },
   );
 
+  testWidgets(
+    'My Location reports a disabled service even with the panel collapsed',
+    (tester) async {
+      phone(tester);
+      final gps = LocationProbe();
+      final bloc = await launch(tester, gps);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('ride-sheet-toggle')));
+      await tester.pumpAndSettle();
+      gps.onLocate = () async => throw const MapsFailure('LOCATION_DISABLED');
+      await tester.tap(find.byKey(const Key('ride-use-device-location')));
+      await tester.pumpAndSettle();
+      expect(find.text('تشغيل الموقع'), findsOneWidget);
+      expect(find.textContaining('خدمة الموقع مغلقة'), findsOneWidget);
+      expect(find.byType(AlertDialog), findsOneWidget);
+      expect(bloc.state.pickup?.point, origin);
+      expect(gps.lastRequireFresh, isTrue);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+  testWidgets(
+    'a denied permission is visible and retry focuses without replacing manual pickup',
+    (tester) async {
+      phone(tester);
+      final gps = LocationProbe();
+      final bloc = await launch(tester, gps);
+      await tester.pumpAndSettle();
+      bloc.add(
+        PickupSelected(
+          TripLocation(point: destination, label: 'Manual pickup'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('ride-sheet-toggle')));
+      await tester.pumpAndSettle();
+      gps.onLocate = () async => throw const MapsFailure('LOCATION_DENIED');
+      await tester.tap(find.byKey(const Key('ride-use-device-location')));
+      await tester.pumpAndSettle();
+      expect(
+        find.widgetWithText(SnackBarAction, 'السماح بالموقع'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('لم يُسمح بالوصول للموقع'), findsOneWidget);
+      gps.onLocate = () async => origin;
+      await tester.tap(find.widgetWithText(SnackBarAction, 'السماح بالموقع'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<RouteMapView>(find.byType(RouteMapView)).focus?.point,
+        origin,
+      );
+      expect(bloc.state.pickup?.point, destination);
+      expect(bloc.state.pickupFromDevice, isFalse);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
   Future<void> review(WidgetTester tester, RideDraftBloc bloc) async {
     bloc.add(
       DestinationSelected(
@@ -292,7 +350,7 @@ void main() {
             findsOneWidget,
           );
         } else {
-          expect(find.textContaining('الموقع غير دقيق'), findsOneWidget);
+          expect(find.textContaining('الموقع غير دقيق'), findsWidgets);
         }
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());

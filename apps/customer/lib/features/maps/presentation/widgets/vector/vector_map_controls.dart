@@ -27,7 +27,9 @@ class VectorMapControls extends StatelessWidget {
         shape: const CircleBorder(),
         child: IconButton(
           key: const Key('ride-use-device-location'),
-          tooltip: AppLocalizations.of(context).mapsUseMyLocation,
+          tooltip: locating
+              ? AppLocalizations.of(context).mapsLocating
+              : AppLocalizations.of(context).mapsUseMyLocation,
           onPressed: locating ? null : onLocate,
           icon: locating
               ? const SizedBox.square(

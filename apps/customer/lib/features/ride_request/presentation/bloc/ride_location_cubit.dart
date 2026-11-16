@@ -7,21 +7,25 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 final class RideLocationState {
   const RideLocationState({
     this.fix,
+    this.focusPoint,
     this.fixRevision = 0,
+    this.focusRevision = 0,
     this.locating = false,
     this.failure,
     this.point,
     this.address,
     this.resolving = false,
   });
-  final int fixRevision;
-  final GeoPoint? fix, point;
+  final int fixRevision, focusRevision;
+  final GeoPoint? fix, point, focusPoint;
   final String? failure, address;
   final bool locating, resolving;
 
   RideLocationState copy({
     GeoPoint? fix,
+    GeoPoint? focusPoint,
     int? fixRevision,
+    int? focusRevision,
     bool? locating,
     String? failure,
     GeoPoint? point,
@@ -30,7 +34,9 @@ final class RideLocationState {
     bool clearPoint = false,
   }) => RideLocationState(
     fix: fix ?? this.fix,
+    focusPoint: focusPoint ?? this.focusPoint,
     fixRevision: fixRevision ?? this.fixRevision,
+    focusRevision: focusRevision ?? this.focusRevision,
     locating: locating ?? this.locating,
     failure: failure,
     point: clearPoint ? null : point ?? this.point,
@@ -58,17 +64,27 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
   int _fixEpoch = 0, _pointEpoch = 0;
   bool _returningFromSettings = false;
 
-  Future<void> locate({bool requireFresh = false}) async {
+  Future<void> locate({
+    bool requireFresh = false,
+    bool focusMap = false,
+  }) async {
     if (isClosed || state.locating) return;
     final epoch = ++_fixEpoch;
+    final selectedAtRequest = _pointEpoch;
     emit(state.copy(locating: true, address: state.address));
     try {
       final fix = await device.locate(requireFresh: requireFresh);
       if (!isClosed && epoch == _fixEpoch) {
+        final focus = focusMap && selectedAtRequest == _pointEpoch;
+        if (focus) _pointEpoch++;
         emit(
           state.copy(
             fix: fix,
+            focusPoint: focus ? fix : state.focusPoint,
             fixRevision: state.fixRevision + 1,
+            focusRevision: state.focusRevision + (focus ? 1 : 0),
+            clearPoint: focus,
+            resolving: focus ? false : state.resolving,
             locating: false,
             address: state.address,
           ),
@@ -115,17 +131,23 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
   Future<void> selectPoint(GeoPoint point) async {
     if (isClosed) return;
     final epoch = ++_pointEpoch;
-    emit(state.copy(point: point, resolving: true));
+    emit(state.copy(point: point, resolving: true, failure: state.failure));
     try {
       final location = await repository.reverse(point, language: language);
       if (location.point != point) throw const MapsFailure('INVALID_RESPONSE');
       if (!isClosed && epoch == _pointEpoch) {
-        emit(state.copy(address: location.label, resolving: false));
+        emit(
+          state.copy(
+            address: location.label,
+            resolving: false,
+            failure: state.failure,
+          ),
+        );
       }
     } catch (_) {
       // Exact coordinates remain usable without a reverse-geocoding server.
       if (!isClosed && epoch == _pointEpoch) {
-        emit(state.copy(resolving: false));
+        emit(state.copy(resolving: false, failure: state.failure));
       }
     }
   }
@@ -133,14 +155,16 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
   void clearPoint() {
     if (isClosed) return;
     _pointEpoch++;
-    emit(state.copy(clearPoint: true, resolving: false));
+    emit(
+      state.copy(clearPoint: true, resolving: false, failure: state.failure),
+    );
   }
 
-  Future<void> openSettings() async {
+  Future<void> openSettings({String? failure}) async {
     if (isClosed) return;
     _returningFromSettings = true;
     try {
-      final opened = state.failure == 'LOCATION_DENIED_FOREVER'
+      final opened = (failure ?? state.failure) == 'LOCATION_DENIED_FOREVER'
           ? await settings.openAppSettings()
           : await settings.openLocationSettings();
       if (!opened && !isClosed) {
@@ -162,7 +186,7 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
   void resumed() {
     if (!_returningFromSettings || isClosed) return;
     _returningFromSettings = false;
-    locate();
+    locate(requireFresh: true, focusMap: true);
   }
 
   @override

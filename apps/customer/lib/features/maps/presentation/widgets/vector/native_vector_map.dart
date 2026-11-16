@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../map_camera_focus.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -30,6 +31,7 @@ class NativeVectorMap extends StatefulWidget {
     this.bottomInset,
     this.onLocate,
     this.locating = false,
+    this.focus,
     this.markerImageLoader = VectorMarkerImages.load,
   });
   final String style;
@@ -39,6 +41,7 @@ class NativeVectorMap extends StatefulWidget {
   final ValueListenable<double>? bottomInset;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
   final Future<Uint8List> Function(String, Color) markerImageLoader;
   @override
   State<NativeVectorMap> createState() => _NativeVectorMapState();
@@ -70,7 +73,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
       Offset(_size.width / 2, (80 + _size.height - _appliedInset.value) / 2);
   Offset? _pointerStart;
   int _tapId = 0;
-  bool _cameraAnimating = false;
+  bool _cameraAnimating = false, _deviceFocusPending = false;
   EdgeInsets? _lastPadding;
   bool _selectionGesture = false, _focusSelectionPending = false;
   GeoPoint? _emittedSelection;
@@ -88,6 +91,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     WidgetsBinding.instance.addObserver(this);
     widget.bottomInset?.addListener(_schedulePadding);
     _focusSelectionPending = _picking;
+    _deviceFocusPending = widget.focus != null;
     _startDeadline();
   }
 
@@ -127,6 +131,10 @@ class _NativeVectorMapState extends State<NativeVectorMap>
       _schedulePadding();
     }
     if (oldWidget.style != widget.style) _reset();
+    if (oldWidget.focus != widget.focus) {
+      _deviceFocusPending = widget.focus != null;
+      _queueSync();
+    }
     if (oldWidget.scene.selection != widget.scene.selection &&
         widget.scene.selection != _emittedSelection) {
       _focusSelectionPending =
@@ -199,11 +207,33 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     try {
       while (_dirty && _current(epoch) && _installed && _foreground) {
         _dirty = false;
-        final scene = widget.scene;
+        final scene = widget.scene.withDeviceLocation(widget.focus?.point);
         if (_drawn != scene) {
           await _layers!.update(scene);
           if (!_current(epoch)) return;
           _drawn = scene;
+        }
+        if (_deviceFocusPending && widget.focus != null) {
+          _deviceFocusPending = false;
+          _fitPending = false;
+          _cameraAnimating = true;
+          try {
+            final update = CameraUpdate.newLatLngZoom(
+              _latLng(widget.focus!.point),
+              15,
+            );
+            if (MediaQuery.disableAnimationsOf(context)) {
+              await _controller!.moveCamera(update);
+            } else {
+              await _controller!.animateCamera(
+                update,
+                duration: AppMotion.medium,
+              );
+            }
+          } finally {
+            _cameraAnimating = false;
+            if (_current(epoch)) await _applyPadding(epoch);
+          }
         }
         if (_focusSelectionPending && _picking) {
           _focusSelectionPending = false;

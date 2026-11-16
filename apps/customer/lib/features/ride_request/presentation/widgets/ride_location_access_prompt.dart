@@ -25,7 +25,11 @@ Future<bool> showRideLocationAccessPrompt(
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text(t.mapsOpenSettings),
+              child: Text(
+                failure == 'LOCATION_DISABLED'
+                    ? t.mapsTurnOnLocation
+                    : t.mapsOpenSettings,
+              ),
             ),
           ],
         ),

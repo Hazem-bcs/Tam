@@ -1811,7 +1811,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mapsCurrentLocation => 'موقعي الحالي';
 
   @override
-  String get mapsLocating => 'جارٍ تحديد نقطة الانطلاق من موقعك…';
+  String get mapsLocating => 'جارٍ تحديد موقعك…';
 
   @override
   String get mapsEnableLocation => 'فعّل الموقع لتحديد الانطلاق';
@@ -1829,4 +1829,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsMoveToSelect => 'حرّك الخريطة لتحديد المكان';
+
+  @override
+  String get mapsTurnOnLocation => 'تشغيل الموقع';
+
+  @override
+  String get mapsAllowLocation => 'السماح بالموقع';
 }

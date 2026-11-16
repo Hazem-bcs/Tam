@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
@@ -24,12 +25,14 @@ class TamMapCanvas extends StatelessWidget {
     this.selection,
     this.onLocate,
     this.locating = false,
+    this.focus,
     this.markerIconSize = 36,
   });
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
   final double markerIconSize;
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
@@ -52,6 +55,7 @@ class TamMapCanvas extends StatelessWidget {
             selection: selection,
             onLocate: onLocate,
             locating: locating,
+            focus: focus,
           ),
         )
       : RasterMapCanvas(
@@ -65,6 +69,7 @@ class TamMapCanvas extends StatelessWidget {
           selection: selection,
           onLocate: onLocate,
           locating: locating,
+          focus: focus,
           markerIconSize: markerIconSize,
           tileProviderFactory: tileProviderFactory,
           onAttribution: onAttribution,

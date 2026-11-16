@@ -1851,7 +1851,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapsCurrentLocation => 'My current location';
 
   @override
-  String get mapsLocating => 'Finding your pickup location…';
+  String get mapsLocating => 'Finding your location…';
 
   @override
   String get mapsEnableLocation => 'Turn on location for your pickup';
@@ -1869,4 +1869,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsMoveToSelect => 'Move the map to choose a place';
+
+  @override
+  String get mapsTurnOnLocation => 'Turn on location';
+
+  @override
+  String get mapsAllowLocation => 'Allow location';
 }

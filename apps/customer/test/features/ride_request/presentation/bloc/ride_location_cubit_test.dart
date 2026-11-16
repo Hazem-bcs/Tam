@@ -53,6 +53,41 @@ void main() {
       expect(maps.searches, 0);
     },
   );
+  test(
+    'explicit location focuses the same fix repeatedly but validation never focuses',
+    () async {
+      await cubit.locate(requireFresh: true, focusMap: true);
+      expect(gps.lastRequireFresh, isTrue);
+      expect(cubit.state.focusPoint, origin);
+      expect(cubit.state.focusRevision, 1);
+      await cubit.locate(requireFresh: true, focusMap: true);
+      expect(cubit.state.focusRevision, 2);
+      gps.onLocate = () async => destination;
+      await cubit.validatePickup(origin);
+      expect(cubit.state.fix, destination);
+      expect(cubit.state.focusPoint, origin);
+      expect(cubit.state.focusRevision, 2);
+    },
+  );
+  test('a newer tapped point wins a pending explicit location focus', () async {
+    final pending = Completer<GeoPoint>();
+    gps.onLocate = () => pending.future;
+    final locating = cubit.locate(focusMap: true);
+    await cubit.selectPoint(destination);
+    pending.complete(origin);
+    await locating;
+    expect(cubit.state.point, destination);
+    expect(cubit.state.focusRevision, 0);
+  });
+  test(
+    'successful explicit location clears only the unconfirmed point',
+    () async {
+      await cubit.selectPoint(destination);
+      await cubit.locate(focusMap: true);
+      expect(cubit.state.point, isNull);
+      expect(cubit.state.focusPoint, origin);
+    },
+  );
   test('repeated location action only has one in-flight request', () async {
     final pending = Completer<GeoPoint>();
     gps.onLocate = () => pending.future;

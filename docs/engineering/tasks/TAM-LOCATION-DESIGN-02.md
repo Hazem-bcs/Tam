@@ -14,3 +14,7 @@ Delivery: docs/engineering/deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md; Android
 User follow-up at2386368: repair abrupt tapped-point transition. Native camera animation, immediate tap feedback, debounced padding serialized after recenter; focused interruption regression and Android preview. Same file ownership and exclusions.
 
 User follow-up at e41c919: accuracy reported restored; prioritize calmer motion and smaller non-obscuring instruction. Keep map stationary on visible-point taps, short local pin feedback, native projection for dragging at the actual pin anchor, preserve collapsed card during picking. No main merge requested for this follow-up.
+
+User follow-up at1bd6343: fix My Location camera action and visible permission/service failures even with collapsed sheet. Ownership extends Maps camera-focus presentation, RideLocationCubit, feature ARB/generated l10n and focused location tests. Explicit fresh acquisition and camera intent; preserve manual pickup/destination. Android preview authorized.
+
+Location-button follow-up completed: 58 focused tests passed, offline Android build 7s, actual permission dialog + GPS-off settings action + successful automatic return verified. GPS restored enabled. Separate local locationpreview package avoids concurrent standard-app installs. Evidence in handoff. Full suite/analyze and main merge deferred.

@@ -9,9 +9,18 @@ final class VectorMapScene extends Equatable {
     this.destination,
     this.selection,
     this.driver,
+    this.deviceLocation,
     this.route,
   });
-  final GeoPoint? origin, destination, selection, driver;
+  final GeoPoint? origin, destination, selection, driver, deviceLocation;
+  VectorMapScene withDeviceLocation(GeoPoint? point) => VectorMapScene(
+    origin: origin,
+    destination: destination,
+    selection: selection,
+    driver: driver,
+    route: route,
+    deviceLocation: point,
+  );
   final MapRoute? route;
 
   List<GeoPoint> get bounds => [?origin, ?destination, ...?route?.points];
@@ -33,6 +42,7 @@ final class VectorMapScene extends Equatable {
         ('destination', destination),
         ('selection', selection),
         ('driver', driver),
+        ('device', deviceLocation),
       ])
         if (entry.$2 != null)
           {
@@ -49,5 +59,12 @@ final class VectorMapScene extends Equatable {
   ];
 
   @override
-  List<Object?> get props => [origin, destination, selection, driver, route];
+  List<Object?> get props => [
+    origin,
+    destination,
+    selection,
+    driver,
+    route,
+    deviceLocation,
+  ];
 }

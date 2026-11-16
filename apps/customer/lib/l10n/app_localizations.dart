@@ -3419,7 +3419,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapsLocating.
   ///
   /// In ar, this message translates to:
-  /// **'جارٍ تحديد نقطة الانطلاق من موقعك…'**
+  /// **'جارٍ تحديد موقعك…'**
   String get mapsLocating;
 
   /// No description provided for @mapsEnableLocation.
@@ -3451,6 +3451,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حرّك الخريطة لتحديد المكان'**
   String get mapsMoveToSelect;
+
+  /// No description provided for @mapsTurnOnLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل الموقع'**
+  String get mapsTurnOnLocation;
+
+  /// No description provided for @mapsAllowLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بالموقع'**
+  String get mapsAllowLocation;
 }
 
 class _AppLocalizationsDelegate

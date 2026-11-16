@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import '../map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_map_colors.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
@@ -25,6 +26,7 @@ class VectorMapSurface extends StatefulWidget {
     this.bottomInset,
     this.onLocate,
     this.locating = false,
+    this.focus,
   });
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver, selection;
@@ -33,6 +35,7 @@ class VectorMapSurface extends StatefulWidget {
   final ValueListenable<double>? bottomInset;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
   @override
   State<VectorMapSurface> createState() => _VectorMapSurfaceState();
 }
@@ -113,6 +116,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
             bottomInset: widget.bottomInset,
             onLocate: widget.onLocate,
             locating: widget.locating,
+            focus: widget.focus,
           );
         } catch (_) {
           return Center(

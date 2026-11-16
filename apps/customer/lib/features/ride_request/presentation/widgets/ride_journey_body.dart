@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_location_cubit.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -94,6 +95,9 @@ class RideJourneyBody extends StatelessWidget {
             onSelected: draft.confirmationPending ? null : onMapPoint,
             onLocate: draft.confirmationPending ? null : onLocate,
             locating: location.locating,
+            focus: location.focusPoint != null && location.focusRevision > 0
+                ? MapCameraFocus(location.focusPoint!, location.focusRevision)
+                : null,
           ),
           panelBuilder: (collapse) => selecting
               ? RideMapPointPanel(

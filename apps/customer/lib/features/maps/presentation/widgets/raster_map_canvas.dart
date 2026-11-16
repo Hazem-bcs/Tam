@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -28,12 +29,14 @@ class RasterMapCanvas extends StatefulWidget {
     this.selection,
     this.onLocate,
     this.locating = false,
+    this.focus,
     this.markerIconSize = 36,
   });
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
   final double markerIconSize;
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
@@ -57,6 +60,15 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
     ...?widget.route?.points.map(_latLng),
   ];
   double get _inset => widget.bottomInset?.value ?? 0;
+  void _focus() {
+    if (!_ready || !mounted || widget.focus == null) return;
+    _controller.move(
+      _latLng(widget.focus!.point),
+      15,
+      offset: Offset(0, -_inset / 2),
+    );
+  }
+
   void _fit() {
     if (!mounted || !_ready) return;
     final points = _points.toSet().toList();
@@ -91,7 +103,9 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
       _generation++;
       _failed = _loaded = false;
     }
-    if (oldWidget.origin != widget.origin ||
+    if (oldWidget.focus != widget.focus && widget.focus != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _focus());
+    } else if (oldWidget.origin != widget.origin ||
         oldWidget.destination != widget.destination ||
         oldWidget.route != widget.route) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _fit());
@@ -145,7 +159,9 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
               backgroundColor: colors.surfaceContainer,
               onMapReady: () {
                 _ready = true;
-                WidgetsBinding.instance.addPostFrameCallback((_) => _fit());
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => widget.focus != null ? _focus() : _fit(),
+                );
               },
               onTap: widget.onSelected == null
                   ? null
@@ -194,6 +210,12 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
                     ),
                   if (widget.driver != null)
                     marker(widget.driver!, Icons.local_taxi, l.mapsDriver),
+                  if (widget.focus != null)
+                    marker(
+                      widget.focus!.point,
+                      Icons.my_location_rounded,
+                      l.mapsCurrentLocation,
+                    ),
                 ],
               ),
             ],

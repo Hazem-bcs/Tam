@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'map_camera_focus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,7 @@ class RouteMapView extends StatefulWidget {
     this.onSelected,
     this.onLocate,
     this.locating = false,
+    this.focus,
     this.markerIconSize = 36,
   });
   final GeoPoint? origin, destination, driver;
@@ -32,6 +34,7 @@ class RouteMapView extends StatefulWidget {
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
   final double markerIconSize;
   @override
   State<RouteMapView> createState() => _RouteMapViewState();
@@ -85,6 +88,7 @@ class _RouteMapViewState extends State<RouteMapView> {
           onSelected: widget.onSelected,
           onLocate: widget.onLocate,
           locating: widget.locating,
+          focus: widget.focus,
           markerIconSize: widget.markerIconSize,
           origin: widget.origin,
           destination: widget.destination,
@@ -108,6 +112,7 @@ class _RouteMapViewState extends State<RouteMapView> {
                   onSelected: widget.onSelected,
                   onLocate: widget.onLocate,
                   locating: widget.locating,
+                  focus: widget.focus,
                   markerIconSize: widget.markerIconSize,
                   onAttribution: dependencies.attribution.open,
                   tileProviderFactory: dependencies.tileProviderFactory,

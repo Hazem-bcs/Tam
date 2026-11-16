@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
@@ -15,6 +16,7 @@ class RideJourneyBackdrop extends StatelessWidget {
     this.onSelected,
     this.onLocate,
     this.locating = false,
+    this.focus,
   });
   final TripLocation? pickup, destination;
   final GeoPoint? selection;
@@ -22,6 +24,7 @@ class RideJourneyBackdrop extends StatelessWidget {
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onLocate;
   final bool locating;
+  final MapCameraFocus? focus;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -35,6 +38,7 @@ class RideJourneyBackdrop extends StatelessWidget {
       onSelected: onSelected,
       onLocate: onLocate,
       locating: locating,
+      focus: focus,
     ),
   );
 }

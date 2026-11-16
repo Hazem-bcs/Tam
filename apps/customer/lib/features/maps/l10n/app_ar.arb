@@ -30,10 +30,12 @@
   "mapsOsmAttribution": "© OpenStreetMap contributors",
   "mapsSelectedPoint": "نقطة محددة على الخريطة",
   "mapsCurrentLocation": "موقعي الحالي",
-  "mapsLocating": "جارٍ تحديد نقطة الانطلاق من موقعك…",
+  "mapsLocating": "جارٍ تحديد موقعك…",
   "mapsEnableLocation": "فعّل الموقع لتحديد الانطلاق",
   "mapsOpenSettings": "فتح الإعدادات",
   "mapsLocationInaccurate": "الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.",
   "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب.",
-  "mapsMoveToSelect": "حرّك الخريطة لتحديد المكان"
+  "mapsMoveToSelect": "حرّك الخريطة لتحديد المكان",
+  "mapsTurnOnLocation": "تشغيل الموقع",
+  "mapsAllowLocation": "السماح بالموقع"
 }

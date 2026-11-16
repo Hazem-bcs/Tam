@@ -764,10 +764,12 @@
   "mapsOsmAttribution": "© OpenStreetMap contributors",
   "mapsSelectedPoint": "Selected map point",
   "mapsCurrentLocation": "My current location",
-  "mapsLocating": "Finding your pickup location…",
+  "mapsLocating": "Finding your location…",
   "mapsEnableLocation": "Turn on location for your pickup",
   "mapsOpenSettings": "Open settings",
   "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.",
   "mapsNativeUnavailable": "Vector maps are available on Android, iOS and web.",
-  "mapsMoveToSelect": "Move the map to choose a place"
+  "mapsMoveToSelect": "Move the map to choose a place",
+  "mapsTurnOnLocation": "Turn on location",
+  "mapsAllowLocation": "Allow location"
 }

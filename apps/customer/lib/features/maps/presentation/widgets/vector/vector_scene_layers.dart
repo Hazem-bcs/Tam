@@ -76,6 +76,18 @@ final class VectorSceneLayers {
         filter: _kind('origin'),
         enableInteraction: false,
       ),
+      () => controller.addCircleLayer(
+        source,
+        'tam-device-location',
+        CircleLayerProperties(
+          circleColor: ink,
+          circleRadius: 6,
+          circleStrokeColor: paper,
+          circleStrokeWidth: 3,
+        ),
+        filter: _kind('device'),
+        enableInteraction: false,
+      ),
       () => controller.addSymbolLayer(
         source,
         'tam-stops',

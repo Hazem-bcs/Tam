@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/vector/native_vector_map.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/vector/vector_map_scene.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
@@ -28,6 +29,7 @@ void main() {
     VectorMapScene scene, {
     ValueNotifier<double>? inset,
     ValueChanged<GeoPoint>? select,
+    MapCameraFocus? focus,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -43,6 +45,7 @@ void main() {
             markerImageLoader: (_, _) async => Uint8List(8),
             bottomInset: inset,
             onSelected: select,
+            focus: focus,
           ),
         ),
       ),
@@ -215,6 +218,38 @@ void main() {
       );
       expect(chosen?.latitude, closeTo(33.63, 1e-10));
       expect(chosen?.longitude, closeTo(36.4, 1e-10));
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'My Location centers the same fix again without changing route endpoints',
+    (tester) async {
+      final scene = VectorMapScene(origin: origin, destination: destination);
+      await show(tester, scene);
+      await load(tester);
+      final first = tester.element(find.byType(MapLibreMap));
+      final probe = platforms.single;
+      final initial = probe.cameras.length;
+      await show(tester, scene, focus: MapCameraFocus(origin, 1));
+      expect(probe.cameras.length, initial + 1);
+      await show(tester, scene, focus: MapCameraFocus(origin, 1));
+      expect(probe.cameras.length, initial + 1);
+      await show(tester, scene, focus: MapCameraFocus(origin, 2));
+      expect(probe.cameras.length, initial + 2);
+      expect(tester.element(find.byType(MapLibreMap)), same(first));
+      final features = probe.scenes.last['features'] as List;
+      expect(
+        features.where((f) => f['properties']['kind'] == 'device'),
+        hasLength(1),
+      );
+      expect(
+        features
+            .where((f) => f['properties']['kind'] == 'destination')
+            .single['geometry']['coordinates'],
+        VectorMapScene.coordinate(destination),
+      );
       await tester.pumpWidget(const SizedBox());
       expect(tester.takeException(), isNull);
     },

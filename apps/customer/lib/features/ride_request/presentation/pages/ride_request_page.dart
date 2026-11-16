@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/map_feedback.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_location_cubit.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_body.dart';
@@ -29,7 +30,9 @@ class _RideRequestPageState extends State<RideRequestPage>
     with WidgetsBindingObserver {
   late RideJourneyStep _step;
   RideLocationCubit? _location;
-  bool _pickingPickup = true, _selectionPending = false, _forceFix = false;
+  bool _pickingPickup = true,
+      _selectionPending = false,
+      _settingsPromptOpen = false;
 
   @override
   void initState() {
@@ -97,7 +100,6 @@ class _RideRequestPageState extends State<RideRequestPage>
   }
 
   void _manualPickup() {
-    _forceFix = false;
     _location?.keepManualPickup();
   }
 
@@ -178,7 +180,7 @@ class _RideRequestPageState extends State<RideRequestPage>
         !state.locating &&
         state.failure == null &&
         !bloc.state.confirmationPending) {
-      if (_forceFix || bloc.state.pickup == null) {
+      if (bloc.state.pickup == null) {
         bloc.add(
           PickupSelected(
             TripLocation(
@@ -189,11 +191,24 @@ class _RideRequestPageState extends State<RideRequestPage>
           ),
         );
       }
-      _forceFix = false;
     }
     if (state.failure == 'LOCATION_DISABLED' ||
         state.failure == 'LOCATION_DENIED_FOREVER') {
       unawaited(_promptSettings(context, state.failure!));
+    } else if (state.failure != null) {
+      final t = AppLocalizations.of(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(mapFailureText(t, state.failure)),
+          action: SnackBarAction(
+            label: state.failure == 'LOCATION_DENIED'
+                ? t.mapsAllowLocation
+                : t.mapsRetry,
+            onPressed: () =>
+                _location?.locate(requireFresh: true, focusMap: true),
+          ),
+        ),
+      );
     }
   }
 
@@ -201,8 +216,14 @@ class _RideRequestPageState extends State<RideRequestPage>
     BuildContext themedContext,
     String failure,
   ) async {
-    final open = await showRideLocationAccessPrompt(themedContext, failure);
-    if (mounted && open) await _location?.openSettings();
+    if (_settingsPromptOpen) return;
+    _settingsPromptOpen = true;
+    try {
+      final open = await showRideLocationAccessPrompt(themedContext, failure);
+      if (mounted && open) await _location?.openSettings(failure: failure);
+    } finally {
+      _settingsPromptOpen = false;
+    }
   }
 
   Widget _draft(
@@ -282,8 +303,8 @@ class _RideRequestPageState extends State<RideRequestPage>
                 onLocate: _location == null
                     ? null
                     : () {
-                        _forceFix = true;
-                        _location!.locate();
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        _location!.locate(requireFresh: true, focusMap: true);
                       },
                 onSettings: _location?.openSettings,
                 savedAddressPickerBuilder: widget.savedAddressPickerBuilder,
