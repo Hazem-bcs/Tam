@@ -5,6 +5,7 @@ import '../notifications_codec.dart';
 const mockNotificationsFixture = <Map<String, dynamic>>[
   {
     'id': 'notice-trip-complete-001',
+    'type': 'ride.completed',
     'kind': 'trip',
     'title': {'ar': 'اكتملت رحلتك', 'en': 'Your trip is complete'},
     'body': {
@@ -17,6 +18,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-offer-001',
+    'type': 'offer.available',
     'kind': 'offer',
     'title': {'ar': 'عرض جديد على رحلاتك', 'en': 'A new ride offer'},
     'body': {
@@ -29,6 +31,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-trips-001',
+    'type': 'ride.history',
     'kind': 'trip',
     'title': {'ar': 'راجع رحلاتك السابقة', 'en': 'Review your past trips'},
     'body': {
@@ -41,6 +44,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-account-001',
+    'type': 'account.welcome',
     'kind': 'account',
     'title': {'ar': 'مرحبًا بك في تم', 'en': 'Welcome to Tam'},
     'body': {
@@ -53,6 +57,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-unknown-001',
+    'type': 'system.announcement',
     'kind': 'system',
     'title': {'ar': 'تحديث عن خدماتنا', 'en': 'Service update'},
     'body': {
@@ -65,6 +70,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-missing-trip-001',
+    'type': 'ride.details',
     'kind': 'trip',
     'title': {'ar': 'تفاصيل رحلة غير متاحة', 'en': 'Trip details unavailable'},
     'body': {
@@ -77,6 +83,7 @@ const mockNotificationsFixture = <Map<String, dynamic>>[
   },
   {
     'id': 'notice-system-001',
+    'type': 'system.announcement',
     'kind': 'system',
     'title': {'ar': 'شكرًا لتجربة تم', 'en': 'Thanks for trying Tam'},
     'body': {

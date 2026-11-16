@@ -17,6 +17,9 @@ void main() {
     (tester) async {
       final repository = MockAddressesRepository();
       final cubit = await pumpAddresses(tester, repository);
+      // Edit/delete are now contextual actions behind the address menu.
+      await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
+      await tester.pumpAndSettle();
       await tester.tap(
         find.byKey(const Key('address-delete-address-home-001')),
       );
@@ -25,6 +28,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(cubit.state.items, hasLength(2));
       repository.failOnce(AddressOperation.delete);
+      // Edit/delete are now contextual actions behind the address menu.
+      await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
+      await tester.pumpAndSettle();
       await tester.tap(
         find.byKey(const Key('address-delete-address-home-001')),
       );
@@ -99,6 +105,39 @@ void main() {
       await repository.dispose();
     },
   );
+
+  testWidgets('visual empty account and location search states', (
+    tester,
+  ) async {
+    if (!captureAddressUi) return;
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final emptyRepository = MockAddressesRepository(seed: []);
+    await pumpAddresses(tester, emptyRepository);
+    await expectLater(
+      find.byType(AddressesPage),
+      matchesGoldenFile('goldens/empty-ar-390.png'),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await emptyRepository.dispose();
+
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    await expectLater(
+      find.byType(AddressEditorPage),
+      matchesGoldenFile('goldens/add-ar-390.png'),
+    );
+    await tester.tap(find.byKey(const Key('address-choose-location')));
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('goldens/location-picker-ar-390.png'),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
 
   for (final config in [
     (390.0, 844.0, 'ar', 1.0),

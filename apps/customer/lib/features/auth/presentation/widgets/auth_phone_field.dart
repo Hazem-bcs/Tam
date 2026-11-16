@@ -28,6 +28,7 @@ class AuthPhoneField extends StatelessWidget {
     required this.onChanged,
     required this.onSubmitted,
     this.readOnly = false,
+    this.focusNode,
   });
 
   final TextEditingController controller;
@@ -38,6 +39,7 @@ class AuthPhoneField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final VoidCallback onSubmitted;
   final bool readOnly;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,8 @@ class AuthPhoneField extends StatelessWidget {
               label: semanticLabel,
               child: TextFormField(
                 controller: controller,
+                focusNode: focusNode,
+                onTapOutside: (_) => focusNode?.unfocus(),
                 readOnly: readOnly,
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.done,

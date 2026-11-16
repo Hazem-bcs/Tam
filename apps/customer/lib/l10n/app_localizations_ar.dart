@@ -880,6 +880,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationsShowAll => 'عرض كل الإشعارات';
 
   @override
+  String get notificationsTripsFilter => 'الرحلات';
+
+  @override
+  String get notificationsOffersFilter => 'العروض';
+
+  @override
+  String get notificationsAccountFilter => 'الحساب';
+
+  @override
+  String get notificationsSystemFilter => 'النظام';
+
+  @override
+  String get notificationsOpenTrip => 'عرض الرحلة';
+
+  @override
+  String get notificationsExploreOffer => 'استعراض العرض';
+
+  @override
+  String get notificationsOpenTrips => 'سجل الرحلات';
+
+  @override
+  String get notificationsExploreServices => 'استكشف الخدمات';
+
+  @override
+  String get notificationsMarkRead => 'تحديد كمقروء';
+
+  @override
+  String get notificationsNoMatches => 'لا توجد إشعارات في هذا التصنيف';
+
+  @override
   String get settingsTitle => 'حسابي';
 
   @override

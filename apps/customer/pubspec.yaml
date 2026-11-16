@@ -26,6 +26,7 @@ dependencies:
   latlong2: ^0.9.1
   geolocator: ^14.0.2
   http: ^1.6.0
+  rive: ^0.14.11
 
 dev_dependencies:
   flutter_test:
@@ -36,7 +37,9 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/animations/
     - assets/maps/
+    - assets/notifications/
   uses-material-design: true
   generate: true
   licenses:

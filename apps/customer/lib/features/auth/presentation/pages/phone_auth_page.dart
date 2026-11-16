@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_caret_gaze.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_phone_field.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
@@ -18,28 +19,46 @@ class PhoneAuthPage extends StatefulWidget {
 class _PhoneAuthPageState extends State<PhoneAuthPage> {
   final _form = GlobalKey<FormState>();
   late final TextEditingController _phone;
+  late final FocusNode _phoneFocus;
+  bool _localInvalid = false;
+
+  void _refreshCaret() {
+    if (mounted) setState(() {});
+  }
+
+  void _refreshFocus() {
+    if (mounted) setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+    _phoneFocus = FocusNode()..addListener(_refreshFocus);
     _phone = TextEditingController(
       text: nationalPhoneEntry(
         context.read<AuthCubit>().state.challenge?.phoneE164 ?? '',
       ),
     );
+    _phone.addListener(_refreshCaret);
   }
 
   @override
   void dispose() {
+    _phoneFocus.removeListener(_refreshFocus);
+    _phoneFocus.dispose();
+    _phone.removeListener(_refreshCaret);
     _phone.dispose();
     super.dispose();
   }
 
   void _submit() {
-    if (_form.currentState!.validate()) {
-      FocusScope.of(context).unfocus();
-      context.read<AuthCubit>().requestOtp(phoneEntryForRequest(_phone.text));
+    if (!_form.currentState!.validate()) {
+      if (!_localInvalid) setState(() => _localInvalid = true);
+      return;
     }
+    if (_localInvalid) setState(() => _localInvalid = false);
+    FocusScope.of(context).unfocus();
+    context.read<AuthCubit>().requestOtp(phoneEntryForRequest(_phone.text));
   }
 
   @override
@@ -54,6 +73,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           title: t.authWelcome,
           description: t.authPhoneDescription,
           busy: state.isBusy,
+          inputFocused: _phoneFocus.hasFocus,
+          gazeProgress: authCaretProgress(_phone.value, maxDigits: 9),
+          hasError: state.failure != null || _localInvalid,
           child: Form(
             key: _form,
             child: AutofillGroup(
@@ -63,13 +85,17 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   AuthPhoneField(
                     key: const Key('auth-phone'),
                     controller: _phone,
+                    focusNode: _phoneFocus,
                     label: t.authPhoneLabel,
                     hint: t.authNationalPhoneHint,
                     semanticLabel: t.authPhoneWithCountry,
                     invalidMessage: t.authPhoneInvalid,
                     readOnly: state.isBusy,
                     onSubmitted: _submit,
-                    onChanged: (_) => context.read<AuthCubit>().clearFailure(),
+                    onChanged: (_) {
+                      context.read<AuthCubit>().clearFailure();
+                      if (_localInvalid) setState(() => _localInvalid = false);
+                    },
                   ),
                   const SizedBox(height: AppSpacing.xl),
                   if (state.failure != null) ...[
