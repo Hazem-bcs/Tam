@@ -142,6 +142,17 @@ ThemeData _previewTheme(Locale locale) {
   );
 }
 
+File _flutterMaterialFont(String name) {
+  var directory = File(Platform.resolvedExecutable).absolute.parent;
+  while (true) {
+    final file = File('${directory.path}/artifacts/material_fonts/$name');
+    if (file.existsSync()) return file;
+    if (directory.path == directory.parent.path) break;
+    directory = directory.parent;
+  }
+  throw FileSystemException('Flutter material font not found', name);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
@@ -160,15 +171,11 @@ void main() {
         );
       }
       await ui.loadFontFromList(
-        await File(
-          '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/Roboto-Regular.ttf',
-        ).readAsBytes(),
+        await _flutterMaterialFont('Roboto-Regular.ttf').readAsBytes(),
         fontFamily: 'Roboto',
       );
       await ui.loadFontFromList(
-        await File(
-          '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
-        ).readAsBytes(),
+        await _flutterMaterialFont('MaterialIcons-Regular.otf').readAsBytes(),
         fontFamily: 'MaterialIcons',
       );
     }
