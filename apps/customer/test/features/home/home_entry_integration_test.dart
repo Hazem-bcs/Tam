@@ -12,6 +12,12 @@ import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
 import '../../support/fake_auth_repository.dart';
 
+/// The signed-in mascot animates continuously; pumpAndSettle cannot finish.
+Future<void> _pumpNavigation(WidgetTester tester) async {
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 450));
+}
+
 void main() {
   testWidgets(
     'real Home entry opens registered routes and retains local Auth',
@@ -25,10 +31,10 @@ void main() {
           temporaryPhoneEntryEnabled: true,
         ),
       );
-      await tester.pumpAndSettle();
+      await _pumpNavigation(tester);
       await tester.enterText(find.byKey(const Key('auth-phone')), '0941234567');
       await tester.tap(find.text('متابعة'));
-      await tester.pumpAndSettle();
+      await _pumpNavigation(tester);
       expect(
         find.bySemanticsLabel('الإشعارات، غير المقروء: 4'),
         findsOneWidget,
@@ -59,7 +65,7 @@ void main() {
       for (final (target, path) in destinations) {
         await tester.ensureVisible(target);
         await tester.tap(target);
-        await tester.pumpAndSettle();
+        await _pumpNavigation(tester);
         expect(
           router.routerDelegate.currentConfiguration.last.matchedLocation,
           path,
@@ -75,14 +81,16 @@ void main() {
         );
         expect(tester.takeException(), isNull);
         router.pop();
-        await tester.pumpAndSettle();
+        await _pumpNavigation(tester);
         expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
         expect(find.byType(HomePage), findsOneWidget);
         expect(auth.state.status, AuthStatus.localAccess);
       }
+      await tester.tap(find.text('الإعدادات'));
+      await _pumpNavigation(tester);
       await tester.ensureVisible(find.text('تسجيل الخروج'));
       await tester.tap(find.text('تسجيل الخروج'));
-      await tester.pumpAndSettle();
+      await _pumpNavigation(tester);
       expect(find.byType(PhoneAuthPage), findsOneWidget);
       expect(auth.state.status, AuthStatus.signedOut);
       expect(await store.read(), isNull);
