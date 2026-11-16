@@ -12,3 +12,10 @@
 - Delivery: merge into customer local main and synchronize to Ahmad's main under the user's ongoing authorization. No driver changes or Actions.
 
 Additional regression: the raster journey test asserts identical camera center and zoom at 0/60/300 ms after confirmation; passes. Full-app verification remains deferred. No extra application screens or routes were added.
+
+## Follow-up: panel motion (2026-11-16)
+
+- READY → IMPLEMENTING → INTEGRATED, root/SUPERVISOR, baseline `a351c036d1eae05ca1b5e112e2fe4f4d676c8abf`; branch `codex/ride-panel-motion`. Ownership: ride_journey_shell.dart and ride_journey_panel_content.dart only, plus this task record.
+- User feedback: map motion is accepted; panel changes still feel abrupt. Keep the same persistent Material surface/handle and animate only its content height. Synchronize incoming/outgoing opacity and restrained directional translation with the existing 300ms theme token. The existing reduced-motion and keyboard behavior remain. No map/navigation/data changes.
+- Dart format and focused analysis of both files pass with zero diagnostics. The existing map-confirmation regression passes, covering confirmation frames, unchanged camera and mounted map. Broad tests/builds deferred under iteration agreement.
+- Existing emulator connection reused with a successful hot reload; no APK build, package download or additional UI navigation. Physical-device animation pacing has not been measured.

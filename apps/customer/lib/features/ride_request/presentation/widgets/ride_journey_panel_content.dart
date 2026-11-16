@@ -40,17 +40,22 @@ class RideJourneyPanelContent extends StatelessWidget {
             child: AnimatedSwitcher(
               duration: MediaQuery.disableAnimationsOf(context)
                   ? Duration.zero
-                  : AppMotion.short,
+                  : AppMotion.medium,
               switchInCurve: AppMotion.easeOut,
               switchOutCurve: AppMotion.easeIn,
               transitionBuilder: (child, animation) => FadeTransition(
                 opacity: animation,
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, .025),
-                    end: Offset.zero,
-                  ).animate(animation),
+                child: AnimatedBuilder(
+                  animation: animation,
                   child: child,
+                  builder: (context, content) => Transform.translate(
+                    offset: Offset(
+                      0,
+                      (child.key == ValueKey(stageKey) ? 16 : -10) *
+                          (1 - animation.value),
+                    ),
+                    child: content,
+                  ),
                 ),
               ),
               layoutBuilder: (current, previous) => Stack(

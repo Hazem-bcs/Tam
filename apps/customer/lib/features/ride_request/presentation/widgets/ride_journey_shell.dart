@@ -180,63 +180,52 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                         _mapInset.value = height + AppSpacing.md;
                       }
                     },
-                    child: AnimatedSize(
-                      alignment: Alignment.bottomCenter,
-                      duration:
-                          keyboardTransition ||
-                              MediaQuery.disableAnimationsOf(context)
-                          // A nonzero tick avoids AnimatedSize completing
-                          // synchronously inside its own layout pass.
-                          ? const Duration(milliseconds: 1)
-                          : AppMotion.medium,
-                      curve: AppMotion.easeOut,
-                      child: Material(
-                        color: c.surfaceContainerLowest,
-                        elevation: AppElevation.raised,
-                        borderRadius: BorderRadius.circular(AppRadii.sheet),
-                        clipBehavior: Clip.antiAlias,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onVerticalDragStart: (_) =>
-                                  FocusScope.of(context).unfocus(),
-                              onVerticalDragUpdate: (details) {
-                                _extent.stop();
-                                _extent.value =
-                                    (_extent.value - details.delta.dy / _height)
-                                        .clamp(_minimum, _maximum);
-                              },
-                              onVerticalDragEnd: (details) {
-                                final velocity = details.primaryVelocity ?? 0;
-                                final fold =
-                                    velocity > 250 ||
-                                    (velocity >= -250 &&
-                                        _extent.value <
-                                            (_minimum + _preferred) / 2);
-                                _move(fold ? _minimum : _preferred);
-                              },
-                              child: Tooltip(
-                                message: _compact
-                                    ? t.rideRequestExpandPanel
-                                    : t.rideRequestCollapsePanel,
-                                child: InkWell(
-                                  key: const Key('ride-sheet-toggle'),
-                                  onTap: () =>
-                                      _move(_compact ? _preferred : _minimum),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: AppDimensions.minTapTarget,
-                                    child: Center(
-                                      child: Container(
-                                        width: 36,
-                                        height: 4,
-                                        decoration: BoxDecoration(
-                                          color: c.outlineVariant,
-                                          borderRadius: BorderRadius.circular(
-                                            AppRadii.sm,
-                                          ),
+                    child: Material(
+                      color: c.surfaceContainerLowest,
+                      elevation: AppElevation.raised,
+                      borderRadius: BorderRadius.circular(AppRadii.sheet),
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onVerticalDragStart: (_) =>
+                                FocusScope.of(context).unfocus(),
+                            onVerticalDragUpdate: (details) {
+                              _extent.stop();
+                              _extent.value =
+                                  (_extent.value - details.delta.dy / _height)
+                                      .clamp(_minimum, _maximum);
+                            },
+                            onVerticalDragEnd: (details) {
+                              final velocity = details.primaryVelocity ?? 0;
+                              final fold =
+                                  velocity > 250 ||
+                                  (velocity >= -250 &&
+                                      _extent.value <
+                                          (_minimum + _preferred) / 2);
+                              _move(fold ? _minimum : _preferred);
+                            },
+                            child: Tooltip(
+                              message: _compact
+                                  ? t.rideRequestExpandPanel
+                                  : t.rideRequestCollapsePanel,
+                              child: InkWell(
+                                key: const Key('ride-sheet-toggle'),
+                                onTap: () =>
+                                    _move(_compact ? _preferred : _minimum),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: AppDimensions.minTapTarget,
+                                  child: Center(
+                                    child: Container(
+                                      width: 36,
+                                      height: 4,
+                                      decoration: BoxDecoration(
+                                        color: c.outlineVariant,
+                                        borderRadius: BorderRadius.circular(
+                                          AppRadii.sm,
                                         ),
                                       ),
                                     ),
@@ -244,8 +233,17 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                 ),
                               ),
                             ),
-                            Flexible(
-                              fit: FlexFit.loose,
+                          ),
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: AnimatedSize(
+                              alignment: Alignment.topCenter,
+                              duration:
+                                  keyboardTransition ||
+                                      MediaQuery.disableAnimationsOf(context)
+                                  ? const Duration(milliseconds: 1)
+                                  : AppMotion.medium,
+                              curve: AppMotion.easeOut,
                               child: RideJourneyPanelContent(
                                 compact: _compact,
                                 expandedHeight: math.max(
@@ -263,8 +261,8 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                     widget.panel!,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
