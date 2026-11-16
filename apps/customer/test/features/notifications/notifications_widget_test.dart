@@ -173,7 +173,12 @@ void main() {
     });
     for (final id in ['notice-unknown-001', 'notice-missing-trip-001']) {
       final finder = find.byKey(Key('notification-$id'));
-      await tester.scrollUntilVisible(finder, 180);
+      // The horizontal category bar adds a second Scrollable: scroll the feed.
+      await tester.scrollUntilVisible(
+        finder,
+        180,
+        scrollable: find.byType(Scrollable).first,
+      );
       await Scrollable.ensureVisible(tester.element(finder), alignment: 0.25);
       await tester.pumpAndSettle();
       expect(finder.hitTestable(), findsOneWidget);
@@ -293,6 +298,40 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('لا توجد إشعارات بعد'), findsOneWidget);
     expect(find.text('تعذر تحميل الإشعارات'), findsNothing);
+  });
+
+  testWidgets('category tabs filter by kind without changing read state', (
+    tester,
+  ) async {
+    final repository = MockNotificationsRepository();
+    final cubit = await _pumpInbox(tester, repository, _NavigationSpy());
+    addTearDown(() async {
+      await cubit.close();
+      await repository.dispose();
+    });
+
+    await tester.tap(find.byKey(const Key('notifications-filter-trips')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const Key('notification-notice-trip-complete-001')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const Key('notification-notice-offer-001')),
+      findsNothing,
+    );
+
+    await tester.tap(find.byKey(const Key('notifications-filter-offers')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const Key('notification-notice-trip-complete-001')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const Key('notification-notice-offer-001')),
+      findsOneWidget,
+    );
+    expect(await repository.getUnreadCount(), 4);
   });
 
   for (final caseItem in [

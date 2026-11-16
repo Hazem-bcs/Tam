@@ -868,6 +868,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationsShowAll => 'View all notifications';
 
   @override
+  String get notificationsTripsFilter => 'Trips';
+
+  @override
+  String get notificationsOffersFilter => 'Offers';
+
+  @override
+  String get notificationsAccountFilter => 'Account';
+
+  @override
+  String get notificationsSystemFilter => 'System';
+
+  @override
+  String get notificationsOpenTrip => 'View trip';
+
+  @override
+  String get notificationsExploreOffer => 'Explore offer';
+
+  @override
+  String get notificationsOpenTrips => 'Trip history';
+
+  @override
+  String get notificationsExploreServices => 'Explore services';
+
+  @override
+  String get notificationsMarkRead => 'Mark as read';
+
+  @override
+  String get notificationsNoMatches => 'No notifications in this category';
+
+  @override
   String get settingsTitle => 'My account';
 
   @override

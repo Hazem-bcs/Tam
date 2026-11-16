@@ -18,12 +18,15 @@
 |---|---|---|---|
 | `id` | string، opaque، غير فارغ | لا | معرف فريد ثابت، لا تفترض صيغة رقمية. |
 | `kind` | string | لا | `trip`, `offer`, `account`, `system`؛ أي قيمة مستقبلية تُعرض بأيقونة عامة. |
+| `type` | string | نعم / غائب | رمز دلالي اختياري مثل `ride.completed`, `ride.history`, `offer.available`. لا يُعامل كمسار ملف أو إجراء؛ تختار Flutter أيقونة محلية من allowlist، وتستخدم `kind` كبديل للأنواع غير المعروفة. |
 | `title` | object `{ar,en}` | لا | نص قصير بلغتين. |
 | `body` | object `{ar,en}` | لا | وصف بلغتين؛ لا HTML تنفيذي. |
 | `created_at` | UTC ISO-8601 `Z` | لا | تاريخ الإنشاء والترتيب. |
 | `read_at` | UTC ISO-8601 `Z` | نعم | `null` تعني غير مقروء. التعليم لا يغيّر القيمة إن كانت موجودة. |
 | `target` | object | لا | `type: home|trips|trip` أو قيمة جديدة غير معروفة. |
 | `target.trip_id` | string opaque | نعم / غائب | مطلوب وغير فارغ فقط حين `type=trip` لتنقل صالح. |
+
+**إجراءات الواجهة الحالية:** تظهر الأزرار المرتبطة فقط بوجهة `target` آمنة ومدعومة؛ لا توجد بعد قائمة `actions` ديناميكية في عقد v1. إضافة إجراءات قابلة للتخصيص تتطلب إصدار عقد API جديدًا ومعرّفات إجراءات مُعتمدة مسبقاً، وليس URLs أو أوامر خام.
 
 **أمان التنقل:** allowlist ثابتة `home / trips / trip`. ينقل Flutter إلى التفاصيل بواسطة `CustomerNavigation.openTrip(trip_id)` فقط، لا بفتح URL أو route من JSON. `target.type` غير معروف أو `trip_id` فارغ: يُعرض نص الإشعار، **ولا تنقل**. يمكن أن يحتوي JSON إضافات مجهولة؛ يجب تجاهلها وعدم تنفيذها. مثال `notice-unknown-001` يعرض `target.type=external` و`url` لأغراض اختبار الرفض فقط؛ لا ينبغي أن يطلبه الباكند للإنتاج. إشعار الرحلة الأساسي يستخدم `mock-history-001`، نفس seed للرحلات في Flutter.
 
@@ -37,6 +40,7 @@
     {
       "id": "notice-trip-complete-001",
       "kind": "trip",
+      "type": "ride.completed",
       "title": {"ar": "اكتملت رحلتك", "en": "Your trip is complete"},
       "body": {"ar": "شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.", "en": "Thanks for choosing Tam. Review your trip details."},
       "created_at": "2026-11-07T12:20:00Z",

@@ -42,6 +42,7 @@ abstract final class NotificationsCodec {
     final rawTripId = rawTarget['trip_id'];
     return CustomerNotification(
       id: requiredString('id'),
+      type: json['type'] is String ? json['type'] as String : null,
       kind: switch (requiredString('kind')) {
         'trip' => NotificationKind.trip,
         'offer' => NotificationKind.offer,

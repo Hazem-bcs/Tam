@@ -25,6 +25,7 @@ final class CustomerNotification {
   const CustomerNotification({
     required this.id,
     required this.kind,
+    this.type,
     required this.title,
     required this.body,
     required this.createdAt,
@@ -34,6 +35,9 @@ final class CustomerNotification {
 
   final String id;
   final NotificationKind kind;
+
+  /// Optional server-defined semantic code; never interpreted as an asset path.
+  final String? type;
   final NotificationCopy title;
   final NotificationCopy body;
   final DateTime createdAt;
@@ -45,6 +49,7 @@ final class CustomerNotification {
   CustomerNotification withReadAt(DateTime when) => CustomerNotification(
     id: id,
     kind: kind,
+    type: type,
     title: title,
     body: body,
     createdAt: createdAt,

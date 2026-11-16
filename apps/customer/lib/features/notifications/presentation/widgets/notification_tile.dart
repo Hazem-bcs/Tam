@@ -1,197 +1,244 @@
 import 'package:flutter/material.dart';
+import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 import '../../domain/customer_notification.dart';
+import 'tam_notification_icon.dart';
 
-/// TAM Activity: a compact event on the journey timeline, not a generic card.
+/// An actionable, accessible event; visual importance follows read state.
 class NotificationTile extends StatelessWidget {
   const NotificationTile({
     super.key,
     required this.notification,
     required this.onTap,
+    this.onMarkRead,
     this.isPending = false,
   });
 
   final CustomerNotification notification;
   final VoidCallback onTap;
+  final VoidCallback? onMarkRead;
   final bool isPending;
 
-  IconData get _icon => switch (notification.kind) {
-    NotificationKind.trip => Icons.directions_car_filled_rounded,
-    NotificationKind.offer => Icons.local_offer_rounded,
-    NotificationKind.account => Icons.verified_user_rounded,
-    NotificationKind.system => Icons.campaign_rounded,
-    NotificationKind.unknown => Icons.notifications_rounded,
-  };
-
-  Color get _accent => switch (notification.kind) {
-    NotificationKind.trip => const Color(0xFF8D153A),
-    NotificationKind.offer => const Color(0xFF9C6030),
-    NotificationKind.account => const Color(0xFF3C745D),
-    NotificationKind.system ||
-    NotificationKind.unknown => const Color(0xFF666275),
-  };
+  String _actionLabel(AppLocalizations l10n) =>
+      switch (notification.target.destination) {
+        NotificationDestination.trip => l10n.notificationsOpenTrip,
+        NotificationDestination.trips => l10n.notificationsOpenTrips,
+        NotificationDestination.home => l10n.notificationsExploreServices,
+        NotificationDestination.unknown => l10n.notificationsOpenNotification,
+      };
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colors = Theme.of(context).colorScheme;
+    final type = Theme.of(context).textTheme;
     final l10n = AppLocalizations.of(context);
     final language = Localizations.localeOf(context).languageCode;
     final title = notification.title.forLanguage(language);
-    final body = notification.body.forLanguage(language);
+    final description = notification.body.forLanguage(language);
     final time = MaterialLocalizations.of(
       context,
     ).formatTimeOfDay(TimeOfDay.fromDateTime(notification.createdAt.toLocal()));
-    final accent = _accent;
-    final isUnread = notification.isUnread;
-    final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    final unread = notification.isUnread;
+    final primaryTripAction =
+        unread &&
+        notification.kind == NotificationKind.trip &&
+        notification.target.canOpen;
+    final showOpenAction =
+        notification.isUnread &&
+        notification.target.canOpen &&
+        (notification.kind == NotificationKind.trip ||
+            notification.kind == NotificationKind.offer);
+    final showMarkRead =
+        unread && onMarkRead != null && !notification.target.canOpen;
+    final motion = MediaQuery.disableAnimationsOf(context);
 
     return Semantics(
       container: true,
       label:
-          '$title, $body, $time, '
-          '${isUnread ? l10n.notificationsUnread : l10n.notificationsRead}',
-      button: true,
+          '$title, $description, $time, '
+          '${unread ? l10n.notificationsUnread : l10n.notificationsRead}',
       child: AnimatedContainer(
-        duration: reduceMotion
-            ? Duration.zero
-            : const Duration(milliseconds: 220),
+        duration: motion ? Duration.zero : AppMotion.short,
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
-          color: isUnread ? const Color(0xFFFFF1F4) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          color: unread
+              ? Color.lerp(
+                  colors.primaryContainer,
+                  colors.surfaceContainerLowest,
+                  .56,
+                )
+              : colors.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(21),
           border: Border.all(
-            color: isUnread ? const Color(0xFFF7E3E9) : Colors.transparent,
+            color: unread
+                ? colors.primary.withValues(alpha: .26)
+                : colors.outlineVariant.withValues(alpha: .7),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: colors.shadow.withValues(alpha: unread ? .065 : .035),
+              blurRadius: unread ? 18 : 11,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Material(
           color: Colors.transparent,
+          borderRadius: BorderRadius.circular(21),
+          clipBehavior: Clip.antiAlias,
           child: InkWell(
             key: Key('notification-${notification.id}'),
+            borderRadius: BorderRadius.circular(21),
             onTap: isPending ? null : onTap,
-            borderRadius: BorderRadius.circular(20),
             child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(12, 13, 12, 10),
-              child: Row(
+              padding: const EdgeInsetsDirectional.fromSTEB(14, 14, 14, 12),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 44,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 43,
-                          height: 43,
-                          decoration: BoxDecoration(
-                            color: isUnread
-                                ? Colors.white
-                                : accent.withValues(alpha: 0.095),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          alignment: Alignment.center,
-                          child: isPending
-                              ? SizedBox(
-                                  width: 17,
-                                  height: 17,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 62,
+                        width: 62,
+                        child: isPending
+                            ? Center(
+                                child: SizedBox.square(
+                                  dimension: 22,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    color: accent,
+                                    color: colors.primary,
                                   ),
-                                )
-                              : Icon(_icon, color: accent, size: 21),
-                        ),
-                        const SizedBox(height: 7),
-                        Container(
-                          height: 24,
-                          width: 2,
-                          decoration: BoxDecoration(
-                            color: accent.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 13),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                                ),
+                              )
+                            : TamNotificationIcon(notification: notification),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontSize: 14.5,
-                                  height: 1.40,
-                                  color: const Color(0xFF291B20),
-                                  fontWeight: isUnread
-                                      ? FontWeight.w800
-                                      : FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            if (isUnread) ...[
-                              const SizedBox(width: 8),
-                              Semantics(
-                                label: l10n.notificationsUnread,
-                                child: Container(
-                                  margin: const EdgeInsets.only(top: 7),
-                                  width: 7,
-                                  height: 7,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFF8D153A),
-                                    shape: BoxShape.circle,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: type.titleSmall?.copyWith(
+                                      fontWeight: unread
+                                          ? FontWeight.w800
+                                          : FontWeight.w700,
+                                      fontSize: 14.5,
+                                      height: 1.35,
+                                      color: colors.onSurface,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          body,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontSize: 12.5,
-                            height: 1.47,
-                            color: const Color(0xFF776C70),
-                          ),
-                        ),
-                        const SizedBox(height: 9),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.schedule_rounded,
-                              size: 13,
-                              color: Color(0xFF91858A),
+                                if (unread) ...[
+                                  const SizedBox(width: 8),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 7),
+                                    child: Semantics(
+                                      label: l10n.notificationsUnread,
+                                      child: CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: colors.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(height: 4),
                             Text(
-                              time,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                fontSize: 10.5,
-                                color: const Color(0xFF91858A),
+                              description,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: type.bodySmall?.copyWith(
+                                height: 1.52,
+                                color: colors.onSurfaceVariant,
                               ),
                             ),
-                            const Spacer(),
-                            if (notification.target.canOpen)
-                              const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                textDirection: TextDirection.ltr,
-                                size: 12,
-                                color: Color(0xFF9A7782),
-                              ),
+                            const SizedBox(height: 9),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.schedule_rounded,
+                                  size: 13,
+                                  color: colors.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  time,
+                                  style: type.labelSmall?.copyWith(
+                                    color: colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  if (showOpenAction || showMarkRead) ...[
+                    const SizedBox(height: 6),
+                    Padding(
+                      padding: EdgeInsetsDirectional.zero,
+                      child: Wrap(
+                        spacing: 7,
+                        runSpacing: 2,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          if (showOpenAction)
+                            primaryTripAction
+                                ? FilledButton(
+                                    onPressed: isPending ? null : onTap,
+                                    style: FilledButton.styleFrom(
+                                      minimumSize: const Size(0, 42),
+                                      visualDensity: VisualDensity.compact,
+                                      textStyle: type.labelMedium,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                      ),
+                                      shape: const StadiumBorder(),
+                                    ),
+                                    child: Text(_actionLabel(l10n)),
+                                  )
+                                : TextButton(
+                                    onPressed: isPending ? null : onTap,
+                                    style: TextButton.styleFrom(
+                                      minimumSize: const Size(0, 42),
+                                      visualDensity: VisualDensity.compact,
+                                      textStyle: type.labelMedium,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 7,
+                                      ),
+                                    ),
+                                    child: Text(_actionLabel(l10n)),
+                                  ),
+                          if (showMarkRead)
+                            TextButton(
+                              onPressed: isPending ? null : onMarkRead,
+                              style: TextButton.styleFrom(
+                                minimumSize: const Size(0, 42),
+                                visualDensity: VisualDensity.compact,
+                                textStyle: type.labelMedium,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                foregroundColor: colors.onSurfaceVariant,
+                              ),
+                              child: Text(l10n.notificationsMarkRead),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

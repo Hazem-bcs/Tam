@@ -1688,6 +1688,66 @@ abstract class AppLocalizations {
   /// **'عرض كل الإشعارات'**
   String get notificationsShowAll;
 
+  /// No description provided for @notificationsTripsFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلات'**
+  String get notificationsTripsFilter;
+
+  /// No description provided for @notificationsOffersFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض'**
+  String get notificationsOffersFilter;
+
+  /// No description provided for @notificationsAccountFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب'**
+  String get notificationsAccountFilter;
+
+  /// No description provided for @notificationsSystemFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'النظام'**
+  String get notificationsSystemFilter;
+
+  /// No description provided for @notificationsOpenTrip.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الرحلة'**
+  String get notificationsOpenTrip;
+
+  /// No description provided for @notificationsExploreOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعراض العرض'**
+  String get notificationsExploreOffer;
+
+  /// No description provided for @notificationsOpenTrips.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل الرحلات'**
+  String get notificationsOpenTrips;
+
+  /// No description provided for @notificationsExploreServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'استكشف الخدمات'**
+  String get notificationsExploreServices;
+
+  /// No description provided for @notificationsMarkRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد كمقروء'**
+  String get notificationsMarkRead;
+
+  /// No description provided for @notificationsNoMatches.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إشعارات في هذا التصنيف'**
+  String get notificationsNoMatches;
+
   /// No description provided for @settingsTitle.
   ///
   /// In ar, this message translates to:
