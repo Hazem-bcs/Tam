@@ -78,7 +78,7 @@ class RideJourneyBody extends StatelessWidget {
         return RideJourneyShell(
           stageKey: selecting ? 'map-selection' : (step, pickingPickup),
           preferredExtent: extent,
-          keepCollapsed: selecting,
+          expandOnChange: location.point,
           collapsedLabel: selecting
               ? t.rideRequestMapPointTitle
               : draft.destination?.label ?? t.rideRequestFlowStartTitle,

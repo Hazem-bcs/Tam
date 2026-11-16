@@ -127,8 +127,7 @@ void main() {
             find.byType(RideMapPointPanel, skipOffstage: false),
           )
           .point;
-      await tester.tap(find.byKey(const Key('ride-sheet-toggle')));
-      await tester.pumpAndSettle();
+      expect(find.byTooltip('طي التفاصيل وتوسيع الخريطة'), findsOneWidget);
       await tester.tap(find.byKey(const Key('ride-map-add-description')));
       await tester.pumpAndSettle();
       await tester.enterText(

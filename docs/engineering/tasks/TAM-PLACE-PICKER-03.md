@@ -9,3 +9,7 @@ Guidance read: AGENTS, portable task protocol, working agreement, architecture A
 Tools available: local Flutter/Android, existing emulator reused with isolated locationpreview package. Focused behavior/layout checks for switching saved/search, cancellation, keyboard/text scaling; one offline build/preview. Broad suite/analyze deferred per user preference.
 
 Status: IMPLEMENTED, awaiting user visual evaluation. Evidence: docs/engineering/deliveries/TAM-PLACE-PICKER-03/HANDOFF.md. 9 journey + 3 focused picker tests passed; offline build/Arabic emulator review complete. Broad checks deferred; no main merge/push.
+
+User follow-up at d3d9679: READY → IMPLEMENTING, quick automatic panel expansion on placing a point. Ownership adds RideJourneyBody/Shell and existing journey regression expectation. Expand on a changed selected point without resetting the point form; retained map and existing reduced-motion animation. Requested hot reload, no broad checks or main merge.
+
+Automatic expansion IMPLEMENTED; hot reload successful (3 libraries,3326ms), format/diff pass. No new build or test run.
