@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_action_tile.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_group.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
 
+/// Destinations stay owned by their respective features and router policies.
 class SettingsAccountLinks extends StatelessWidget {
   const SettingsAccountLinks({
     super.key,
@@ -14,6 +16,7 @@ class SettingsAccountLinks extends StatelessWidget {
     required this.onChangePhone,
     required this.onDeleteAccount,
   });
+
   final VoidCallback onChangePhone, onDeleteAccount;
   final bool enabled;
   final VoidCallback onAddresses, onSupport, onTerms, onPrivacy;
@@ -21,69 +24,91 @@ class SettingsAccountLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ListTile(
-          key: const Key('settings-addresses'),
-          leading: const Icon(Icons.bookmark_border),
-          title: Text(t.addressesTitle),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            size: AppDimensions.iconSize,
-          ),
-          onTap: enabled ? onAddresses : null,
+        SettingsGroup(
+          title: t.settingsAccountSectionTitle,
+          children: [
+            SettingsActionTile(
+              key: const Key('settings-addresses'),
+              icon: Icons.bookmark_outline_rounded,
+              title: t.addressesTitle,
+              subtitle: t.addressesDescription,
+              onTap: enabled ? onAddresses : null,
+            ),
+            SettingsActionTile(
+              key: const Key('settings-change-phone'),
+              icon: Icons.phone_iphone_rounded,
+              title: t.accountManagementChangePhone,
+              onTap: enabled ? onChangePhone : null,
+            ),
+          ],
         ),
-        ListTile(
-          key: const Key('settings-change-phone'),
-          leading: const Icon(Icons.phone_outlined),
-          title: Text(t.accountManagementChangePhone),
-          onTap: enabled ? onChangePhone : null,
+        const SizedBox(height: AppSpacing.xl),
+        SettingsGroup(
+          title: t.settingsInfoTitle,
+          children: [
+            SettingsActionTile(
+              key: const Key('settings-support'),
+              icon: Icons.support_agent_rounded,
+              title: t.settingsHelp,
+              onTap: enabled ? onSupport : null,
+            ),
+            SettingsActionTile(
+              key: const Key('settings-terms'),
+              icon: Icons.description_outlined,
+              title: t.settingsTerms,
+              onTap: enabled ? onTerms : null,
+            ),
+            SettingsActionTile(
+              key: const Key('settings-privacy'),
+              icon: Icons.shield_outlined,
+              title: t.settingsPrivacy,
+              onTap: enabled ? onPrivacy : null,
+            ),
+          ],
         ),
-        ListTile(
-          key: const Key('settings-delete-account'),
-          leading: const Icon(Icons.person_remove_outlined),
-          title: Text(t.accountManagementDeleteAccount),
-          onTap: enabled ? onDeleteAccount : null,
+        const SizedBox(height: AppSpacing.xl),
+        SettingsGroup(
+          title: t.settingsDangerSectionTitle,
+          children: [
+            SettingsActionTile(
+              key: const Key('settings-delete-account'),
+              icon: Icons.delete_outline_rounded,
+              title: t.accountManagementDeleteAccount,
+              danger: true,
+              onTap: enabled ? onDeleteAccount : null,
+            ),
+          ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        Text(
-          t.settingsInfoTitle,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        for (final item in [
-          (
-            const Key('settings-support'),
-            Icons.headset_mic_outlined,
-            t.settingsHelp,
-            onSupport,
-          ),
-          (
-            const Key('settings-terms'),
-            Icons.description_outlined,
-            t.settingsTerms,
-            onTerms,
-          ),
-          (
-            const Key('settings-privacy'),
-            Icons.privacy_tip_outlined,
-            t.settingsPrivacy,
-            onPrivacy,
-          ),
-        ])
-          ListTile(
-            key: item.$1,
-            leading: Icon(item.$2),
-            title: Text(item.$3),
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: AppDimensions.iconSize,
+        Material(
+          color: colors.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadii.lg),
+          child: ExpansionTile(
+            key: const Key('settings-version-disclosure'),
+            shape: const Border(),
+            collapsedShape: const Border(),
+            leading: const Icon(Icons.info_outline_rounded),
+            title: Text(t.settingsDevelopmentDisclosureTitle),
+            childrenPadding: const EdgeInsetsDirectional.fromSTEB(
+              AppSpacing.lg,
+              0,
+              AppSpacing.lg,
+              AppSpacing.lg,
             ),
-            onTap: enabled ? item.$4 : null,
+            children: [
+              Text(
+                t.settingsMockNotice,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+              ),
+            ],
           ),
-        const SizedBox(height: AppSpacing.md),
-        TamCard(child: Text(t.settingsMockNotice)),
+        ),
       ],
     );
   }

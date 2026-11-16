@@ -1862,6 +1862,42 @@ abstract class AppLocalizations {
   /// **'سياسة الخصوصية'**
   String get settingsPrivacy;
 
+  /// No description provided for @settingsWelcome.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً بك في تم'**
+  String get settingsWelcome;
+
+  /// No description provided for @settingsAccountSectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب والعناوين'**
+  String get settingsAccountSectionTitle;
+
+  /// No description provided for @settingsDangerSectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الحساب'**
+  String get settingsDangerSectionTitle;
+
+  /// No description provided for @settingsInternalNotificationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات داخل التطبيق فقط، ولا تشمل تنبيهات الهاتف.'**
+  String get settingsInternalNotificationHint;
+
+  /// No description provided for @settingsDevelopmentDisclosureTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن هذه النسخة'**
+  String get settingsDevelopmentDisclosureTitle;
+
+  /// No description provided for @settingsCurrentPhoneHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم هذه الجلسة'**
+  String get settingsCurrentPhoneHint;
+
   /// No description provided for @addressesTitle.
   ///
   /// In ar, this message translates to:

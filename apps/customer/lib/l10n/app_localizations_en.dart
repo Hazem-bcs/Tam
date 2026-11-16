@@ -961,6 +961,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsPrivacy => 'Privacy policy';
 
   @override
+  String get settingsWelcome => 'Welcome to Tam';
+
+  @override
+  String get settingsAccountSectionTitle => 'Account & addresses';
+
+  @override
+  String get settingsDangerSectionTitle => 'Account management';
+
+  @override
+  String get settingsInternalNotificationHint =>
+      'In-app notifications only, not phone push alerts.';
+
+  @override
+  String get settingsDevelopmentDisclosureTitle => 'About this version';
+
+  @override
+  String get settingsCurrentPhoneHint => 'Phone for this session';
+
+  @override
   String get addressesTitle => 'My addresses';
 
   @override

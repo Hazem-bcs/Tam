@@ -6,6 +6,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_language_sheet.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -93,38 +94,16 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _pickLanguage() async {
-    final t = AppLocalizations.of(context);
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (sheetContext) => SafeArea(
-        child: Padding(
-          padding: AppSpacing.pagePadding,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                t.settingsLanguage,
-                style: Theme.of(sheetContext).textTheme.titleLarge,
-              ),
-              for (final code in const ['ar', 'en'])
-                ListTile(
-                  key: Key('settings-locale-$code'),
-                  title: Text(
-                    code == 'ar' ? t.settingsArabic : t.settingsEnglish,
-                  ),
-                  trailing: widget.locale.value.languageCode == code
-                      ? const Icon(Icons.check_circle_outline)
-                      : null,
-                  onTap: () {
-                    widget.locale.setLocale(Locale(code));
-                    Navigator.pop(sheetContext);
-                  },
-                ),
-            ],
-          ),
-        ),
+      isScrollControlled: true,
+      builder: (sheetContext) => SettingsLanguageSheet(
+        languageCode: widget.locale.value.languageCode,
+        onSelected: (code) {
+          widget.locale.setLocale(Locale(code));
+          Navigator.pop(sheetContext);
+        },
       ),
     );
   }
@@ -202,10 +181,15 @@ class _SettingsPageState extends State<SettingsPage> {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(t.settingsTitle),
+            title: Text(
+              t.settingsTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+            ),
             automaticallyImplyLeading: false,
             actions: [
-              IconButton(
+              IconButton.filledTonal(
                 tooltip: t.settingsNotifications,
                 icon: const Icon(Icons.notifications_none_outlined),
                 onPressed: () => _navigate(widget.navigation.openNotifications),
