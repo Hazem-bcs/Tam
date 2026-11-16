@@ -1,0 +1,24 @@
+{
+  "static_pixel_identical": {
+    "sad": true,
+    "happy": true,
+    "focus": true,
+    "waiting": true,
+    "idle": true
+  },
+  "glove_bright_pixels": {
+    "idle_000:left": 1071,
+    "idle_000:right": 1066,
+    "idle_500:left": 1069,
+    "idle_500:right": 1076,
+    "sad_priority:left": 1231,
+    "sad_priority:right": 1218,
+    "success_032:left": 1689,
+    "success_032:right": 1742,
+    "success_240:left": 1736,
+    "success_240:right": 1784,
+    "recovery:left": 1081,
+    "recovery:right": 1071
+  },
+  "source_sha256": "b83004a6348ad732576c666b420bad78fa1b5e0e6702925a04ea16d2d3c484b4"
+}
