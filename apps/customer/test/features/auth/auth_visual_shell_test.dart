@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/app.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_rive_mascot.dart';
 
 import '../../support/fake_auth_repository.dart';
 
@@ -24,6 +25,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('auth-brand-scene')), findsOneWidget);
+    expect(find.byKey(const Key('auth-tam-mascot')), findsOneWidget);
     expect(find.byKey(const Key('auth-form-surface')), findsOneWidget);
     expect(find.text('تم'), findsWidgets);
     expect(find.text('مشوار'), findsNothing);
@@ -55,6 +57,113 @@ void main() {
     expect(find.byKey(const Key('auth-phone')), findsOneWidget);
     final illustration = tester.getSize(find.byType(AuthHeaderArtwork));
     expect(illustration.width, greaterThan(170));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'keyboard keeps mascot and hero the same size while fields stay scrollable',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetViewInsets);
+
+      await tester.pumpWidget(
+        TamApp(
+          authRepository: FakeAuthRepository(latency: Duration.zero),
+          sessionStore: MemoryAuthSessionStore(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      const hero = Key('auth-brand-scene');
+      const mascot = Key('auth-tam-mascot');
+      final heroBefore = tester.getSize(find.byKey(hero));
+      final mascotBefore = tester.getSize(find.byKey(mascot));
+      expect(mascotBefore.width, greaterThan(200));
+
+      await tester.tap(find.byType(TextFormField).first);
+      tester.view.viewInsets = const FakeViewPadding(bottom: 320);
+      await tester.pumpAndSettle();
+      expect(tester.getSize(find.byKey(hero)), heroBefore);
+      expect(tester.getSize(find.byKey(mascot)), mascotBefore);
+      expect(find.byKey(const Key('auth-phone')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('Rive mascot receives focus and OTP phase changes', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      TamApp(
+        authRepository: FakeAuthRepository(latency: Duration.zero),
+        sessionStore: MemoryAuthSessionStore(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    AuthRiveMascot mascot() =>
+        tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+    expect(mascot().inputFocused, isFalse);
+    expect(mascot().otpStage, isFalse);
+
+    await tester.tap(find.byType(TextFormField).first);
+    await tester.pumpAndSettle();
+    expect(mascot().inputFocused, isTrue);
+    expect(mascot().gazeProgress, 0);
+
+    await tester.enterText(find.byKey(const Key('auth-phone')), '9123');
+    await tester.pumpAndSettle();
+    expect(mascot().gazeProgress, closeTo(4 / 9, 0.0001));
+
+    await tester.enterText(find.byKey(const Key('auth-phone')), '912345678');
+    await tester.pumpAndSettle();
+    expect(mascot().gazeProgress, 1);
+    // Touching outside the input must release focus and return to living Idle.
+    await tester.tap(find.text('أهلًا بك في تم'));
+    await tester.pumpAndSettle();
+    expect(mascot().inputFocused, isFalse);
+
+    await tester.ensureVisible(find.text('إرسال رمز التحقق'));
+    await tester.tap(find.text('إرسال رمز التحقق'));
+    await tester.pumpAndSettle();
+    expect(mascot().otpStage, isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('local invalid phone drives concern and clears when corrected', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      TamApp(
+        authRepository: FakeAuthRepository(latency: Duration.zero),
+        sessionStore: MemoryAuthSessionStore(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    AuthRiveMascot mascot() =>
+        tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+    expect(mascot().hasError, isFalse);
+
+    await tester.ensureVisible(find.text('إرسال رمز التحقق'));
+    await tester.tap(find.text('إرسال رمز التحقق'));
+    await tester.pumpAndSettle();
+    expect(mascot().hasError, isTrue);
+
+    await tester.enterText(find.byKey(const Key('auth-phone')), '912345678');
+    await tester.pumpAndSettle();
+    expect(mascot().hasError, isFalse);
     expect(tester.takeException(), isNull);
   });
 }

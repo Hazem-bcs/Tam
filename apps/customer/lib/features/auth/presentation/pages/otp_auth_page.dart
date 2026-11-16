@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_caret_gaze.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_otp_input.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
@@ -20,9 +21,28 @@ class OtpAuthPage extends StatefulWidget {
 class _OtpAuthPageState extends State<OtpAuthPage> {
   final _form = GlobalKey<FormState>();
   final _code = TextEditingController();
+  bool _otpFocused = false;
+  bool _localInvalid = false;
+
+  void _refreshCodeCaret() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _code.addListener(_refreshCodeCaret);
+  }
+
+  void _updateOtpFocus(bool hasFocus) {
+    if (mounted && _otpFocused != hasFocus) {
+      setState(() => _otpFocused = hasFocus);
+    }
+  }
 
   @override
   void dispose() {
+    _code.removeListener(_refreshCodeCaret);
     _code.dispose();
     super.dispose();
   }
@@ -31,10 +51,12 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
     // A previous server error must not veto a corrected code before the next
     // frame has removed TextFormField.forceErrorText.
     if (RegExp(r'^\d{6}$').hasMatch(_code.text)) {
+      if (_localInvalid) setState(() => _localInvalid = false);
       FocusScope.of(context).unfocus();
       context.read<AuthCubit>().verifyOtp(_code.text);
     } else {
       _form.currentState!.validate();
+      if (!_localInvalid) setState(() => _localInvalid = true);
     }
   }
 
@@ -63,6 +85,10 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
           artwork: AuthArtwork.verification,
           onBack: context.read<AuthCubit>().editPhone,
           busy: state.isBusy,
+          inputFocused: _otpFocused,
+          gazeProgress: authCaretProgress(_code.value, maxDigits: 6),
+          hasError: state.failure != null || _localInvalid,
+          otpStage: true,
           child: AuthCountdown(
             deadline: challenge.expiresAt,
             builder: (context, expiry) {
@@ -127,6 +153,7 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
                       AuthOtpInput(
                         key: const Key('auth-code'),
                         controller: _code,
+                        onFocusChanged: _updateOtpFocus,
                         label: t.authCodeLabel,
                         readOnly: state.isBusy,
                         blocked: blocked,
@@ -140,8 +167,12 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
                             ? null
                             : t.authCodeInvalid,
                         onSubmitted: _verify,
-                        onChanged: (_) =>
-                            context.read<AuthCubit>().clearFailure(),
+                        onChanged: (_) {
+                          context.read<AuthCubit>().clearFailure();
+                          if (_localInvalid) {
+                            setState(() => _localInvalid = false);
+                          }
+                        },
                       ),
                       if (failure != null && failure.code != 'OTP_INVALID') ...[
                         const SizedBox(height: AppSpacing.lg),

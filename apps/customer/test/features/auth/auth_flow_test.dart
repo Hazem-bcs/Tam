@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/app.dart';
+import 'package:tam_customer/app/router/app_routes.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/pages/phone_auth_page.dart';
 
@@ -56,9 +57,35 @@ void main() {
           findsOneWidget,
         );
         expect(await store.read(), isNotNull);
-        final logout = find.text(arabic ? 'تسجيل الخروج' : 'Sign out');
-        await tester.ensureVisible(logout);
+        // Settings moved to the account tab in the unified main shell.
+        // Exercise the current logout route and its confirmation dialog.
+        GoRouter.of(
+          tester.element(
+            find.text(arabic ? 'تم تسجيل الدخول' : 'You are signed in'),
+          ),
+        ).go(AppRoutes.settings);
+        await tester.pumpAndSettle();
+        final logoutLabel = arabic ? 'تسجيل الخروج' : 'Log out';
+        final logout = find.text(logoutLabel);
+        await tester.scrollUntilVisible(
+          logout,
+          280,
+          scrollable: find
+              .descendant(
+                of: find.byKey(const Key('settings-content')),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        );
         await tester.tap(logout);
+        await tester.pumpAndSettle();
+        expect(find.byType(AlertDialog), findsOneWidget);
+        await tester.tap(
+          find.descendant(
+            of: find.byType(AlertDialog),
+            matching: find.widgetWithText(TextButton, logoutLabel),
+          ),
+        );
         await tester.pumpAndSettle();
         expect(find.byKey(const Key('auth-phone')), findsOneWidget);
         expect(await store.read(), isNull);

@@ -19,6 +19,7 @@ class AuthOtpInput extends StatefulWidget {
     this.readOnly = false,
     this.blocked = false,
     this.autofocus = true,
+    this.onFocusChanged,
   });
 
   final TextEditingController controller;
@@ -30,6 +31,7 @@ class AuthOtpInput extends StatefulWidget {
   final bool readOnly;
   final bool blocked;
   final bool autofocus;
+  final ValueChanged<bool>? onFocusChanged;
 
   @override
   State<AuthOtpInput> createState() => _AuthOtpInputState();
@@ -56,7 +58,14 @@ class _AuthOtpInputState extends State<AuthOtpInput> {
   }
 
   void _rebuild() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    setState(() {});
+    final onFocusChanged = widget.onFocusChanged;
+    if (onFocusChanged != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) onFocusChanged(_focus.hasFocus);
+      });
+    }
   }
 
   void _update() {
@@ -195,6 +204,7 @@ class _AuthOtpInputState extends State<AuthOtpInput> {
                         child: TextField(
                           controller: widget.controller,
                           focusNode: _focus,
+                          onTapOutside: (_) => _focus.unfocus(),
                           autofocus:
                               widget.autofocus &&
                               !widget.blocked &&
