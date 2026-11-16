@@ -64,6 +64,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   final _appliedInset = ValueNotifier<double>(0);
   final _selectionAnchor = ValueNotifier<Offset?>(null);
   GeoPoint? _tappedSelection;
+  (GeoPoint?, GeoPoint?)? _retainedViewport;
   int _selectionEpoch = 0;
   double get _pixelRatio =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android
@@ -132,8 +133,22 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     }
     if (oldWidget.style != widget.style) _reset();
     if (oldWidget.focus != widget.focus) {
+      _retainedViewport = null;
       _deviceFocusPending = widget.focus != null;
       _queueSync();
+    }
+    final endpoints = (widget.scene.origin, widget.scene.destination);
+    final adoptedPoint = oldWidget.scene.selection;
+    if (adoptedPoint != null &&
+        widget.scene.selection == null &&
+        (widget.scene.origin == adoptedPoint ||
+            widget.scene.destination == adoptedPoint)) {
+      // Confirming a pin changes its role, not the place the user is viewing.
+      // Retain this viewport even if route geometry arrives asynchronously.
+      _retainedViewport = endpoints;
+      _fitPending = false;
+    } else if (_retainedViewport != endpoints) {
+      _retainedViewport = null;
     }
     if (oldWidget.scene.selection != widget.scene.selection &&
         widget.scene.selection != _emittedSelection) {
@@ -154,7 +169,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     if (oldWidget.scene.origin != widget.scene.origin ||
         oldWidget.scene.destination != widget.scene.destination ||
         oldWidget.scene.route != widget.scene.route) {
-      _fitPending = true;
+      _fitPending = _retainedViewport == null;
     }
     if (oldWidget.scene != widget.scene) _queueSync();
   }
@@ -165,6 +180,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _layers = null;
     _drawn = null;
     _installed = false;
+    _retainedViewport = null;
     _lastPadding = null;
     _focusSelectionPending = _picking;
     _loading = true;
@@ -298,6 +314,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         !_installed ||
         _size.isEmpty ||
         _cameraAnimating ||
+        _retainedViewport != null ||
         (_picking && !force))
       return;
     try {

@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/vector/native_vector_map.dart';
+import 'package:tam_customer/features/maps/domain/maps_repository.dart'
+    as domain;
 import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/vector/vector_map_scene.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -63,6 +65,66 @@ void main() {
     tester.widget<MapLibreMap>(find.byType(MapLibreMap)).onMapIdle!();
     await tester.pump();
   }
+
+  testWidgets(
+    'confirming a selected endpoint preserves viewport through route updates',
+    (tester) async {
+      final inset = ValueNotifier<double>(280);
+      addTearDown(inset.dispose);
+      await show(
+        tester,
+        VectorMapScene(origin: origin, selection: destination),
+        inset: inset,
+        select: (_) {},
+      );
+      await load(tester);
+      await tester.pumpAndSettle();
+      final map = tester.element(find.byType(MapLibreMap));
+      final probe = platforms.single;
+      final cameras = probe.cameras.length;
+      final padding = probe.insets.length;
+      await show(
+        tester,
+        VectorMapScene(origin: origin, destination: destination),
+        inset: inset,
+        select: (_) {},
+      );
+      inset.value = 210;
+      await tester.pumpAndSettle();
+      await show(
+        tester,
+        VectorMapScene(
+          origin: origin,
+          destination: destination,
+          route: domain.MapRoute(
+            origin: origin,
+            destination: destination,
+            points: [origin, destination],
+            distanceMeters: 1200,
+            durationSeconds: 240,
+            provider: 'test',
+          ),
+        ),
+        inset: inset,
+        select: (_) {},
+      );
+      await tester.pumpAndSettle();
+      expect(tester.element(find.byType(MapLibreMap)), same(map));
+      expect(probe.cameras.length, cameras);
+      expect(probe.insets.length, padding);
+      expect(probe.scenes.last['features'], hasLength(3));
+      await show(
+        tester,
+        VectorMapScene(origin: origin, destination: destination),
+        inset: inset,
+        focus: MapCameraFocus(origin, 1),
+      );
+      await tester.pumpAndSettle();
+      expect(probe.cameras.length, greaterThan(cameras));
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('selection and driver updates preserve map, sprites and camera', (
     tester,

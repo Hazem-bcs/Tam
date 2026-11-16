@@ -32,6 +32,7 @@ class _RideRequestPageState extends State<RideRequestPage>
   RideLocationCubit? _location;
   bool _pickingPickup = true,
       _selectionPending = false,
+      _mapSelectionPending = false,
       _settingsPromptOpen = false;
 
   @override
@@ -133,9 +134,19 @@ class _RideRequestPageState extends State<RideRequestPage>
     FocusScope.of(context).unfocus();
     if (pickup) _manualPickup();
     _selectionPending = false;
-    _location?.clearPoint();
+    final unchanged =
+        (pickup ? bloc.state.pickup : bloc.state.destination) == value;
+    _mapSelectionPending = !unchanged;
     bloc.add(pickup ? PickupSelected(value) : DestinationSelected(value));
+    if (unchanged) _finishMapSelection();
+  }
+
+  void _finishMapSelection() {
+    _mapSelectionPending = false;
     setState(() => _step = RideJourneyStep.entry);
+    // Keep the selected pin until the draft contains its endpoint. The map and
+    // panel then see one committed change, never an empty intermediate scene.
+    _location?.clearPoint();
   }
 
   void _continue(RideDraftState state) {
@@ -243,7 +254,7 @@ class _RideRequestPageState extends State<RideRequestPage>
   ) => BlocConsumer<RideDraftBloc, RideDraftState>(
     listenWhen: (previous, current) =>
         previous.confirmedTrip?.id != current.confirmedTrip?.id ||
-        (_selectionPending &&
+        ((_selectionPending || _mapSelectionPending) &&
             (previous.pickup != current.pickup ||
                 previous.destination != current.destination)),
     listener: (context, state) {
@@ -252,6 +263,8 @@ class _RideRequestPageState extends State<RideRequestPage>
           id: state.confirmedTrip!.id,
           replaceCurrent: true,
         );
+      } else if (_mapSelectionPending) {
+        _finishMapSelection();
       } else if (_selectionPending && !state.searching) {
         _selectionPending = false;
         setState(() {

@@ -52,6 +52,7 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
   final _controller = MapController();
   bool _ready = false, _failed = false, _loaded = false;
   int _generation = 0;
+  (GeoPoint?, GeoPoint?)? _retainedViewport;
   LatLng _latLng(GeoPoint p) =>
       LatLng(p.latitude.clamp(-85.0511, 85.0511), p.longitude);
   List<LatLng> get _points => [
@@ -103,12 +104,24 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
       _generation++;
       _failed = _loaded = false;
     }
+    final endpoints = (widget.origin, widget.destination);
+    final adoptedPoint = oldWidget.selection;
+    if (adoptedPoint != null &&
+        widget.selection == null &&
+        (widget.origin == adoptedPoint || widget.destination == adoptedPoint)) {
+      _retainedViewport = endpoints;
+    } else if (_retainedViewport != endpoints) {
+      _retainedViewport = null;
+    }
     if (oldWidget.focus != widget.focus && widget.focus != null) {
+      _retainedViewport = null;
       WidgetsBinding.instance.addPostFrameCallback((_) => _focus());
     } else if (oldWidget.origin != widget.origin ||
         oldWidget.destination != widget.destination ||
         oldWidget.route != widget.route) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _fit());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_retainedViewport == null) _fit();
+      });
     }
   }
 

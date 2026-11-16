@@ -97,6 +97,60 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
+  testWidgets(
+    'map confirmation updates the existing journey without an intermediate empty point',
+    (tester) async {
+      phone(tester);
+      final bloc = await launch(tester, LocationProbe());
+      await tester.pumpAndSettle();
+      final mapState = tester.state(find.byType(FlutterMap));
+      tester
+          .widget<RideJourneyBody>(find.byType(RideJourneyBody))
+          .onMapPoint(destination);
+      await tester.pumpAndSettle();
+      final panel = tester.widget<RideMapPointPanel>(
+        find.byType(RideMapPointPanel),
+      );
+      final camera = tester
+          .widget<FlutterMap>(find.byType(FlutterMap))
+          .mapController!
+          .camera;
+      final center = camera.center, zoom = camera.zoom;
+      panel.onDestination(
+        TripLocation(point: destination, label: 'بوابة الحديقة'),
+      );
+      for (final duration in [
+        Duration.zero,
+        const Duration(milliseconds: 60),
+        const Duration(milliseconds: 300),
+      ]) {
+        await tester.pump(duration);
+        final journey = tester.widget<RideJourneyBody>(
+          find.byType(RideJourneyBody),
+        );
+        if (journey.location.point == null) {
+          expect(journey.draft.destination?.point, destination);
+        }
+        expect(tester.state(find.byType(FlutterMap)), same(mapState));
+        final currentCamera = tester
+            .widget<FlutterMap>(find.byType(FlutterMap))
+            .mapController!
+            .camera;
+        expect(currentCamera.center, center);
+        expect(currentCamera.zoom, zoom);
+        expect(tester.takeException(), isNull);
+      }
+      await tester.pumpAndSettle();
+      expect(bloc.state.destination?.label, 'بوابة الحديقة');
+      expect(
+        tester.widget<RideJourneyBody>(find.byType(RideJourneyBody)).step,
+        RideJourneyStep.entry,
+      );
+      await tester.pumpWidget(const SizedBox());
+      await tester.runAsync(bloc.close);
+    },
+  );
+
   testWidgets('keyboard keeps map viewport and camera inset stable', (
     tester,
   ) async {
