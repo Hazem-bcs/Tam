@@ -1,0 +1,105 @@
+name: TAM Cloud UI Preview
+
+# Safe for a public repository: no secrets, no deployments, no self-hosted runners.
+on:
+  pull_request:
+    paths:
+      - 'apps/customer/lib/**'
+      - 'apps/customer/test/features/**'
+      - 'apps/customer/assets/**'
+      - '.github/workflows/ui-preview.yml'
+  workflow_dispatch:
+    inputs:
+      feature:
+        description: 'Choose one UI surface, or all four'
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - home
+          - notifications
+          - trips
+          - settings
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloud-ui-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ui-preview:
+    name: ${{ matrix.feature }} / Flutter UI
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        feature: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.feature != 'all' && format('["{0}"]', inputs.feature) || '["home","notifications","trips","settings"]') }}
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install Flutter (cloud-hosted)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.41.4'
+          cache: true
+
+      - name: Resolve packages
+        working-directory: apps/customer
+        run: flutter pub get
+
+      - name: Check formatting
+        working-directory: apps/customer
+        env:
+          FEATURE: ${{ matrix.feature }}
+        run: dart format --output=none --set-exit-if-changed "lib/features/$FEATURE" "test/features/$FEATURE"
+
+      - name: Analyze feature
+        working-directory: apps/customer
+        env:
+          FEATURE: ${{ matrix.feature }}
+        run: flutter analyze --no-pub "lib/features/$FEATURE" "test/features/$FEATURE"
+
+      - name: Run feature tests
+        working-directory: apps/customer
+        env:
+          FEATURE: ${{ matrix.feature }}
+        run: flutter test --no-pub "test/features/$FEATURE" -r compact
+
+      - name: Render updated UI preview snapshots
+        working-directory: apps/customer
+        shell: bash
+        env:
+          FEATURE: ${{ matrix.feature }}
+        run: |
+          set -euo pipefail
+          case "$FEATURE" in
+            home)
+              flutter test --no-pub --dart-define=CAPTURE_HOME_GOLDENS=true --update-goldens test/features/home/home_visual_test.dart
+              ;;
+            notifications)
+              flutter test --no-pub --dart-define=TAM_NOTIFICATIONS_GOLDEN=true --update-goldens test/features/notifications/notifications_widget_test.dart
+              ;;
+            trips)
+              flutter test --no-pub --update-goldens test/features/trips/trips_activity_visual_test.dart
+              ;;
+            settings)
+              flutter test --no-pub --dart-define=CAPTURE_SETTINGS_GOLDENS=true --update-goldens test/features/settings/settings_page_test.dart
+              ;;
+          esac
+
+      - name: Upload actual Flutter screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tam-ui-${{ matrix.feature }}-${{ github.run_attempt }}
+          path: apps/customer/test/features/${{ matrix.feature }}/goldens/*.png
+          if-no-files-found: warn
+          retention-days: 7
