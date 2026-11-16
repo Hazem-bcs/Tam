@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/settings/data/api/unavailable_settings_repository.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_settings_repository.dart';
@@ -47,18 +48,21 @@ Widget buildSettingsFeature(
     _repositories[locale] = selected;
   }
 
-  return BlocProvider(
-    key: ObjectKey(selected.repository),
-    create: (_) => SettingsCubit(selected!.repository)..load(),
-    child: SettingsPage(
-      navigation: navigation,
-      onBack: onBack,
-      locale: locale,
-      logout: () async {
-        await logout();
-        resetSettingsFeatureSession(locale);
-      },
-      phoneE164: phoneE164,
+  return Theme(
+    data: AppTheme.account(Theme.of(context)),
+    child: BlocProvider(
+      key: ObjectKey(selected.repository),
+      create: (_) => SettingsCubit(selected!.repository)..load(),
+      child: SettingsPage(
+        navigation: navigation,
+        onBack: onBack,
+        locale: locale,
+        logout: () async {
+          await logout();
+          resetSettingsFeatureSession(locale);
+        },
+        phoneE164: phoneE164,
+      ),
     ),
   );
 }

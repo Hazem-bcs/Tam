@@ -20,11 +20,27 @@ class SettingsGroup extends StatelessWidget {
             start: AppSpacing.xs,
             bottom: AppSpacing.md,
           ),
-          child: Text(
-            title,
-            style: typography.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+          child: Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors.primary,
+                  borderRadius: BorderRadius.circular(AppRadii.sm),
+                ),
+                child: const SizedBox(width: 3, height: 16),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Text(
+                  title,
+                  style: typography.bodyMedium?.copyWith(
+                    fontSize: 15,
+                    color: colors.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Material(
@@ -46,7 +62,7 @@ class SettingsGroup extends StatelessWidget {
                         horizontal: AppSpacing.lg,
                       ),
                       child: Divider(
-                        color: colors.outlineVariant,
+                        color: colors.outlineVariant.withValues(alpha: 0.75),
                         height: AppDimensions.borderWidth,
                       ),
                     ),

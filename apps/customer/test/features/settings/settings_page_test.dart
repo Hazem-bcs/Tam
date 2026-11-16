@@ -80,13 +80,18 @@ Widget testApp({
         data: MediaQuery.of(
           context,
         ).copyWith(textScaler: TextScaler.linear(textScale)),
-        child: BlocProvider(
-          create: (_) => SettingsCubit(repository)..load(),
-          child: SettingsPage(
-            navigation: navigation,
-            locale: locale,
-            phoneE164: phoneE164,
-            logout: logout ?? () async {},
+        child: Builder(
+          builder: (context) => Theme(
+            data: AppTheme.account(Theme.of(context)),
+            child: BlocProvider(
+              create: (_) => SettingsCubit(repository)..load(),
+              child: SettingsPage(
+                navigation: navigation,
+                locale: locale,
+                phoneE164: phoneE164,
+                logout: logout ?? () async {},
+              ),
+            ),
           ),
         ),
       ),
@@ -141,12 +146,19 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
     if (const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) {
-      await ui.loadFontFromList(
-        await File(
-          '/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf',
-        ).readAsBytes(),
-        fontFamily: 'Noto Sans Arabic',
-      );
+      // Load the actual shipped brand fonts to render the same glyphs as Flutter
+      // on Android; do not substitute a different host font for the screenshots.
+      for (final (name, family) in [
+        ('NotoSansArabic-Regular.ttf', 'TamSansArabic'),
+        ('NotoSansArabic-Bold.ttf', 'TamSansArabic'),
+        ('NotoSans-Regular.ttf', 'TamSansLatin'),
+        ('NotoSans-Bold.ttf', 'TamSansLatin'),
+      ]) {
+        await ui.loadFontFromList(
+          await File('assets/fonts/$name').readAsBytes(),
+          fontFamily: family,
+        );
+      }
       await ui.loadFontFromList(
         await File(
           '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/Roboto-Regular.ttf',
@@ -160,6 +172,55 @@ void main() {
         fontFamily: 'MaterialIcons',
       );
     }
+  });
+
+  testWidgets('Account headings, row titles and descriptions are distinct', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final context = tester.element(find.byKey(const Key('settings-content')));
+    final type = Theme.of(context).textTheme;
+    expect(type.bodyLarge?.fontFamily, 'TamSansArabic');
+
+    final header = tester.widget<Text>(find.text('الإعدادات'));
+    final title = tester.widget<Text>(find.text('اللغة'));
+    final detail = tester.widget<Text>(find.text('العربية'));
+    expect(header.style?.fontSize, 15);
+    expect(title.style?.fontSize, 16);
+    expect(detail.style?.fontSize, 14);
+    expect(header.style?.fontWeight, FontWeight.w700);
+    expect(title.style?.fontWeight, FontWeight.w700);
+    expect(detail.style?.fontWeight, FontWeight.w400);
+    expect(title.style?.color, Theme.of(context).colorScheme.onSurface);
+    expect(detail.style?.color, Theme.of(context).colorScheme.onSurfaceVariant);
+  });
+
+  testWidgets('Guest profile does not repeat the missing-phone warning', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+        phoneE164: null,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('أنت تتصفح كضيف'), findsOneWidget);
+    expect(find.text('لا يوجد رقم هاتف لهذه الجلسة'), findsNothing);
   });
 
   testWidgets('Arabic profile and read-only injected phone', (tester) async {
@@ -462,6 +523,27 @@ void main() {
     await expectLater(
       find.byType(SettingsPage),
       matchesGoldenFile('goldens/settings_ar_profile_editor.png'),
+    );
+  });
+
+  testWidgets('visual guest account Arabic 390dp', (tester) async {
+    if (!const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) return;
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+        phoneE164: null,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(SettingsPage),
+      matchesGoldenFile('goldens/settings_ar_guest_390.png'),
     );
   });
 

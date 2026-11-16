@@ -48,7 +48,7 @@ class SettingsPreferencesSection extends StatelessWidget {
                   height: 42,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: colors.primaryContainer,
+                    color: colors.primaryContainer.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
                   child: Icon(
@@ -58,7 +58,7 @@ class SettingsPreferencesSection extends StatelessWidget {
                 ),
                 title: Text(
                   t.settingsAccountNotifications,
-                  style: text.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: text.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 subtitle: Text(
                   t.settingsInternalNotificationHint,

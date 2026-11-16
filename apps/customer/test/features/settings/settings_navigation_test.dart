@@ -35,12 +35,15 @@ void main() {
               key: const Key('open-settings'),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => BlocProvider(
-                    create: (_) => SettingsCubit(repository)..load(),
-                    child: SettingsPage(
-                      navigation: FakeNavigation(),
-                      locale: locale,
-                      logout: () async {},
+                  builder: (pageContext) => Theme(
+                    data: AppTheme.account(Theme.of(pageContext)),
+                    child: BlocProvider(
+                      create: (_) => SettingsCubit(repository)..load(),
+                      child: SettingsPage(
+                        navigation: FakeNavigation(),
+                        locale: locale,
+                        logout: () async {},
+                      ),
                     ),
                   ),
                 ),

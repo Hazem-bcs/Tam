@@ -185,7 +185,7 @@ class _SettingsPageState extends State<SettingsPage> {
               t.settingsTitle,
               style: Theme.of(
                 context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
             ),
             automaticallyImplyLeading: false,
             actions: [

@@ -108,7 +108,7 @@ class SettingsProfileSection extends StatelessWidget {
                                 t.settingsWelcome,
                                 style: text.headlineSmall?.copyWith(
                                   color: colors.onPrimaryContainer,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.sm),
@@ -173,32 +173,25 @@ class SettingsProfileSection extends StatelessWidget {
                       edit,
                     ],
                   ),
-                const SizedBox(height: AppSpacing.sm),
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: phoneE164 == null
-                      ? Text(
-                          t.settingsPhoneUnavailable,
-                          style: text.bodySmall?.copyWith(
-                            color: colors.onSurfaceVariant,
-                          ),
-                        )
-                      : Directionality(
+                if (phoneE164 != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SelectableText(
+                          phoneE164!,
                           textDirection: TextDirection.ltr,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SelectableText(
-                              phoneE164!,
-                              textDirection: TextDirection.ltr,
-                              style:
-                                  (compactDetails
-                                          ? text.bodySmall
-                                          : text.bodyLarge)
-                                      ?.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                          ),
+                          style:
+                              (compactDetails ? text.bodySmall : text.bodyLarge)
+                                  ?.copyWith(fontWeight: FontWeight.w600),
                         ),
-                ),
+                      ),
+                    ),
+                  ),
+                ],
                 if (state.nameDirty) ...[
                   const SizedBox(height: AppSpacing.sm),
                   Text(
