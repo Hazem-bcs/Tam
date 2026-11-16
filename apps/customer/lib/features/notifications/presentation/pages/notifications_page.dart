@@ -39,28 +39,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
       appBar: AppBar(
         toolbarHeight: 64,
         backgroundColor: colors.surface,
-        titleSpacing: 0,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.notifications_none_rounded,
-              color: colors.primary,
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                l10n.navNotifications,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: colors.onSurface,
-                ),
-              ),
-            ),
-          ],
+        titleSpacing: AppSpacing.lg,
+        title: Text(
+          l10n.navNotifications,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+            color: colors.onSurface,
+          ),
         ),
         actions: [
           BlocBuilder<NotificationsCubit, NotificationsState>(
@@ -80,20 +67,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     )
                   : null,
               icon: const Icon(Icons.done_all_rounded),
-            ),
-          ),
-          BlocBuilder<NotificationsCubit, NotificationsState>(
-            buildWhen: (a, b) =>
-                a.isBusy != b.isBusy || a.refreshing != b.refreshing,
-            builder: (context, state) => IconButton(
-              key: const Key('notifications-refresh'),
-              tooltip: l10n.notificationsRefresh,
-              onPressed: state.isBusy
-                  ? null
-                  : () => unawaited(
-                      context.read<NotificationsCubit>().load(refresh: true),
-                    ),
-              icon: const Icon(Icons.refresh_rounded),
             ),
           ),
           const SizedBox(width: 4),
