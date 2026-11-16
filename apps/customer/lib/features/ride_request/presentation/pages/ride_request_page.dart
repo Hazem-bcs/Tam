@@ -292,7 +292,9 @@ class _RideRequestPageState extends State<RideRequestPage>
             systemNavigationBarColor: Theme.of(context).colorScheme.surface,
           ),
           child: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: SafeArea(
+              maintainBottomViewPadding: true,
               child: RideJourneyBody(
                 step: _step,
                 draft: state,

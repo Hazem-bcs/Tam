@@ -97,6 +97,50 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
+  testWidgets('keyboard keeps map viewport and camera inset stable', (
+    tester,
+  ) async {
+    phone(tester, width: 320);
+    await launch(tester, LocationProbe(), scale: 2);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('إلى أين تريد الذهاب؟'));
+    await tester.pumpAndSettle();
+    final map = find.byType(FlutterMap);
+    final originalState = tester.state(map);
+    final originalSize = tester.getSize(map);
+    await tester.enterText(find.byType(TextFormField), 'الجلاء');
+    await tester.pumpAndSettle();
+    final originalInset = tester
+        .widget<RouteMapView>(find.byType(RouteMapView))
+        .bottomInset!
+        .value;
+    addTearDown(tester.view.resetViewInsets);
+    for (final height in [80.0, 180.0, 300.0]) {
+      tester.view.viewInsets = FakeViewPadding(bottom: height);
+      await tester.pumpAndSettle();
+      expect(tester.state(map), same(originalState));
+      expect(tester.getSize(map), originalSize);
+      expect(
+        tester
+            .widget<RouteMapView>(find.byType(RouteMapView))
+            .bottomInset!
+            .value,
+        originalInset,
+      );
+      expect(tester.takeException(), isNull);
+    }
+    await tester.ensureVisible(find.byType(TextFormField));
+    expect(
+      tester.widget<TextFormField>(find.byType(TextFormField)).controller!.text,
+      'الجلاء',
+    );
+    tester.view.viewInsets = const FakeViewPadding();
+    await tester.pumpAndSettle();
+    expect(tester.getSize(map), originalSize);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets(
     'GPS pickup, folding without resetting the map, and naming a tapped destination',
     (tester) async {

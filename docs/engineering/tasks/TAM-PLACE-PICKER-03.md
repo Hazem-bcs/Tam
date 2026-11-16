@@ -13,3 +13,7 @@ Status: IMPLEMENTED, awaiting user visual evaluation. Evidence: docs/engineering
 User follow-up at d3d9679: READY → IMPLEMENTING, quick automatic panel expansion on placing a point. Ownership adds RideJourneyBody/Shell and existing journey regression expectation. Expand on a changed selected point without resetting the point form; retained map and existing reduced-motion animation. Requested hot reload, no broad checks or main merge.
 
 Automatic expansion IMPLEMENTED; hot reload successful (3 libraries,3326ms), format/diff pass. No new build or test run.
+
+User follow-up at cd53016: READY → IMPLEMENTING. Fix keyboard-induced map resize/jump and competing panel animation. Owned RideRequestPage/Shell and focused keyboard regression. Keep native map viewport and camera padding steady while keyboard is visible, only constrain/lift scrollable sheet; preserve query/focus and small-phone text-scale access. Local hot reload requested in same active preview workflow; no main merge or broad checks.
+
+Keyboard follow-up IMPLEMENTED: one targeted viewport regression passes; hot reload, Android map-pixel comparison and keyboard rendering reviewed. No rebuild/full checks or main merge. Evidence in handoff.

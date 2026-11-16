@@ -41,6 +41,7 @@ class _RideJourneyShellState extends State<RideJourneyShell>
   )..addListener(_changed);
   final _mapInset = ValueNotifier<double>(0);
   double _height = 0, _minimum = .15, _maximum = .90;
+  double _keyboardInset = 0, _panelHeight = 0;
   bool _compact = false;
   Offset? _mapDragOrigin;
 
@@ -88,6 +89,20 @@ class _RideJourneyShellState extends State<RideJourneyShell>
     final t = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final c = theme.colorScheme;
+    final keyboardInset = math.max(
+      0.0,
+      MediaQuery.viewInsetsOf(context).bottom -
+          MediaQuery.viewPaddingOf(context).bottom,
+    );
+    final keyboardTransition = keyboardInset > 0 || _keyboardInset > 0;
+    if (_keyboardInset > 0 && keyboardInset == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _keyboardInset == 0) {
+          _mapInset.value = _panelHeight + AppSpacing.md;
+        }
+      });
+    }
+    _keyboardInset = keyboardInset;
     return LayoutBuilder(
       builder: (context, bounds) {
         if (_height != bounds.maxHeight) {
@@ -123,7 +138,13 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                     if (!_compact) _move(_minimum);
                   }
                 },
-                child: RepaintBoundary(child: widget.mapBuilder(_mapInset)),
+                child: RepaintBoundary(
+                  child: MediaQuery.removeViewInsets(
+                    context: context,
+                    removeBottom: true,
+                    child: widget.mapBuilder(_mapInset),
+                  ),
+                ),
               ),
             ),
             PositionedDirectional(
@@ -135,12 +156,15 @@ class _RideJourneyShellState extends State<RideJourneyShell>
             AnimatedBuilder(
               animation: _extent,
               builder: (context, child) => Positioned(
-                bottom: AppSpacing.md,
+                bottom: keyboardInset + AppSpacing.md,
                 left: AppSpacing.md,
                 right: AppSpacing.md,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: (_extent.value * _height).clamp(0, _height),
+                    maxHeight: math.min(
+                      (_extent.value * _height).clamp(0, _height),
+                      math.max(0, _height - keyboardInset - 96),
+                    ),
                   ),
                   child: child!,
                 ),
@@ -151,12 +175,19 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                   constraints: const BoxConstraints(maxWidth: 600),
                   child: RidePanelSizeObserver(
                     onHeight: (height) {
-                      if (mounted) _mapInset.value = height + AppSpacing.md;
+                      _panelHeight = height;
+                      if (mounted && _keyboardInset == 0) {
+                        _mapInset.value = height + AppSpacing.md;
+                      }
                     },
                     child: AnimatedSize(
                       alignment: Alignment.bottomCenter,
-                      duration: MediaQuery.disableAnimationsOf(context)
-                          ? Duration.zero
+                      duration:
+                          keyboardTransition ||
+                              MediaQuery.disableAnimationsOf(context)
+                          // A nonzero tick avoids AnimatedSize completing
+                          // synchronously inside its own layout pass.
+                          ? const Duration(milliseconds: 1)
                           : AppMotion.medium,
                       curve: AppMotion.easeOut,
                       child: Material(
