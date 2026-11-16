@@ -532,6 +532,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestConfirmDestination => 'اعتماد الوجهة';
 
   @override
+  String get rideRequestSearchPickupTitle => 'من أين؟';
+
+  @override
+  String get rideRequestSearchDestinationTitle => 'إلى أين؟';
+
+  @override
+  String get rideRequestSearchDestinationHint => 'ابحث عن وجهتك';
+
+  @override
+  String rideRequestSearchFrom(String place) {
+    return 'من $place';
+  }
+
+  @override
+  String rideRequestSearchTo(String place) {
+    return 'إلى $place';
+  }
+
+  @override
+  String get rideRequestChooseFromMap => 'اختيار من الخريطة';
+
+  @override
+  String get rideRequestSavedPlaces => 'عناوينك المحفوظة';
+
+  @override
+  String get rideRequestClearSearch => 'مسح البحث';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override

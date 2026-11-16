@@ -1076,6 +1076,54 @@ abstract class AppLocalizations {
   /// **'اعتماد الوجهة'**
   String get rideRequestConfirmDestination;
 
+  /// No description provided for @rideRequestSearchPickupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'من أين؟'**
+  String get rideRequestSearchPickupTitle;
+
+  /// No description provided for @rideRequestSearchDestinationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى أين؟'**
+  String get rideRequestSearchDestinationTitle;
+
+  /// No description provided for @rideRequestSearchDestinationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن وجهتك'**
+  String get rideRequestSearchDestinationHint;
+
+  /// No description provided for @rideRequestSearchFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {place}'**
+  String rideRequestSearchFrom(String place);
+
+  /// No description provided for @rideRequestSearchTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى {place}'**
+  String rideRequestSearchTo(String place);
+
+  /// No description provided for @rideRequestChooseFromMap.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من الخريطة'**
+  String get rideRequestChooseFromMap;
+
+  /// No description provided for @rideRequestSavedPlaces.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناوينك المحفوظة'**
+  String get rideRequestSavedPlaces;
+
+  /// No description provided for @rideRequestClearSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح البحث'**
+  String get rideRequestClearSearch;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:

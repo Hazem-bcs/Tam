@@ -110,10 +110,21 @@ class _RideRequestPageState extends State<RideRequestPage>
     }
     FocusScope.of(context).unfocus();
     if (_pickingPickup) _manualPickup();
-    _selectionPending = true;
+    final unchanged =
+        (_pickingPickup ? bloc.state.pickup : bloc.state.destination) == value;
+    _selectionPending = !unchanged;
     bloc.add(
       _pickingPickup ? PickupSelected(value) : DestinationSelected(value),
     );
+    if (unchanged) {
+      setState(() {
+        if (bloc.state.hasRoute) {
+          _step = RideJourneyStep.vehicle;
+        } else {
+          _pickingPickup = bloc.state.pickup == null;
+        }
+      });
+    }
   }
 
   void _useMapPoint(TripLocation value, {required bool pickup}) {

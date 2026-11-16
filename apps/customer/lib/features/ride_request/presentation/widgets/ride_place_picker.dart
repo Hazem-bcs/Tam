@@ -31,7 +31,13 @@ class RidePlacePicker extends StatefulWidget {
 class _RidePlacePickerState extends State<RidePlacePicker> {
   final _search = TextEditingController();
   final _focus = FocusNode();
-  bool _saved = false;
+  bool _hasQuery = false;
+
+  void _searchChanged(String query) {
+    final hasQuery = query.trim().isNotEmpty;
+    if (_hasQuery != hasQuery) setState(() => _hasQuery = hasQuery);
+    context.read<RideDraftBloc>().add(RidePlaceSearchChanged(query));
+  }
 
   void _select(TripLocation selected) {
     _focus.unfocus();
@@ -58,15 +64,6 @@ class _RidePlacePickerState extends State<RidePlacePicker> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted)
-        context.read<RideDraftBloc>().add(const RidePlaceSearchChanged(''));
-    });
-  }
-
-  @override
   void dispose() {
     _search.dispose();
     _focus.dispose();
@@ -86,93 +83,74 @@ class _RidePlacePickerState extends State<RidePlacePicker> {
       children: [
         if (!widget.embedded) ...[
           Text(
-            widget.pickup ? t.rideRequestPickup : t.rideRequestDestination,
+            widget.pickup
+                ? t.rideRequestSearchPickupTitle
+                : t.rideRequestSearchDestinationTitle,
             style: theme.textTheme.titleLarge,
           ),
           const SizedBox(height: AppSpacing.md),
         ],
-        if (!_saved) ...[
-          TamTextField(
-            key: const Key('ride-place-search'),
-            labelText: t.rideRequestSearchPlaces,
-            controller: _search,
-            focusNode: _focus,
-            prefixIcon: const Icon(Icons.search_rounded),
-            onChanged: (query) => context.read<RideDraftBloc>().add(
-              RidePlaceSearchChanged(query),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-        ],
+        TamTextField(
+          key: const Key('ride-place-search'),
+          labelText: widget.pickup
+              ? t.rideRequestSearchPlaces
+              : t.rideRequestSearchDestinationHint,
+          controller: _search,
+          focusNode: _focus,
+          textInputAction: TextInputAction.search,
+          prefixIcon: const Icon(Icons.search_rounded),
+          suffixIcon: _hasQuery
+              ? IconButton(
+                  tooltip: t.rideRequestClearSearch,
+                  icon: const Icon(Icons.close_rounded, size: 20),
+                  onPressed: () {
+                    _search.clear();
+                    _searchChanged('');
+                  },
+                )
+              : null,
+          onChanged: _searchChanged,
+        ),
         if (MapsScope.maybeOf(context) != null) ...[
-          OutlinedButton(
+          const SizedBox(height: AppSpacing.sm),
+          TextButton(
             key: const Key('ride-pick-on-map'),
             onPressed: _pickOnMap,
-            style: OutlinedButton.styleFrom(
-              backgroundColor: theme.colorScheme.surfaceContainerLow,
-              side: BorderSide.none,
-              padding: const EdgeInsets.all(AppSpacing.md),
-            ),
             child: Row(
               children: [
                 const RideArtwork(
                   type: RideArtworkType.mapSelect,
-                  width: 44,
-                  height: 40,
+                  width: 28,
+                  height: 28,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.rideRequestPickFromMap,
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      Text(
-                        t.rideRequestPickFromMapHint,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(child: Text(t.rideRequestChooseFromMap)),
+                const Icon(Icons.arrow_forward_rounded, size: 18),
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-        ],
-        if (widget.savedAddressPickerBuilder != null) ...[
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.xs,
+          const Divider(height: AppSpacing.lg),
+        ] else
+          const SizedBox(height: AppSpacing.lg),
+        Visibility(
+          visible: !_hasQuery,
+          maintainState: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ChoiceChip(
-                label: Text(t.addressesSearchTab),
-                selected: !_saved,
-                showCheckmark: false,
-                onSelected: (_) => setState(() => _saved = false),
+              Text(
+                t.rideRequestSavedPlaces,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
-              ChoiceChip(
-                key: const Key('ride-saved-addresses'),
-                label: Text(t.addressesSavedTab),
-                selected: _saved,
-                showCheckmark: false,
-                onSelected: (_) {
-                  _focus.unfocus();
-                  setState(() => _saved = true);
-                },
-              ),
+              const SizedBox(height: AppSpacing.sm),
+              widget.savedAddressPickerBuilder?.call(_select) ??
+                  Text(t.addressesEmpty),
             ],
           ),
-          const SizedBox(height: AppSpacing.sm),
-        ],
-        if (_saved)
-          widget.savedAddressPickerBuilder!(_select)
-        else
+        ),
+        if (_hasQuery)
           BlocBuilder<RideDraftBloc, RideDraftState>(
             buildWhen: (a, b) =>
                 a.suggestions != b.suggestions ||
@@ -197,43 +175,35 @@ class _RidePlacePickerState extends State<RidePlacePicker> {
 
   Widget _results(BuildContext context, RideDraftState state) {
     final t = AppLocalizations.of(context);
-    if (state.searching)
+    if (state.searching) {
       return Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Center(
-          child: Semantics(
-            label: t.rideRequestPlaceSearchLoading,
-            child: const CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            semanticsLabel: t.rideRequestPlaceSearchLoading,
           ),
         ),
       );
-    if (state.searchError != null)
+    }
+    if (state.searchError != null) {
       return Column(
         children: [
           Text(t.rideRequestErrorUnavailable),
           TamButton.secondary(
             label: t.rideRequestRetry,
-            onPressed: () => context.read<RideDraftBloc>().add(
-              RidePlaceSearchChanged(_search.text),
-            ),
+            onPressed: () => _searchChanged(_search.text),
           ),
         ],
       );
+    }
     if (state.suggestions.isEmpty) return Text(t.rideRequestNoPlaces);
     final ar = Localizations.localeOf(context).languageCode == 'ar';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(start: AppSpacing.sm),
-          child: Text(
-            _search.text.isEmpty
-                ? t.rideRequestSuggestedPlaces
-                : t.rideRequestSearchResults,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ),
+        Text(
+          t.rideRequestSearchResults,
+          style: Theme.of(context).textTheme.labelSmall,
         ),
         const SizedBox(height: AppSpacing.xs),
         for (var i = 0; i < state.suggestions.length; i++) ...[

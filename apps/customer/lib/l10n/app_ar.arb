@@ -239,6 +239,28 @@
   "rideRequestDriverNoteHint": "مثلاً: بجانب المدخل الرئيسي",
   "rideRequestConfirmPickup": "اعتماد نقطة الانطلاق",
   "rideRequestConfirmDestination": "اعتماد الوجهة",
+  "rideRequestSearchPickupTitle": "من أين؟",
+  "rideRequestSearchDestinationTitle": "إلى أين؟",
+  "rideRequestSearchDestinationHint": "ابحث عن وجهتك",
+  "rideRequestSearchFrom": "من {place}",
+  "rideRequestSearchTo": "إلى {place}",
+  "rideRequestChooseFromMap": "اختيار من الخريطة",
+  "rideRequestSavedPlaces": "عناوينك المحفوظة",
+  "rideRequestClearSearch": "مسح البحث",
+  "@rideRequestSearchFrom": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "@rideRequestSearchTo": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
   "tripsAll": "الكل",
   "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",

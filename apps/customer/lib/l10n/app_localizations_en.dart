@@ -543,6 +543,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestConfirmDestination => 'Confirm destination';
 
   @override
+  String get rideRequestSearchPickupTitle => 'Where from?';
+
+  @override
+  String get rideRequestSearchDestinationTitle => 'Where to?';
+
+  @override
+  String get rideRequestSearchDestinationHint => 'Search for your destination';
+
+  @override
+  String rideRequestSearchFrom(String place) {
+    return 'From $place';
+  }
+
+  @override
+  String rideRequestSearchTo(String place) {
+    return 'To $place';
+  }
+
+  @override
+  String get rideRequestChooseFromMap => 'Choose on the map';
+
+  @override
+  String get rideRequestSavedPlaces => 'Your saved places';
+
+  @override
+  String get rideRequestClearSearch => 'Clear search';
+
+  @override
   String get tripsAll => 'All';
 
   @override

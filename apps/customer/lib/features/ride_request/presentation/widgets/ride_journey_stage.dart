@@ -5,13 +5,14 @@ import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_locations.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_sheet.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_quote_review.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_schedule_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
+
+import 'ride_journey_place_sheet.dart';
 
 enum RideJourneyStep { entry, places, vehicle, review }
 
@@ -52,6 +53,18 @@ class RideJourneyStage extends StatelessWidget {
           onContinue: onContinue,
           status: locationStatus,
         ),
+      );
+    }
+    if (step == RideJourneyStep.places) {
+      return RideJourneyPlaceSheet(
+        pickingPickup: pickingPickup,
+        pickup: state.pickup,
+        destination: state.destination,
+        onOtherEndpoint: pickingPickup ? onDestination : onPickup,
+        onSelected: onSelected,
+        onPickOnMap: onPickOnMap,
+        status: locationStatus,
+        savedAddressPickerBuilder: savedAddressPickerBuilder,
       );
     }
     final title = switch (step) {
@@ -105,26 +118,7 @@ class RideJourneyStage extends StatelessWidget {
               onPickup: onPickup,
               onDestination: onDestination,
             ),
-            RideJourneyStep.places => Column(
-              children: [
-                RideJourneyLocations(
-                  compact: true,
-                  pickup: state.pickup,
-                  destination: state.destination,
-                  onPickup: onPickup,
-                  onDestination: onDestination,
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                RidePlacePicker(
-                  key: ValueKey(pickingPickup),
-                  pickup: pickingPickup,
-                  embedded: true,
-                  onPickOnMap: onPickOnMap,
-                  onSelected: onSelected,
-                  savedAddressPickerBuilder: savedAddressPickerBuilder,
-                ),
-              ],
-            ),
+            RideJourneyStep.places => const SizedBox.shrink(),
             RideJourneyStep.vehicle => Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

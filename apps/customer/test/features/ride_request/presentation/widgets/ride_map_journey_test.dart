@@ -281,7 +281,7 @@ void main() {
     expect(find.byTooltip('طي التفاصيل وتوسيع الخريطة'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
-    expect(find.text('من وين بدك تنطلق؟'), findsOneWidget);
+    expect(find.text('من أين؟'), findsOneWidget);
     expect(bloc.state.confirmedTrip, isNull);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
@@ -370,7 +370,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(action);
       await tester.pumpAndSettle();
-      expect(find.text('لوين بدك توصل؟'), findsOneWidget);
+      expect(find.text('إلى أين؟'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
     },

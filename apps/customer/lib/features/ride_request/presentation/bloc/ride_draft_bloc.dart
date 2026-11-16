@@ -122,6 +122,16 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     Emitter<RideDraftState> emit,
   ) async {
     final requestId = ++_searchRevision;
+    if (event.query.trim().isEmpty) {
+      emit(
+        state.copyWith(
+          searching: false,
+          suggestions: const [],
+          clearSearchError: true,
+        ),
+      );
+      return;
+    }
     emit(
       state.copyWith(
         searching: true,

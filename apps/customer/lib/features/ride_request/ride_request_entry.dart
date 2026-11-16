@@ -46,6 +46,7 @@ Widget buildRideRequestFeature(
               repository: addresses,
               onSelected: onSelected,
               onManage: navigation.openAddresses,
+              compact: true,
             ),
     ),
   );

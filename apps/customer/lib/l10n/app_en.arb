@@ -239,6 +239,28 @@
   "rideRequestDriverNoteHint": "For example: beside the main entrance",
   "rideRequestConfirmPickup": "Confirm pickup",
   "rideRequestConfirmDestination": "Confirm destination",
+  "rideRequestSearchPickupTitle": "Where from?",
+  "rideRequestSearchDestinationTitle": "Where to?",
+  "rideRequestSearchDestinationHint": "Search for your destination",
+  "rideRequestSearchFrom": "From {place}",
+  "rideRequestSearchTo": "To {place}",
+  "rideRequestChooseFromMap": "Choose on the map",
+  "rideRequestSavedPlaces": "Your saved places",
+  "rideRequestClearSearch": "Clear search",
+  "@rideRequestSearchFrom": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "@rideRequestSearchTo": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
