@@ -96,8 +96,9 @@ void main() {
               // This measures actual exported art, not the widget rectangle.
               for (var y = image.height ~/ 2; y < image.height; y++) {
                 for (var x = 0; x < image.width; x++) {
-                  if (right ? x < image.width * .69 : x > image.width * .31)
+                  if (right ? x < image.width * .69 : x > image.width * .31) {
                     continue;
+                  }
                   final offset = (y * image.width + x) * 4;
                   final r = pixels[offset];
                   final g = pixels[offset + 1];
