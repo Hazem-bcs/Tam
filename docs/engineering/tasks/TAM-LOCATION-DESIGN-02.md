@@ -12,3 +12,5 @@ Tools: local Flutter/Android available, existing emulator reused. Broad tests de
 Delivery: docs/engineering/deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md; Android screenshot included.
 
 User follow-up at2386368: repair abrupt tapped-point transition. Native camera animation, immediate tap feedback, debounced padding serialized after recenter; focused interruption regression and Android preview. Same file ownership and exclusions.
+
+User follow-up at e41c919: accuracy reported restored; prioritize calmer motion and smaller non-obscuring instruction. Keep map stationary on visible-point taps, short local pin feedback, native projection for dragging at the actual pin anchor, preserve collapsed card during picking. No main merge requested for this follow-up.

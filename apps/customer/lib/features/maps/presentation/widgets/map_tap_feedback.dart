@@ -23,25 +23,25 @@ class MapTapFeedback extends StatelessWidget {
             return Stack(
               children: [
                 Positioned(
-                  left: value.point.dx - 26,
-                  top: value.point.dy - 26,
+                  left: value.point.dx - 18,
+                  top: value.point.dy - 18,
                   child: TweenAnimationBuilder<double>(
                     key: ValueKey(value.id),
                     tween: Tween(begin: 0, end: 1),
-                    duration: AppMotion.long,
+                    duration: AppMotion.short,
                     curve: AppMotion.easeOut,
                     builder: (context, progress, _) => Opacity(
                       opacity: 1 - progress,
                       child: Transform.scale(
-                        scale: .3 + .7 * progress,
+                        scale: .6 + .4 * progress,
                         child: Container(
-                          width: 52,
-                          height: 52,
+                          width: 36,
+                          height: 36,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: color.withValues(alpha: .12),
+                            color: color.withValues(alpha: .08),
                             border: Border.all(
-                              color: color.withValues(alpha: .6),
+                              color: color.withValues(alpha: .3),
                               width: 1.5,
                             ),
                           ),

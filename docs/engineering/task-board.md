@@ -233,3 +233,5 @@ TAM-USER-VEHICLES-01: IMPLEMENTED بواسطة root؛ اعتماد رسومات 
 TAM-LOCATION-DESIGN-02: INTEGRATED — main محليًا بتفويض المستخدم2026-11-16 بواسطة root على107497f، [البطاقة](tasks/TAM-LOCATION-DESIGN-02.md). تصميم اختيار الموقع المعتمد مع حذف أزرار الزوم.
 
 تسليم TAM-LOCATION-DESIGN-02: [المعاينة وحدود التحقق](deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md)، بانتظار تقييم المستخدم البصري.
+
+متابعة TAM-LOCATION-DESIGN-02 بعدe41c919: IMPLEMENTED على فرع الميزة؛ نقر ثابت المشهد، تغذية راجعة180ms، وتلميح عند الحافة.12 اختبارًا محددًا ومعاينة Android، بانتظار تقييم المستخدم؛ لم تُدمج المتابعة الجديدة تلقائيًا إلىmain.

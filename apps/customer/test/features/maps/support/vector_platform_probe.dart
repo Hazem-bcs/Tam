@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -97,6 +98,18 @@ class VectorPlatformProbe extends MapLibrePlatform {
   }) async {
     if (layerId == 'tam-driver' && !installed.isCompleted) installed.complete();
   }
+
+  LatLng projectedPoint = const LatLng(33.63, 36.4);
+  Point projectedScreen = const Point(400.0, 300.0);
+  Point? lastInverseProjection;
+  @override
+  Future<LatLng> toLatLng(Point point) async {
+    lastInverseProjection = point;
+    return projectedPoint;
+  }
+
+  @override
+  Future<Point> toScreenLocation(LatLng point) async => projectedScreen;
 
   @override
   Future<void> updateContentInsets(EdgeInsets padding, bool animated) async {

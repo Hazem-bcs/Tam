@@ -10,6 +10,7 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 
 import '../map_feedback.dart';
 import '../map_selection_cursor.dart';
+import '../map_selection_hint.dart';
 import '../map_tap_feedback.dart';
 import 'vector_camera.dart';
 import 'vector_map_controls.dart';
@@ -58,6 +59,15 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   final _moving = ValueNotifier<bool>(false);
   final _tap = ValueNotifier<MapTap?>(null);
   final _appliedInset = ValueNotifier<double>(0);
+  final _selectionAnchor = ValueNotifier<Offset?>(null);
+  GeoPoint? _tappedSelection;
+  int _selectionEpoch = 0;
+  double get _pixelRatio =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+      ? MediaQuery.devicePixelRatioOf(context)
+      : 1;
+  Offset get _defaultAnchor =>
+      Offset(_size.width / 2, (80 + _size.height - _appliedInset.value) / 2);
   Offset? _pointerStart;
   int _tapId = 0;
   bool _cameraAnimating = false;
@@ -119,11 +129,19 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     if (oldWidget.style != widget.style) _reset();
     if (oldWidget.scene.selection != widget.scene.selection &&
         widget.scene.selection != _emittedSelection) {
-      _focusSelectionPending = _picking;
+      _focusSelectionPending =
+          _picking && widget.scene.selection != _tappedSelection;
+      if (widget.scene.selection == _tappedSelection) _fitPending = false;
     }
     if (!_picking) {
       _selectionGesture = false;
       _moving.value = false;
+      if (oldWidget.scene.selection != null) {
+        _selectionEpoch++;
+        _selectionAnchor.value = null;
+        _tappedSelection = null;
+        _schedulePadding();
+      }
     }
     if (oldWidget.scene.origin != widget.scene.origin ||
         oldWidget.scene.destination != widget.scene.destination ||
@@ -191,9 +209,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
           _focusSelectionPending = false;
           _fitPending = false;
           if (!_current(epoch)) return;
-          final update = CameraUpdate.newLatLng(
-            _latLng(widget.scene.selection!),
-          );
+          final selected = widget.scene.selection!;
+          final update = CameraUpdate.newLatLng(_latLng(selected));
+          await _applyPadding(epoch, force: true);
           _cameraAnimating = true;
           _moving.value = true;
           try {
@@ -209,7 +227,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
             _cameraAnimating = false;
             if (_current(epoch)) {
               _moving.value = false;
-              await _applyPadding(epoch);
+              await _refreshAnchor(epoch);
             }
           }
         }
@@ -243,8 +261,14 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     });
   }
 
-  Future<void> _applyPadding(int epoch) async {
-    if (!_current(epoch) || !_installed || _size.isEmpty || _cameraAnimating)
+  Future<void> _applyPadding(int epoch, {bool force = false}) async {
+    // During manual selection the map stays under the finger. Folding the card
+    // changes overlay space only; it must not translate the selected building.
+    if (!_current(epoch) ||
+        !_installed ||
+        _size.isEmpty ||
+        _cameraAnimating ||
+        (_picking && !force))
       return;
     try {
       final bottom = _inset.clamp(0.0, math.max(0.0, _size.height - 160));
@@ -270,7 +294,31 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     });
   }
 
-  void _onIdle(int epoch) {
+  Future<void> _refreshAnchor(int epoch) async {
+    final selected = widget.scene.selection;
+    final request = _selectionEpoch;
+    if (!_current(epoch) ||
+        !_installed ||
+        selected == null ||
+        _selectionGesture)
+      return;
+    try {
+      final screen = await _controller!.toScreenLocation(_latLng(selected));
+      if (_current(epoch) &&
+          request == _selectionEpoch &&
+          widget.scene.selection == selected &&
+          !_selectionGesture) {
+        _selectionAnchor.value = Offset(
+          screen.x / _pixelRatio,
+          screen.y / _pixelRatio,
+        );
+      }
+    } catch (_) {
+      /* Keep the last valid screen position. */
+    }
+  }
+
+  Future<void> _onIdle(int epoch) async {
     if (!_current(epoch) || !_installed) return;
     if (_loading) {
       _deadline?.cancel();
@@ -282,13 +330,24 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _moving.value = false;
     if (_picking && _selectionGesture) {
       _selectionGesture = false;
-      final target = _camera.target;
-      final point = GeoPoint(
-        latitude: target.latitude,
-        longitude: target.longitude,
-      );
-      _emittedSelection = point;
-      widget.onSelected?.call(point);
+      final request = ++_selectionEpoch;
+      final anchor = _selectionAnchor.value ?? _defaultAnchor;
+      try {
+        final projected = await _controller!.toLatLng(
+          math.Point(anchor.dx * _pixelRatio, anchor.dy * _pixelRatio),
+        );
+        if (!_current(epoch) || request != _selectionEpoch || !_picking) return;
+        final point = GeoPoint(
+          latitude: projected.latitude,
+          longitude: projected.longitude,
+        );
+        _emittedSelection = point;
+        widget.onSelected?.call(point);
+      } catch (_) {
+        // A failed projection must never replace the last valid chosen point.
+      }
+    } else if (_picking && !_cameraAnimating) {
+      await _refreshAnchor(epoch);
     }
   }
 
@@ -298,6 +357,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _moving.dispose();
     _tap.dispose();
     _appliedInset.dispose();
+    _selectionAnchor.dispose();
     _deadline?.cancel();
     _paddingTimer?.cancel();
     widget.bottomInset?.removeListener(_schedulePadding);
@@ -315,6 +375,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         if (_size != bounds.biggest) {
           _size = bounds.biggest;
           _schedulePadding();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_current(epoch) && _picking) unawaited(_refreshAnchor(epoch));
+          });
         }
         return AnimatedBuilder(
           animation:
@@ -322,6 +385,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
           child: Listener(
             behavior: HitTestBehavior.opaque,
             onPointerDown: (event) => _pointerStart = event.localPosition,
+            onPointerUp: (_) => _pointerStart = null,
+            onPointerCancel: (_) => _pointerStart = null,
             onPointerMove: (event) {
               final start = _pointerStart;
               if (_picking &&
@@ -348,26 +413,25 @@ class _NativeVectorMapState extends State<NativeVectorMap>
                 if (_current(epoch)) _controller = controller;
               },
               onStyleLoadedCallback: () => unawaited(_onStyleLoaded(epoch)),
-              onMapIdle: () => _onIdle(epoch),
+              onMapIdle: () => unawaited(_onIdle(epoch)),
               onCameraMove: (camera) {
                 if (_current(epoch)) _camera = camera;
               },
               onMapClick: (screen, point) {
                 if (widget.onSelected == null) return;
                 _selectionGesture = false;
-                final ratio = defaultTargetPlatform == TargetPlatform.android
-                    ? MediaQuery.devicePixelRatioOf(context)
-                    : 1;
-                _tap.value = (
-                  point: Offset(screen.x / ratio, screen.y / ratio),
-                  id: ++_tapId,
+                _selectionEpoch++;
+                _tappedSelection = GeoPoint(
+                  latitude: point.latitude,
+                  longitude: point.longitude,
                 );
-                widget.onSelected!(
-                  GeoPoint(
-                    latitude: point.latitude,
-                    longitude: point.longitude,
-                  ),
+                final anchor = Offset(
+                  screen.x / _pixelRatio,
+                  screen.y / _pixelRatio,
                 );
+                _selectionAnchor.value = anchor;
+                _tap.value = (point: anchor, id: ++_tapId);
+                widget.onSelected!(_tappedSelection!);
               },
             ),
           ),
@@ -376,17 +440,16 @@ class _NativeVectorMapState extends State<NativeVectorMap>
             children: [
               map!,
               MapTapFeedback(tap: _tap),
-              if (_picking && !_loading && !_failed)
-                ValueListenableBuilder<double>(
-                  valueListenable: _appliedInset,
-                  builder: (context, inset, _) => MapSelectionCursor(
-                    anchor: Offset(
-                      _size.width / 2,
-                      (80 + _size.height - inset) / 2,
-                    ),
+              if (_picking && !_loading && !_failed) ...[
+                ValueListenableBuilder<Offset?>(
+                  valueListenable: _selectionAnchor,
+                  builder: (context, anchor, _) => MapSelectionCursor(
+                    anchor: anchor ?? _defaultAnchor,
                     moving: _moving,
                   ),
                 ),
+                MapSelectionHint(bottomInset: _inset),
+              ],
               if (_loading)
                 const Align(
                   alignment: Alignment.topCenter,

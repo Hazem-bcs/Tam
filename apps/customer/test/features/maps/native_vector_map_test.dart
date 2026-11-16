@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -127,7 +126,11 @@ void main() {
       expect(chosen, isEmpty);
       await gesture.up();
       native.onMapIdle!();
-      expect(chosen, [GeoPoint(latitude: 33.52, longitude: 36.31)]);
+      await tester.pump();
+      expect(chosen, hasLength(1));
+      expect(chosen.single.latitude, closeTo(33.63, 1e-10));
+      expect(chosen.single.longitude, closeTo(36.4, 1e-10));
+      expect(platforms.single.lastInverseProjection, const Point(400.0, 300.0));
       final cameraCount = platforms.single.cameras.length;
       await show(
         tester,
@@ -143,7 +146,7 @@ void main() {
   );
 
   testWidgets(
-    'sheet padding cannot interrupt a tapped-point camera animation',
+    'tap and card folding keep the building and clicked point stationary',
     (tester) async {
       final inset = ValueNotifier<double>(200);
       addTearDown(inset.dispose);
@@ -156,30 +159,62 @@ void main() {
       );
       await load(tester);
       final probe = platforms.single;
-      final pending = Completer<bool?>();
-      probe.onAnimate = () => pending.future;
+      final cameras = probe.cameras.length, padding = probe.insets.length;
       final native = tester.widget<MapLibreMap>(find.byType(MapLibreMap));
-      native.onMapClick!(const Point(200, 300), const LatLng(33.52, 36.31));
-      expect(chosen, GeoPoint(latitude: 33.52, longitude: 36.31));
+      native.onMapClick!(const Point(200.0, 300.0), const LatLng(33.52, 36.31));
       await show(
         tester,
         VectorMapScene(origin: origin, selection: chosen),
         inset: inset,
         select: (p) => chosen = p,
       );
-      expect(probe.animations, [const Duration(milliseconds: 300)]);
-      final paddingCount = probe.insets.length;
       for (var i = 0; i < 20; i++) {
         inset.value = 220 + i.toDouble();
       }
-      await tester.pump(const Duration(milliseconds: 250));
-      expect(probe.insets.length, paddingCount);
-      pending.complete(true);
-      await tester.pump();
-      expect(probe.insets.last.bottom, 239);
-      expect(probe.insets.length, paddingCount + 1);
       await tester.pump(const Duration(milliseconds: 500));
-      expect(probe.insets.length, paddingCount + 1);
+      expect(chosen, GeoPoint(latitude: 33.52, longitude: 36.31));
+      expect(probe.cameras.length, cameras);
+      expect(probe.insets.length, padding);
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'drag reads the geographic point under the tapped pin at Android density 3',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 1800);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      GeoPoint? chosen;
+      await show(
+        tester,
+        VectorMapScene(origin: origin),
+        select: (p) => chosen = p,
+      );
+      await load(tester);
+      final native = tester.widget<MapLibreMap>(find.byType(MapLibreMap));
+      native.onMapClick!(
+        const Point(900.0, 1200.0),
+        const LatLng(33.52, 36.31),
+      );
+      await show(
+        tester,
+        VectorMapScene(origin: origin, selection: chosen),
+        select: (p) => chosen = p,
+      );
+      final gesture = await tester.startGesture(const Offset(150, 200));
+      await gesture.moveBy(const Offset(50, 20));
+      await gesture.up();
+      tester.widget<MapLibreMap>(find.byType(MapLibreMap)).onMapIdle!();
+      await tester.pump();
+      expect(
+        platforms.single.lastInverseProjection,
+        const Point(900.0, 1200.0),
+      );
+      expect(chosen?.latitude, closeTo(33.63, 1e-10));
+      expect(chosen?.longitude, closeTo(36.4, 1e-10));
       await tester.pumpWidget(const SizedBox());
       expect(tester.takeException(), isNull);
     },

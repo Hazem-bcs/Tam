@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/l10n/app_localizations.dart';
 
 /// Vector geometry stays crisp at any density; only the pin lifts during a drag.
 /// The bottom of the pin, not its bounding box, is the selected map coordinate.
@@ -16,44 +15,12 @@ class MapSelectionCursor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final c = theme.colorScheme;
+    final c = Theme.of(context).colorScheme;
     return Positioned.fill(
       child: IgnorePointer(
         child: Stack(
           children: [
-            if (anchor.dy > 200)
-              AnimatedPositioned(
-                duration: MediaQuery.disableAnimationsOf(context)
-                    ? Duration.zero
-                    : AppMotion.medium,
-                curve: AppMotion.easeOut,
-                left: anchor.dx - 130,
-                bottom: null,
-                top: anchor.dy - 86,
-                width: 260,
-                child: Material(
-                  color: c.surfaceContainerLowest,
-                  elevation: AppElevation.raised,
-                  borderRadius: BorderRadius.circular(AppRadii.sheet),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context).mapsMoveToSelect,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.labelSmall,
-                    ),
-                  ),
-                ),
-              ),
-            AnimatedPositioned(
-              duration: MediaQuery.disableAnimationsOf(context)
-                  ? Duration.zero
-                  : AppMotion.medium,
-              curve: AppMotion.easeOut,
+            Positioned(
               left: anchor.dx - 18,
               top: anchor.dy - 41,
               child: ValueListenableBuilder<bool>(
@@ -63,11 +30,7 @@ class MapSelectionCursor extends StatelessWidget {
                   height: 44,
                   child: Stack(
                     children: [
-                      AnimatedPositioned(
-                        duration: MediaQuery.disableAnimationsOf(context)
-                            ? Duration.zero
-                            : AppMotion.medium,
-                        curve: AppMotion.easeOut,
+                      Positioned(
                         bottom: 0,
                         left: 10,
                         right: 10,
@@ -94,9 +57,22 @@ class MapSelectionCursor extends StatelessWidget {
                             ? Duration.zero
                             : AppMotion.short,
                         offset: Offset(0, lifting ? -.12 : 0),
-                        child: CustomPaint(
-                          size: const Size(36, 42),
-                          painter: _PinPainter(c.primary, c.onPrimary),
+                        child: TweenAnimationBuilder<double>(
+                          key: ValueKey(anchor),
+                          tween: Tween(begin: .9, end: 1),
+                          duration: MediaQuery.disableAnimationsOf(context)
+                              ? Duration.zero
+                              : AppMotion.short,
+                          curve: AppMotion.easeOut,
+                          builder: (context, scale, child) => Transform.scale(
+                            scale: scale,
+                            alignment: Alignment.bottomCenter,
+                            child: child,
+                          ),
+                          child: CustomPaint(
+                            size: const Size(36, 42),
+                            painter: _PinPainter(c.primary, c.onPrimary),
+                          ),
                         ),
                       ),
                     ],

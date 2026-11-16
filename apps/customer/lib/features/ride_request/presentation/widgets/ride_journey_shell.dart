@@ -18,6 +18,7 @@ class RideJourneyShell extends StatefulWidget {
     required this.stageKey,
     required this.collapsedLabel,
     required this.preferredExtent,
+    this.keepCollapsed = false,
   }) : assert(panel != null || panelBuilder != null);
   final Widget header;
   final Widget? panel;
@@ -26,6 +27,7 @@ class RideJourneyShell extends StatefulWidget {
   final Object stageKey;
   final String collapsedLabel;
   final double preferredExtent;
+  final bool keepCollapsed;
 
   @override
   State<RideJourneyShell> createState() => _RideJourneyShellState();
@@ -65,6 +67,7 @@ class _RideJourneyShellState extends State<RideJourneyShell>
   @override
   void didUpdateWidget(RideJourneyShell oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.keepCollapsed && _compact) return;
     if (widget.stageKey != oldWidget.stageKey ||
         (widget.preferredExtent != oldWidget.preferredExtent && !_compact)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
