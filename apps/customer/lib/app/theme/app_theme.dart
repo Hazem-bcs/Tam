@@ -7,6 +7,10 @@ import 'package:tam_customer/app/theme/app_typography.dart';
 abstract final class AppTheme {
   static final ThemeData light = _build(AppColors.light, AppColors.lightStatus);
 
+  /// Opt-in brand typography without rebuilding the ambient color system.
+  static ThemeData activity(ThemeData ambient) =>
+      ambient.copyWith(textTheme: AppTypography.home(ambient.textTheme));
+
   /// Central, route-local opt-in; pushed pages keep their ambient app theme.
   static ThemeData home(ThemeData ambient) => _build(
     AppColors.home,

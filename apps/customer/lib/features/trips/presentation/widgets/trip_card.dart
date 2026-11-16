@@ -7,9 +7,10 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 
-/// Tam's compact journey ticket: status, route and fare in one visual scan.
+/// A crafted journey ticket: status and route first, price second.
 class TripCard extends StatefulWidget {
   const TripCard({super.key, required this.trip, required this.onTap});
+
   final Trip trip;
   final VoidCallback onTap;
 
@@ -37,137 +38,187 @@ class _TripCardState extends State<TripCard> {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final l = AppLocalizations.of(context);
-    final date = DateFormat.MMMd(
-      Localizations.localeOf(context).languageCode,
-    ).format(widget.trip.createdAt.toLocal());
+    final locale = Localizations.localeOf(context).languageCode;
+    final trip = widget.trip;
+    final isCompleted = trip.status == TripStatus.completed;
+    final tone = tripStatusColors(context, trip.status);
+    final date = DateFormat.MMMd(locale).format(trip.createdAt.toLocal());
+    final time = DateFormat.jm(locale).format(trip.createdAt.toLocal());
 
     return AnimatedScale(
+      scale: _pressed ? .986 : 1,
       duration: MediaQuery.disableAnimationsOf(context)
           ? Duration.zero
-          : const Duration(milliseconds: 130),
-      curve: Curves.easeOutCubic,
-      scale: _pressed ? .986 : 1,
+          : AppMotion.short,
+      curve: AppMotion.easeOut,
       child: Material(
         color: colors.surfaceContainerLowest,
+        elevation: AppElevation.raised,
+        shadowColor: colors.shadow.withValues(alpha: .08),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
-          side: BorderSide(color: colors.outlineVariant.withValues(alpha: .9)),
+          side: BorderSide(color: colors.outlineVariant.withValues(alpha: .8)),
         ),
         child: InkWell(
           onTap: widget.onTap,
-          onHighlightChanged: (value) {
-            if (mounted) setState(() => _pressed = value);
+          onHighlightChanged: (pressed) {
+            if (mounted) setState(() => _pressed = pressed);
           },
           child: Stack(
             children: [
               PositionedDirectional(
-                top: 62,
                 start: 0,
+                top: AppSpacing.lg,
+                bottom: AppSpacing.lg,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: colors.primary.withValues(alpha: .65),
+                    color: tone.foreground.withValues(alpha: .68),
                     borderRadius: const BorderRadiusDirectional.only(
                       topEnd: Radius.circular(3),
                       bottomEnd: Radius.circular(3),
                     ),
                   ),
-                  child: const SizedBox(width: 3, height: 37),
+                  child: const SizedBox(width: 3),
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(16, 11, 16, 10),
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 13, 16, 13),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: AppSpacing.sm,
+                      runSpacing: AppSpacing.sm,
+                      children: [
+                        TripStatusBadge(status: trip.status),
+                        _TripDate(date: date, time: time),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Divider(
+                      color: colors.outlineVariant.withValues(alpha: .7),
+                      height: 1,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
                     Row(
                       children: [
-                        TripStatusBadge(status: widget.trip.status),
-                        const Spacer(),
-                        Text(
-                          date,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: colors.onSurfaceVariant,
+                        Expanded(
+                          child: TripJourney(
+                            pickup: trip.booking.pickup,
+                            destination: trip.booking.destination,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.md),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: isCompleted
+                                ? colors.primaryContainer.withValues(alpha: .65)
+                                : colors.errorContainer.withValues(alpha: .65),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Icon(
+                              Icons.directions_car_outlined,
+                              size: 23,
+                              color: isCompleted
+                                  ? colors.primary
+                                  : colors.onErrorContainer,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: AppSpacing.sm),
-                    TripJourney(
-                      pickup: widget.trip.booking.pickup,
-                      destination: widget.trip.booking.destination,
-                    ),
-                    if (widget.trip.booking.scheduledAt != null) ...[
+                    if (trip.booking.scheduledAt != null) ...[
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         l.tripsScheduledAt(
-                          rideTimeLabel(
-                            context,
-                            widget.trip.booking.scheduledAt!,
-                          ),
+                          rideTimeLabel(context, trip.booking.scheduledAt!),
                         ),
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: colors.onSurfaceVariant,
                         ),
                       ),
                     ],
-                    const SizedBox(height: AppSpacing.sm),
-                    Container(
+                    const SizedBox(height: AppSpacing.md),
+                    Divider(
+                      color: colors.outlineVariant.withValues(alpha: .7),
                       height: 1,
-                      color: colors.outlineVariant.withValues(alpha: .75),
                     ),
-                    const SizedBox(height: AppSpacing.xs),
+                    const SizedBox(height: AppSpacing.sm),
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: AppSpacing.md,
-                      runSpacing: AppSpacing.xs,
+                      spacing: AppSpacing.sm,
+                      runSpacing: AppSpacing.sm,
                       children: [
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l.tripsFare,
+                              isCompleted
+                                  ? l.tripsFare
+                                  : l.completionRecordedFare,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: colors.onSurfaceVariant,
                               ),
                             ),
                             Text(
                               _localizedFare(context),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.titleMedium?.copyWith(
-                                color: colors.primary,
                                 fontWeight: FontWeight.w800,
-                                letterSpacing: -.35,
+                                color: isCompleted
+                                    ? colors.primary
+                                    : colors.onSurface,
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              l.tripsDetails,
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: colors.onSurface,
-                              ),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.primaryContainer.withValues(
+                              alpha: .7,
                             ),
-                            const SizedBox(width: AppSpacing.sm),
-                            DecoratedBox(
-                              decoration: BoxDecoration(
-                                color: colors.primaryContainer,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(7),
-                                child: Icon(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: AppSpacing.sm,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
                                   Icons.arrow_back_rounded,
-                                  size: 18,
+                                  size: 20,
                                   color: colors.primary,
                                 ),
-                              ),
+                                const SizedBox(width: AppSpacing.xs),
+                                Flexible(
+                                  child: Text(
+                                    l.tripsDetails,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: theme.textTheme.labelMedium
+                                        ?.copyWith(
+                                          color: colors.primary,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -178,6 +229,42 @@ class _TripCardState extends State<TripCard> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _TripDate extends StatelessWidget {
+  const _TripDate({required this.date, required this.time});
+
+  final String date;
+  final String time;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    return Wrap(
+      spacing: AppSpacing.sm,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Icon(
+          Icons.calendar_today_outlined,
+          size: 14,
+          color: colors.onSurfaceVariant,
+        ),
+        Text(
+          date,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: colors.onSurfaceVariant,
+          ),
+        ),
+        Text(
+          time,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: colors.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }

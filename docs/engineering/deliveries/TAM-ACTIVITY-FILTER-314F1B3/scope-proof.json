@@ -1,0 +1,36 @@
+{
+  "baseline": "4a650909502ee04a9379025372fc530aa1f72e15",
+  "source": "314f1b3f524cf50a1c576d8612cc82ed934b381a",
+  "source_repository": "/home/hazem/projects/tam-platform",
+  "copied_presentation_files": [
+    "apps/customer/lib/features/trips/presentation/pages/trips_list_page.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/active_trip_card.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/activity_masthead.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/next_trip_prompt.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/trip_card.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/trip_history_list.dart",
+    "apps/customer/lib/features/trips/presentation/widgets/trip_status_filter.dart"
+  ],
+  "source_files_match_exactly": true,
+  "unchanged_feature_trees": {
+    "home": "aa7e923ef7a0b7bccd74b6e97f50b319cd329e13",
+    "auth": "5e08cba9025ea414d6d43d32e87976a35d29f8b9",
+    "settings": "4e0e6e63c56c5e16d5455c57349c217723a3de01",
+    "addresses": "d40cc3578191a53a8b03d95bf775b9171199cfea",
+    "notifications": "3cede8b3fdaf397ecf449d12835a2680c6fe5faa",
+    "maps": "047f4ea106f499f277173dbadbbc305be8f8c89d",
+    "ride_request": "ed48152166c23f3236b708f39ced0e4bf2adf74d",
+    "account_management": "793b55cdea3699d67e2608c7325d99b23b1d6b17"
+  },
+  "unchanged_other_paths": [
+    "assets",
+    "l10n",
+    "router",
+    "shell",
+    "core",
+    "pubspec.yaml",
+    "pubspec.lock"
+  ],
+  "theme_change": "Only additive AppTheme.activity helper (4 lines); all previous bytes preserved",
+  "test_result": "48 passed; feature analysis clean; format clean"
+}

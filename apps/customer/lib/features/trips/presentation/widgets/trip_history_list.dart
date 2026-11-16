@@ -188,8 +188,10 @@ class _SectionHeading extends StatelessWidget {
       spacing: AppSpacing.sm,
       runSpacing: AppSpacing.xs,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.xs,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
@@ -201,7 +203,6 @@ class _SectionHeading extends StatelessWidget {
                 child: Icon(icon, color: colors.primary, size: 18),
               ),
             ),
-            const SizedBox(width: AppSpacing.sm),
             Text(
               label,
               style: text.titleMedium?.copyWith(
