@@ -67,11 +67,29 @@ jobs:
           FEATURE: ${{ matrix.feature }}
         run: flutter analyze --no-pub "lib/features/$FEATURE" "test/features/$FEATURE"
 
+      - name: Install native Rive runtime for Home integration tests
+        if: matrix.feature == 'home'
+        working-directory: apps/customer
+        run: dart run rive_native:setup --verbose --platform linux
+
       - name: Run feature tests
         working-directory: apps/customer
+        shell: bash
         env:
           FEATURE: ${{ matrix.feature }}
-        run: flutter test --no-pub "test/features/$FEATURE" -r compact
+        run: |
+          set -euo pipefail
+          if [[ "$FEATURE" == trips ]]; then
+            # Golden pixels made on a different host OS are not stable.
+            # Compare behavior here, then render Linux golden previews below.
+            mapfile -d '' -t tests < <(
+              find "test/features/$FEATURE" -name '*_test.dart' \
+                ! -name 'trips_activity_visual_test.dart' -print0
+            )
+            flutter test --no-pub "${tests[@]}" -r compact
+          else
+            flutter test --no-pub "test/features/$FEATURE" -r compact
+          fi
 
       - name: Render updated UI preview snapshots
         working-directory: apps/customer
