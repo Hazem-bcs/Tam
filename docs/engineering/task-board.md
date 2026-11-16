@@ -235,3 +235,5 @@ TAM-LOCATION-DESIGN-02: INTEGRATED — main محليًا بتفويض المست
 تسليم TAM-LOCATION-DESIGN-02: [المعاينة وحدود التحقق](deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md)، بانتظار تقييم المستخدم البصري.
 
 متابعة TAM-LOCATION-DESIGN-02 بعدe41c919: IMPLEMENTED على فرع الميزة؛ نقر ثابت المشهد، تغذية راجعة180ms، وتلميح عند الحافة.12 اختبارًا محددًا ومعاينة Android، بانتظار تقييم المستخدم؛ لم تُدمج المتابعة الجديدة تلقائيًا إلىmain.
+
+متابعة البطاقة العرضية TAM-LOCATION-DESIGN-02: IMPLEMENTED بواسطة root، أساس f4f567a، ملكية RideJourneyEntry ورسم المسار المحلي؛ تنفيذ التصور الذي اعتمده المستخدم ومعاينة المحاكي.

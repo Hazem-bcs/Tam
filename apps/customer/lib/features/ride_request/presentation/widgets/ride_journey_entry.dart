@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
 
-/// The introduction grows with its content rather than reserving half a screen.
+import 'ride_entry_route_connector.dart';
+
+/// Two editable endpoints share one horizontal route, growing with their text.
 class RideJourneyEntry extends StatelessWidget {
   const RideJourneyEntry({
     super.key,
@@ -23,90 +24,89 @@ class RideJourneyEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    return Material(
-      color: colors.surfaceContainerLowest,
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(AppRadii.sheet),
+    final colors = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.lg,
+        0,
+        AppSpacing.lg,
+        AppSpacing.lg,
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.xl,
-          0,
-          AppSpacing.xl,
-          AppSpacing.lg,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Semantics(
-              header: true,
-              child: Text(
-                t.rideRequestFlowStartTitle,
-                style: theme.textTheme.headlineMedium,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (status != null) ...[
+            status!,
+            const SizedBox(height: AppSpacing.md),
+          ],
+          CustomPaint(
+            painter: RideEntryRouteConnector(
+              color: colors.primary.withValues(alpha: .45),
+              direction: Directionality.of(context),
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              t.rideRequestFlowStartSubtitle,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colors.onSurfaceVariant,
-              ),
-            ),
-            if (status != null) ...[
-              const SizedBox(height: AppSpacing.md),
-              status!,
-            ],
-            const SizedBox(height: AppSpacing.lg),
-            Material(
-              color: colors.surfaceContainerLowest,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadii.lg),
-                side: BorderSide(color: colors.outlineVariant),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  _LocationRow(
-                    caption: t.rideRequestPickup,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: _Endpoint(
+                    caption: t.rideRequestPhasePickup,
                     label: pickup?.label ?? t.rideRequestPickupHint,
                     icon: Icons.trip_origin_rounded,
                     onTap: onPickup,
                   ),
-                  const Divider(
-                    height: 1,
-                    indent: AppSpacing.xl,
-                    endIndent: AppSpacing.xl,
-                  ),
-                  _LocationRow(
+                ),
+                const SizedBox(width: AppSpacing.lg),
+                Expanded(
+                  child: _Endpoint(
                     caption: t.rideRequestDestination,
                     label: destination?.label ?? t.rideRequestDestinationHint,
                     icon: Icons.location_on_rounded,
                     onTap: onDestination,
                   ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          FilledButton(
+            key: const Key('ride-flow-continue'),
+            onPressed: onContinue,
+            child: SizedBox(
+              width: double.infinity,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xl,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: Text(
+                      pickup != null && destination != null
+                          ? t.rideRequestProgressVehicle
+                          : t.rideRequestFlowStartAction,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const PositionedDirectional(
+                    end: 0,
+                    child: ExcludeSemantics(
+                      child: Icon(Icons.arrow_forward_rounded, size: 20),
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: AppSpacing.lg),
-            TamButton.primary(
-              key: const Key('ride-flow-continue'),
-              label: destination == null
-                  ? t.rideRequestFlowStartAction
-                  : t.rideRequestFlowContinue,
-              icon: Icons.arrow_forward_rounded,
-              onPressed: onContinue,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _LocationRow extends StatelessWidget {
-  const _LocationRow({
+class _Endpoint extends StatelessWidget {
+  const _Endpoint({
     required this.caption,
     required this.label,
     required this.icon,
@@ -120,26 +120,58 @@ class _LocationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    return ListTile(
-      minTileHeight: 60,
-      minVerticalPadding: AppSpacing.xs,
-      contentPadding: const EdgeInsetsDirectional.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: 0,
-      ),
-      leading: Icon(icon, size: 20, color: colors.primary),
-      title: Text(
-        caption,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: colors.onSurfaceVariant,
+    return Semantics(
+      button: true,
+      label: '$caption: $label',
+      excludeSemantics: true,
+      onTap: onTap,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            AppSpacing.xs,
+            AppSpacing.xs,
+            AppSpacing.xs,
+            AppSpacing.sm,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 24, color: colors.primary),
+              const SizedBox(height: AppSpacing.sm),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(
+                      caption,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  Icon(
+                    Icons.edit_outlined,
+                    size: 14,
+                    color: colors.onSurfaceVariant,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: colors.onSurface,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      subtitle: Text(
-        label,
-        style: theme.textTheme.titleSmall?.copyWith(color: colors.onSurface),
-      ),
-      trailing: const Icon(Icons.chevron_right_rounded),
-      onTap: onTap,
     );
   }
 }
