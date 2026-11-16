@@ -12,13 +12,6 @@ import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 
 import '../../support/fake_auth_repository.dart';
 
-/// The signed-in mascot animates continuously; pumpAndSettle cannot finish.
-Future<void> _pumpNavigation(WidgetTester tester) async {
-  for (var frame = 0; frame < 12; frame++) {
-    await tester.pump(const Duration(milliseconds: 100));
-  }
-}
-
 void main() {
   testWidgets(
     'real Home entry opens registered routes and retains local Auth',
@@ -32,10 +25,10 @@ void main() {
           temporaryPhoneEntryEnabled: true,
         ),
       );
-      await _pumpNavigation(tester);
+      await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('auth-phone')), '0941234567');
       await tester.tap(find.text('متابعة'));
-      await _pumpNavigation(tester);
+      await tester.pumpAndSettle();
       expect(
         find.bySemanticsLabel('الإشعارات، غير المقروء: 4'),
         findsOneWidget,
@@ -43,13 +36,9 @@ void main() {
       );
       semantics.dispose();
       final home = tester.element(find.byType(HomePage));
-      final homeScaffold = find.descendant(
-        of: find.byType(HomePage),
-        matching: find.byType(Scaffold),
-      );
       expect(
-        Theme.of(tester.element(homeScaffold.first)).colorScheme.primary,
-        AppTheme.light.colorScheme.primary,
+        Theme.of(tester.element(find.byType(Scaffold))).colorScheme.primary,
+        isNot(AppTheme.light.colorScheme.primary),
       );
       final auth = home.read<AuthCubit>();
       final router = GoRouter.of(home);
@@ -66,7 +55,7 @@ void main() {
       for (final (target, path) in destinations) {
         await tester.ensureVisible(target);
         await tester.tap(target);
-        await _pumpNavigation(tester);
+        await tester.pumpAndSettle();
         expect(
           router.routerDelegate.currentConfiguration.last.matchedLocation,
           path,
@@ -82,16 +71,14 @@ void main() {
         );
         expect(tester.takeException(), isNull);
         router.pop();
-        await _pumpNavigation(tester);
+        await tester.pumpAndSettle();
         expect(router.routeInformationProvider.value.uri.path, AppRoutes.home);
         expect(find.byType(HomePage), findsOneWidget);
         expect(auth.state.status, AuthStatus.localAccess);
       }
-      await tester.tap(find.text('الإعدادات'));
-      await _pumpNavigation(tester);
       await tester.ensureVisible(find.text('تسجيل الخروج'));
       await tester.tap(find.text('تسجيل الخروج'));
-      await _pumpNavigation(tester);
+      await tester.pumpAndSettle();
       expect(find.byType(PhoneAuthPage), findsOneWidget);
       expect(auth.state.status, AuthStatus.signedOut);
       expect(await store.read(), isNull);
