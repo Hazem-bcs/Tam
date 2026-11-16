@@ -88,6 +88,8 @@ void main() {
       // A saved address is a location snapshot, never a mutable trip reference.
       router.push(AppRoutes.addresses);
       await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('address-menu-${created.id}')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('address-delete-${created.id}')));
       await tester.pumpAndSettle();
       await tester.tap(find.text('حذف'));
@@ -147,6 +149,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(AddressesPage), findsOneWidget);
       expect(settings.state.hasUnsavedChanges, false);
+      await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('address-edit-address-home-001')));
       await tester.pumpAndSettle();
       expect(
@@ -178,6 +182,8 @@ void main() {
       await enterCustomerSession(tester);
       final router = customerRouter(tester);
       router.push(AppRoutes.addresses);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('address-edit-address-home-001')));
       await tester.pumpAndSettle();

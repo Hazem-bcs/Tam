@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 
@@ -14,6 +13,7 @@ import '../bloc/address_editor_state.dart';
 import '../widgets/address_display.dart';
 import '../widgets/address_icon_picker.dart';
 import '../widgets/address_location_picker.dart';
+import '../widgets/address_location_summary.dart';
 
 class AddressEditorPage extends StatefulWidget {
   const AddressEditorPage({super.key, required this.onBack});
@@ -131,6 +131,10 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
               context.read<AddressEditorCubit>().id == null
                   ? t.addressesAdd
                   : t.addressesEdit,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             leading: IconButton(
               icon: const BackButtonIcon(),
@@ -147,6 +151,42 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
               ),
             ),
           ),
+          bottomNavigationBar:
+              (state.phase == AddressEditorPhase.ready ||
+                  state.phase == AddressEditorPhase.saving)
+              ? SafeArea(
+                  top: false,
+                  child: Center(
+                    heightFactor: 1,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 640),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          AppSpacing.xl,
+                          AppSpacing.sm,
+                          AppSpacing.xl,
+                          AppSpacing.lg,
+                        ),
+                        child: TamButton.primary(
+                          key: const Key('address-save'),
+                          label: state.retryPending
+                              ? t.addressesRetry
+                              : t.addressesSave,
+                          loadingLabel: t.addressesSaving,
+                          isLoading: state.phase == AddressEditorPhase.saving,
+                          onPressed:
+                              state.busy ||
+                                  (!state.dirty &&
+                                      context.read<AddressEditorCubit>().id !=
+                                          null)
+                              ? null
+                              : context.read<AddressEditorCubit>().save,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : null,
         ),
       ),
     );
@@ -186,31 +226,9 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TamCard(
-            key: const Key('address-choose-location'),
+          AddressLocationSummary(
+            locationLabel: state.location?.label,
             onTap: state.locked ? null : _chooseLocation,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        t.addressesLocation,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      Text(state.location?.label ?? t.addressesChooseLocation),
-                    ],
-                  ),
-                ),
-                const Icon(Icons.search),
-              ],
-            ),
           ),
           if (state.validationAttempted && state.location == null)
             Text(
@@ -254,15 +272,6 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
             ),
             const SizedBox(height: AppSpacing.md),
           ],
-          TamButton.primary(
-            key: const Key('address-save'),
-            label: state.retryPending ? t.addressesRetry : t.addressesSave,
-            loadingLabel: t.addressesSaving,
-            isLoading: state.phase == AddressEditorPhase.saving,
-            onPressed: state.busy || (!state.dirty && cubit.id != null)
-                ? null
-                : cubit.save,
-          ),
         ],
       ),
     );

@@ -33,6 +33,7 @@ Widget addressTestApp({
   String locale = 'ar',
   double scale = 1,
 }) => MaterialApp(
+  debugShowCheckedModeBanner: false,
   theme: captureAddressUi ? previewTheme() : AppTheme.light,
   locale: Locale(locale),
   supportedLocales: AppLocalizations.supportedLocales,
