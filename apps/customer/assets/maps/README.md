@@ -23,6 +23,13 @@ The default public provider is OpenFreeMap. MapLibre is the renderer and
 OpenStreetMap is the underlying map data. Source credits remain accessible from
 the map's attribution information button.
 
+The active vehicle selector uses the user's `vehicle-*-user.png` artwork,
+supplied from Downloads on 2026-11-16: White Toyota Sedan with Burgundy Arabic
+Livery (standard), Premium Comfort Sedan with Maroon Accents (comfort), Polished
+Hyundai H-1 with Maroon Decals (van), and Glossy Maroon-Accented Delivery Scooter.
+The scooter backdrop is removed while preserving the supplied vehicle design.
+The previous SVG vehicle illustrations are retained as unused earlier artwork.
+
 To self-host, supply a bundled style under `assets/maps/`, register it as a
 Flutter asset, and set `MAP_VECTOR_STYLE_ASSET` centrally. Replace the style's
 vector source URL, glyph URL, sprite URL and any active ancillary source URLs

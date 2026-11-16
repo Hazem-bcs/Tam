@@ -225,3 +225,7 @@ TAM-FLOATING-LOCATION-01: IMPLEMENTED بواسطة root على242cff7، بطاق
 TAM-VEHICLE-ART-02: IMPLEMENTED بواسطة root على4777d6f، أربعة SVG أصلية
 بمنظور ثلاثي الأرباع بدل رسوم العربات السابقة. [البطاقة](tasks/TAM-VEHICLE-ART-02.md)،
 [معاينة الرسم وحدود التحقق](deliveries/TAM-VEHICLE-ART-02/HANDOFF.md).
+
+TAM-USER-VEHICLES-01: IMPLEMENTED بواسطة root؛ اعتماد رسومات المستخدم الأربع
+بخلفيات شفافة بدل SVG السابقة. [البطاقة](tasks/TAM-USER-VEHICLES-01.md)،
+[معاينة المحاكي وحدود التحقق](deliveries/TAM-USER-VEHICLES-01/HANDOFF.md).
