@@ -14,8 +14,9 @@ import '../../support/fake_auth_repository.dart';
 
 /// The signed-in mascot animates continuously; pumpAndSettle cannot finish.
 Future<void> _pumpNavigation(WidgetTester tester) async {
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 450));
+  for (var frame = 0; frame < 12; frame++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
 }
 
 void main() {
