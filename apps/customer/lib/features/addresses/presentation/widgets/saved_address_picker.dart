@@ -8,6 +8,7 @@ import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 import '../bloc/addresses_cubit.dart';
 import '../bloc/addresses_state.dart';
 import 'address_display.dart';
+import 'address_visual_icon.dart';
 import 'saved_address_shortcuts.dart';
 
 class SavedAddressPicker extends StatelessWidget {
@@ -46,7 +47,7 @@ class SavedAddressPicker extends StatelessWidget {
             for (final item in state.items)
               ListTile(
                 key: Key('saved-address-${item.id}'),
-                leading: Icon(addressIcon(item.input.icon)),
+                leading: AddressVisualIcon(category: item.input.icon, size: 30),
                 title: Text(item.input.name),
                 subtitle: Text(item.input.location.label),
                 onTap: () => onSelected(item.input.location),

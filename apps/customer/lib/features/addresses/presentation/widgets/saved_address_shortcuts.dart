@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import '../../domain/saved_address.dart';
-import 'address_display.dart';
+import 'address_visual_icon.dart';
 
 /// Repository-backed shortcuts for choosing a ride endpoint, without management.
 class SavedAddressShortcuts extends StatelessWidget {
@@ -64,13 +64,7 @@ class _AddressShortcut extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ExcludeSemantics(
-                    child: Icon(
-                      addressIcon(item.input.icon),
-                      color: colors.primary,
-                      size: 22,
-                    ),
-                  ),
+                  AddressVisualIcon(category: item.input.icon, size: 30),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
