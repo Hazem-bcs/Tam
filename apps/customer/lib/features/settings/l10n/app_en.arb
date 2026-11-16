@@ -38,5 +38,11 @@
   "settingsLoggingOut": "Logging out",
   "settingsHelp": "Help and support",
   "settingsTerms": "Terms and conditions",
-  "settingsPrivacy": "Privacy policy"
+  "settingsPrivacy": "Privacy policy",
+  "settingsWelcome": "Welcome to Tam",
+  "settingsAccountSectionTitle": "Account & addresses",
+  "settingsDangerSectionTitle": "Account management",
+  "settingsInternalNotificationHint": "In-app notifications only, not phone push alerts.",
+  "settingsDevelopmentDisclosureTitle": "About this version",
+  "settingsCurrentPhoneHint": "Phone for this session"
 }

@@ -38,5 +38,11 @@
   "settingsLoggingOut": "جارٍ تسجيل الخروج",
   "settingsHelp": "المساعدة والدعم",
   "settingsTerms": "الشروط والأحكام",
-  "settingsPrivacy": "سياسة الخصوصية"
+  "settingsPrivacy": "سياسة الخصوصية",
+  "settingsWelcome": "أهلاً بك في تم",
+  "settingsAccountSectionTitle": "الحساب والعناوين",
+  "settingsDangerSectionTitle": "إدارة الحساب",
+  "settingsInternalNotificationHint": "إشعارات داخل التطبيق فقط، ولا تشمل تنبيهات الهاتف.",
+  "settingsDevelopmentDisclosureTitle": "عن هذه النسخة",
+  "settingsCurrentPhoneHint": "رقم هذه الجلسة"
 }

@@ -98,6 +98,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    // The new account header is scrollable. Reach the edit action first when
+    // the keyboard occupies much of a compact, large-text viewport.
+    await tester.ensureVisible(find.byTooltip('تعديل الاسم'));
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('تعديل الاسم'));
     await tester.pumpAndSettle();
     final input = find.byKey(const Key('settings-name-field'));

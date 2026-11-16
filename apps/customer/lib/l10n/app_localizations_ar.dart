@@ -976,6 +976,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsPrivacy => 'سياسة الخصوصية';
 
   @override
+  String get settingsWelcome => 'أهلاً بك في تم';
+
+  @override
+  String get settingsAccountSectionTitle => 'الحساب والعناوين';
+
+  @override
+  String get settingsDangerSectionTitle => 'إدارة الحساب';
+
+  @override
+  String get settingsInternalNotificationHint =>
+      'إشعارات داخل التطبيق فقط، ولا تشمل تنبيهات الهاتف.';
+
+  @override
+  String get settingsDevelopmentDisclosureTitle => 'عن هذه النسخة';
+
+  @override
+  String get settingsCurrentPhoneHint => 'رقم هذه الجلسة';
+
+  @override
   String get addressesTitle => 'عناويني';
 
   @override
