@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/home/data/mock/mock_home_repository.dart';
@@ -45,6 +46,14 @@ void main() {
         );
         expect(tester.takeException(), isNull);
         if (capture) {
+          // Ensure the mascot asset is decoded before taking pixel snapshots.
+          await tester.runAsync(
+            () => precacheImage(
+              const AssetImage('assets/images/tam_account_mascot.webp'),
+              tester.element(find.byType(HomePage)),
+            ),
+          );
+          await tester.pumpAndSettle();
           await expectLater(
             find.byType(HomePage),
             matchesGoldenFile(

@@ -482,6 +482,72 @@ abstract class AppLocalizations {
   /// **'الإشعارات، غير المقروء: {count}'**
   String homeUnreadNotifications(int count);
 
+  /// No description provided for @homeLandingQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'وين رايح اليوم؟'**
+  String get homeLandingQuestion;
+
+  /// No description provided for @homeLandingSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشوارك يبدأ بخطوة بسيطة'**
+  String get homeLandingSubtitle;
+
+  /// No description provided for @homePickupLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقطة الانطلاق'**
+  String get homePickupLabel;
+
+  /// No description provided for @homePickupPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'من وين بدنا نبلّش؟'**
+  String get homePickupPrompt;
+
+  /// No description provided for @homeDestinationLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجهة'**
+  String get homeDestinationLabel;
+
+  /// No description provided for @homeDestinationPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوين المشوار؟'**
+  String get homeDestinationPrompt;
+
+  /// No description provided for @homeBookRide.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب مشوار'**
+  String get homeBookRide;
+
+  /// No description provided for @homeServicesHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات تم'**
+  String get homeServicesHeading;
+
+  /// No description provided for @homeServicesDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات جديدة لتسهّل يومك، قريبًا'**
+  String get homeServicesDescription;
+
+  /// No description provided for @homeRideUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة المشوار غير متاحة حاليًا.'**
+  String get homeRideUnavailable;
+
+  /// No description provided for @homeLatest.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر الأخبار'**
+  String get homeLatest;
+
   /// No description provided for @rideRequestTitle.
   ///
   /// In ar, this message translates to:

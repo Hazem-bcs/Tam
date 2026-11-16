@@ -48,10 +48,7 @@ void main() {
 
       final destinations = [
         (find.byKey(const Key('home-notifications')), AppRoutes.notifications),
-        (
-          find.text('حدد نقطة الانطلاق والوجهة لطلب رحلة'),
-          AppRoutes.rideRequest,
-        ),
+        (find.byKey(const Key('home-ride-entry')), AppRoutes.rideRequest),
         (find.text('طلباتي'), AppRoutes.trips),
         (find.text('الإعدادات'), AppRoutes.settings),
       ];

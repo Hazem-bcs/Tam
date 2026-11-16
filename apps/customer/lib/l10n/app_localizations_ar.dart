@@ -218,6 +218,39 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get homeLandingQuestion => 'وين رايح اليوم؟';
+
+  @override
+  String get homeLandingSubtitle => 'مشوارك يبدأ بخطوة بسيطة';
+
+  @override
+  String get homePickupLabel => 'نقطة الانطلاق';
+
+  @override
+  String get homePickupPrompt => 'من وين بدنا نبلّش؟';
+
+  @override
+  String get homeDestinationLabel => 'الوجهة';
+
+  @override
+  String get homeDestinationPrompt => 'لوين المشوار؟';
+
+  @override
+  String get homeBookRide => 'اطلب مشوار';
+
+  @override
+  String get homeServicesHeading => 'خدمات تم';
+
+  @override
+  String get homeServicesDescription => 'خدمات جديدة لتسهّل يومك، قريبًا';
+
+  @override
+  String get homeRideUnavailable => 'خدمة المشوار غير متاحة حاليًا.';
+
+  @override
+  String get homeLatest => 'آخر الأخبار';
+
+  @override
   String get rideRequestTitle => 'احجز مشوارك';
 
   @override

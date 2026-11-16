@@ -113,6 +113,17 @@
       }
     }
   },
+  "homeLandingQuestion": "وين رايح اليوم؟",
+  "homeLandingSubtitle": "مشوارك يبدأ بخطوة بسيطة",
+  "homePickupLabel": "نقطة الانطلاق",
+  "homePickupPrompt": "من وين بدنا نبلّش؟",
+  "homeDestinationLabel": "الوجهة",
+  "homeDestinationPrompt": "لوين المشوار؟",
+  "homeBookRide": "اطلب مشوار",
+  "homeServicesHeading": "خدمات تم",
+  "homeServicesDescription": "خدمات جديدة لتسهّل يومك، قريبًا",
+  "homeRideUnavailable": "خدمة المشوار غير متاحة حاليًا.",
+  "homeLatest": "آخر الأخبار",
   "rideRequestTitle": "احجز مشوارك",
   "rideRequestPickup": "نقطة الانطلاق",
   "rideRequestPickupHint": "حدد مكان الانطلاق",

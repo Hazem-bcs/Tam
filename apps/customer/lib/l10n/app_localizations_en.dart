@@ -223,6 +223,41 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get homeLandingQuestion => 'Where to today?';
+
+  @override
+  String get homeLandingSubtitle => 'Your next ride starts here.';
+
+  @override
+  String get homePickupLabel => 'Pickup';
+
+  @override
+  String get homePickupPrompt => 'Choose your pickup';
+
+  @override
+  String get homeDestinationLabel => 'Destination';
+
+  @override
+  String get homeDestinationPrompt => 'Where are you headed?';
+
+  @override
+  String get homeBookRide => 'Book a ride';
+
+  @override
+  String get homeServicesHeading => 'TAM services';
+
+  @override
+  String get homeServicesDescription =>
+      'More everyday services are on the way.';
+
+  @override
+  String get homeRideUnavailable =>
+      'Ride requests are not currently available.';
+
+  @override
+  String get homeLatest => 'What\'s new';
+
+  @override
   String get rideRequestTitle => 'Book a ride';
 
   @override

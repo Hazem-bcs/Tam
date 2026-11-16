@@ -39,7 +39,7 @@ void main() {
       expect(find.text('خدمات تم'), findsOneWidget);
       expect(find.text('قريبًا'), findsNWidgets(2));
       expect(find.text('مزايا جديدة في الطريق'), findsNothing);
-      expect(find.text('مشوارك أسهل مع تم'), findsNothing);
+      expect(find.text('مشوارك أسهل مع تم'), findsOneWidget);
       expect(find.text('تسجيل الخروج'), findsNothing);
       expect(find.text('تسجيل الدخول'), findsNothing);
 
