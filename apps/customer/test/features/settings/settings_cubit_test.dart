@@ -67,6 +67,35 @@ void main() {
     expect(cubit.state.notificationsDirty, false);
   });
 
+  test(
+    'automatic notification save restores last saved value on failure',
+    () async {
+      final repository = MockSettingsRepository()
+        ..failNextPreferencesSave = true;
+      final cubit = SettingsCubit(repository);
+      addTearDown(cubit.close);
+      await cubit.load();
+      expect(await cubit.updateNotificationsImmediately(false), false);
+      expect(cubit.state.draftNotificationsEnabled, true);
+      expect(cubit.state.notificationsDirty, false);
+      expect(cubit.state.preferences!.accountNotificationsEnabled, true);
+
+      expect(await cubit.updateNotificationsImmediately(false), true);
+      expect(cubit.state.draftNotificationsEnabled, false);
+      expect(cubit.state.notificationsDirty, false);
+    },
+  );
+
+  test('automatic preference save preserves pending profile edits', () async {
+    final cubit = SettingsCubit(MockSettingsRepository());
+    addTearDown(cubit.close);
+    await cubit.load();
+    cubit.nameChanged('Changed display name');
+    expect(await cubit.updateNotificationsImmediately(false), true);
+    expect(cubit.state.nameDirty, true);
+    expect(cubit.state.notificationsDirty, false);
+  });
+
   test('load error and retry do not manufacture profile data', () async {
     final repository = MockSettingsRepository()..failNextProfileLoad = true;
     final cubit = SettingsCubit(repository);

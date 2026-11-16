@@ -4,7 +4,6 @@ import 'package:tam_customer/features/settings/presentation/bloc/settings_state.
 import 'package:tam_customer/features/settings/presentation/widgets/settings_action_tile.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_group.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
 
 class SettingsPreferencesSection extends StatelessWidget {
   const SettingsPreferencesSection({
@@ -12,14 +11,12 @@ class SettingsPreferencesSection extends StatelessWidget {
     required this.state,
     required this.languageCode,
     required this.onNotificationsChanged,
-    required this.onSave,
     required this.onLanguageTap,
   });
 
   final SettingsState state;
   final String languageCode;
   final ValueChanged<bool> onNotificationsChanged;
-  final VoidCallback onSave;
   final VoidCallback onLanguageTap;
 
   @override
@@ -69,31 +66,6 @@ class SettingsPreferencesSection extends StatelessWidget {
                 value: state.draftNotificationsEnabled,
                 onChanged: state.isBusy ? null : onNotificationsChanged,
               ),
-              if (state.notificationsDirty) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Padding(
-                  padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: AppSpacing.sm,
-                  ),
-                  child: TamButton.secondary(
-                    label: t.settingsSavePreferences,
-                    loadingLabel: t.settingsSaving,
-                    isLoading:
-                        state.activity == SettingsActivity.savingPreferences,
-                    onPressed: state.isBusy ? null : onSave,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.md),
-              ],
-              if (state.errorTarget == SettingsErrorTarget.preferences &&
-                  state.error != null)
-                Padding(
-                  padding: const EdgeInsetsDirectional.all(AppSpacing.sm),
-                  child: Text(
-                    t.settingsSaveError,
-                    style: text.bodySmall?.copyWith(color: colors.error),
-                  ),
-                ),
             ],
           ),
         ),
