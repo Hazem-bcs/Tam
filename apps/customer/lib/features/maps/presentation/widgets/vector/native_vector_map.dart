@@ -10,6 +10,7 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 
 import '../map_feedback.dart';
 import '../map_selection_cursor.dart';
+import '../map_tap_feedback.dart';
 import 'vector_camera.dart';
 import 'vector_map_controls.dart';
 import 'vector_map_scene.dart';
@@ -55,6 +56,12 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   bool _syncing = false, _dirty = false, _fitPending = true;
   bool _foreground = true;
   final _moving = ValueNotifier<bool>(false);
+  final _tap = ValueNotifier<MapTap?>(null);
+  final _appliedInset = ValueNotifier<double>(0);
+  Offset? _pointerStart;
+  int _tapId = 0;
+  bool _cameraAnimating = false;
+  EdgeInsets? _lastPadding;
   bool _selectionGesture = false, _focusSelectionPending = false;
   GeoPoint? _emittedSelection;
   bool get _picking =>
@@ -132,6 +139,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _layers = null;
     _drawn = null;
     _installed = false;
+    _lastPadding = null;
+    _focusSelectionPending = _picking;
     _loading = true;
     _failed = false;
     _fitPending = true;
@@ -181,11 +190,28 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         if (_focusSelectionPending && _picking) {
           _focusSelectionPending = false;
           _fitPending = false;
-          await _applyPadding(epoch);
           if (!_current(epoch)) return;
-          await _controller!.moveCamera(
-            CameraUpdate.newLatLng(_latLng(widget.scene.selection!)),
+          final update = CameraUpdate.newLatLng(
+            _latLng(widget.scene.selection!),
           );
+          _cameraAnimating = true;
+          _moving.value = true;
+          try {
+            if (MediaQuery.disableAnimationsOf(context)) {
+              await _controller!.moveCamera(update);
+            } else {
+              await _controller!.animateCamera(
+                update,
+                duration: AppMotion.medium,
+              );
+            }
+          } finally {
+            _cameraAnimating = false;
+            if (_current(epoch)) {
+              _moving.value = false;
+              await _applyPadding(epoch);
+            }
+          }
         }
         if (_fitPending && !_picking) {
           _fitPending = false;
@@ -206,23 +232,29 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     if (update != null) await _controller!.moveCamera(update);
   }
 
-  // The sheet may animate at display refresh rate. Only viewport padding is
-  // coalesced here; the native map/scene is never rebuilt or repainted per tick.
+  // Debounce sheet geometry. Native padding is itself a camera operation:
+  // sending it every few frames would cancel an in-flight selection animation.
   void _schedulePadding() {
-    if (_paddingTimer != null || !_foreground) return;
-    _paddingTimer = Timer(const Duration(milliseconds: 80), () {
+    _paddingTimer?.cancel();
+    if (!_foreground) return;
+    _paddingTimer = Timer(AppMotion.short, () {
       _paddingTimer = null;
       unawaited(_applyPadding(_epoch));
     });
   }
 
   Future<void> _applyPadding(int epoch) async {
-    if (!_current(epoch) || !_installed || _size.isEmpty) return;
+    if (!_current(epoch) || !_installed || _size.isEmpty || _cameraAnimating)
+      return;
     try {
       final bottom = _inset.clamp(0.0, math.max(0.0, _size.height - 160));
+      final padding = EdgeInsets.fromLTRB(0, 80, 0, bottom.toDouble());
+      if (padding == _lastPadding) return;
+      _lastPadding = padding;
+      _appliedInset.value = bottom.toDouble();
       await _controller!.updateContentInsets(
-        EdgeInsets.fromLTRB(0, 80, 0, bottom.toDouble()),
-        false,
+        padding,
+        !_loading && !MediaQuery.disableAnimationsOf(context),
       );
     } catch (_) {
       _showFailure(epoch);
@@ -264,6 +296,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   void dispose() {
     _epoch++;
     _moving.dispose();
+    _tap.dispose();
+    _appliedInset.dispose();
     _deadline?.cancel();
     _paddingTimer?.cancel();
     widget.bottomInset?.removeListener(_schedulePadding);
@@ -287,8 +321,12 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               widget.bottomInset ?? const AlwaysStoppedAnimation<double>(0),
           child: Listener(
             behavior: HitTestBehavior.opaque,
+            onPointerDown: (event) => _pointerStart = event.localPosition,
             onPointerMove: (event) {
-              if (_picking && event.delta.distance > 1) {
+              final start = _pointerStart;
+              if (_picking &&
+                  start != null &&
+                  (event.localPosition - start).distance > 12) {
                 _selectionGesture = true;
                 _moving.value = true;
               }
@@ -314,25 +352,40 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               onCameraMove: (camera) {
                 if (_current(epoch)) _camera = camera;
               },
-              onMapClick: (_, point) => widget.onSelected?.call(
-                GeoPoint(latitude: point.latitude, longitude: point.longitude),
-              ),
+              onMapClick: (screen, point) {
+                if (widget.onSelected == null) return;
+                _selectionGesture = false;
+                final ratio = defaultTargetPlatform == TargetPlatform.android
+                    ? MediaQuery.devicePixelRatioOf(context)
+                    : 1;
+                _tap.value = (
+                  point: Offset(screen.x / ratio, screen.y / ratio),
+                  id: ++_tapId,
+                );
+                widget.onSelected!(
+                  GeoPoint(
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                  ),
+                );
+              },
             ),
           ),
           builder: (context, map) => Stack(
             fit: StackFit.expand,
             children: [
               map!,
+              MapTapFeedback(tap: _tap),
               if (_picking && !_loading && !_failed)
-                MapSelectionCursor(
-                  anchor: Offset(
-                    _size.width / 2,
-                    (80 +
-                            _size.height -
-                            _inset.clamp(0, math.max(0, _size.height - 160))) /
-                        2,
+                ValueListenableBuilder<double>(
+                  valueListenable: _appliedInset,
+                  builder: (context, inset, _) => MapSelectionCursor(
+                    anchor: Offset(
+                      _size.width / 2,
+                      (80 + _size.height - inset) / 2,
+                    ),
+                    moving: _moving,
                   ),
-                  moving: _moving,
                 ),
               if (_loading)
                 const Align(

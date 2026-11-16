@@ -23,7 +23,11 @@ class MapSelectionCursor extends StatelessWidget {
         child: Stack(
           children: [
             if (anchor.dy > 200)
-              Positioned(
+              AnimatedPositioned(
+                duration: MediaQuery.disableAnimationsOf(context)
+                    ? Duration.zero
+                    : AppMotion.medium,
+                curve: AppMotion.easeOut,
                 left: anchor.dx - 130,
                 bottom: null,
                 top: anchor.dy - 86,
@@ -45,7 +49,11 @@ class MapSelectionCursor extends StatelessWidget {
                   ),
                 ),
               ),
-            Positioned(
+            AnimatedPositioned(
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : AppMotion.medium,
+              curve: AppMotion.easeOut,
               left: anchor.dx - 18,
               top: anchor.dy - 41,
               child: ValueListenableBuilder<bool>(
@@ -55,7 +63,11 @@ class MapSelectionCursor extends StatelessWidget {
                   height: 44,
                   child: Stack(
                     children: [
-                      Positioned(
+                      AnimatedPositioned(
+                        duration: MediaQuery.disableAnimationsOf(context)
+                            ? Duration.zero
+                            : AppMotion.medium,
+                        curve: AppMotion.easeOut,
                         bottom: 0,
                         left: 10,
                         right: 10,

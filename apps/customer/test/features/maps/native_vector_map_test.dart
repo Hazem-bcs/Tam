@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -136,6 +137,49 @@ void main() {
       expect(platforms.single.cameras.length, cameraCount);
       native.onMapIdle!();
       expect(chosen, hasLength(1));
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'sheet padding cannot interrupt a tapped-point camera animation',
+    (tester) async {
+      final inset = ValueNotifier<double>(200);
+      addTearDown(inset.dispose);
+      GeoPoint? chosen;
+      await show(
+        tester,
+        VectorMapScene(origin: origin),
+        inset: inset,
+        select: (p) => chosen = p,
+      );
+      await load(tester);
+      final probe = platforms.single;
+      final pending = Completer<bool?>();
+      probe.onAnimate = () => pending.future;
+      final native = tester.widget<MapLibreMap>(find.byType(MapLibreMap));
+      native.onMapClick!(const Point(200, 300), const LatLng(33.52, 36.31));
+      expect(chosen, GeoPoint(latitude: 33.52, longitude: 36.31));
+      await show(
+        tester,
+        VectorMapScene(origin: origin, selection: chosen),
+        inset: inset,
+        select: (p) => chosen = p,
+      );
+      expect(probe.animations, [const Duration(milliseconds: 300)]);
+      final paddingCount = probe.insets.length;
+      for (var i = 0; i < 20; i++) {
+        inset.value = 220 + i.toDouble();
+      }
+      await tester.pump(const Duration(milliseconds: 250));
+      expect(probe.insets.length, paddingCount);
+      pending.complete(true);
+      await tester.pump();
+      expect(probe.insets.last.bottom, 239);
+      expect(probe.insets.length, paddingCount + 1);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(probe.insets.length, paddingCount + 1);
       await tester.pumpWidget(const SizedBox());
       expect(tester.takeException(), isNull);
     },

@@ -10,3 +10,5 @@ Read: AGENTS, task protocol, working agreement, design system, navigation, archi
 Tools: local Flutter/Android available, existing emulator reused. Broad tests deferred per iteration preference; one focused check for selection/navigation and one offline build for requested preview. No push/main merge authorized for this task.
 
 Delivery: docs/engineering/deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md; Android screenshot included.
+
+User follow-up at2386368: repair abrupt tapped-point transition. Native camera animation, immediate tap feedback, debounced padding serialized after recenter; focused interruption regression and Android preview. Same file ownership and exclusions.

@@ -14,6 +14,8 @@ class VectorPlatformProbe extends MapLibrePlatform {
   final insets = <EdgeInsets>[];
   final cameras = <CameraUpdate>[];
   int images = 0, disposed = 0;
+  final animations = <Duration?>[];
+  Future<bool?> Function()? onAnimate;
   bool _created = false;
   bool failUpdates = false;
 
@@ -110,7 +112,8 @@ class VectorPlatformProbe extends MapLibrePlatform {
   @override
   Future<bool?> animateCamera(CameraUpdate update, {Duration? duration}) async {
     cameras.add(update);
-    return true;
+    animations.add(duration);
+    return onAnimate == null ? true : await onAnimate!();
   }
 
   @override
