@@ -66,74 +66,83 @@ class NotificationsFilterBar extends StatelessWidget {
         Icons.tune_rounded,
       ),
     ];
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+    // Keep every filter fully visible inside the page's horizontal padding.
+    // Horizontal scrolling can leave half-cut chips at both screen edges.
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Row(
-        children: [
-          for (final entry in entries) ...[
-            Semantics(
-              button: true,
-              selected: selected == entry.$1,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  key: Key('notifications-filter-${entry.$1.name}'),
-                  onTap: () => onChanged(entry.$1),
-                  borderRadius: BorderRadius.circular(28),
-                  child: AnimatedContainer(
-                    duration: MediaQuery.disableAnimationsOf(context)
-                        ? Duration.zero
-                        : const Duration(milliseconds: 180),
-                    curve: Curves.easeOutCubic,
-                    constraints: const BoxConstraints(minHeight: 46),
-                    padding: const EdgeInsetsDirectional.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: selected == entry.$1
-                          ? colors.primary
-                          : colors.surfaceContainerLowest,
+      child: LayoutBuilder(
+        builder: (context, bounds) => Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final entry in entries)
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: bounds.maxWidth),
+                child: Semantics(
+                  button: true,
+                  selected: selected == entry.$1,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      key: Key('notifications-filter-${entry.$1.name}'),
+                      onTap: () => onChanged(entry.$1),
                       borderRadius: BorderRadius.circular(28),
-                      border: Border.all(
-                        color: selected == entry.$1
-                            ? colors.primary
-                            : colors.outlineVariant,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          entry.$3,
-                          size: 17,
+                      child: AnimatedContainer(
+                        duration: MediaQuery.disableAnimationsOf(context)
+                            ? Duration.zero
+                            : const Duration(milliseconds: 180),
+                        curve: Curves.easeOutCubic,
+                        constraints: const BoxConstraints(minHeight: 46),
+                        padding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
                           color: selected == entry.$1
-                              ? colors.onPrimary
-                              : colors.onSurfaceVariant,
+                              ? colors.primary
+                              : colors.surfaceContainerLowest,
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(
+                            color: selected == entry.$1
+                                ? colors.primary
+                                : colors.outlineVariant,
+                          ),
                         ),
-                        const SizedBox(width: 7),
-                        Text(
-                          entry.$2,
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: selected == entry.$1
-                                    ? colors.onPrimary
-                                    : colors.onSurface,
-                                fontWeight: selected == entry.$1
-                                    ? FontWeight.w800
-                                    : FontWeight.w600,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              entry.$3,
+                              size: 17,
+                              color: selected == entry.$1
+                                  ? colors.onPrimary
+                                  : colors.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 7),
+                            Flexible(
+                              child: Text(
+                                entry.$2,
+                                softWrap: true,
+                                style: Theme.of(context).textTheme.labelMedium
+                                    ?.copyWith(
+                                      color: selected == entry.$1
+                                          ? colors.onPrimary
+                                          : colors.onSurface,
+                                      fontWeight: selected == entry.$1
+                                          ? FontWeight.w800
+                                          : FontWeight.w600,
+                                    ),
                               ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
           ],
-        ],
+        ),
       ),
     );
   }
