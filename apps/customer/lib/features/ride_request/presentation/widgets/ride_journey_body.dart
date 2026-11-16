@@ -97,6 +97,8 @@ class RideJourneyBody extends StatelessWidget {
           panelBuilder: (collapse) => selecting
               ? RideMapPointPanel(
                   point: location.point!,
+                  initialPickup:
+                      step == RideJourneyStep.places && pickingPickup,
                   address: location.address,
                   resolving: location.resolving,
                   onPickup: onMapPickup,

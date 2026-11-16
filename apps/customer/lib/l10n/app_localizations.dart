@@ -1016,6 +1016,66 @@ abstract class AppLocalizations {
   /// **'نتائج البحث'**
   String get rideRequestSearchResults;
 
+  /// No description provided for @rideRequestPhasePlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكان'**
+  String get rideRequestPhasePlace;
+
+  /// No description provided for @rideRequestPhaseVehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المركبة'**
+  String get rideRequestPhaseVehicle;
+
+  /// No description provided for @rideRequestPhaseConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'التأكيد'**
+  String get rideRequestPhaseConfirm;
+
+  /// No description provided for @rideRequestPhasePickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانطلاق'**
+  String get rideRequestPhasePickup;
+
+  /// No description provided for @rideRequestSelectedPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكان المحدد'**
+  String get rideRequestSelectedPlace;
+
+  /// No description provided for @rideRequestConfirmMapPoint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتمد هذه النقطة على الخريطة'**
+  String get rideRequestConfirmMapPoint;
+
+  /// No description provided for @rideRequestAddDriverNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف وصفًا للسائق'**
+  String get rideRequestAddDriverNote;
+
+  /// No description provided for @rideRequestDriverNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثلاً: بجانب المدخل الرئيسي'**
+  String get rideRequestDriverNoteHint;
+
+  /// No description provided for @rideRequestConfirmPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد نقطة الانطلاق'**
+  String get rideRequestConfirmPickup;
+
+  /// No description provided for @rideRequestConfirmDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد الوجهة'**
+  String get rideRequestConfirmDestination;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:
@@ -3349,6 +3409,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الخريطة المتجهة متاحة على Android وiOS والويب.'**
   String get mapsNativeUnavailable;
+
+  /// No description provided for @mapsMoveToSelect.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرّك الخريطة لتحديد المكان'**
+  String get mapsMoveToSelect;
 }
 
 class _AppLocalizationsDelegate

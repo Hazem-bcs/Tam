@@ -40,6 +40,7 @@ class _RideJourneyShellState extends State<RideJourneyShell>
   final _mapInset = ValueNotifier<double>(0);
   double _height = 0, _minimum = .15, _maximum = .90;
   bool _compact = false;
+  Offset? _mapDragOrigin;
 
   double get _preferred => widget.preferredExtent.clamp(_minimum, _maximum);
   void _changed() {
@@ -108,7 +109,19 @@ class _RideJourneyShellState extends State<RideJourneyShell>
         return Stack(
           children: [
             Positioned.fill(
-              child: RepaintBoundary(child: widget.mapBuilder(_mapInset)),
+              child: Listener(
+                onPointerDown: (event) => _mapDragOrigin = event.position,
+                onPointerUp: (_) => _mapDragOrigin = null,
+                onPointerCancel: (_) => _mapDragOrigin = null,
+                onPointerMove: (event) {
+                  final start = _mapDragOrigin;
+                  if (start != null && (event.position - start).distance > 12) {
+                    _mapDragOrigin = null;
+                    if (!_compact) _move(_minimum);
+                  }
+                },
+                child: RepaintBoundary(child: widget.mapBuilder(_mapInset)),
+              ),
             ),
             PositionedDirectional(
               top: AppSpacing.md,
@@ -170,41 +183,30 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                             (_minimum + _preferred) / 2);
                                 _move(fold ? _minimum : _preferred);
                               },
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: AppDimensions.minTapTarget,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Container(
-                                      width: 36,
-                                      height: 4,
-                                      decoration: BoxDecoration(
-                                        color: c.outlineVariant,
-                                        borderRadius: BorderRadius.circular(
-                                          AppRadii.sm,
+                              child: Tooltip(
+                                message: _compact
+                                    ? t.rideRequestExpandPanel
+                                    : t.rideRequestCollapsePanel,
+                                child: InkWell(
+                                  key: const Key('ride-sheet-toggle'),
+                                  onTap: () =>
+                                      _move(_compact ? _preferred : _minimum),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: AppDimensions.minTapTarget,
+                                    child: Center(
+                                      child: Container(
+                                        width: 36,
+                                        height: 4,
+                                        decoration: BoxDecoration(
+                                          color: c.outlineVariant,
+                                          borderRadius: BorderRadius.circular(
+                                            AppRadii.sm,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    PositionedDirectional(
-                                      end: AppSpacing.sm,
-                                      child: IconButton(
-                                        key: const Key('ride-sheet-toggle'),
-                                        tooltip: _compact
-                                            ? t.rideRequestExpandPanel
-                                            : t.rideRequestCollapsePanel,
-                                        onPressed: () => _move(
-                                          _compact ? _preferred : _minimum,
-                                        ),
-                                        icon: Icon(
-                                          _compact
-                                              ? Icons.keyboard_arrow_up_rounded
-                                              : Icons
-                                                    .keyboard_arrow_down_rounded,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),

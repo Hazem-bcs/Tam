@@ -108,6 +108,39 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets(
+    'panning a selected point updates once at idle and never recenters the next scene',
+    (tester) async {
+      final chosen = <GeoPoint>[];
+      await show(
+        tester,
+        VectorMapScene(origin: origin, selection: destination),
+        select: chosen.add,
+      );
+      await load(tester);
+      final native = tester.widget<MapLibreMap>(find.byType(MapLibreMap));
+      final gesture = await tester.startGesture(const Offset(300, 300));
+      await gesture.moveBy(const Offset(50, 20));
+      const position = CameraPosition(target: LatLng(33.52, 36.31), zoom: 15);
+      native.onCameraMove!(position);
+      expect(chosen, isEmpty);
+      await gesture.up();
+      native.onMapIdle!();
+      expect(chosen, [GeoPoint(latitude: 33.52, longitude: 36.31)]);
+      final cameraCount = platforms.single.cameras.length;
+      await show(
+        tester,
+        VectorMapScene(origin: origin, selection: chosen.single),
+        select: chosen.add,
+      );
+      expect(platforms.single.cameras.length, cameraCount);
+      native.onMapIdle!();
+      expect(chosen, hasLength(1));
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('native failure is visible and retry recreates the failed view', (
     tester,
   ) async {

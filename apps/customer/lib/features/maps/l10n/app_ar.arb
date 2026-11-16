@@ -34,5 +34,6 @@
   "mapsEnableLocation": "فعّل الموقع لتحديد الانطلاق",
   "mapsOpenSettings": "فتح الإعدادات",
   "mapsLocationInaccurate": "الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.",
-  "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب."
+  "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب.",
+  "mapsMoveToSelect": "حرّك الخريطة لتحديد المكان"
 }

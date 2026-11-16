@@ -115,5 +115,15 @@
   "rideRequestPickFromMap": "Choose a point on the map",
   "rideRequestPickFromMapHint": "Move the map and tap your place",
   "rideRequestSuggestedPlaces": "Suggested places",
-  "rideRequestSearchResults": "Search results"
+  "rideRequestSearchResults": "Search results",
+  "rideRequestPhasePlace": "Place",
+  "rideRequestPhaseVehicle": "Vehicle",
+  "rideRequestPhaseConfirm": "Confirm",
+  "rideRequestPhasePickup": "Pickup",
+  "rideRequestSelectedPlace": "Selected place",
+  "rideRequestConfirmMapPoint": "Use this point on the map",
+  "rideRequestAddDriverNote": "Add a note for your driver",
+  "rideRequestDriverNoteHint": "For example: beside the main entrance",
+  "rideRequestConfirmPickup": "Confirm pickup",
+  "rideRequestConfirmDestination": "Confirm destination"
 }

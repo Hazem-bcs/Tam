@@ -229,6 +229,16 @@
   "rideRequestPickFromMapHint": "حرّك الخريطة والمس المكان",
   "rideRequestSuggestedPlaces": "أماكن مقترحة",
   "rideRequestSearchResults": "نتائج البحث",
+  "rideRequestPhasePlace": "المكان",
+  "rideRequestPhaseVehicle": "المركبة",
+  "rideRequestPhaseConfirm": "التأكيد",
+  "rideRequestPhasePickup": "الانطلاق",
+  "rideRequestSelectedPlace": "المكان المحدد",
+  "rideRequestConfirmMapPoint": "اعتمد هذه النقطة على الخريطة",
+  "rideRequestAddDriverNote": "أضف وصفًا للسائق",
+  "rideRequestDriverNoteHint": "مثلاً: بجانب المدخل الرئيسي",
+  "rideRequestConfirmPickup": "اعتماد نقطة الانطلاق",
+  "rideRequestConfirmDestination": "اعتماد الوجهة",
   "tripsAll": "الكل",
   "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",
@@ -752,5 +762,6 @@
   "mapsEnableLocation": "فعّل الموقع لتحديد الانطلاق",
   "mapsOpenSettings": "فتح الإعدادات",
   "mapsLocationInaccurate": "الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.",
-  "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب."
+  "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب.",
+  "mapsMoveToSelect": "حرّك الخريطة لتحديد المكان"
 }

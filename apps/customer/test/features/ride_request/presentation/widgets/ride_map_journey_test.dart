@@ -124,6 +124,8 @@ void main() {
       final point = tester
           .widget<RideMapPointPanel>(find.byType(RideMapPointPanel))
           .point;
+      await tester.tap(find.byKey(const Key('ride-map-add-description')));
+      await tester.pumpAndSettle();
       await tester.enterText(
         find.byKey(const Key('ride-map-point-description')),
         'بوابة الحديقة',
@@ -164,6 +166,8 @@ void main() {
       final point = tester
           .widget<RideMapPointPanel>(find.byType(RideMapPointPanel))
           .point;
+      await tester.tap(find.byKey(const Key('ride-map-role-pickup')));
+      await tester.pump(const Duration(milliseconds: 350));
       final pickup = find.byKey(const Key('ride-map-use-pickup'));
       await tester.ensureVisible(pickup);
       await tester.tap(pickup);

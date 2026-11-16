@@ -512,6 +512,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestSearchResults => 'Search results';
 
   @override
+  String get rideRequestPhasePlace => 'Place';
+
+  @override
+  String get rideRequestPhaseVehicle => 'Vehicle';
+
+  @override
+  String get rideRequestPhaseConfirm => 'Confirm';
+
+  @override
+  String get rideRequestPhasePickup => 'Pickup';
+
+  @override
+  String get rideRequestSelectedPlace => 'Selected place';
+
+  @override
+  String get rideRequestConfirmMapPoint => 'Use this point on the map';
+
+  @override
+  String get rideRequestAddDriverNote => 'Add a note for your driver';
+
+  @override
+  String get rideRequestDriverNoteHint =>
+      'For example: beside the main entrance';
+
+  @override
+  String get rideRequestConfirmPickup => 'Confirm pickup';
+
+  @override
+  String get rideRequestConfirmDestination => 'Confirm destination';
+
+  @override
   String get tripsAll => 'All';
 
   @override
@@ -1816,4 +1847,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mapsNativeUnavailable =>
       'Vector maps are available on Android, iOS and web.';
+
+  @override
+  String get mapsMoveToSelect => 'Move the map to choose a place';
 }

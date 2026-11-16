@@ -9,6 +9,7 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
 import '../map_feedback.dart';
+import '../map_selection_cursor.dart';
 import 'vector_camera.dart';
 import 'vector_map_controls.dart';
 import 'vector_map_scene.dart';
@@ -53,6 +54,11 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   bool _loading = true, _failed = false, _installed = false;
   bool _syncing = false, _dirty = false, _fitPending = true;
   bool _foreground = true;
+  final _moving = ValueNotifier<bool>(false);
+  bool _selectionGesture = false, _focusSelectionPending = false;
+  GeoPoint? _emittedSelection;
+  bool get _picking =>
+      widget.scene.selection != null && widget.onSelected != null;
   double get _inset => widget.bottomInset?.value ?? 0;
   bool _current(int epoch) => mounted && epoch == _epoch;
 
@@ -64,6 +70,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _camera = CameraPosition(target: _latLng(center), zoom: 15);
     WidgetsBinding.instance.addObserver(this);
     widget.bottomInset?.addListener(_schedulePadding);
+    _focusSelectionPending = _picking;
     _startDeadline();
   }
 
@@ -103,6 +110,14 @@ class _NativeVectorMapState extends State<NativeVectorMap>
       _schedulePadding();
     }
     if (oldWidget.style != widget.style) _reset();
+    if (oldWidget.scene.selection != widget.scene.selection &&
+        widget.scene.selection != _emittedSelection) {
+      _focusSelectionPending = _picking;
+    }
+    if (!_picking) {
+      _selectionGesture = false;
+      _moving.value = false;
+    }
     if (oldWidget.scene.origin != widget.scene.origin ||
         oldWidget.scene.destination != widget.scene.destination ||
         oldWidget.scene.route != widget.scene.route) {
@@ -163,7 +178,16 @@ class _NativeVectorMapState extends State<NativeVectorMap>
           if (!_current(epoch)) return;
           _drawn = scene;
         }
-        if (_fitPending) {
+        if (_focusSelectionPending && _picking) {
+          _focusSelectionPending = false;
+          _fitPending = false;
+          await _applyPadding(epoch);
+          if (!_current(epoch)) return;
+          await _controller!.moveCamera(
+            CameraUpdate.newLatLng(_latLng(widget.scene.selection!)),
+          );
+        }
+        if (_fitPending && !_picking) {
           _fitPending = false;
           await _fit(epoch);
         }
@@ -215,36 +239,31 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   }
 
   void _onIdle(int epoch) {
-    if (!_current(epoch) || !_installed || !_loading) return;
-    _deadline?.cancel();
-    setState(() {
-      _loading = false;
-      _failed = false;
-    });
-  }
-
-  void _zoom(int delta) {
-    final controller = _controller;
-    if (controller == null) return;
-    final camera = controller.cameraPosition ?? _camera;
-    final update = CameraUpdate.newLatLngZoom(
-      camera.target,
-      (camera.zoom + delta).clamp(3, 19),
-    );
-    unawaited(
-      (MediaQuery.disableAnimationsOf(context)
-              ? controller.moveCamera(update)
-              : controller.animateCamera(update, duration: AppMotion.short))
-          .catchError((Object _) {
-            _showFailure(_epoch);
-            return false;
-          }),
-    );
+    if (!_current(epoch) || !_installed) return;
+    if (_loading) {
+      _deadline?.cancel();
+      setState(() {
+        _loading = false;
+        _failed = false;
+      });
+    }
+    _moving.value = false;
+    if (_picking && _selectionGesture) {
+      _selectionGesture = false;
+      final target = _camera.target;
+      final point = GeoPoint(
+        latitude: target.latitude,
+        longitude: target.longitude,
+      );
+      _emittedSelection = point;
+      widget.onSelected?.call(point);
+    }
   }
 
   @override
   void dispose() {
     _epoch++;
+    _moving.dispose();
     _deadline?.cancel();
     _paddingTimer?.cancel();
     widget.bottomInset?.removeListener(_schedulePadding);
@@ -266,35 +285,55 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         return AnimatedBuilder(
           animation:
               widget.bottomInset ?? const AlwaysStoppedAnimation<double>(0),
-          child: MapLibreMap(
-            key: ValueKey('vector-map-$epoch'),
-            initialCameraPosition: _camera,
-            styleString: widget.style,
-            annotationOrder: const [],
-            myLocationEnabled: false,
-            trackCameraPosition: true,
-            tiltGesturesEnabled: false,
-            minMaxZoomPreference: const MinMaxZoomPreference(3, 19),
-            compassEnabled: false,
-            attributionButtonColor: Theme.of(context).colorScheme.primary,
-            attributionButtonPosition: AttributionButtonPosition.topRight,
-            attributionButtonMargins: const math.Point(12, 100),
-            onMapCreated: (controller) {
-              if (_current(epoch)) _controller = controller;
+          child: Listener(
+            behavior: HitTestBehavior.opaque,
+            onPointerMove: (event) {
+              if (_picking && event.delta.distance > 1) {
+                _selectionGesture = true;
+                _moving.value = true;
+              }
             },
-            onStyleLoadedCallback: () => unawaited(_onStyleLoaded(epoch)),
-            onMapIdle: () => _onIdle(epoch),
-            onCameraMove: (camera) {
-              if (_current(epoch)) _camera = camera;
-            },
-            onMapClick: (_, point) => widget.onSelected?.call(
-              GeoPoint(latitude: point.latitude, longitude: point.longitude),
+            child: MapLibreMap(
+              key: ValueKey('vector-map-$epoch'),
+              initialCameraPosition: _camera,
+              styleString: widget.style,
+              annotationOrder: const [],
+              myLocationEnabled: false,
+              trackCameraPosition: true,
+              tiltGesturesEnabled: false,
+              minMaxZoomPreference: const MinMaxZoomPreference(3, 19),
+              compassEnabled: false,
+              attributionButtonColor: Theme.of(context).colorScheme.primary,
+              attributionButtonPosition: AttributionButtonPosition.topRight,
+              attributionButtonMargins: const math.Point(12, 100),
+              onMapCreated: (controller) {
+                if (_current(epoch)) _controller = controller;
+              },
+              onStyleLoadedCallback: () => unawaited(_onStyleLoaded(epoch)),
+              onMapIdle: () => _onIdle(epoch),
+              onCameraMove: (camera) {
+                if (_current(epoch)) _camera = camera;
+              },
+              onMapClick: (_, point) => widget.onSelected?.call(
+                GeoPoint(latitude: point.latitude, longitude: point.longitude),
+              ),
             ),
           ),
           builder: (context, map) => Stack(
             fit: StackFit.expand,
             children: [
               map!,
+              if (_picking && !_loading && !_failed)
+                MapSelectionCursor(
+                  anchor: Offset(
+                    _size.width / 2,
+                    (80 +
+                            _size.height -
+                            _inset.clamp(0, math.max(0, _size.height - 160))) /
+                        2,
+                  ),
+                  moving: _moving,
+                ),
               if (_loading)
                 const Align(
                   alignment: Alignment.topCenter,
@@ -313,7 +352,6 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               if (_size.height - _inset >= 220)
                 VectorMapControls(
                   bottomInset: _inset,
-                  onZoom: _installed ? _zoom : null,
                   onLocate: widget.onLocate,
                   locating: widget.locating,
                 ),

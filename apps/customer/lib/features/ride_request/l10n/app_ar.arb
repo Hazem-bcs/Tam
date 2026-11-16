@@ -115,5 +115,15 @@
   "rideRequestPickFromMap": "حدد نقطة من الخريطة",
   "rideRequestPickFromMapHint": "حرّك الخريطة والمس المكان",
   "rideRequestSuggestedPlaces": "أماكن مقترحة",
-  "rideRequestSearchResults": "نتائج البحث"
+  "rideRequestSearchResults": "نتائج البحث",
+  "rideRequestPhasePlace": "المكان",
+  "rideRequestPhaseVehicle": "المركبة",
+  "rideRequestPhaseConfirm": "التأكيد",
+  "rideRequestPhasePickup": "الانطلاق",
+  "rideRequestSelectedPlace": "المكان المحدد",
+  "rideRequestConfirmMapPoint": "اعتمد هذه النقطة على الخريطة",
+  "rideRequestAddDriverNote": "أضف وصفًا للسائق",
+  "rideRequestDriverNoteHint": "مثلاً: بجانب المدخل الرئيسي",
+  "rideRequestConfirmPickup": "اعتماد نقطة الانطلاق",
+  "rideRequestConfirmDestination": "اعتماد الوجهة"
 }

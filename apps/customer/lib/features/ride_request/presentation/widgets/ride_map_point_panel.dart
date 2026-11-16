@@ -6,9 +6,9 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
+import 'ride_map_point_role.dart';
 
-/// Coordinates can be used immediately; an unavailable address lookup never
-/// substitutes a fixture or drops the user's selected point.
+/// A real point is usable even when reverse geocoding is unavailable.
 class RideMapPointPanel extends StatefulWidget {
   const RideMapPointPanel({
     super.key,
@@ -18,10 +18,11 @@ class RideMapPointPanel extends StatefulWidget {
     required this.onPickup,
     required this.onDestination,
     required this.onClose,
+    this.initialPickup = false,
   });
   final GeoPoint point;
   final String? address;
-  final bool resolving;
+  final bool resolving, initialPickup;
   final ValueChanged<TripLocation> onPickup, onDestination;
   final VoidCallback onClose;
 
@@ -30,25 +31,21 @@ class RideMapPointPanel extends StatefulWidget {
 }
 
 class _RideMapPointPanelState extends State<RideMapPointPanel> {
-  late final _description = TextEditingController(text: widget.address);
-  bool _edited = false;
-  @override
-  void didUpdateWidget(RideMapPointPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.point != widget.point) {
-      _edited = false;
-      _description.text = widget.address ?? '';
-    } else if (!_edited && oldWidget.address != widget.address) {
-      _description.text = widget.address ?? '';
-    }
-  }
+  final _description = TextEditingController();
+  late bool _pickup = widget.initialPickup;
+  bool _showDescription = false;
 
-  TripLocation _location(AppLocalizations t) => TripLocation(
-    point: widget.point,
-    label: _description.text.trim().isEmpty
-        ? t.rideRequestMapPoint
-        : _description.text.trim(),
-  );
+  TripLocation _location(AppLocalizations t) {
+    final description = _description.text.trim();
+    return TripLocation(
+      point: widget.point,
+      label: description.isNotEmpty
+          ? description
+          : widget.address?.trim().isNotEmpty == true
+          ? widget.address!
+          : t.rideRequestMapPoint,
+    );
+  }
 
   @override
   void dispose() {
@@ -60,6 +57,8 @@ class _RideMapPointPanelState extends State<RideMapPointPanel> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final c = theme.colorScheme;
+    final address = widget.address?.trim();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
@@ -71,56 +70,76 @@ class _RideMapPointPanelState extends State<RideMapPointPanel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    t.rideRequestMapPointTitle,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                ),
-                IconButton(
-                  tooltip: t.rideRequestMapPointCancel,
-                  onPressed: widget.onClose,
-                  icon: const Icon(Icons.close_rounded),
-                ),
-              ],
-            ),
             Text(
-              t.rideRequestMapPointHint,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+              t.rideRequestSelectedPlace,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: c.onSurfaceVariant,
               ),
             ),
+            const SizedBox(height: AppSpacing.xs),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                address?.isNotEmpty == true
+                    ? address!
+                    : t.rideRequestConfirmMapPoint,
+                style: theme.textTheme.titleMedium,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            RideMapPointRole(
+              pickup: _pickup,
+              onChanged: (pickup) => setState(() => _pickup = pickup),
+            ),
             const SizedBox(height: AppSpacing.sm),
-            Text(
-              '${widget.point.latitude.toStringAsFixed(5)}, ${widget.point.longitude.toStringAsFixed(5)}',
-              textDirection: TextDirection.ltr,
-              style: theme.textTheme.labelSmall,
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: TextButton.icon(
+                key: const Key('ride-map-add-description'),
+                onPressed: () =>
+                    setState(() => _showDescription = !_showDescription),
+                icon: Icon(
+                  _showDescription ? Icons.remove_rounded : Icons.add_rounded,
+                  size: 18,
+                ),
+                label: Text(t.rideRequestAddDriverNote),
+              ),
             ),
-            const SizedBox(height: AppSpacing.lg),
-            TamTextField(
-              key: const Key('ride-map-point-description'),
-              controller: _description,
-              labelText: t.rideRequestMapPointDescription,
-              hintText: t.mapsAddressHint,
-              inputFormatters: [LengthLimitingTextInputFormatter(200)],
-              onChanged: (_) => _edited = true,
+            AnimatedSize(
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : AppMotion.short,
+              alignment: Alignment.topCenter,
+              child: _showDescription
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                      child: TamTextField(
+                        key: const Key('ride-map-point-description'),
+                        controller: _description,
+                        labelText: t.rideRequestMapPointDescription,
+                        hintText: t.rideRequestDriverNoteHint,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(200),
+                        ],
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).unfocus(),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
-            if (widget.resolving) const LinearProgressIndicator(),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.sm),
             TamButton.primary(
-              key: const Key('ride-map-use-destination'),
-              label: t.rideRequestUseAsDestination,
-              icon: Icons.location_on_outlined,
-              onPressed: () => widget.onDestination(_location(t)),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            TamButton.secondary(
-              key: const Key('ride-map-use-pickup'),
-              label: t.rideRequestUseAsPickup,
-              icon: Icons.trip_origin_rounded,
-              onPressed: () => widget.onPickup(_location(t)),
+              key: Key(
+                _pickup ? 'ride-map-use-pickup' : 'ride-map-use-destination',
+              ),
+              label: _pickup
+                  ? t.rideRequestConfirmPickup
+                  : t.rideRequestConfirmDestination,
+              icon: Icons.check_rounded,
+              onPressed: () => (_pickup
+                  ? widget.onPickup
+                  : widget.onDestination)(_location(t)),
             ),
           ],
         ),

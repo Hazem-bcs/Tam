@@ -229,3 +229,7 @@ TAM-VEHICLE-ART-02: IMPLEMENTED بواسطة root على4777d6f، أربعة SVG
 TAM-USER-VEHICLES-01: IMPLEMENTED بواسطة root؛ اعتماد رسومات المستخدم الأربع
 بخلفيات شفافة بدل SVG السابقة. [البطاقة](tasks/TAM-USER-VEHICLES-01.md)،
 [معاينة المحاكي وحدود التحقق](deliveries/TAM-USER-VEHICLES-01/HANDOFF.md).
+
+TAM-LOCATION-DESIGN-02: IMPLEMENTED بواسطة root على107497f، [البطاقة](tasks/TAM-LOCATION-DESIGN-02.md). تصميم اختيار الموقع المعتمد مع حذف أزرار الزوم.
+
+تسليم TAM-LOCATION-DESIGN-02: [المعاينة وحدود التحقق](deliveries/TAM-LOCATION-DESIGN-02/HANDOFF.md)، بانتظار تقييم المستخدم البصري.

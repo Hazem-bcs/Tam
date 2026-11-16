@@ -11,6 +11,7 @@ import '../../domain/maps_repository.dart';
 import 'map_attribution_link.dart';
 import 'map_feedback.dart';
 import 'private_tile_layer.dart';
+import 'vector/vector_map_controls.dart';
 
 class RasterMapCanvas extends StatefulWidget {
   const RasterMapCanvas({
@@ -232,53 +233,11 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
                     right: 0,
                     child: LinearProgressIndicator(),
                   ),
-                if (zoomControls || widget.onLocate != null)
-                  PositionedDirectional(
-                    bottom: _inset + 4,
-                    end: 4,
-                    child: Material(
-                      color: colors.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(AppRadii.sm),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (widget.onLocate != null)
-                            IconButton(
-                              key: const Key('ride-use-device-location'),
-                              tooltip: l.mapsUseMyLocation,
-                              onPressed: widget.locating
-                                  ? null
-                                  : widget.onLocate,
-                              icon: widget.locating
-                                  ? const SizedBox.square(
-                                      dimension: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : const Icon(Icons.my_location_rounded),
-                            ),
-                          if (zoomControls) ...[
-                            IconButton(
-                              tooltip: l.mapsZoomIn,
-                              icon: const Icon(Icons.add),
-                              onPressed: () => _controller.move(
-                                _controller.camera.center,
-                                (_controller.camera.zoom + 1).clamp(3, 19),
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: l.mapsZoomOut,
-                              icon: const Icon(Icons.remove),
-                              onPressed: () => _controller.move(
-                                _controller.camera.center,
-                                (_controller.camera.zoom - 1).clamp(3, 19),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
+                if (zoomControls && widget.onLocate != null)
+                  VectorMapControls(
+                    bottomInset: _inset,
+                    onLocate: widget.onLocate,
+                    locating: widget.locating,
                   ),
                 PositionedDirectional(
                   bottom: _inset + AppSpacing.xs,

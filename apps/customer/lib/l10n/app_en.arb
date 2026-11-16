@@ -229,6 +229,16 @@
   "rideRequestPickFromMapHint": "Move the map and tap your place",
   "rideRequestSuggestedPlaces": "Suggested places",
   "rideRequestSearchResults": "Search results",
+  "rideRequestPhasePlace": "Place",
+  "rideRequestPhaseVehicle": "Vehicle",
+  "rideRequestPhaseConfirm": "Confirm",
+  "rideRequestPhasePickup": "Pickup",
+  "rideRequestSelectedPlace": "Selected place",
+  "rideRequestConfirmMapPoint": "Use this point on the map",
+  "rideRequestAddDriverNote": "Add a note for your driver",
+  "rideRequestDriverNoteHint": "For example: beside the main entrance",
+  "rideRequestConfirmPickup": "Confirm pickup",
+  "rideRequestConfirmDestination": "Confirm destination",
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
@@ -752,5 +762,6 @@
   "mapsEnableLocation": "Turn on location for your pickup",
   "mapsOpenSettings": "Open settings",
   "mapsLocationInaccurate": "The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.",
-  "mapsNativeUnavailable": "Vector maps are available on Android, iOS and web."
+  "mapsNativeUnavailable": "Vector maps are available on Android, iOS and web.",
+  "mapsMoveToSelect": "Move the map to choose a place"
 }

@@ -91,7 +91,7 @@ final class VectorSceneLayers {
           ['get', 'kind'],
           [
             'literal',
-            ['destination', 'selection'],
+            ['destination'],
           ],
         ],
         enableInteraction: false,

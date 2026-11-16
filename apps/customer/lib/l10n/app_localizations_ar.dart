@@ -502,6 +502,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestSearchResults => 'نتائج البحث';
 
   @override
+  String get rideRequestPhasePlace => 'المكان';
+
+  @override
+  String get rideRequestPhaseVehicle => 'المركبة';
+
+  @override
+  String get rideRequestPhaseConfirm => 'التأكيد';
+
+  @override
+  String get rideRequestPhasePickup => 'الانطلاق';
+
+  @override
+  String get rideRequestSelectedPlace => 'المكان المحدد';
+
+  @override
+  String get rideRequestConfirmMapPoint => 'اعتمد هذه النقطة على الخريطة';
+
+  @override
+  String get rideRequestAddDriverNote => 'أضف وصفًا للسائق';
+
+  @override
+  String get rideRequestDriverNoteHint => 'مثلاً: بجانب المدخل الرئيسي';
+
+  @override
+  String get rideRequestConfirmPickup => 'اعتماد نقطة الانطلاق';
+
+  @override
+  String get rideRequestConfirmDestination => 'اعتماد الوجهة';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override
@@ -1777,4 +1807,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get mapsNativeUnavailable =>
       'الخريطة المتجهة متاحة على Android وiOS والويب.';
+
+  @override
+  String get mapsMoveToSelect => 'حرّك الخريطة لتحديد المكان';
 }
