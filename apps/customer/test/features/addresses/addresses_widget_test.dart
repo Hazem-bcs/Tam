@@ -106,6 +106,26 @@ void main() {
     },
   );
 
+  testWidgets('selected address icon keeps the same size and no checkmark', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    final home = find.byKey(const Key('address-icon-home'));
+    final work = find.byKey(const Key('address-icon-work'));
+    await tester.ensureVisible(work);
+    final beforeHome = tester.getSize(home);
+    final beforeWork = tester.getSize(work);
+    expect(beforeHome, beforeWork);
+    await tester.tap(work);
+    await tester.pumpAndSettle();
+    expect(tester.getSize(home), beforeHome);
+    expect(tester.getSize(work), beforeWork);
+    expect(find.byIcon(Icons.check_circle_rounded), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
   testWidgets('visual empty account and location search states', (
     tester,
   ) async {

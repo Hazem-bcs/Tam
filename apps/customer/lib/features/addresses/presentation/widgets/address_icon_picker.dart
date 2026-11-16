@@ -45,14 +45,13 @@ class AddressIconPicker extends StatelessWidget {
                 for (final icon in AddressIcon.values)
                   SizedBox(
                     width: width,
+                    height: scaling > 21 ? 160 : 116,
                     child: Semantics(
                       selected: selected == icon,
                       button: true,
                       label: addressIconLabel(t, icon),
                       child: Material(
-                        color: selected == icon
-                            ? colors.primaryContainer
-                            : colors.surfaceContainerLowest,
+                        color: colors.surfaceContainerLowest,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppRadii.lg),
                           side: BorderSide(
@@ -70,10 +69,11 @@ class AddressIconPicker extends StatelessWidget {
                           onTap: enabled ? () => onSelected(icon) : null,
                           child: Padding(
                             padding: const EdgeInsetsDirectional.symmetric(
-                              vertical: AppSpacing.md,
+                              vertical: AppSpacing.sm,
                               horizontal: AppSpacing.xs,
                             ),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 AddressVisualIcon(category: icon, size: 46),
@@ -82,17 +82,9 @@ class AddressIconPicker extends StatelessWidget {
                                   addressIconLabel(t, icon),
                                   textAlign: TextAlign.center,
                                   style: typ.labelMedium?.copyWith(
-                                    fontWeight: selected == icon
-                                        ? FontWeight.w800
-                                        : FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                if (selected == icon)
-                                  Icon(
-                                    Icons.check_circle_rounded,
-                                    size: 17,
-                                    color: colors.primary,
-                                  ),
                               ],
                             ),
                           ),
