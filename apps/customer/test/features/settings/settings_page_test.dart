@@ -271,6 +271,103 @@ void main() {
     expect(navigation.home + navigation.trips, 0);
   });
 
+  testWidgets('notification switch saves instantly without a Save button', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    final repository = MockSettingsRepository();
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: repository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      (await repository.loadPreferences()).accountNotificationsEnabled,
+      true,
+    );
+    await tester.tap(find.byKey(const Key('settings-notifications-switch')));
+    await tester.pumpAndSettle();
+
+    expect(
+      (await repository.loadPreferences()).accountNotificationsEnabled,
+      false,
+    );
+    expect(find.text('حفظ تفضيل الإشعارات'), findsNothing);
+    final cubit = tester
+        .element(find.byType(SettingsPage))
+        .read<SettingsCubit>();
+    expect(cubit.state.notificationsDirty, false);
+    expect(cubit.state.hasUnsavedChanges, false);
+  });
+
+  testWidgets('failed immediate save rolls switch back and informs the user', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    final repository = MockSettingsRepository()..failNextPreferencesSave = true;
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: repository,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('settings-notifications-switch')));
+    await tester.pumpAndSettle();
+
+    expect(
+      (await repository.loadPreferences()).accountNotificationsEnabled,
+      true,
+    );
+    final switchWidget = tester.widget<SwitchListTile>(
+      find.byKey(const Key('settings-notifications-switch')),
+    );
+    expect(switchWidget.value, true);
+    expect(find.textContaining('تعذر حفظ التغييرات'), findsOneWidget);
+    final cubit = tester
+        .element(find.byType(SettingsPage))
+        .read<SettingsCubit>();
+    expect(cubit.state.notificationsDirty, false);
+
+    await tester.tap(find.byKey(const Key('settings-notifications-switch')));
+    await tester.pumpAndSettle();
+    expect(
+      (await repository.loadPreferences()).accountNotificationsEnabled,
+      false,
+    );
+  });
+
+  testWidgets('version information opens a readable disclosure sheet', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const Key('settings-content')),
+      const Offset(0, -1450),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('settings-version-disclosure')));
+    await tester.pumpAndSettle();
+    expect(find.text('عن هذه النسخة'), findsWidgets);
+    expect(find.textContaining('محاكاة للتطوير'), findsOneWidget);
+  });
+
   testWidgets('logout uses provided callback only after confirmation', (
     tester,
   ) async {
@@ -291,7 +388,7 @@ void main() {
       const Offset(0, -750),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.logout_outlined));
+    await tester.tap(find.byKey(const Key('settings-logout-action')));
     await tester.pumpAndSettle();
     expect(calls, 0);
     await tester.tap(find.text('تسجيل الخروج').last);
@@ -447,6 +544,61 @@ void main() {
     await expectLater(
       find.byType(SettingsPage),
       matchesGoldenFile('goldens/settings_en_800.png'),
+    );
+  });
+
+  testWidgets('version sheet remains readable at 320dp with 2x text', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(320, 750));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+        textScale: 2,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('settings-version-disclosure')),
+      350,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('settings-version-disclosure')));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.textContaining('محاكاة للتطوير'), findsOneWidget);
+  });
+
+  testWidgets('visual Arabic version information sheet', (tester) async {
+    if (!const bool.fromEnvironment('CAPTURE_SETTINGS_GOLDENS')) return;
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: FakeNavigation(),
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.byKey(const Key('settings-content')),
+      const Offset(0, -1400),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('settings-version-disclosure')));
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Overlay).first,
+      matchesGoldenFile('goldens/settings_ar_version_sheet.png'),
     );
   });
 

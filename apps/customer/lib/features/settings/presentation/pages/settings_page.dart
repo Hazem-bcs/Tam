@@ -6,6 +6,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_actions.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_language_sheet.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
@@ -93,6 +94,17 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  Future<void> _updateNotifications(bool enabled) async {
+    final changed = await context
+        .read<SettingsCubit>()
+        .updateNotificationsImmediately(enabled);
+    if (!changed && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).settingsSaveError)),
+      );
+    }
+  }
+
   Future<void> _pickLanguage() async {
     await showModalBottomSheet<void>(
       context: context,
@@ -162,7 +174,7 @@ class _SettingsPageState extends State<SettingsPage> {
         if (state.successAction == 'name') {
           _name.text = state.draftName;
         }
-        if (state.successAction != null) {
+        if (state.successAction == 'name') {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(t.settingsSaved)));
@@ -258,8 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsPreferencesSection(
           state: state,
           languageCode: widget.locale.value.languageCode,
-          onNotificationsChanged: cubit.notificationsChanged,
-          onSave: cubit.savePreferences,
+          onNotificationsChanged: _updateNotifications,
           onLanguageTap: _pickLanguage,
         ),
         const SizedBox(height: AppSpacing.xl),
@@ -274,12 +285,10 @@ class _SettingsPageState extends State<SettingsPage> {
               _navigate(widget.navigation.openAccountDeletion),
         ),
         const SizedBox(height: AppSpacing.xl),
-        TamButton.secondary(
-          label: t.settingsLogout,
-          icon: Icons.logout_outlined,
-          loadingLabel: t.settingsLoggingOut,
-          isLoading: _loggingOut,
-          onPressed: state.isBusy ? null : _logout,
+        SettingsBottomActions(
+          busy: state.isBusy,
+          loggingOut: _loggingOut,
+          onLogout: _logout,
         ),
         const SizedBox(height: AppSpacing.lg),
       ],

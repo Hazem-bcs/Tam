@@ -24,7 +24,6 @@ class SettingsAccountLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -82,32 +81,6 @@ class SettingsAccountLinks extends StatelessWidget {
               onTap: enabled ? onDeleteAccount : null,
             ),
           ],
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        Material(
-          color: colors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(AppRadii.lg),
-          child: ExpansionTile(
-            key: const Key('settings-version-disclosure'),
-            shape: const Border(),
-            collapsedShape: const Border(),
-            leading: const Icon(Icons.info_outline_rounded),
-            title: Text(t.settingsDevelopmentDisclosureTitle),
-            childrenPadding: const EdgeInsetsDirectional.fromSTEB(
-              AppSpacing.lg,
-              0,
-              AppSpacing.lg,
-              AppSpacing.lg,
-            ),
-            children: [
-              Text(
-                t.settingsMockNotice,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
-              ),
-            ],
-          ),
         ),
       ],
     );

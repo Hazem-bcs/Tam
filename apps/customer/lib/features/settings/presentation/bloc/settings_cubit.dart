@@ -105,6 +105,31 @@ final class SettingsCubit extends Cubit<SettingsState> {
     );
   }
 
+  /// A single-tap preference change: optimistic UI followed by immediate save.
+  ///
+  /// A failed save restores the value from the repository, so the switch never
+  /// implies that an unsaved change succeeded. The explicit savePreferences
+  /// method remains available to existing non-UI callers.
+  Future<bool> updateNotificationsImmediately(bool enabled) async {
+    if (isClosed || !state.isReady || state.isBusy) return false;
+    if (enabled == state.preferences!.accountNotificationsEnabled) return true;
+
+    notificationsChanged(enabled);
+    final saved = await savePreferences();
+    if (!saved && !isClosed && state.isReady && !state.isBusy) {
+      emit(
+        state.copyWith(
+          draftNotificationsEnabled:
+              state.preferences!.accountNotificationsEnabled,
+          error: null,
+          errorTarget: null,
+          successAction: null,
+        ),
+      );
+    }
+    return saved;
+  }
+
   Future<bool> saveName() async {
     if (!state.isReady || state.isBusy || !state.nameDirty) return false;
     if (!SettingsNameRules.isValid(state.draftName)) {
