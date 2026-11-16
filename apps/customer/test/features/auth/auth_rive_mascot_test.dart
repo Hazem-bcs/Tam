@@ -80,6 +80,12 @@ void main() {
     // Requires the V4 export: a missing static-mode input is an asset mismatch.
     expect(model.boolean('reduceMotion')!.value, isTrue);
     final body = controller.artboard.component('Body pose hinge')!;
+    final leftWrist = controller.artboard.component(
+      'Left Wrist follow-through',
+    )!;
+    final rightWrist = controller.artboard.component(
+      'Right Wrist follow-through',
+    )!;
     final idleY = body.y;
 
     await load(
@@ -87,11 +93,13 @@ void main() {
       const AuthRiveMascot(size: 250, hasError: true, reduceMotion: true),
     );
     final sadY = body.y;
+    final sadWrists = [leftWrist.rotation, rightWrist.rotation];
     expect(sadY, isNot(closeTo(idleY, 0.001)));
     expect(controller.active, isFalse);
     expect(controller.isTickerActive, isFalse);
     await tester.pump(const Duration(seconds: 2));
     expect(body.y, sadY);
+    expect([leftWrist.rotation, rightWrist.rotation], sadWrists);
 
     await load(
       tester,
@@ -119,6 +127,8 @@ void main() {
     expect(controller.isTickerActive, isFalse);
     expect(tester.binding.transientCallbackCount, 0);
     body.dispose();
+    leftWrist.dispose();
+    rightWrist.dispose();
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
@@ -173,5 +183,74 @@ void main() {
     });
     await tester.pump();
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('motion preference toggles keep the rig and pending gaze', (
+    tester,
+  ) async {
+    final controller = await load(
+      tester,
+      const AuthRiveMascot(
+        size: 250,
+        inputFocused: true,
+        gazeProgress: 0.8,
+        reduceMotion: true,
+      ),
+    );
+    final machine = controller.stateMachine;
+    final model = machine.boundRuntimeViewModelInstance!;
+    final playing = await load(
+      tester,
+      const AuthRiveMascot(size: 250, inputFocused: true, gazeProgress: 0.8),
+    );
+    // Resuming the same rig avoids reloading its initial Welcome state.
+    expect(playing, same(controller));
+    expect(playing.stateMachine, same(machine));
+    expect(controller.isTickerActive, isTrue);
+    expect(model.number('gazeX')!.value, closeTo(5.4, 0.001));
+
+    await load(
+      tester,
+      const AuthRiveMascot(size: 250, inputFocused: true, gazeProgress: 0.1),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+    await load(
+      tester,
+      const AuthRiveMascot(size: 250, inputFocused: true, gazeProgress: 0.1),
+      visible: false,
+    );
+    expect(model.number('gazeX')!.value, closeTo(-7.2, 0.001));
+    for (final reduced in [true, false]) {
+      await load(
+        tester,
+        AuthRiveMascot(
+          size: 250,
+          inputFocused: true,
+          gazeProgress: 1,
+          reduceMotion: reduced,
+        ),
+        visible: false,
+      );
+      expect(controller.active, isFalse);
+      expect(controller.isTickerActive, isFalse);
+      expect(model.number('gazeX')!.value, 9);
+      expect(tester.binding.transientCallbackCount, 0);
+    }
+    final resumed = await load(
+      tester,
+      const AuthRiveMascot(size: 250, inputFocused: true, gazeProgress: 1),
+    );
+    expect(resumed.stateMachine, same(machine));
+    expect(controller.isTickerActive, isTrue);
+    expect(model.number('gazeX')!.value, 9);
+    await load(tester, const AuthRiveMascot(size: 250, reduceMotion: true));
+    await load(tester, const AuthRiveMascot(size: 250));
+    await tester.pump(const Duration(milliseconds: 500));
+    final shoulder = controller.artboard.component('Right Shoulder control')!;
+    // V4 Idle stays gently down (+.15..35 rad); Welcome's wave is negative
+    // around this point. Static -> animated must return directly to Idle.
+    expect(shoulder.rotation, inInclusiveRange(0.15, 0.35));
+    shoulder.dispose();
+    await tester.pumpWidget(const SizedBox.shrink());
   });
 }
