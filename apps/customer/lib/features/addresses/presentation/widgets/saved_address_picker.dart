@@ -44,9 +44,7 @@ class SavedAddressPicker extends StatelessWidget {
           children: [
             if (state.status == AddressesStatus.loading)
               Center(
-                child: TamLoadingIndicator(
-                  semanticLabel: t.addressesLoading,
-                ),
+                child: TamLoadingIndicator(semanticLabel: t.addressesLoading),
               ),
             if (state.failure != null) ...[
               Text(addressFailureMessage(t, state.failure)),
@@ -58,17 +56,15 @@ class SavedAddressPicker extends StatelessWidget {
             if (state.status == AddressesStatus.ready && items.isEmpty)
               Text(compact ? t.addressesEmpty : t.addressesEmptyBody),
             if (compact)
-              SavedAddressShortcuts(
-                items: items,
-                onSelected: onSelected,
-              )
+              SavedAddressShortcuts(items: items, onSelected: onSelected)
             else ...[
               for (final item in items)
                 ListTile(
                   key: Key('saved-address-${item.id}'),
                   selected: item.id == preferredId,
-                  selectedTileColor:
-                      Theme.of(context).colorScheme.primaryContainer,
+                  selectedTileColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   leading: AddressVisualIcon(
                     category: item.input.icon,
                     size: 30,
