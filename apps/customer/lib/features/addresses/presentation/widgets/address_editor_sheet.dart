@@ -26,16 +26,20 @@ class AddressEditorSheet extends StatefulWidget {
 
 class _AddressEditorSheetState extends State<AddressEditorSheet> {
   bool _collapsed = false;
+  double _dragDistance = 0;
 
   void _toggle() => setState(() => _collapsed = !_collapsed);
 
   void _dragEnded(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
-    if (velocity > 100 && !_collapsed) {
+    final collapse = _dragDistance > 40 || velocity > 100;
+    final expand = _dragDistance < -40 || velocity < -100;
+    if (collapse && !_collapsed) {
       setState(() => _collapsed = true);
-    } else if (velocity < -100 && _collapsed) {
+    } else if (expand && _collapsed) {
       setState(() => _collapsed = false);
     }
+    _dragDistance = 0;
   }
 
   @override
@@ -80,6 +84,9 @@ class _AddressEditorSheetState extends State<AddressEditorSheet> {
                     key: const Key('address-sheet-toggle'),
                     behavior: HitTestBehavior.opaque,
                     onTap: _toggle,
+                    onVerticalDragStart: (_) => _dragDistance = 0,
+                    onVerticalDragUpdate: (details) =>
+                        _dragDistance += details.primaryDelta ?? 0,
                     onVerticalDragEnd: _dragEnded,
                     child: Semantics(
                       button: true,
