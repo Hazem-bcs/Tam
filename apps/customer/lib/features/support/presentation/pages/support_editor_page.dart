@@ -4,12 +4,14 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
-import 'package:tam_customer/shared/widgets/tam_text_field.dart';
+
 import '../bloc/support_editor_cubit.dart';
+import '../widgets/support_editor_category_picker.dart';
 import '../widgets/support_editor_sections.dart';
 import '../widgets/support_feedback.dart';
 
-/// A single, focused editor surface; domain validation and submission stay in Cubit.
+/// Support requests keep their existing validation and submission contract.
+/// This screen owns only the visual presentation of that contract.
 class SupportEditorPage extends StatefulWidget {
   const SupportEditorPage({
     super.key,
@@ -52,13 +54,13 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
       },
       builder: (context, state) {
         final cubit = context.read<SupportEditorCubit>();
+        final options = state.options;
         final editable =
             !state.loading &&
             !state.sending &&
             !state.locked &&
             !state.ended &&
             state.accepted == null;
-        final options = state.options;
 
         return Scaffold(
           backgroundColor: colors.surface,
@@ -67,11 +69,19 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
             surfaceTintColor: colors.surface,
             scrolledUnderElevation: 0,
             centerTitle: true,
-            title: Text(t.supportNewTicket),
-            leading: BackButton(onPressed: widget.onBack),
+            title: Text(
+              t.supportNewTicket,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colors.onSurface.withValues(alpha: 0.83),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            leading: BackButton(
+              color: colors.primary,
+              onPressed: widget.onBack,
+            ),
           ),
           body: SafeArea(
-            bottom: true,
             child: Align(
               alignment: Alignment.topCenter,
               child: ConstrainedBox(
@@ -93,15 +103,14 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
                             title: t.supportEditorHeadline,
                             subtitle: t.supportEditorSubtitle,
                           ),
-                          const SizedBox(height: AppSpacing.xl),
+                          const SizedBox(height: AppSpacing.lg),
                           SupportEditorNotice(text: t.supportSimulationNotice),
                           const SizedBox(height: AppSpacing.xl),
-                          if (state.ended) ...[
+                          if (state.ended)
                             Text(
                               t.supportSessionEnded,
                               style: theme.textTheme.bodyMedium,
                             ),
-                          ],
                           if (state.loading)
                             TamLoadingIndicator(
                               semanticLabel: t.supportLoading,
@@ -126,113 +135,54 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
                             ],
                             SupportEditorFieldHeading(
                               label: t.supportEditorCategory,
-                              icon: Icons.chat_bubble_outline_rounded,
                             ),
-                            const SizedBox(height: AppSpacing.md),
-                            DropdownButtonFormField<String>(
-                              key: const Key('support-category'),
-                              initialValue: state.categoryId,
-                              isExpanded: true,
-                              icon: const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                              ),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: colors.surfaceContainerLowest,
-                              ),
-                              items: options.categories
-                                  .map(
-                                    (category) => DropdownMenuItem<String>(
-                                      value: category.id,
-                                      child: Text(
-                                        t.localeName.startsWith('ar')
-                                            ? category.nameAr
-                                            : category.nameEn,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: editable
-                                  ? (value) {
-                                      if (value != null) {
-                                        cubit.categoryChanged(value);
-                                      }
-                                    }
-                                  : null,
+                            const SizedBox(height: AppSpacing.sm),
+                            SupportEditorCategoryPicker(
+                              title: t.supportEditorCategory,
+                              categories: options.categories,
+                              selectedId: state.categoryId,
+                              enabled: editable,
+                              languageCode: t.localeName,
+                              onSelected: cubit.categoryChanged,
                             ),
                             const SizedBox(height: AppSpacing.xl),
-                            SupportEditorFieldHeading(
-                              label: t.supportBody,
-                              icon: Icons.edit_outlined,
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            TamTextField(
-                              key: const Key('support-body'),
-                              labelText: t.supportBody,
-                              hintText: t.supportEditorPlaceholder,
+                            SupportEditorFieldHeading(label: t.supportBody),
+                            const SizedBox(height: AppSpacing.sm),
+                            SupportEditorDetailsField(
                               controller: _body,
+                              hint: t.supportEditorPlaceholder,
                               enabled: editable,
-                              maxLines: 6,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.newline,
+                              length: state.body.trim().runes.length,
+                              maxLength: cubit.policy.maxBodyCodePoints,
                               onChanged: cubit.bodyChanged,
                             ),
                             const SizedBox(height: AppSpacing.sm),
-                            Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: AppSpacing.lg,
-                              runSpacing: AppSpacing.xs,
-                              children: [
-                                Text(
-                                  t.supportBodyHint,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: colors.onSurfaceVariant,
-                                  ),
-                                ),
-                                Directionality(
-                                  textDirection: TextDirection.ltr,
-                                  child: Text(
-                                    '${state.body.trim().runes.length} / ${cubit.policy.maxBodyCodePoints}',
-                                    style: theme.textTheme.labelMedium
-                                        ?.copyWith(
-                                          color: colors.onSurfaceVariant,
-                                        ),
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              t.supportBodyHint,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colors.onSurfaceVariant,
+                              ),
                             ),
                           ],
                         ],
                       ),
                     ),
-
                     if (options != null && !state.ended && !state.locked)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: colors.surface,
-                          border: Border(
-                            top: BorderSide(color: colors.outlineVariant),
-                          ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          AppSpacing.xl,
+                          AppSpacing.sm,
+                          AppSpacing.xl,
+                          AppSpacing.lg,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            AppSpacing.xl,
-                            AppSpacing.md,
-                            AppSpacing.xl,
-                            AppSpacing.md,
-                          ),
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 592),
-                            child: TamButton.primary(
-                              key: const Key('support-submit'),
-                              label: t.supportSubmit,
-                              icon: Icons.send_rounded,
-                              loadingLabel: t.supportSending,
-                              isLoading: state.sending,
-                              onPressed: cubit.canSubmit ? cubit.submit : null,
-                            ),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 592),
+                          child: TamButton.primary(
+                            key: const Key('support-submit'),
+                            label: t.supportSubmit,
+                            loadingLabel: t.supportSending,
+                            isLoading: state.sending,
+                            onPressed: cubit.canSubmit ? cubit.submit : null,
                           ),
                         ),
                       ),
