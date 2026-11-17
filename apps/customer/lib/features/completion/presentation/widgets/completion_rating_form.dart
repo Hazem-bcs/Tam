@@ -5,6 +5,8 @@ import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 import '../../domain/completion_repository.dart';
 import '../bloc/completion_state.dart';
+import 'completion_feedback_options.dart';
+import 'completion_rating_stars.dart';
 import 'completion_surface.dart';
 
 class CompletionRatingForm extends StatefulWidget {
@@ -92,38 +94,14 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
             ),
           ],
           const SizedBox(height: AppSpacing.lg),
-          Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              for (var value = 1; value <= 5; value++)
-                Semantics(
-                  label: l.completionStars(value),
-                  selected: selected == value,
-                  child: IconButton(
-                    key: ValueKey('completion-stars-$value'),
-                    tooltip: l.completionStars(value),
-                    onPressed: editable
-                        ? () => setState(() {
-                            _stars = value;
-                            _tags.clear();
-                          })
-                        : null,
-                    icon: Icon(
-                      value <= selected
-                          ? Icons.star_rounded
-                          : Icons.star_outline_rounded,
-                      color: value <= selected
-                          ? colors.primary
-                          : colors.outline,
-                      size: 32,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: AppDimensions.minTapTarget,
-                      minHeight: AppDimensions.minTapTarget,
-                    ),
-                  ),
-                ),
-            ],
+          CompletionRatingStars(
+            value: selected,
+            onChanged: editable
+                ? (value) => setState(() {
+                    _stars = value;
+                    _tags.clear();
+                  })
+                : null,
           ),
           if (rating != null) ...[
             const SizedBox(height: AppSpacing.md),
@@ -143,52 +121,42 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
           ] else ...[
-            if (selected > 0) ...[
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                l.completionQuickFeedbackHint,
-                style: text.labelMedium?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.xs,
-                children: [
-                  for (var index = 0; index < suggestions.length; index++)
-                    FilterChip(
-                      key: ValueKey('completion-tag-$index'),
-                      label: Text(suggestions[index]),
-                      selected: _tags.contains(index),
-                      onSelected: editable
-                          ? (value) => setState(() {
-                              if (value) {
-                                _tags.add(index);
-                              } else {
-                                _tags.remove(index);
-                              }
-                            })
-                          : null,
-                      showCheckmark: true,
-                      selectedColor: colors.primaryContainer,
-                      checkmarkColor: colors.primary,
-                      side: BorderSide(
-                        color: _tags.contains(index)
-                            ? colors.primary
-                            : colors.outlineVariant,
-                      ),
-                      labelStyle: text.labelMedium?.copyWith(
-                        color: _tags.contains(index)
-                            ? colors.onPrimaryContainer
-                            : colors.onSurface,
-                      ),
+            AnimatedSize(
+              duration: MediaQuery.of(context).disableAnimations
+                  ? Duration.zero
+                  : AppMotion.medium,
+              curve: AppMotion.easeOut,
+              alignment: Alignment.topCenter,
+              child: selected == 0
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: AppSpacing.lg),
+                        Text(
+                          l.completionQuickFeedbackHint,
+                          style: text.labelMedium?.copyWith(
+                            color: colors.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        CompletionFeedbackOptions(
+                          labels: suggestions,
+                          positive: selected >= 4,
+                          selected: _tags,
+                          enabled: editable,
+                          onToggle: (index) => setState(() {
+                            if (_tags.contains(index)) {
+                              _tags.remove(index);
+                            } else {
+                              _tags.add(index);
+                            }
+                          }),
+                        ),
+                      ],
                     ),
-                ],
-              ),
-            ],
+            ),
             const SizedBox(height: AppSpacing.lg),
             TamTextField(
               key: const ValueKey('completion-comment'),
