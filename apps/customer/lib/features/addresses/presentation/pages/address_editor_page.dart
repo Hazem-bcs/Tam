@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/maps/maps_entry.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
@@ -78,6 +79,12 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
   }
 
   Future<void> _chooseOnMap() async {
+    // Keep the existing place-search sheet functional in map-free tests and
+    // configurations; the production app injects MapsScope at its root.
+    if (MapsScope.maybeOf(context) == null) {
+      await _chooseLocation();
+      return;
+    }
     final cubit = context.read<AddressEditorCubit>();
     final selected = await showMapLocationPicker(
       context,
