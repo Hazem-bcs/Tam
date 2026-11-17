@@ -33,8 +33,10 @@ class NativeVectorMap extends StatefulWidget {
     this.locating = false,
     this.focus,
     this.markerImageLoader = VectorMarkerImages.load,
+    this.compactPreview = false,
   });
   final String style;
+  final bool compactPreview;
   final VectorMapScene scene;
   final GeoPoint initialCenter;
   final ValueChanged<GeoPoint>? onSelected;
@@ -292,7 +294,12 @@ class _NativeVectorMapState extends State<NativeVectorMap>
 
   Future<void> _fit(int epoch) async {
     if (!_current(epoch) || _controller == null) return;
-    final update = VectorCamera.fit(widget.scene, _size, _inset);
+    final update = VectorCamera.fit(
+      widget.scene,
+      _size,
+      _inset,
+      compactPreview: widget.compactPreview,
+    );
     if (update != null) await _controller!.moveCamera(update);
   }
 
@@ -319,7 +326,12 @@ class _NativeVectorMapState extends State<NativeVectorMap>
       return;
     try {
       final bottom = _inset.clamp(0.0, math.max(0.0, _size.height - 160));
-      final padding = EdgeInsets.fromLTRB(0, 80, 0, bottom.toDouble());
+      final padding = EdgeInsets.fromLTRB(
+        0,
+        widget.compactPreview ? 8 : 80,
+        0,
+        bottom.toDouble(),
+      );
       if (padding == _lastPadding) return;
       _lastPadding = padding;
       _appliedInset.value = bottom.toDouble();
@@ -451,6 +463,10 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               myLocationEnabled: false,
               trackCameraPosition: true,
               tiltGesturesEnabled: false,
+              scrollGesturesEnabled: !widget.compactPreview,
+              zoomGesturesEnabled: !widget.compactPreview,
+              rotateGesturesEnabled: !widget.compactPreview,
+              doubleClickZoomEnabled: !widget.compactPreview,
               minMaxZoomPreference: const MinMaxZoomPreference(3, 19),
               compassEnabled: false,
               attributionButtonColor: Theme.of(context).colorScheme.primary,
