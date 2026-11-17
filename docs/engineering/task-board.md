@@ -310,3 +310,10 @@ TAM-SHARED-IDLE-V5: READY → IMPLEMENTING، root، أساس التطبيقc6f4b
 ومصدر Rive62f452e، worktree source idle-v5 مستقل. نطاق Idle16ث فقط؛
 الحركات الحالية التي رضي عنها المستخدم محفوظة.
 [البطاقة](tasks/TAM-SHARED-IDLE-V5.md).
+
+
+TAM-SHARED-IDLE-V5: INTEGRATED محليًا، root، تطبيق30730df ومصدر5177b45.
+دورة Idle16ث بطبقة أساسية مستمرة، دون تبديل رسم الكف أو تغيير الحركات
+المعتمدة. اختبار كامل797نجاحًا و30إخفاقًا قديمًا؛ تحليل42infoسابقة؛461/0تنسيق.
+المصدر في worktree idle-v5؛ لا push أو دمج main.
+[التسليم ومعاينة30fps](deliveries/TAM-SHARED-IDLE-V5/REPORT.ar.md).
