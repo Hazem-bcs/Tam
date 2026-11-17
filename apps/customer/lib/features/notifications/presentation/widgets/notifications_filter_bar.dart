@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 import '../../domain/customer_notification.dart';
@@ -20,8 +21,8 @@ extension NotificationsFeedFilterX on NotificationsFeedFilter {
   };
 }
 
-/// Edge-to-edge horizontal filters. The next partially visible chip is the
-/// scroll affordance; spacing exists between chips, never around the strip.
+/// Edge-to-edge horizontal filters. Start/end gutters are scrollable list
+/// items, not fixed padding; the next partial chip remains a scroll affordance.
 class NotificationsFilterBar extends StatelessWidget {
   const NotificationsFilterBar({
     super.key,
@@ -78,12 +79,25 @@ class NotificationsFilterBar extends StatelessWidget {
       child: ListView.separated(
         key: const Key('notifications-filter-list'),
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 12),
         physics: const BouncingScrollPhysics(),
-        itemCount: entries.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 6),
+        itemCount: entries.length + 2,
+        separatorBuilder: (_, index) {
+          if (index == 0 || index == entries.length) {
+            return const SizedBox.shrink();
+          }
+          return const SizedBox(width: 6);
+        },
         itemBuilder: (context, index) {
-          final entry = entries[index];
+          if (index == 0) {
+            return const SizedBox(
+              key: Key('notifications-filter-start-space'),
+              width: AppSpacing.lg,
+            );
+          }
+          if (index == entries.length + 1) {
+            return const SizedBox(width: AppSpacing.md);
+          }
+          final entry = entries[index - 1];
           final isSelected = selected == entry.$1;
           return Semantics(
             button: true,

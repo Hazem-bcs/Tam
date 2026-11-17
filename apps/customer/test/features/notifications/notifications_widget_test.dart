@@ -321,6 +321,13 @@ void main() {
     final stripRect = tester.getRect(filterStrip);
     expect(stripRect.left, 0);
     expect(stripRect.right, 390);
+    final firstFilter = find.byKey(const Key('notifications-filter-all'));
+    final initialRight = tester.getRect(firstFilter).right;
+    expect(stripRect.right - initialRight, closeTo(16, 0.1));
+    // The start gutter belongs to the scroll content, not the viewport.
+    await tester.drag(filterStrip, const Offset(40, 0));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(firstFilter).right, greaterThan(initialRight + 20));
 
     await tester.tap(find.byKey(const Key('notifications-back')));
     await tester.pumpAndSettle();
@@ -340,6 +347,14 @@ void main() {
       await repository.dispose();
     });
     expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
+    // The same start-of-list gap follows LTR direction automatically.
+    final stripRect = tester.getRect(
+      find.byKey(const Key('notifications-filter-list')),
+    );
+    final firstFilterRect = tester.getRect(
+      find.byKey(const Key('notifications-filter-all')),
+    );
+    expect(firstFilterRect.left - stripRect.left, closeTo(16, 0.1));
   });
 
   testWidgets('category tabs filter by kind without changing read state', (
