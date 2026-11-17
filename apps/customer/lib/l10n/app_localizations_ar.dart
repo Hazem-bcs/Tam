@@ -1674,6 +1674,23 @@ class AppLocalizationsAr extends AppLocalizations {
       'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.';
 
   @override
+  String get supportEditorHeadline => 'كيف نقدر نساعدك؟';
+
+  @override
+  String get supportEditorSubtitle =>
+      'صف لنا استفسارك أو المشكلة التي تواجهها.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'اكتب التفاصيل التي تساعدنا على فهم طلبك...';
+
+  @override
+  String get supportEditorCategory => 'نوع الاستفسار';
+
+  @override
+  String get supportEditorTripContext => 'بخصوص رحلة سابقة';
+
+  @override
   String get accountManagementChangePhone => 'تغيير رقم الهاتف';
 
   @override

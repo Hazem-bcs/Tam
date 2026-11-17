@@ -741,6 +741,11 @@
     }
   },
   "supportSimulationNotice": "Support operations in this version are simulated and are not sent to a real support team.",
+  "supportEditorHeadline": "How can we help?",
+  "supportEditorSubtitle": "Tell us about your question or the issue you are facing.",
+  "supportEditorPlaceholder": "Describe your question or issue in detail...",
+  "supportEditorCategory": "Inquiry type",
+  "supportEditorTripContext": "Regarding a previous trip",
   "accountManagementChangePhone": "Change phone number",
   "accountManagementDeleteAccount": "Delete account",
   "accountManagementSimulation": "Local simulation; no server account is changed or deleted.",

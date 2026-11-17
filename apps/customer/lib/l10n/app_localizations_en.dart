@@ -1710,6 +1710,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'Support operations in this version are simulated and are not sent to a real support team.';
 
   @override
+  String get supportEditorHeadline => 'How can we help?';
+
+  @override
+  String get supportEditorSubtitle =>
+      'Tell us about your question or the issue you are facing.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'Describe your question or issue in detail...';
+
+  @override
+  String get supportEditorCategory => 'Inquiry type';
+
+  @override
+  String get supportEditorTripContext => 'Regarding a previous trip';
+
+  @override
   String get accountManagementChangePhone => 'Change phone number';
 
   @override
