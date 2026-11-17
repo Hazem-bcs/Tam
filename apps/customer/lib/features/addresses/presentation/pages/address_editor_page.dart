@@ -7,7 +7,6 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
-import '../../domain/saved_address.dart';
 import '../bloc/address_editor_cubit.dart';
 import '../bloc/address_editor_state.dart';
 import '../widgets/address_display.dart';
@@ -236,8 +235,8 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
       builder: (context, bounds) {
         final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
         final mapHeight = keyboardOpen
-            ? (bounds.maxHeight * .25).clamp(64.0, 104.0)
-            : (bounds.maxHeight * .46).clamp(145.0, 340.0);
+            ? (bounds.maxHeight * .18).clamp(24.0, 72.0)
+            : (bounds.maxHeight * .46).clamp(100.0, 340.0);
         return Stack(
           children: [
             PositionedDirectional(
@@ -247,7 +246,9 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
               height: mapHeight,
               child: AddressMapPreview(
                 location: state.location,
-                onChooseLocation: state.locked ? null : _chooseOnMap,
+                onChooseLocation: state.locked
+                    ? null
+                    : () => _chooseOnMap(),
                 onBack: state.busy ? null : _back,
               ),
             ),
