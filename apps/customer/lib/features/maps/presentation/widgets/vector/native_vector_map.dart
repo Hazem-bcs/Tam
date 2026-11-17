@@ -327,8 +327,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         _size.isEmpty ||
         _cameraAnimating ||
         _retainedViewport != null ||
-        (_picking && !force))
+        (_picking && !force)) {
       return;
+    }
     try {
       final bottom = _inset.clamp(0.0, math.max(0.0, _size.height - 160));
       final padding = EdgeInsets.fromLTRB(
@@ -364,8 +365,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     if (!_current(epoch) ||
         !_installed ||
         selected == null ||
-        _selectionGesture)
+        _selectionGesture) {
       return;
+    }
     try {
       final screen = await _controller!.toScreenLocation(_latLng(selected));
       if (_current(epoch) &&
