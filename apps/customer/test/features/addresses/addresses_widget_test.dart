@@ -15,6 +15,54 @@ import 'addresses_test_support.dart';
 void main() {
   setUpAll(loadAddressPreviewFonts);
 
+  testWidgets('tapping saved place selects it; edit only opens via menu', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    String? edited;
+    await pumpAddresses(
+      tester,
+      repository,
+      onEdit: (id) => edited = id,
+    );
+    final tile = find.byKey(const Key('address-select-address-home-001'));
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(edited, isNull);
+    expect(find.byKey(const Key('address-preferred-check')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('address-edit-address-home-001')));
+    await tester.pumpAndSettle();
+    expect(edited, 'address-home-001');
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+  testWidgets('editing a saved place preloads name, icon and map point', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    final cubit = await pumpAddressEditor(
+      tester,
+      repository,
+      id: 'address-home-001',
+    );
+    expect(cubit.state.name, 'المنزل');
+    expect(cubit.state.icon, AddressIcon.home);
+    expect(cubit.state.location?.point.latitude, 33.5);
+    expect(
+      tester.widget<TextField>(
+        find.byKey(const Key('address-name')),
+      ).controller?.text,
+      'المنزل',
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+
   testWidgets(
     'delete requires confirmation and failure keeps the address visible',
     (tester) async {
@@ -183,6 +231,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.getTopLeft(surface).dy, lessThan(collapsed));
     expect(find.byType(AddressMapPreview), findsOneWidget);
+    // The panel cannot be dragged beyond its content height.
+    final expandedTop = tester.getTopLeft(surface).dy;
+    await tester.dragFrom(
+      tester.getTopLeft(surface) + const Offset(195, 16),
+      const Offset(0, -450),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(surface).dy, closeTo(expandedTop, 1));
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });
