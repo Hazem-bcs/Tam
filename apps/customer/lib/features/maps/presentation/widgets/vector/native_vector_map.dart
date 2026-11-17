@@ -1,5 +1,4 @@
 import 'dart:async';
-import '../map_camera_focus.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +8,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
+import '../map_camera_focus.dart';
 import '../map_feedback.dart';
 import '../map_selection_cursor.dart';
 import '../map_selection_hint.dart';
@@ -226,6 +226,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   Future<void> _synchronize() async {
     _syncing = true;
     final epoch = _epoch;
+    final disableAnimations = mounted && MediaQuery.disableAnimationsOf(context);
     try {
       while (_dirty && _current(epoch) && _installed && _foreground) {
         _dirty = false;
@@ -244,7 +245,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               _latLng(widget.focus!.point),
               15,
             );
-            if (MediaQuery.disableAnimationsOf(context)) {
+            if (disableAnimations) {
               await _controller!.moveCamera(update);
             } else {
               await _controller!.animateCamera(
@@ -267,7 +268,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
           _cameraAnimating = true;
           _moving.value = true;
           try {
-            if (MediaQuery.disableAnimationsOf(context)) {
+            if (disableAnimations) {
               await _controller!.moveCamera(update);
             } else {
               await _controller!.animateCamera(
