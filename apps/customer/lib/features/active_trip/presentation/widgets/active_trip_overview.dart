@@ -179,6 +179,7 @@ class ActiveTripOverview extends StatelessWidget {
     );
   }
 
-  void _refresh(BuildContext context) =>
-      context.read<ActiveTripCubit>().refresh();
+  void _refresh(BuildContext context) {
+    context.read<ActiveTripCubit>().refresh();
+  }
 }
