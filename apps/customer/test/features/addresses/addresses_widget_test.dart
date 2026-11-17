@@ -6,6 +6,7 @@ import 'package:tam_customer/features/addresses/domain/saved_address.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/address_editor_page.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/addresses_page.dart';
 import 'package:tam_customer/features/addresses/presentation/widgets/address_location_picker.dart';
+import 'package:tam_customer/features/addresses/presentation/widgets/address_map_preview.dart';
 
 import 'addresses_test_support.dart';
 
@@ -105,6 +106,52 @@ void main() {
       await repository.dispose();
     },
   );
+
+  testWidgets('map preview keeps existing location search as fallback', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    await tester.tap(find.byKey(const Key('address-map-tap')));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddressLocationPicker), findsOneWidget);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+  testWidgets('editor follows the map and one-row address icon layout', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    expect(find.byType(AddressMapPreview), findsOneWidget);
+    expect(find.byKey(const Key('address-editor-sheet')), findsOneWidget);
+    expect(find.byKey(const Key('address-icons-scroll')), findsOneWidget);
+    // On Arabic screens, the map actions follow the reading start (right).
+    expect(
+      tester.getTopLeft(find.byKey(const Key('address-map-back'))).dx,
+      greaterThan(195),
+    );
+    expect(
+      tester.getTopLeft(find.byKey(const Key('address-map-locate'))).dx,
+      greaterThan(195),
+    );
+
+    final home = find.byKey(const Key('address-icon-home'));
+    final work = find.byKey(const Key('address-icon-work'));
+    final study = find.byKey(const Key('address-icon-study'));
+    await tester.ensureVisible(home);
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(home).dy, tester.getTopLeft(work).dy);
+    expect(tester.getTopLeft(work).dy, tester.getTopLeft(study).dy);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
 
   testWidgets('selected address icon keeps the same size and no checkmark', (
     tester,

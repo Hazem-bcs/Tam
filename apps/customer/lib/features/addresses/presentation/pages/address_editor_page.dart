@@ -2,18 +2,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/maps/maps_entry.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
-import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 
-import '../../domain/saved_address.dart';
 import '../bloc/address_editor_cubit.dart';
 import '../bloc/address_editor_state.dart';
 import '../widgets/address_display.dart';
-import '../widgets/address_icon_picker.dart';
+import '../widgets/address_editor_form.dart';
 import '../widgets/address_location_picker.dart';
-import '../widgets/address_location_summary.dart';
+import '../widgets/address_map_preview.dart';
 
 class AddressEditorPage extends StatefulWidget {
   const AddressEditorPage({super.key, required this.onBack});
@@ -78,6 +78,22 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
     });
   }
 
+  Future<void> _chooseOnMap() async {
+    // Keep the existing place-search sheet functional in map-free tests and
+    // configurations; the production app injects MapsScope at its root.
+    if (MapsScope.maybeOf(context) == null) {
+      await _chooseLocation();
+      return;
+    }
+    final cubit = context.read<AddressEditorCubit>();
+    final selected = await showMapLocationPicker(
+      context,
+      initial: cubit.state.location,
+    );
+    if (!mounted || selected == null) return;
+    cubit.locationSelected(selected);
+  }
+
   Future<void> _chooseLocation() async {
     final cubit = context.read<AddressEditorCubit>();
     unawaited(cubit.search(''));
@@ -126,22 +142,27 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
           if (!didPop) _back();
         },
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              context.read<AddressEditorCubit>().id == null
-                  ? t.addressesAdd
-                  : t.addressesEdit,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            leading: IconButton(
-              icon: const BackButtonIcon(),
-              onPressed: state.busy ? null : _back,
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            ),
-          ),
+          // The ready editor uses its map as the hero and hosts back there.
+          // Loading and failure states still expose an accessible back action.
+          appBar:
+              state.phase == AddressEditorPhase.loading ||
+                  state.phase == AddressEditorPhase.error ||
+                  state.phase == AddressEditorPhase.notFound
+              ? AppBar(
+                  title: Text(
+                    context.read<AddressEditorCubit>().id == null
+                        ? t.addressesAdd
+                        : t.addressesEdit,
+                  ),
+                  leading: IconButton(
+                    icon: const BackButtonIcon(),
+                    onPressed: state.busy ? null : _back,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
+                  ),
+                )
+              : null,
           body: SafeArea(
             child: Align(
               alignment: Alignment.topCenter,
@@ -219,61 +240,74 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
         ),
       );
     }
-    return SingleChildScrollView(
-      key: const Key('address-editor-scroll'),
-      padding: AppSpacing.pagePadding,
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AddressLocationSummary(
-            locationLabel: state.location?.label,
-            onTap: state.locked ? null : _chooseLocation,
-          ),
-          if (state.validationAttempted && state.location == null)
-            Text(
-              t.addressesLocationError,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+    return LayoutBuilder(
+      builder: (context, bounds) {
+        final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
+        final mapHeight = keyboardOpen
+            ? (bounds.maxHeight * .18).clamp(24.0, 72.0)
+            : (bounds.maxHeight * .52).clamp(100.0, 400.0);
+        return Stack(
+          children: [
+            PositionedDirectional(
+              top: 0,
+              start: 0,
+              end: 0,
+              height: mapHeight,
+              child: AddressMapPreview(
+                location: state.location,
+                onChooseLocation: state.locked ? null : () => _chooseOnMap(),
+                onBack: state.busy ? null : _back,
+              ),
             ),
-          const SizedBox(height: AppSpacing.xl),
-          TamTextField(
-            key: const Key('address-name'),
-            labelText: t.addressesName,
-            hintText: t.addressesNameHint,
-            controller: _name,
-            enabled: !state.locked,
-            textInputAction: TextInputAction.done,
-            onChanged: cubit.nameChanged,
-            errorText:
-                state.validationAttempted && !AddressInput.validName(state.name)
-                ? t.addressesNameError(AddressInput.maxNameLength)
-                : null,
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          AddressIconPicker(
-            selected: state.icon,
-            enabled: !state.locked,
-            onSelected: cubit.iconChanged,
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          if (state.retryPending) ...[
-            Text(t.addressesRetryPending),
-            const SizedBox(height: AppSpacing.md),
-          ],
-          if (state.failure != null) ...[
-            Semantics(
-              liveRegion: true,
-              child: Text(
-                addressFailureMessage(t, state.failure),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
+            Positioned.fill(
+              top: mapHeight - AppSpacing.xl,
+              child: Material(
+                key: const Key('address-editor-sheet'),
+                elevation: AppElevation.raised,
+                color: Theme.of(context).colorScheme.surface,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppRadii.sheet),
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    const SizedBox(height: AppSpacing.sm),
+                    Center(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.outlineVariant,
+                          borderRadius: BorderRadius.circular(AppRadii.sm),
+                        ),
+                        child: const SizedBox(width: 36, height: 4),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        key: const Key('address-editor-scroll'),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                          AppSpacing.xl,
+                          AppSpacing.lg,
+                          AppSpacing.xl,
+                          AppSpacing.xl,
+                        ),
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        child: AddressEditorForm(
+                          state: state,
+                          nameController: _name,
+                          onChooseLocation: _chooseLocation,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
           ],
-        ],
-      ),
+        );
+      },
     );
   }
 }
