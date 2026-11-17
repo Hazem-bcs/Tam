@@ -1,0 +1,67 @@
+name: Ahmad UI - Saved Places Cloud Check
+
+# Hosted-only PR validation. No credentials, deployments or laptop runners.
+on:
+  pull_request:
+    branches: [ahmad-ui]
+    paths:
+      - 'apps/customer/lib/features/addresses/**'
+      - 'apps/customer/lib/features/maps/**'
+      - 'apps/customer/test/features/addresses/**'
+      - 'apps/customer/test/features/maps/**'
+      - '.github/workflows/ahmad-address-ux.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: saved-places-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  addresses:
+    name: Saved places / Flutter
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.4'
+          channel: stable
+          cache: true
+      - name: Resolve packages
+        working-directory: apps/customer
+        run: flutter pub get
+      - name: Check Dart formatting
+        working-directory: apps/customer
+        shell: bash
+        run: |
+          set -euo pipefail
+          dart format             lib/features/addresses             lib/features/maps/domain/foreground_location.dart             lib/features/maps/presentation/widgets/vector/native_vector_map.dart             lib/features/maps/presentation/widgets/raster_map_canvas.dart             test/features/addresses             test/features/maps/foreground_location_test.dart
+          git diff --check
+          git diff --exit-code --             lib/features/addresses             lib/features/maps/domain/foreground_location.dart             lib/features/maps/presentation/widgets/vector/native_vector_map.dart             lib/features/maps/presentation/widgets/raster_map_canvas.dart             test/features/addresses             test/features/maps/foreground_location_test.dart
+      - name: Analyze changed surfaces
+        working-directory: apps/customer
+        run: |
+          flutter analyze --no-pub             lib/features/addresses             lib/features/maps/domain/foreground_location.dart             lib/features/maps/presentation/widgets/vector/native_vector_map.dart             lib/features/maps/presentation/widgets/raster_map_canvas.dart             test/features/addresses             test/features/maps/foreground_location_test.dart
+      - name: Run saved-place and foreground-location tests
+        working-directory: apps/customer
+        run: |
+          flutter test --no-pub             test/features/addresses             test/features/maps/foreground_location_test.dart             -r compact
+      - name: Render address UI comparisons
+        working-directory: apps/customer
+        run: |
+          flutter test --no-pub             --dart-define=CAPTURE_ADDRESS_UI=true             --update-goldens             test/features/addresses/addresses_widget_test.dart
+      - name: Upload Flutter-rendered screen previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: saved-addresses-ui-${{ github.run_attempt }}
+          path: apps/customer/test/features/addresses/goldens/*.png
+          if-no-files-found: warn
+          retention-days: 7
