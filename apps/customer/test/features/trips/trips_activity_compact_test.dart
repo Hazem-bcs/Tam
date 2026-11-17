@@ -11,7 +11,7 @@ import 'package:tam_customer/shared/data/mock/seed_trips.dart';
 import 'support/trips_test_support.dart';
 
 void main() {
-  testWidgets('activity service artwork is slightly larger', (tester) async {
+  testWidgets('activity services stay compact and readable', (tester) async {
     tripsViewport(tester, const Size(390, 844));
     final store = MockTripStore(seed: seedMockTrips());
     addTearDown(store.dispose);
@@ -38,9 +38,13 @@ void main() {
       );
       expect(matching, findsOneWidget);
       final image = tester.widget<Image>(matching);
-      expect(image.width, 32);
-      expect(image.height, 32);
+      expect(image.width, 28);
+      expect(image.height, 28);
     }
+    expect(
+      tester.getSize(find.byKey(const Key('trips-services'))).height,
+      lessThanOrEqualTo(64),
+    );
     expect(tester.takeException(), isNull);
   });
 
