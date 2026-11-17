@@ -1886,6 +1886,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get completionFeedbackOptional => 'Optional';
 
   @override
+  String get completionSupportShort => 'Support';
+
+  @override
   String get supportTitle => 'Help and support';
 
   @override

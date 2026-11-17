@@ -65,5 +65,6 @@
   "completionTagCarIssue": "Vehicle issue",
   "completionTagServiceIssue": "Uncomfortable trip",
   "completionQuickFeedbackCritical": "What could we improve?",
-  "completionFeedbackOptional": "Optional"
+  "completionFeedbackOptional": "Optional",
+  "completionSupportShort": "Support"
 }

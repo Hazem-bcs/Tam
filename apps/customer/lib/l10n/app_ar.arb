@@ -808,6 +808,7 @@
   "completionTagServiceIssue": "تجربة غير مريحة",
   "completionQuickFeedbackCritical": "ما الذي يمكن تحسينه؟",
   "completionFeedbackOptional": "اختياري",
+  "completionSupportShort": "الدعم",
   "supportTitle": "المساعدة والدعم",
   "supportIntro": "أنشئ طلب دعم عام أو اختر رحلة لإرسال بلاغ عنها.",
   "supportNewTicket": "طلب دعم جديد",

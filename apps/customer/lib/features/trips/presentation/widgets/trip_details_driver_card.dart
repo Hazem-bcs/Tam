@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
 
 class TripDetailsDriverCard extends StatelessWidget {
@@ -48,13 +49,9 @@ class TripDetailsDriverCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Icon(
-                    Icons.person_outline_rounded,
-                    color: theme.colorScheme.primary,
-                  ),
+                DriverAvatar(
+                  size: 52,
+                  showDemoAvatar: trip.receipt?.isSimulated == true,
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(

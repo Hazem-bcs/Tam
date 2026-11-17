@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_avatar.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
 /// Replaces the old AlertDialog with a readable, scrollable details sheet.
@@ -21,9 +21,7 @@ Future<void> showActiveDriverDetailsSheet(
     showDragHandle: true,
     backgroundColor: colors.surfaceContainerLowest,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(AppRadii.sheet),
-      ),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
     ),
     builder: (sheetContext) => ConstrainedBox(
       constraints: BoxConstraints(
@@ -87,12 +85,7 @@ class _DriverDetails extends StatelessWidget {
           style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: AppSpacing.lg),
-        Align(
-          child: ActiveDriverAvatar(
-            size: 86,
-            showDemoAvatar: showDemoAvatar,
-          ),
-        ),
+        Align(child: DriverAvatar(size: 86, showDemoAvatar: showDemoAvatar)),
         const SizedBox(height: AppSpacing.md),
         Text(
           name,
@@ -108,7 +101,9 @@ class _DriverDetails extends StatelessWidget {
             Flexible(
               child: Text(
                 l.activeTripRating(driver.rating.toStringAsFixed(1)),
-                style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+                style: text.bodyMedium?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
               ),
             ),
           ],

@@ -808,6 +808,7 @@
   "completionTagServiceIssue": "Uncomfortable trip",
   "completionQuickFeedbackCritical": "What could we improve?",
   "completionFeedbackOptional": "Optional",
+  "completionSupportShort": "Support",
   "supportTitle": "Help and support",
   "supportIntro": "Create a general support request or choose a trip to report an issue.",
   "supportNewTicket": "New support request",

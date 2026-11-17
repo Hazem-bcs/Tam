@@ -121,6 +121,9 @@ class TripDetailsPage extends StatelessWidget {
                           trip: state.trip!,
                           state: state,
                           navigation: navigation,
+                          showSupport:
+                              state.trip!.status != TripStatus.completed ||
+                              ratingBuilder == null,
                         ),
                       ],
                     ),

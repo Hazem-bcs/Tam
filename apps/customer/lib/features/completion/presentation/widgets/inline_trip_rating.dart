@@ -15,9 +15,11 @@ class InlineTripRating extends StatelessWidget {
     super.key,
     required this.repository,
     required this.tripId,
+    this.onSupport,
   });
   final CompletionRepository repository;
   final String tripId;
+  final VoidCallback? onSupport;
 
   @override
   Widget build(BuildContext context) => BlocProvider(
@@ -49,7 +51,17 @@ class InlineTripRating extends StatelessWidget {
                   state: state,
                   policy: cubit.policy,
                   onSubmit: cubit.submit,
+                  onSupport: onSupport,
                 ),
+              if (state.completion == null && onSupport != null) ...[
+                const SizedBox(height: AppSpacing.sm),
+                TamButton.secondary(
+                  key: const Key('trips-support'),
+                  label: t.completionSupportShort,
+                  icon: Icons.support_agent_outlined,
+                  onPressed: onSupport,
+                ),
+              ],
               if (state.failure != null) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(

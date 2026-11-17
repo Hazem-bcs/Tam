@@ -15,8 +15,10 @@ class CompletionRatingForm extends StatefulWidget {
     required this.state,
     required this.policy,
     required this.onSubmit,
+    this.onSupport,
   });
 
+  final VoidCallback? onSupport;
   final CompletionState state;
   final CompletionPolicy policy;
   final void Function(int, String) onSubmit;
@@ -120,6 +122,10 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               textAlign: TextAlign.center,
               style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
+            if (widget.onSupport != null) ...[
+              const SizedBox(height: AppSpacing.md),
+              _SupportAction(onPressed: widget.onSupport),
+            ],
           ] else ...[
             AnimatedSize(
               duration: MediaQuery.of(context).disableAnimations
@@ -189,25 +195,84 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
             const SizedBox(height: AppSpacing.md),
-            TamButton.primary(
-              key: const ValueKey('completion-submit'),
-              label: l.completionSubmit,
-              icon: Icons.send_outlined,
-              loadingLabel: l.completionSubmitting,
-              isLoading: state.submitting,
-              onPressed: editable && selected > 0 && withinLimit
-                  ? () {
-                      FocusScope.of(context).unfocus();
-                      widget.onSubmit(
-                        selected,
-                        _reviewComment(context, suggestions),
-                      );
-                    }
-                  : null,
+            _RatingActions(
+              onSupport: widget.onSupport,
+              submitting: state.submitting,
+              submit: TamButton.primary(
+                key: const ValueKey('completion-submit'),
+                label: l.completionSubmit,
+                icon: Icons.send_outlined,
+                loadingLabel: l.completionSubmitting,
+                isLoading: state.submitting,
+                onPressed: editable && selected > 0 && withinLimit
+                    ? () {
+                        FocusScope.of(context).unfocus();
+                        widget.onSubmit(
+                          selected,
+                          _reviewComment(context, suggestions),
+                        );
+                      }
+                    : null,
+              ),
             ),
           ],
         ],
       ),
     );
   }
+}
+
+class _RatingActions extends StatelessWidget {
+  const _RatingActions({
+    required this.submit,
+    required this.onSupport,
+    required this.submitting,
+  });
+  final Widget submit;
+  final VoidCallback? onSupport;
+  final bool submitting;
+  @override
+  Widget build(BuildContext context) {
+    if (onSupport == null) return submit;
+    final support = _SupportAction(onPressed: submitting ? null : onSupport);
+    return LayoutBuilder(
+      builder: (context, bounds) {
+        if (bounds.maxWidth >= 300 &&
+            MediaQuery.textScalerOf(context).scale(1) < 1.4) {
+          return Row(
+            children: [
+              Expanded(flex: 2, child: submit),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(child: support),
+            ],
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            submit,
+            const SizedBox(height: AppSpacing.sm),
+            support,
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _SupportAction extends StatelessWidget {
+  const _SupportAction({required this.onPressed});
+  final VoidCallback? onPressed;
+  @override
+  Widget build(BuildContext context) => OutlinedButton.icon(
+    key: const Key('trips-support'),
+    onPressed: onPressed,
+    icon: Image.asset(
+      'assets/notifications/support.webp',
+      width: 24,
+      height: 24,
+      excludeFromSemantics: true,
+    ),
+    label: Text(AppLocalizations.of(context).completionSupportShort),
+  );
 }

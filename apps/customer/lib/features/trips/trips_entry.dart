@@ -43,6 +43,7 @@ Widget buildTripsFeature(
                   : (id) => InlineTripRating(
                       repository: completionRepository,
                       tripId: id,
+                      onSupport: () => navigation.openSupport(tripId: id),
                     ),
             ),
           ),

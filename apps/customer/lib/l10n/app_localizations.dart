@@ -3530,6 +3530,12 @@ abstract class AppLocalizations {
   /// **'اختياري'**
   String get completionFeedbackOptional;
 
+  /// No description provided for @completionSupportShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم'**
+  String get completionSupportShort;
+
   /// No description provided for @supportTitle.
   ///
   /// In ar, this message translates to:

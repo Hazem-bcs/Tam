@@ -15,8 +15,10 @@ class TripDetailsActions extends StatelessWidget {
     required this.trip,
     required this.state,
     required this.navigation,
+    this.showSupport = true,
   });
 
+  final bool showSupport;
   final Trip trip;
   final TripDetailsState state;
   final CustomerNavigation navigation;
@@ -77,14 +79,15 @@ class TripDetailsActions extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
-        TamButton.primary(
-          key: const Key('trips-support'),
-          icon: Icons.headset_mic_outlined,
-          label: l.tripsSupportAction,
-          onPressed: enabled
-              ? () => navigation.openSupport(tripId: trip.id)
-              : null,
-        ),
+        if (showSupport)
+          TamButton.secondary(
+            key: const Key('trips-support'),
+            icon: Icons.headset_mic_outlined,
+            label: l.tripsSupportAction,
+            onPressed: enabled
+                ? () => navigation.openSupport(tripId: trip.id)
+                : null,
+          ),
         if (trip.canCancel) ...[
           const SizedBox(height: AppSpacing.sm),
           TamButton.secondary(

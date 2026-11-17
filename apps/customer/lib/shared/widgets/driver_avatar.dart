@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Fictional portrait is restricted to the mock repository composition.
-class ActiveDriverAvatar extends StatelessWidget {
-  const ActiveDriverAvatar({
-    super.key,
-    this.size = 56,
-    this.showDemoAvatar = false,
-  });
+class DriverAvatar extends StatelessWidget {
+  const DriverAvatar({super.key, this.size = 56, this.showDemoAvatar = false});
 
   final double size;
   final bool showDemoAvatar;

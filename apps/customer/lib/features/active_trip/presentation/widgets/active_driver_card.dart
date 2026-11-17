@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_avatar.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_details_sheet.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 
 class ActiveDriverCard extends StatelessWidget {
   const ActiveDriverCard({
@@ -47,15 +47,18 @@ class ActiveDriverCard extends StatelessWidget {
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Row(
               children: [
-                ActiveDriverAvatar(showDemoAvatar: showDemoAvatar),
+                DriverAvatar(showDemoAvatar: showDemoAvatar),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name, style: text.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      )),
+                      Text(
+                        name,
+                        style: text.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
                         vehicle,
@@ -66,7 +69,11 @@ class ActiveDriverCard extends StatelessWidget {
                       const SizedBox(height: AppSpacing.xs),
                       Row(
                         children: [
-                          Icon(Icons.star_rounded, color: colors.primary, size: 16),
+                          Icon(
+                            Icons.star_rounded,
+                            color: colors.primary,
+                            size: 16,
+                          ),
                           const SizedBox(width: AppSpacing.xs),
                           Text(
                             driver.rating.toStringAsFixed(1),
@@ -94,11 +101,7 @@ class ActiveDriverCard extends StatelessWidget {
 
 /// The two useful immediate actions stay outside the details sheet.
 class ActiveDriverContactBar extends StatelessWidget {
-  const ActiveDriverContactBar({
-    super.key,
-    required this.onChat,
-    this.onCall,
-  });
+  const ActiveDriverContactBar({super.key, required this.onChat, this.onCall});
   final VoidCallback onChat;
   final VoidCallback? onCall;
 
@@ -107,7 +110,8 @@ class ActiveDriverContactBar extends StatelessWidget {
     final l = AppLocalizations.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final stacked = constraints.maxWidth < 350 ||
+        final stacked =
+            constraints.maxWidth < 350 ||
             MediaQuery.textScalerOf(context).scale(1) > 1.5;
         final gap = onCall == null ? 0.0 : AppSpacing.sm;
         final width = stacked || onCall == null

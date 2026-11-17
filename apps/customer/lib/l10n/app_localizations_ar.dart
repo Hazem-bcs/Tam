@@ -1854,6 +1854,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get completionFeedbackOptional => 'اختياري';
 
   @override
+  String get completionSupportShort => 'الدعم';
+
+  @override
   String get supportTitle => 'المساعدة والدعم';
 
   @override
