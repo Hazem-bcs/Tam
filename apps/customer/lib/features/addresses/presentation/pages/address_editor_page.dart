@@ -245,7 +245,7 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
         final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
         final mapHeight = keyboardOpen
             ? (bounds.maxHeight * .18).clamp(24.0, 72.0)
-            : (bounds.maxHeight * .46).clamp(100.0, 340.0);
+            : (bounds.maxHeight * .52).clamp(100.0, 400.0);
         return Stack(
           children: [
             PositionedDirectional(
