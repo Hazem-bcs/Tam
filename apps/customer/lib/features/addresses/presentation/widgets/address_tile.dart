@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+
 import '../../domain/saved_address.dart';
 import 'address_visual_icon.dart';
 
 enum _AddressAction { edit, delete }
 
-/// A tappable address card with contextual edit/delete actions.
+/// Tapping selects a saved location; only the menu's edit action navigates.
 class AddressTile extends StatelessWidget {
   const AddressTile({
     super.key,
     required this.address,
     required this.enabled,
+    required this.selected,
+    required this.onSelect,
     required this.onEdit,
     required this.onDelete,
   });
 
   final SavedAddress address;
   final bool enabled;
-  final VoidCallback onEdit, onDelete;
+  final bool selected;
+  final VoidCallback onSelect;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -28,36 +34,40 @@ class AddressTile extends StatelessWidget {
 
     return Material(
       key: Key('address-item-${address.id}'),
-      color: colors.surfaceContainerLowest,
-      borderRadius: BorderRadius.circular(AppRadii.sheet),
+      color: selected ? colors.primaryContainer : colors.surfaceContainerLowest,
+      borderRadius: BorderRadius.circular(AppRadii.lg),
       clipBehavior: Clip.antiAlias,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.all(color: colors.outlineVariant),
-          borderRadius: BorderRadius.circular(AppRadii.sheet),
+          border: Border.all(
+            color: selected ? colors.primary : colors.outlineVariant,
+            width: selected ? AppDimensions.focusBorderWidth : 1,
+          ),
+          borderRadius: BorderRadius.circular(AppRadii.lg),
         ),
         child: InkWell(
-          onTap: enabled ? onEdit : null,
+          key: Key('address-select-${address.id}'),
+          onTap: enabled ? onSelect : null,
           child: Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(
               AppSpacing.md,
-              AppSpacing.md,
               AppSpacing.sm,
-              AppSpacing.md,
+              AppSpacing.xs,
+              AppSpacing.sm,
             ),
             child: Row(
               children: [
                 Container(
-                  width: 72,
-                  height: 72,
+                  width: 60,
+                  height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: colors.primaryContainer.withValues(alpha: 0.52),
-                    borderRadius: BorderRadius.circular(AppRadii.lg),
+                    color: colors.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
                   child: AddressVisualIcon(
                     category: address.input.icon,
-                    size: 58,
+                    size: 45,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
@@ -66,18 +76,33 @@ class AddressTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        address.input.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              address.input.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          if (selected) ...[
+                            const SizedBox(width: AppSpacing.xs),
+                            Icon(
+                              Icons.check_circle_rounded,
+                              key: const Key('address-preferred-check'),
+                              size: 17,
+                              color: colors.primary,
+                            ),
+                          ],
+                        ],
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
                         address.input.location.label,
-                        maxLines: 3,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colors.onSurfaceVariant,
@@ -90,8 +115,20 @@ class AddressTile extends StatelessWidget {
                   key: Key('address-menu-${address.id}'),
                   enabled: enabled,
                   tooltip: t.addressesManage,
+                  position: PopupMenuPosition.under,
+                  offset: const Offset(0, 6),
+                  constraints: const BoxConstraints(
+                    minWidth: 180,
+                    maxWidth: 230,
+                  ),
+                  color: colors.surfaceContainerLowest,
+                  elevation: AppElevation.raised,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadii.lg),
+                    side: BorderSide(color: colors.outlineVariant),
+                  ),
                   icon: Icon(
-                    Icons.more_vert_rounded,
+                    Icons.more_horiz_rounded,
                     color: colors.onSurfaceVariant,
                   ),
                   onSelected: (action) {
@@ -105,22 +142,44 @@ class AddressTile extends StatelessWidget {
                     PopupMenuItem(
                       key: Key('address-edit-${address.id}'),
                       value: _AddressAction.edit,
+                      height: 52,
                       child: Row(
                         children: [
-                          const Icon(Icons.edit_outlined),
-                          const SizedBox(width: AppSpacing.sm),
-                          Text(t.addressesEdit),
+                          Icon(
+                            Icons.edit_outlined,
+                            size: 20,
+                            color: colors.primary,
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Text(
+                            t.addressesEdit,
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ],
                       ),
                     ),
+                    const PopupMenuDivider(height: 8),
                     PopupMenuItem(
                       key: Key('address-delete-${address.id}'),
                       value: _AddressAction.delete,
+                      height: 52,
                       child: Row(
                         children: [
-                          Icon(Icons.delete_outline, color: colors.error),
-                          const SizedBox(width: AppSpacing.sm),
-                          Text(t.addressesDelete),
+                          Icon(
+                            Icons.delete_outline,
+                            color: colors.error,
+                            size: 20,
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Text(
+                            t.addressesDelete,
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: colors.error,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ],
                       ),
                     ),
