@@ -20,11 +20,7 @@ void main() {
   ) async {
     final repository = MockAddressesRepository();
     String? edited;
-    await pumpAddresses(
-      tester,
-      repository,
-      onEdit: (id) => edited = id,
-    );
+    await pumpAddresses(tester, repository, onEdit: (id) => edited = id);
     final tile = find.byKey(const Key('address-select-address-home-001'));
     await tester.tap(tile);
     await tester.pumpAndSettle();
@@ -53,15 +49,15 @@ void main() {
     expect(cubit.state.icon, AddressIcon.home);
     expect(cubit.state.location?.point.latitude, 33.5);
     expect(
-      tester.widget<TextField>(
-        find.byKey(const Key('address-name')),
-      ).controller?.text,
+      tester
+          .widget<TextField>(find.byKey(const Key('address-name')))
+          .controller
+          ?.text,
       'المنزل',
     );
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });
-
 
   testWidgets(
     'delete requires confirmation and failure keeps the address visible',
