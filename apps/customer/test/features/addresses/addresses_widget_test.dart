@@ -6,6 +6,7 @@ import 'package:tam_customer/features/addresses/domain/saved_address.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/address_editor_page.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/addresses_page.dart';
 import 'package:tam_customer/features/addresses/presentation/widgets/address_location_picker.dart';
+import 'package:tam_customer/features/addresses/presentation/widgets/address_map_preview.dart';
 
 import 'addresses_test_support.dart';
 
@@ -105,6 +106,31 @@ void main() {
       await repository.dispose();
     },
   );
+
+  testWidgets('editor follows the map and one-row address icon layout', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    expect(find.byType(AddressMapPreview), findsOneWidget);
+    expect(find.byKey(const Key('address-editor-sheet')), findsOneWidget);
+    expect(find.byKey(const Key('address-icons-scroll')), findsOneWidget);
+
+    final home = find.byKey(const Key('address-icon-home'));
+    final work = find.byKey(const Key('address-icon-work'));
+    final study = find.byKey(const Key('address-icon-study'));
+    await tester.ensureVisible(home);
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(home).dy, tester.getTopLeft(work).dy);
+    expect(tester.getTopLeft(work).dy, tester.getTopLeft(study).dy);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
 
   testWidgets('selected address icon keeps the same size and no checkmark', (
     tester,
