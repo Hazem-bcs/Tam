@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,6 +9,7 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 import '../../domain/maps_repository.dart';
 import 'map_attribution_link.dart';
+import 'map_camera_focus.dart';
 import 'map_feedback.dart';
 import 'private_tile_layer.dart';
 import 'vector/vector_map_controls.dart';
