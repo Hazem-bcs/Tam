@@ -159,38 +159,31 @@ class _TripCardState extends State<TripCard> {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Wrap(
-                      alignment: WrapAlignment.spaceBetween,
+                      alignment: isCompleted
+                          ? WrapAlignment.spaceBetween
+                          : WrapAlignment.end,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: AppSpacing.sm,
                       runSpacing: AppSpacing.sm,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              isCompleted
-                                  ? l.tripsFare
-                                  : l.completionRecordedFare,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: colors.onSurfaceVariant,
+                        // A cancelled request has no completed fare to charge.
+                        // Keep the amount for completed trips, without a redundant
+                        // visible heading. VoiceOver/TalkBack retain the context.
+                        if (isCompleted)
+                          Semantics(
+                            label: '${l.tripsFare}: ${_localizedFare(context)}',
+                            child: ExcludeSemantics(
+                              child: Text(
+                                _localizedFare(context),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: colors.primary,
+                                ),
                               ),
                             ),
-                            Text(
-                              _localizedFare(context),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: isCompleted
-                                    ? colors.primary
-                                    : colors.onSurface,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
                         DecoratedBox(
                           decoration: BoxDecoration(
                             color: colors.primaryContainer.withValues(
