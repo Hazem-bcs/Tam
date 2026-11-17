@@ -1,0 +1,15 @@
+{
+  "code_commit": "8bf8c89405322f781c80e81a41aff925c380c435",
+  "apk_sha256": "514bbac9b24744d893f81931a2464172294eb9c487eddbe6ad1b31f82f1e5513",
+  "mascot_sha256": "47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802",
+  "zip_crc_valid": true,
+  "platform": "android-x64",
+  "build": "flutter build apk --debug --no-pub --target-platform android-x64",
+  "build_success": true,
+  "installed_apk_sha256": "514bbac9b24744d893f81931a2464172294eb9c487eddbe6ad1b31f82f1e5513",
+  "installed_mascot_sha256": "47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802",
+  "installed_apk_matches": true,
+  "running_pid": "13168",
+  "emulator": "emulator-5554 (reused)",
+  "visual_evidence": "activity-android.png: observed latest activity page after install; user navigation was not interrupted for a comprehensive tour."
+}

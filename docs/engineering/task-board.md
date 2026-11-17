@@ -317,3 +317,15 @@ TAM-SHARED-IDLE-V5: INTEGRATED محليًا، root، تطبيق30730df ومصد�
 المعتمدة. اختبار كامل797نجاحًا و30إخفاقًا قديمًا؛ تحليل42infoسابقة؛461/0تنسيق.
 المصدر في worktree idle-v5؛ لا push أو دمج main.
 [التسليم ومعاينة30fps](deliveries/TAM-SHARED-IDLE-V5/REPORT.ar.md).
+
+
+TAM-FINAL-MAIN-AUDIT-20261117: READY → IMPLEMENTING، root / SUPERVISOR؛
+تفويض المستخدم جمع main النهائية وحفظ جميع الشاشات الأحدث. أساس محلي93b0fb5
+وبعيد47977d9، مرشح دمج8bf8c89، مقارنة شجرات عشر ميزات بمصادرها النهائية.
+[البطاقة](tasks/TAM-FINAL-MAIN-AUDIT-20261117.md).
+
+TAM-FINAL-MAIN-AUDIT-20261117: INTEGRATED إلى main محليًا، root؛ كود8bf8c89
+يجمع origin/main47977d9 مع V5 وبقية التطوير المحلي. عشر شجرات ميزات تطابق
+مصادرها النهائية؛468/0 تنسيق،42infoقديمة،803نجاحًا/32إخفاقًا موجودة مسبقًا
+أو أعيد إثباتها على أساس main. بناء Android x64 وتثبيت ناجحان؛ لا push.
+[المصادر والأدلة والقيود](deliveries/TAM-FINAL-MAIN-AUDIT-20261117/REPORT.ar.md).
