@@ -20,6 +20,8 @@ final class ForegroundLocation implements DeviceLocation {
   final LocationPolicy policy;
   final DateTime Function() _now;
   final Duration Function() _elapsed;
+  final _updates = StreamController<GeoPoint>.broadcast(sync: true);
+  Stream<GeoPoint> get positionUpdates => _updates.stream;
   StreamSubscription<LocationFix>? _positions;
   StreamSubscription<bool>? _service;
   Future<void> _stopping = Future.value();
@@ -30,6 +32,20 @@ final class ForegroundLocation implements DeviceLocation {
   int _epoch = 0;
   bool _session = false, _foreground = true, _disposed = false;
   bool get _active => _session && _foreground && !_disposed;
+
+  /// An already-accepted foreground fix, never stale or persisted across sessions.
+  GeoPoint? get cachedPoint {
+    final fix = _fix;
+    final received = _received;
+    if (!_active || fix == null || received == null) return null;
+    final age = _elapsed() - received;
+    if (age < Duration.zero || age > policy.maximumAge) return null;
+    return policy.accepts(fix, _now()) ? fix.point : null;
+  }
+
+  /// Reuse the app's foreground location stream without showing a new
+  /// permission prompt. A denied/unavailable location remains unavailable.
+  Future<GeoPoint> locateWithoutPrompt() => _locate(requestPermission: false);
 
   void setSession(bool entered) {
     if (_session == entered || _disposed) return;
@@ -169,8 +185,12 @@ final class ForegroundLocation implements DeviceLocation {
         observation.accuracyMeters >= _fix!.accuracyMeters) {
       return;
     }
+    final previous = _fix?.point;
     _fix = observation;
     _received = _elapsed();
+    if (previous != observation.point && !_updates.isClosed) {
+      _updates.add(observation.point);
+    }
   }
 
   void _watch(int epoch) {
@@ -227,6 +247,7 @@ final class ForegroundLocation implements DeviceLocation {
     _disposed = true;
     _invalidate();
     await _stopping;
+    await _updates.close();
   }
 }
 

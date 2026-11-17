@@ -186,13 +186,19 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
       );
     }
 
-    _mapSelection ??= AddressMapSelectionCubit(
-      repository: dependencies.repository,
-      deviceLocation: dependencies.deviceLocation,
-      reverseAvailable: dependencies.configuration.hasServices,
-      language: Localizations.localeOf(context).languageCode,
-      initialLocation: state.location,
-    );
+    if (_mapSelection == null) {
+      _mapSelection = AddressMapSelectionCubit(
+        repository: dependencies.repository,
+        deviceLocation: dependencies.deviceLocation,
+        sharedLocation: dependencies.currentLocation,
+        reverseAvailable: dependencies.configuration.hasServices,
+        language: Localizations.localeOf(context).languageCode,
+        initialLocation: state.location,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _mapSelection?.centerOnKnownLocation();
+      });
+    }
 
     return BlocProvider<AddressMapSelectionCubit>.value(
       value: _mapSelection!,
@@ -210,6 +216,7 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
               Positioned.fill(
                 child: AddressMapPreview(
                   location: mapState.location,
+                  focus: mapState.focus,
                   onSelected: state.locked ? null : _mapSelection!.select,
                   onBack: state.busy ? null : _back,
                   onLocate: state.locked || mapState.locating

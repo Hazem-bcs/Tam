@@ -56,6 +56,7 @@ Future<AddressesCubit> pumpAddresses(
   String locale = 'ar',
   double scale = 1,
   VoidCallback? onAdd,
+  ValueChanged<String>? onEdit,
 }) async {
   await tester.pumpWidget(
     addressTestApp(
@@ -66,7 +67,7 @@ Future<AddressesCubit> pumpAddresses(
           context,
           repository: repository,
           onAdd: onAdd ?? () {},
-          onEdit: (_) {},
+          onEdit: onEdit ?? (_) {},
           onBack: () {},
         ),
       ),
