@@ -85,8 +85,9 @@ class _AddressEditorSheetState extends State<AddressEditorSheet> {
                       button: true,
                       label: _collapsed
                           ? t.addressesManage
-                          : MaterialLocalizations.of(context)
-                                .closeButtonTooltip,
+                          : MaterialLocalizations.of(
+                              context,
+                            ).closeButtonTooltip,
                       child: SizedBox(
                         width: double.infinity,
                         height: AppDimensions.minTapTarget,
