@@ -72,8 +72,9 @@ class AddressMapPreview extends StatelessWidget {
         ),
         PositionedDirectional(
           top: AppSpacing.md,
-          end: AppSpacing.lg,
+          start: AppSpacing.lg,
           child: _MapAction(
+            key: const Key('address-map-back'),
             tooltip: MaterialLocalizations.of(context).backButtonTooltip,
             onPressed: onBack,
             icon: const BackButtonIcon(),
@@ -81,8 +82,9 @@ class AddressMapPreview extends StatelessWidget {
         ),
         PositionedDirectional(
           bottom: 54,
-          end: AppSpacing.lg,
+          start: AppSpacing.lg,
           child: _MapAction(
+            key: const Key('address-map-locate'),
             tooltip: l.mapsPickLocation,
             onPressed: onChooseLocation,
             icon: const Icon(Icons.my_location_rounded),
@@ -95,6 +97,7 @@ class AddressMapPreview extends StatelessWidget {
 
 class _MapAction extends StatelessWidget {
   const _MapAction({
+    super.key,
     required this.tooltip,
     required this.icon,
     required this.onPressed,
