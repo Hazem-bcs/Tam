@@ -11,36 +11,25 @@ List<RouteBase> buildSupportRoutes(
   required SupportPolicy policy,
   required DateTime Function() now,
 }) => [
+  // Legacy URLs render the editor directly, never the removed hub.
   GoRoute(
     path: AppRoutes.support,
-    builder: (context, state) => buildSupportFeature(
+    builder: (context, state) => _editor(
+      context,
+      state,
       repository: repository,
       policy: policy,
       now: now,
-      onBack: () => _back(context, AppRoutes.settings),
-      onCreate: () =>
-          unawaited(GoRouter.of(context).push<void>(AppRoutes.supportNew)),
-      onTicket: (id) => unawaited(
-        GoRouter.of(context).push<void>(AppRoutes.supportTicketLocation(id)),
-      ),
-      // Trips belongs to the existing StatefulShellRoute branch; pushing it
-      // would insert a second shell page with the same Navigator page key.
-      onChooseTrip: () => GoRouter.of(context).go(AppRoutes.trips),
     ),
   ),
   GoRoute(
     path: AppRoutes.supportNew,
-    builder: (context, state) => buildSupportEditorFeature(
+    builder: (context, state) => _editor(
+      context,
+      state,
       repository: repository,
       policy: policy,
       now: now,
-      tripId: state.uri.queryParameters['trip_id'],
-      onBack: () => _back(context, AppRoutes.support),
-      onCreated: (id) => unawaited(
-        GoRouter.of(
-          context,
-        ).pushReplacement<void>(AppRoutes.supportTicketLocation(id)),
-      ),
     ),
   ),
   GoRoute(
@@ -48,7 +37,7 @@ List<RouteBase> buildSupportRoutes(
     builder: (context, state) => buildSupportTicketFeature(
       repository: repository,
       id: state.pathParameters['ticketId']!,
-      onBack: () => _back(context, AppRoutes.support),
+      onBack: () => _back(context, AppRoutes.settings),
     ),
   ),
   for (final entry in {
@@ -65,6 +54,25 @@ List<RouteBase> buildSupportRoutes(
       ),
     ),
 ];
+
+Widget _editor(
+  BuildContext context,
+  GoRouterState state, {
+  required SupportRepository repository,
+  required SupportPolicy policy,
+  required DateTime Function() now,
+}) => buildSupportEditorFeature(
+  repository: repository,
+  policy: policy,
+  now: now,
+  tripId: state.uri.queryParameters['trip_id'],
+  onBack: () => _back(context, AppRoutes.settings),
+  onCreated: (id) => unawaited(
+    GoRouter.of(
+      context,
+    ).pushReplacement<void>(AppRoutes.supportTicketLocation(id)),
+  ),
+);
 
 void _back(BuildContext context, String fallback) {
   final router = GoRouter.of(context);

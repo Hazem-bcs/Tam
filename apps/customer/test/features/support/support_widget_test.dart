@@ -56,7 +56,7 @@ void main() {
       (800.0, 1000.0, 2.0),
       (800.0, 390.0, 1.0),
     ]) {
-      testWidgets('$locale editor and hub layout ${target.$1} x${target.$3}', (
+      testWidgets('$locale editor layout ${target.$1} x${target.$3}', (
         tester,
       ) async {
         tester.view.physicalSize = Size(target.$1, target.$2);
@@ -67,25 +67,6 @@ void main() {
         final repo = MockSupportRepository(store, now: () => supportNow);
         addTearDown(repo.dispose);
         addTearDown(store.dispose);
-        await pumpSupport(
-          tester,
-          buildSupportFeature(
-            repository: repo,
-            policy: const SupportPolicy(),
-            now: () => supportNow,
-            onBack: () {},
-            onCreate: () {},
-            onTicket: (_) {},
-            onChooseTrip: () {},
-          ),
-          locale: locale,
-          scale: target.$3,
-        );
-        expect(tester.takeException(), isNull);
-        await captureSupport(
-          tester,
-          'hub-$locale-${target.$1.toInt()}x${target.$2.toInt()}-x${target.$3.toInt()}',
-        );
         await pumpSupport(
           tester,
           buildSupportEditorFeature(

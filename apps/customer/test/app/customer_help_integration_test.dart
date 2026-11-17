@@ -6,101 +6,99 @@ import 'package:tam_customer/features/completion/presentation/bloc/completion_cu
 import 'package:tam_customer/features/completion/presentation/pages/completion_page.dart';
 import 'package:tam_customer/features/support/presentation/bloc/legal_cubit.dart';
 import 'package:tam_customer/features/support/presentation/bloc/support_detail_cubit.dart';
-import 'package:tam_customer/features/support/presentation/bloc/support_list_cubit.dart';
+import 'package:tam_customer/features/support/presentation/bloc/support_editor_cubit.dart';
 import 'package:tam_customer/features/support/presentation/pages/legal_page.dart';
-import 'package:tam_customer/features/support/presentation/pages/support_page.dart';
+import 'package:tam_customer/features/support/presentation/pages/support_editor_page.dart';
 import 'package:tam_customer/features/support/presentation/pages/support_ticket_page.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 import 'support/customer_app_harness.dart';
 
 void main() {
-  testWidgets('Settings opens general help and unpublished legal pages', (
-    tester,
-  ) async {
-    await launchCustomerApp(tester);
-    await enterCustomerSession(tester);
-    final router = customerRouter(tester);
-    router.push(AppRoutes.settings);
-    await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(
-      find.byKey(const Key('settings-support')),
-      220,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.ensureVisible(find.byKey(const Key('settings-support')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('settings-support')));
-    await tester.pumpAndSettle();
-    expect(find.byType(SupportPage), findsOneWidget);
-    await tester.tap(find.byKey(const Key('support-new-ticket')));
-    await tester.pumpAndSettle();
-    const body = 'أحتاج إلى مساعدة عامة في استخدام التطبيق';
-    await tester.enterText(find.byKey(const Key('support-body')), body);
-    await tester.pump();
-    await tester.ensureVisible(find.byKey(const Key('support-submit')));
-    await tester.tap(find.byKey(const Key('support-submit')));
-    await tester.pumpAndSettle();
-    final ticket = tester
-        .element(find.byType(SupportTicketDetailsPage))
-        .read<SupportDetailCubit>()
-        .state
-        .ticket!;
-    expect(ticket.tripId, isNull);
-    expect(ticket.body, body);
-    await showCustomerHome(tester, router);
-    router.push(AppRoutes.support);
-    await tester.pumpAndSettle();
-    expect(
-      tester
-          .element(find.byType(SupportPage))
-          .read<SupportListCubit>()
-          .state
-          .tickets
-          .map((t) => t.id),
-      contains(ticket.id),
-    );
-    await showCustomerHome(tester, router);
-    router.push(AppRoutes.settings);
-    await tester.pumpAndSettle();
-    for (final key in ['settings-terms', 'settings-privacy']) {
+  testWidgets(
+    'Settings opens the request editor directly and retains legal pages',
+    (tester) async {
+      await launchCustomerApp(tester);
+      await enterCustomerSession(tester);
+      final router = customerRouter(tester);
+      router.push(AppRoutes.settings);
+      await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
-        find.byKey(Key(key)),
+        find.byKey(const Key('settings-support')),
         220,
         scrollable: find.byType(Scrollable).first,
       );
-      await tester.ensureVisible(find.byKey(Key(key)));
+      await tester.ensureVisible(find.byKey(const Key('settings-support')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key(key)));
+      await tester.tap(find.byKey(const Key('settings-support')));
       await tester.pumpAndSettle();
-      final state = tester
-          .element(find.byType(LegalPage))
-          .read<LegalCubit>()
-          .state;
-      expect(state.document, isNull);
-      expect(state.failure, isNull);
-      final l = AppLocalizations.of(tester.element(find.byType(LegalPage)));
-      expect(find.text(l.supportLegalUnpublished), findsOneWidget);
-      router.pop();
+      expect(find.byType(SupportEditorPage), findsOneWidget);
+      const body = 'أحتاج إلى مساعدة عامة في استخدام التطبيق';
+      await tester.enterText(find.byKey(const Key('support-body')), body);
+      await tester.pump();
+      await tester.ensureVisible(find.byKey(const Key('support-submit')));
+      await tester.tap(find.byKey(const Key('support-submit')));
       await tester.pumpAndSettle();
-    }
-    await showCustomerHome(tester, router);
-    await customerAuth(tester).logout();
-    await tester.pumpAndSettle();
-    await enterCustomerSession(tester, phone: null);
-    router.go(AppRoutes.support);
-    await tester.pumpAndSettle();
-    expect(
-      tester
-          .element(find.byType(SupportPage))
-          .read<SupportListCubit>()
+      final ticket = tester
+          .element(find.byType(SupportTicketDetailsPage))
+          .read<SupportDetailCubit>()
           .state
-          .tickets,
-      isEmpty,
-    );
-    await tester.pumpWidget(const SizedBox.shrink());
-    expect(tester.takeException(), isNull);
-  });
+          .ticket!;
+      expect(ticket.tripId, isNull);
+      expect(ticket.body, body);
+      await showCustomerHome(tester, router);
+      // Previously issued tickets still have directly accessible details.
+      router.push(AppRoutes.supportTicketLocation(ticket.id));
+      await tester.pumpAndSettle();
+      expect(find.byType(SupportTicketDetailsPage), findsOneWidget);
+      expect(find.text(body), findsOneWidget);
+      await showCustomerHome(tester, router);
+      router.push(AppRoutes.settings);
+      await tester.pumpAndSettle();
+      for (final key in ['settings-terms', 'settings-privacy']) {
+        await tester.scrollUntilVisible(
+          find.byKey(Key(key)),
+          220,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await tester.ensureVisible(find.byKey(Key(key)));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key(key)));
+        await tester.pumpAndSettle();
+        final state = tester
+            .element(find.byType(LegalPage))
+            .read<LegalCubit>()
+            .state;
+        expect(state.document, isNull);
+        expect(state.failure, isNull);
+        final l = AppLocalizations.of(tester.element(find.byType(LegalPage)));
+        expect(find.text(l.supportLegalUnpublished), findsOneWidget);
+        router.pop();
+        await tester.pumpAndSettle();
+      }
+      await showCustomerHome(tester, router);
+      await customerAuth(tester).logout();
+      await tester.pumpAndSettle();
+      await enterCustomerSession(tester, phone: null);
+      router.go(AppRoutes.support);
+      await tester.pumpAndSettle();
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        AppRoutes.support,
+      );
+      expect(find.byType(SupportEditorPage), findsOneWidget);
+      expect(
+        tester
+            .element(find.byType(SupportEditorPage))
+            .read<SupportEditorCubit>()
+            .state
+            .body,
+        isEmpty,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'legacy completed trip ratings are cleared when the session ends',

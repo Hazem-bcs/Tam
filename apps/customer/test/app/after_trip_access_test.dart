@@ -9,9 +9,9 @@ import 'package:tam_customer/features/completion/presentation/bloc/completion_cu
 import 'package:tam_customer/features/completion/presentation/pages/completion_page.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 import 'package:tam_customer/features/support/presentation/bloc/legal_cubit.dart';
-import 'package:tam_customer/features/support/presentation/bloc/support_list_cubit.dart';
+import 'package:tam_customer/features/support/presentation/bloc/support_editor_cubit.dart';
 import 'package:tam_customer/features/support/presentation/pages/legal_page.dart';
-import 'package:tam_customer/features/support/presentation/pages/support_page.dart';
+import 'package:tam_customer/features/support/presentation/pages/support_editor_page.dart';
 
 import '../support/fake_auth_repository.dart';
 import 'support/customer_app_harness.dart';
@@ -105,10 +105,10 @@ void main() {
       router.go(AppRoutes.support);
       await tester.pumpAndSettle();
       final support = tester
-          .element(find.byType(SupportPage))
-          .read<SupportListCubit>()
+          .element(find.byType(SupportEditorPage))
+          .read<SupportEditorCubit>()
           .state;
-      expect(support.tickets, isEmpty);
+      expect(support.options, isNull);
       expect(support.failure!.code, 'SERVICE_UNAVAILABLE');
       await tester.pumpWidget(const SizedBox.shrink());
       expect(tester.takeException(), isNull);
