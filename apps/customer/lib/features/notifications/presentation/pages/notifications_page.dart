@@ -37,9 +37,46 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: colors.surface,
       appBar: AppBar(
-        toolbarHeight: 64,
+        automaticallyImplyLeading: false,
+        toolbarHeight: 70,
         backgroundColor: colors.surface,
-        titleSpacing: AppSpacing.lg,
+        surfaceTintColor: colors.surface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leadingWidth: 70,
+        leading: Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16, end: 6),
+          child: Center(
+            child: SizedBox.square(
+              dimension: 48,
+              child: IconButton(
+                key: const Key('notifications-back'),
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                onPressed: () {
+                  final navigator = Navigator.of(context);
+                  if (navigator.canPop()) {
+                    navigator.pop();
+                  } else {
+                    widget.navigation.openHome();
+                  }
+                },
+                icon: Icon(
+                  Directionality.of(context) == TextDirection.rtl
+                      ? Icons.arrow_forward_ios_rounded
+                      : Icons.arrow_back_ios_new_rounded,
+                  size: 20,
+                ),
+                style: IconButton.styleFrom(
+                  foregroundColor: colors.onSurface,
+                  backgroundColor: colors.surfaceContainerLowest,
+                  side: BorderSide(color: colors.outlineVariant),
+                  minimumSize: const Size.square(48),
+                ),
+              ),
+            ),
+          ),
+        ),
+        titleSpacing: 2,
         title: Text(
           l10n.navNotifications,
           maxLines: 1,
@@ -55,21 +92,31 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 a.unreadCount != b.unreadCount ||
                 a.markingAll != b.markingAll ||
                 a.isBusy != b.isBusy,
-            builder: (context, state) => IconButton(
-              key: const Key('notifications-mark-all'),
-              tooltip: l10n.notificationsMarkAll,
-              onPressed:
-                  state.unreadCount != null &&
-                      state.unreadCount! > 0 &&
-                      !state.isBusy
-                  ? () => unawaited(
-                      context.read<NotificationsCubit>().markAllAsRead(),
-                    )
-                  : null,
-              icon: const Icon(Icons.done_all_rounded),
+            builder: (context, state) => Padding(
+              padding: const EdgeInsetsDirectional.only(end: 16),
+              child: IconButton(
+                key: const Key('notifications-mark-all'),
+                tooltip: l10n.notificationsMarkAll,
+                onPressed:
+                    state.unreadCount != null &&
+                        state.unreadCount! > 0 &&
+                        !state.isBusy
+                    ? () => unawaited(
+                        context.read<NotificationsCubit>().markAllAsRead(),
+                      )
+                    : null,
+                icon: const Icon(Icons.mark_email_read_outlined, size: 22),
+                style: IconButton.styleFrom(
+                  foregroundColor: colors.primary,
+                  backgroundColor: colors.primaryContainer,
+                  disabledForegroundColor: colors.onSurfaceVariant,
+                  disabledBackgroundColor: colors.surfaceContainerLow,
+                  side: BorderSide(color: colors.outlineVariant),
+                  minimumSize: const Size.square(48),
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 4),
         ],
       ),
       body: SafeArea(
@@ -137,7 +184,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       }
       entries.add(
         Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 10),
+          padding: const EdgeInsetsDirectional.fromSTEB(18, 0, 18, 10),
           child: NotificationTile(
             notification: notification,
             isPending:
@@ -156,9 +203,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
       child: ListView(
         key: const Key('notifications-list'),
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsetsDirectional.fromSTEB(18, 10, 18, 32),
+        padding: const EdgeInsetsDirectional.only(top: 10, bottom: 32),
         children: [
-          NotificationsOverview(unreadCount: state.unreadCount),
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+            child: NotificationsOverview(unreadCount: state.unreadCount),
+          ),
           const SizedBox(height: 16),
           NotificationsFilterBar(
             selected: _filter,
@@ -166,55 +216,69 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
           if (state.error != null || state.mutationError != null) ...[
             const SizedBox(height: 12),
-            NotificationsErrorBanner(
-              message: state.mutationError != null
-                  ? l10n.notificationsMutationError
-                  : _errorMessage(l10n, state.error),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+              child: NotificationsErrorBanner(
+                message: state.mutationError != null
+                    ? l10n.notificationsMutationError
+                    : _errorMessage(l10n, state.error),
+              ),
             ),
           ],
           if (visible.isEmpty) ...[
             const SizedBox(height: 30),
-            Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.inbox_outlined,
-                    size: 42,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _filter == NotificationsFeedFilter.unread
-                        ? l10n.notificationsNoUnread
-                        : l10n.notificationsNoMatches,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    key: const Key('notifications-show-all'),
-                    onPressed: () => setState(() {
-                      _filter = NotificationsFeedFilter.all;
-                    }),
-                    child: Text(l10n.notificationsShowAll),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.inbox_outlined,
+                      size: 42,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _filter == NotificationsFeedFilter.unread
+                          ? l10n.notificationsNoUnread
+                          : l10n.notificationsNoMatches,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      key: const Key('notifications-show-all'),
+                      onPressed: () => setState(() {
+                        _filter = NotificationsFeedFilter.all;
+                      }),
+                      child: Text(l10n.notificationsShowAll),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
           ...entries,
           if (state.moreError != null) ...[
-            NotificationsErrorBanner(message: l10n.notificationsMoreError),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+              child: NotificationsErrorBanner(
+                message: l10n.notificationsMoreError,
+              ),
+            ),
             const SizedBox(height: AppSpacing.sm),
           ],
           if (state.hasMore)
-            TamButton.secondary(
-              label: l10n.notificationsLoadMore,
-              isLoading: state.loadingMore,
-              loadingLabel: l10n.notificationsLoadingMore,
-              onPressed: state.isBusy
-                  ? null
-                  : () => unawaited(cubit.loadMore()),
+            Padding(
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+              child: TamButton.secondary(
+                label: l10n.notificationsLoadMore,
+                isLoading: state.loadingMore,
+                loadingLabel: l10n.notificationsLoadingMore,
+                onPressed: state.isBusy
+                    ? null
+                    : () => unawaited(cubit.loadMore()),
+              ),
             ),
         ],
       ),
@@ -230,7 +294,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       _ => l10n.notificationsEarlier,
     };
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(4, 24, 4, 12),
+      padding: const EdgeInsetsDirectional.fromSTEB(22, 24, 22, 12),
       child: Row(
         children: [
           Icon(Icons.calendar_today_outlined, size: 17, color: colors.primary),
