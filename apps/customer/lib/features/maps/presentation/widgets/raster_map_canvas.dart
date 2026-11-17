@@ -141,6 +141,8 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
     final l = AppLocalizations.of(context),
         colors = Theme.of(context).colorScheme;
     final center =
+        widget.focus?.point ??
+        widget.selection ??
         widget.origin ??
         widget.destination ??
         widget.configuration.initialCenter;
