@@ -8,8 +8,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 
-/// Contextual actions are part of the page scroll, never three competing
-/// sticky CTAs that hide the route and recorded fare.
+/// One strong action. Rating and help stay easy to reach but visually quiet.
 class TripDetailsActions extends StatelessWidget {
   const TripDetailsActions({
     super.key,
@@ -55,134 +54,64 @@ class TripDetailsActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
-    final available = !state.isCancelling;
-
+    final enabled = !state.isCancelling;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (state.actionErrorCode != null) ...[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(bottom: AppSpacing.sm),
-            child: Text(
-              tripsErrorLabel(l, state.actionErrorCode),
-              style: text.bodyMedium?.copyWith(color: colors.error),
-            ),
+          Text(
+            tripsErrorLabel(l, state.actionErrorCode),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colors.error),
           ),
+          const SizedBox(height: AppSpacing.sm),
         ],
         if (trip.status.isActive) ...[
-          _LargeAction(
-            label: l.activeTripFollow,
+          _PrimaryTripAction(
             icon: Icons.route_outlined,
-            onPressed: available
+            label: l.activeTripFollow,
+            onPressed: enabled
                 ? () => navigation.openActiveTrip(id: trip.id)
                 : null,
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
-        if (trip.status == TripStatus.completed) ...[
-          _LargeAction(
-            key: const Key('trips-completion'),
-            label: l.tripsCompletion,
-            icon: Icons.star_border_rounded,
-            onPressed: () => navigation.openCompletion(trip.id),
-          ),
-          const SizedBox(height: AppSpacing.md),
-        ],
-        ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 58),
-          child: OutlinedButton(
-            onPressed: available
-                ? () => navigation.openRideRequest(
-                    prefill: TripPrefill(
-                      pickup: trip.booking.pickup,
-                      destination: trip.booking.destination,
-                    ),
-                  )
-                : null,
-            style: OutlinedButton.styleFrom(
-              foregroundColor: colors.primary,
-              side: BorderSide(color: colors.primary, width: 1.3),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(19),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.replay_rounded, size: 23),
-                const SizedBox(width: AppSpacing.sm),
-                Flexible(
-                  child: Text(
-                    l.tripsRebook,
-                    textAlign: TextAlign.center,
-                    style: text.titleSmall?.copyWith(
-                      color: colors.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
+        _PrimaryTripAction(
+          icon: Icons.replay_rounded,
+          label: l.tripsRebook,
+          onPressed: enabled
+              ? () => navigation.openRideRequest(
+                  prefill: TripPrefill(
+                    pickup: trip.booking.pickup,
+                    destination: trip.booking.destination,
                   ),
-                ),
-              ],
-            ),
-          ),
+                )
+              : null,
+          quiet: trip.status.isActive,
         ),
-        const SizedBox(height: AppSpacing.md),
-        Material(
-          color: colors.surfaceContainerLowest,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(19),
-            side: BorderSide(color: colors.outlineVariant),
+        const SizedBox(height: AppSpacing.sm),
+        if (trip.status == TripStatus.completed) ...[
+          _ActionLink(
+            key: const Key('trips-completion'),
+            icon: Icons.star_outline_rounded,
+            label: l.tripsCompletion,
+            onTap: () => navigation.openCompletion(trip.id),
           ),
-          child: InkWell(
-            key: const Key('trips-support'),
-            borderRadius: BorderRadius.circular(19),
-            onTap: available
-                ? () => navigation.openSupport(tripId: trip.id)
-                : null,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.headset_mic_outlined,
-                    size: 22,
-                    color: colors.primary,
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Text(
-                      l.tripsSupport,
-                      style: text.titleSmall?.copyWith(
-                        color: colors.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: colors.onSurfaceVariant,
-                  ),
-                ],
-              ),
-            ),
-          ),
+        ],
+        _ActionLink(
+          key: const Key('trips-support'),
+          icon: Icons.headset_mic_outlined,
+          label: l.tripsSupport,
+          onTap: enabled ? () => navigation.openSupport(tripId: trip.id) : null,
         ),
         if (trip.canCancel) ...[
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.sm),
           TamButton.secondary(
             label: l.tripsCancel,
             isLoading: state.isCancelling,
             loadingLabel: l.tripsCancelling,
-            onPressed: available ? () => _confirmCancel(context) : null,
+            onPressed: enabled ? () => _confirmCancel(context) : null,
           ),
         ],
       ],
@@ -190,53 +119,112 @@ class TripDetailsActions extends StatelessWidget {
   }
 }
 
-class _LargeAction extends StatelessWidget {
-  const _LargeAction({
-    super.key,
-    required this.label,
+class _PrimaryTripAction extends StatelessWidget {
+  const _PrimaryTripAction({
     required this.icon,
+    required this.label,
     required this.onPressed,
+    this.quiet = false,
   });
-
-  final String label;
   final IconData icon;
+  final String label;
   final VoidCallback? onPressed;
+  final bool quiet;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 60),
+    final type = Theme.of(context).textTheme;
+    return SizedBox(
+      width: double.infinity,
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
-          backgroundColor: colors.primary,
-          foregroundColor: colors.onPrimary,
+          minimumSize: const Size(0, 52),
+          backgroundColor: quiet ? colors.primaryContainer : colors.primary,
+          foregroundColor: quiet ? colors.primary : colors.onPrimary,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
-            vertical: AppSpacing.lg,
+            vertical: AppSpacing.md,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(19),
+            borderRadius: BorderRadius.circular(15),
           ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 23),
+            Icon(icon, size: 19),
             const SizedBox(width: AppSpacing.sm),
             Flexible(
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: colors.onPrimary,
-                  fontWeight: FontWeight.w700,
+                style: type.labelLarge?.copyWith(
+                  color: quiet ? colors.primary : colors.onPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionLink extends StatelessWidget {
+  const _ActionLink({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              children: [
+                Icon(icon, size: 19, color: colors.onSurfaceVariant),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colors.onSurface,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_left_rounded,
+                  color: colors.onSurfaceVariant,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

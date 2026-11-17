@@ -34,7 +34,7 @@ class TripDetailsPage extends StatelessWidget {
             l.tripsDetailsTitle,
             style: AppTypography.home(
               theme.textTheme,
-            ).titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            ).titleLarge?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
           ),
           leading: IconButton(
             tooltip: MaterialLocalizations.of(context).backButtonTooltip,
@@ -82,7 +82,7 @@ class TripDetailsPage extends StatelessWidget {
                     key: const Key('trips-details-scroll'),
                     padding: const EdgeInsetsDirectional.fromSTEB(
                       AppSpacing.lg,
-                      AppSpacing.md,
+                      AppSpacing.sm,
                       AppSpacing.lg,
                       AppSpacing.xxl,
                     ),
@@ -98,7 +98,7 @@ class TripDetailsPage extends StatelessWidget {
                           const SizedBox(height: AppSpacing.md),
                         ],
                         TripDetailsBody(trip: state.trip!),
-                        const SizedBox(height: AppSpacing.xl),
+                        const SizedBox(height: AppSpacing.lg),
                         TripDetailsActions(
                           trip: state.trip!,
                           state: state,

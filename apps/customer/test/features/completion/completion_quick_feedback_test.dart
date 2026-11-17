@@ -48,6 +48,7 @@ void main() {
     await tester.tap(find.byKey(const Key('completion-tag-2')));
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.byKey(const Key('completion-stars-2')));
     await tester.tap(find.byKey(const Key('completion-stars-2')));
     await tester.pumpAndSettle();
     expect(find.text('تأخر الوصول'), findsOneWidget);
