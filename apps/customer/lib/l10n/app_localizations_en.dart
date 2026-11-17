@@ -1240,6 +1240,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCurrentPhoneHint => 'Phone for this session';
 
   @override
+  String get settingsWalletUnavailable => 'Balance unavailable';
+
+  @override
   String get addressesTitle => 'My addresses';
 
   @override

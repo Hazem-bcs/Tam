@@ -9,10 +9,12 @@ class SettingsActionTile extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.subtitle,
+    this.asset,
     this.danger = false,
   });
 
   final IconData icon;
+  final String? asset;
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
@@ -25,21 +27,26 @@ class SettingsActionTile extends StatelessWidget {
     final accent = danger ? colors.error : colors.primary;
     return ListTile(
       enabled: onTap != null,
-      minVerticalPadding: AppSpacing.md,
+      minVerticalPadding: AppSpacing.xs,
       contentPadding: const EdgeInsetsDirectional.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.xs,
+        horizontal: AppSpacing.md,
+        vertical: 0,
       ),
       leading: Container(
-        width: 42,
-        height: 42,
+        width: 36,
+        height: 36,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: (danger ? colors.errorContainer : colors.primaryContainer)
               .withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(AppRadii.md),
         ),
-        child: Icon(icon, color: accent),
+        child: asset == null
+            ? Icon(icon, color: accent)
+            : Padding(
+                padding: const EdgeInsets.all(5),
+                child: Image.asset(asset!, excludeFromSemantics: true),
+              ),
       ),
       title: Text(
         title,

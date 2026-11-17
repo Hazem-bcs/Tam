@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
-import 'package:tam_customer/features/settings/presentation/widgets/settings_mascot.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
@@ -33,15 +32,21 @@ class SettingsProfileSection extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final reducedMotion = MediaQuery.disableAnimationsOf(context);
-    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     final compactDetails =
         MediaQuery.sizeOf(context).width < 360 &&
         MediaQuery.textScalerOf(context).scale(16) > 24;
-    final avatar = CircleAvatar(
-      radius: 24,
-      backgroundColor: colors.primaryContainer,
-      foregroundColor: colors.onPrimaryContainer,
-      child: const Icon(Icons.person_outline_rounded),
+    final avatar = Container(
+      width: 52,
+      height: 52,
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLowest.withValues(alpha: 0.7),
+        shape: BoxShape.circle,
+      ),
+      child: Image.asset(
+        'assets/notifications/account.webp',
+        excludeFromSemantics: true,
+      ),
     );
     final edit = IconButton(
       tooltip: t.settingsEditName,
@@ -59,7 +64,7 @@ class SettingsProfileSection extends StatelessWidget {
         Text(
           phoneE164 == null
               ? t.authGuestDescription
-              : t.settingsCurrentPhoneHint,
+              : t.settingsProfileSubtitle,
           style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
         ),
       ],
@@ -68,95 +73,16 @@ class SettingsProfileSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AnimatedSize(
-          alignment: AlignmentDirectional.topCenter,
-          duration: reducedMotion ? Duration.zero : AppMotion.medium,
-          child: keyboardOpen
-              ? const SizedBox(width: double.infinity)
-              : Container(
-                  key: const Key('settings-welcome-hero'),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: AlignmentDirectional.topStart,
-                      end: AlignmentDirectional.bottomEnd,
-                      colors: [
-                        colors.primaryContainer.withValues(alpha: 0.86),
-                        colors.surfaceContainerLowest,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(AppRadii.sheet),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadii.sheet),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                        AppSpacing.lg,
-                        AppSpacing.lg,
-                        AppSpacing.sm,
-                        AppSpacing.sm,
-                      ),
-                      child: LayoutBuilder(
-                        builder: (context, bounds) {
-                          final largeText =
-                              MediaQuery.textScalerOf(context).scale(16) > 24;
-                          final compact = bounds.maxWidth < 300 || largeText;
-                          final message = Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                t.settingsWelcome,
-                                style: text.headlineSmall?.copyWith(
-                                  color: colors.onPrimaryContainer,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacing.sm),
-                              Text(
-                                t.settingsProfileSubtitle,
-                                style: text.bodyMedium?.copyWith(
-                                  color: colors.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          );
-                          if (compact) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                message,
-                                const SizedBox(height: AppSpacing.xs),
-                                const Align(
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: SettingsMascot(size: 88),
-                                ),
-                              ],
-                            );
-                          }
-                          return Row(
-                            children: [
-                              Expanded(child: message),
-                              const SizedBox(width: AppSpacing.sm),
-                              const SettingsMascot(size: 110),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-        ),
-        if (!keyboardOpen) const SizedBox(height: AppSpacing.md),
         Material(
-          color: colors.surfaceContainerLowest,
+          color: colors.primaryContainer.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(AppRadii.sheet),
           clipBehavior: Clip.antiAlias,
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: colors.outlineVariant),
+              border: Border.all(color: colors.primaryContainer),
               borderRadius: BorderRadius.circular(AppRadii.sheet),
             ),
-            padding: const EdgeInsetsDirectional.all(AppSpacing.lg),
+            padding: const EdgeInsetsDirectional.all(AppSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

@@ -37,8 +37,8 @@ class SettingsPreferencesSection extends StatelessWidget {
               SwitchListTile.adaptive(
                 key: const Key('settings-notifications-switch'),
                 contentPadding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
+                  horizontal: AppSpacing.xs,
+                  vertical: 0,
                 ),
                 secondary: Container(
                   width: 42,
@@ -48,9 +48,12 @@ class SettingsPreferencesSection extends StatelessWidget {
                     color: colors.primaryContainer.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
-                  child: Icon(
-                    Icons.notifications_outlined,
-                    color: colors.primary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Image.asset(
+                      'assets/notifications/notification_bell.webp',
+                      excludeFromSemantics: true,
+                    ),
                   ),
                 ),
                 title: Text(

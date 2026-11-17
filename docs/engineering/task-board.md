@@ -352,3 +352,7 @@ AUI-01-HOME-20261117: READY_FOR_REVIEW؛root،24اختبارًا مستهدفً�
 AUI-02-AUTH-20261117: READY → IMPLEMENTING؛root،أساسe06b2ff،auth/presentationوباقيالسلوككماهو. سؤالربطالتسجيلمعلق.
 
 AUI-02-AUTH-20261117: READY_FOR_REVIEW؛root،التسجيلمعاينةفقطلحينتوضيححفظالاسم،51اختبارًاناجحًا،تحليلمستهدفنظيفوبناءAndroidناجح؛mainدونتغيير.
+
+AUI-03-ACCOUNT-20261117: READY → IMPLEMENTING؛ root، أساس873853a، settings presentation علىahmad-ui؛ تصميم حسابي مع الأيقونات الموجودة والحفاظ على السلوك.
+
+AUI-03-ACCOUNT-20261117: READY_FOR_REVIEW؛ root،27اختبارًا مستهدفًا ناجحًا،تحليلSettingsنظيف وHot Reload؛ الفحص الشامل819نجاحًا/46إخفاقًا و45ملاحظة،موثقة بالتقرير؛mainدونتغيير.

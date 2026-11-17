@@ -78,8 +78,12 @@ class SettingsBottomActions extends StatelessWidget {
             key: const Key('settings-logout-action'),
             onPressed: busy || loggingOut ? null : onLogout,
             style: TextButton.styleFrom(
-              foregroundColor: colors.error,
-              minimumSize: const Size(180, AppDimensions.minTapTarget),
+              foregroundColor: colors.primary,
+              minimumSize: const Size(
+                double.infinity,
+                AppDimensions.minTapTarget,
+              ),
+              backgroundColor: colors.primaryContainer.withValues(alpha: 0.5),
               padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: AppSpacing.xl,
                 vertical: AppSpacing.md,

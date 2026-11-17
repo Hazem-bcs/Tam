@@ -506,6 +506,7 @@
   "settingsInternalNotificationHint": "إشعارات داخل التطبيق فقط، ولا تشمل تنبيهات الهاتف.",
   "settingsDevelopmentDisclosureTitle": "عن هذه النسخة",
   "settingsCurrentPhoneHint": "رقم هذه الجلسة",
+  "settingsWalletUnavailable": "الرصيد غير متاح حاليًا",
   "addressesTitle": "عناويني",
   "addressesDescription": "احفظ أماكنك للوصول إليها أسرع",
   "addressesAdd": "إضافة موقع",

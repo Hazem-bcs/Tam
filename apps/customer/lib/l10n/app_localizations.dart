@@ -2384,6 +2384,12 @@ abstract class AppLocalizations {
   /// **'رقم هذه الجلسة'**
   String get settingsCurrentPhoneHint;
 
+  /// No description provided for @settingsWalletUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد غير متاح حاليًا'**
+  String get settingsWalletUnavailable;
+
   /// No description provided for @addressesTitle.
   ///
   /// In ar, this message translates to:

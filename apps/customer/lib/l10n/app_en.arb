@@ -506,6 +506,7 @@
   "settingsInternalNotificationHint": "In-app notifications only, not phone push alerts.",
   "settingsDevelopmentDisclosureTitle": "About this version",
   "settingsCurrentPhoneHint": "Phone for this session",
+  "settingsWalletUnavailable": "Balance unavailable",
   "addressesTitle": "My addresses",
   "addressesDescription": "Save places for faster booking",
   "addressesAdd": "Add a place",

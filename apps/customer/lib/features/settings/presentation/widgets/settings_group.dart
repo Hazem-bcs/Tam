@@ -18,39 +18,24 @@ class SettingsGroup extends StatelessWidget {
         Padding(
           padding: const EdgeInsetsDirectional.only(
             start: AppSpacing.xs,
-            bottom: AppSpacing.md,
+            bottom: AppSpacing.sm,
           ),
-          child: Row(
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colors.primary,
-                  borderRadius: BorderRadius.circular(AppRadii.sm),
-                ),
-                child: const SizedBox(width: 3, height: 16),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  title,
-                  style: typography.bodyMedium?.copyWith(
-                    fontSize: 15,
-                    color: colors.onSurfaceVariant,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
+          child: Text(
+            title,
+            style: typography.titleSmall?.copyWith(
+              color: colors.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         Material(
           color: colors.surfaceContainerLowest,
-          borderRadius: BorderRadius.circular(AppRadii.sheet),
+          borderRadius: BorderRadius.circular(AppRadii.md),
           clipBehavior: Clip.antiAlias,
           child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(color: colors.outlineVariant),
-              borderRadius: BorderRadius.circular(AppRadii.sheet),
+              borderRadius: BorderRadius.circular(AppRadii.md),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -10,6 +10,7 @@ import 'package:tam_customer/features/settings/presentation/widgets/settings_bot
 import 'package:tam_customer/features/settings/presentation/widgets/settings_language_sheet.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_wallet_summary.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
@@ -201,9 +202,14 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             automaticallyImplyLeading: false,
             actions: [
-              IconButton.filledTonal(
+              IconButton(
                 tooltip: t.settingsNotifications,
-                icon: const Icon(Icons.notifications_none_outlined),
+                icon: Image.asset(
+                  'assets/notifications/notification_bell.webp',
+                  width: 28,
+                  height: 28,
+                  excludeFromSemantics: true,
+                ),
                 onPressed: () => _navigate(widget.navigation.openNotifications),
               ),
             ],
@@ -266,15 +272,11 @@ class _SettingsPageState extends State<SettingsPage> {
           onNameChanged: cubit.nameChanged,
           onSave: cubit.saveName,
         ),
-        const SizedBox(height: AppSpacing.xl),
-        SettingsPreferencesSection(
-          state: state,
-          languageCode: widget.locale.value.languageCode,
-          onNotificationsChanged: _updateNotifications,
-          onLanguageTap: _pickLanguage,
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.md),
+        const SettingsWalletSummary(),
+        const SizedBox(height: AppSpacing.md),
         SettingsAccountLinks(
+          destinationsOnly: true,
           enabled: !state.isBusy,
           onAddresses: () => _navigate(widget.navigation.openAddresses),
           onSupport: () => _navigate(() => widget.navigation.openSupport()),
@@ -284,7 +286,26 @@ class _SettingsPageState extends State<SettingsPage> {
           onDeleteAccount: () =>
               _navigate(widget.navigation.openAccountDeletion),
         ),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.lg),
+        SettingsPreferencesSection(
+          state: state,
+          languageCode: widget.locale.value.languageCode,
+          onNotificationsChanged: _updateNotifications,
+          onLanguageTap: _pickLanguage,
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        SettingsAccountLinks(
+          supportOnly: true,
+          enabled: !state.isBusy,
+          onAddresses: () => _navigate(widget.navigation.openAddresses),
+          onSupport: () => _navigate(() => widget.navigation.openSupport()),
+          onTerms: () => _navigate(widget.navigation.openTerms),
+          onPrivacy: () => _navigate(widget.navigation.openPrivacy),
+          onChangePhone: () => _navigate(widget.navigation.openAccountPhone),
+          onDeleteAccount: () =>
+              _navigate(widget.navigation.openAccountDeletion),
+        ),
+        const SizedBox(height: AppSpacing.lg),
         SettingsBottomActions(
           busy: state.isBusy,
           loggingOut: _loggingOut,

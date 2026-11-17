@@ -1221,6 +1221,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsCurrentPhoneHint => 'رقم هذه الجلسة';
 
   @override
+  String get settingsWalletUnavailable => 'الرصيد غير متاح حاليًا';
+
+  @override
   String get addressesTitle => 'عناويني';
 
   @override

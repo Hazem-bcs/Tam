@@ -202,7 +202,7 @@ void main() {
     final header = tester.widget<Text>(find.text('الإعدادات'));
     final title = tester.widget<Text>(find.text('اللغة'));
     final detail = tester.widget<Text>(find.text('العربية'));
-    expect(header.style?.fontSize, 15);
+    expect(header.style?.fontSize, type.titleSmall?.fontSize);
     expect(title.style?.fontSize, 16);
     expect(detail.style?.fontSize, 14);
     expect(header.style?.fontWeight, FontWeight.w700);
@@ -247,12 +247,39 @@ void main() {
     expect(find.text('+963912345678'), findsOneWidget);
     expect(find.text('مستخدم تم'), findsOneWidget);
     expect(find.text('إشعارات الحساب'), findsOneWidget);
-    expect(find.text('المحفظة'), findsNothing);
+    expect(find.text('المحفظة'), findsOneWidget);
+    expect(find.text('الرصيد غير متاح حاليًا'), findsOneWidget);
     expect(find.text('الوضع الداكن'), findsNothing);
 
     await tester.tap(find.byTooltip('فتح الإشعارات'));
     expect(navigation.notifications, 1);
   });
+
+  testWidgets(
+    'coupon details explain booking entry without activating an offer',
+    (tester) async {
+      final locale = AppLocaleController();
+      addTearDown(locale.dispose);
+      final navigation = FakeNavigation();
+      await tester.pumpWidget(
+        testApp(
+          locale: locale,
+          navigation: navigation,
+          repository: MockSettingsRepository(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('settings-coupons')));
+      await tester.tap(find.byKey(const Key('settings-coupons')));
+      await tester.pumpAndSettle();
+      final context = tester.element(find.byType(AlertDialog));
+      expect(
+        find.text(AppLocalizations.of(context).homeCouponInstructions),
+        findsOneWidget,
+      );
+      expect(navigation.home + navigation.trips, 0);
+    },
+  );
 
   testWidgets('language changes immediately without changing phone or route', (
     tester,
@@ -268,12 +295,19 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('settings-language-tile')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-language-tile')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-locale-en')));
     await tester.pumpAndSettle();
     expect(locale.value.languageCode, 'en');
     expect(find.text('My account'), findsOneWidget);
+    await tester.drag(
+      find.byKey(const Key('settings-content')),
+      const Offset(0, 1000),
+    );
+    await tester.pumpAndSettle();
     expect(find.text('+963912345678'), findsOneWidget);
     expect(navigation.home + navigation.trips, 0);
   });
@@ -297,6 +331,10 @@ void main() {
       (await repository.loadPreferences()).accountNotificationsEnabled,
       true,
     );
+    await tester.ensureVisible(
+      find.byKey(const Key('settings-notifications-switch')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-notifications-switch')));
     await tester.pumpAndSettle();
 
@@ -326,6 +364,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const Key('settings-notifications-switch')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-notifications-switch')));
     await tester.pumpAndSettle();
 
@@ -343,6 +385,10 @@ void main() {
         .read<SettingsCubit>();
     expect(cubit.state.notificationsDirty, false);
 
+    await tester.ensureVisible(
+      find.byKey(const Key('settings-notifications-switch')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-notifications-switch')));
     await tester.pumpAndSettle();
     expect(

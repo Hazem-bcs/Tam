@@ -15,10 +15,13 @@ class SettingsAccountLinks extends StatelessWidget {
     required this.onPrivacy,
     required this.onChangePhone,
     required this.onDeleteAccount,
+    this.destinationsOnly = false,
+    this.supportOnly = false,
   });
 
   final VoidCallback onChangePhone, onDeleteAccount;
   final bool enabled;
+  final bool destinationsOnly, supportOnly;
   final VoidCallback onAddresses, onSupport, onTerms, onPrivacy;
 
   @override
@@ -27,61 +30,96 @@ class SettingsAccountLinks extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SettingsGroup(
-          title: t.settingsAccountSectionTitle,
-          children: [
-            SettingsActionTile(
-              key: const Key('settings-addresses'),
-              icon: Icons.bookmark_outline_rounded,
-              title: t.addressesTitle,
-              subtitle: t.addressesDescription,
-              onTap: enabled ? onAddresses : null,
-            ),
-            SettingsActionTile(
-              key: const Key('settings-change-phone'),
-              icon: Icons.phone_iphone_rounded,
-              title: t.accountManagementChangePhone,
-              onTap: enabled ? onChangePhone : null,
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        SettingsGroup(
-          title: t.settingsInfoTitle,
-          children: [
-            SettingsActionTile(
-              key: const Key('settings-support'),
-              icon: Icons.support_agent_rounded,
-              title: t.settingsHelp,
-              onTap: enabled ? onSupport : null,
-            ),
-            SettingsActionTile(
-              key: const Key('settings-terms'),
-              icon: Icons.description_outlined,
-              title: t.settingsTerms,
-              onTap: enabled ? onTerms : null,
-            ),
-            SettingsActionTile(
-              key: const Key('settings-privacy'),
-              icon: Icons.shield_outlined,
-              title: t.settingsPrivacy,
-              onTap: enabled ? onPrivacy : null,
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        SettingsGroup(
-          title: t.settingsDangerSectionTitle,
-          children: [
-            SettingsActionTile(
-              key: const Key('settings-delete-account'),
-              icon: Icons.delete_outline_rounded,
-              title: t.accountManagementDeleteAccount,
-              danger: true,
-              onTap: enabled ? onDeleteAccount : null,
-            ),
-          ],
-        ),
+        if (!supportOnly)
+          SettingsGroup(
+            title: t.settingsAccountSectionTitle,
+            children: [
+              SettingsActionTile(
+                key: const Key('settings-addresses'),
+                asset: 'assets/images/address_pin.webp',
+                icon: Icons.bookmark_outline_rounded,
+                title: t.addressesTitle,
+                subtitle: t.addressesDescription,
+                onTap: enabled ? onAddresses : null,
+              ),
+              SettingsActionTile(
+                key: const Key('settings-coupons'),
+                asset: 'assets/notifications/discount_offer.webp',
+                icon: Icons.local_offer_outlined,
+                title: t.homeCouponTitle,
+                subtitle: t.homeCouponHint,
+                onTap: !enabled
+                    ? null
+                    : () => showDialog<void>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(t.homeCouponTitle),
+                          content: Text(t.homeCouponInstructions),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(
+                                MaterialLocalizations.of(
+                                  context,
+                                ).closeButtonLabel,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+              SettingsActionTile(
+                key: const Key('settings-change-phone'),
+                asset: 'assets/notifications/account.webp',
+                icon: Icons.phone_iphone_rounded,
+                title: t.accountManagementChangePhone,
+                onTap: enabled ? onChangePhone : null,
+              ),
+            ],
+          ),
+        if (!destinationsOnly) ...[
+          if (!supportOnly) const SizedBox(height: AppSpacing.lg),
+          SettingsGroup(
+            title: t.settingsInfoTitle,
+            children: [
+              SettingsActionTile(
+                key: const Key('settings-support'),
+                asset: 'assets/notifications/support.webp',
+                icon: Icons.support_agent_rounded,
+                title: t.settingsHelp,
+                onTap: enabled ? onSupport : null,
+              ),
+              SettingsActionTile(
+                key: const Key('settings-terms'),
+                asset: 'assets/notifications/information.webp',
+                icon: Icons.description_outlined,
+                title: t.settingsTerms,
+                onTap: enabled ? onTerms : null,
+              ),
+              SettingsActionTile(
+                key: const Key('settings-privacy'),
+                asset: 'assets/notifications/security.webp',
+                icon: Icons.shield_outlined,
+                title: t.settingsPrivacy,
+                onTap: enabled ? onPrivacy : null,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          SettingsGroup(
+            title: t.settingsDangerSectionTitle,
+            children: [
+              SettingsActionTile(
+                key: const Key('settings-delete-account'),
+                asset: 'assets/notifications/warning.webp',
+                icon: Icons.delete_outline_rounded,
+                title: t.accountManagementDeleteAccount,
+                danger: true,
+                onTap: enabled ? onDeleteAccount : null,
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }
