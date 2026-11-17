@@ -202,11 +202,13 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  TextButton(
+                  const SizedBox(height: AppSpacing.md),
+                  TamButton.secondary(
+                    label: t.authContinueGuest,
+                    icon: Icons.person_outline_rounded,
                     onPressed: state.isBusy
                         ? null
                         : context.read<AuthCubit>().continueAsGuest,
-                    child: Text(t.authContinueGuest),
                   ),
                 ],
               ),
