@@ -83,7 +83,7 @@ final class AddressMapSelectionCubit extends Cubit<AddressMapSelectionState> {
     unawaited(
       _sharedLocation.locateWithoutPrompt().then(
         _deviceMoved,
-        onError: (Object _, StackTrace __) {
+        onError: (Object _, StackTrace _) {
           // The map keeps its configured fallback center if permission is absent.
         },
       ),
