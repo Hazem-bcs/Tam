@@ -137,7 +137,8 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
         child: Scaffold(
           // The ready editor uses its map as the hero and hosts back there.
           // Loading and failure states still expose an accessible back action.
-          appBar: state.phase == AddressEditorPhase.loading ||
+          appBar:
+              state.phase == AddressEditorPhase.loading ||
                   state.phase == AddressEditorPhase.error ||
                   state.phase == AddressEditorPhase.notFound
               ? AppBar(
@@ -149,8 +150,9 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
                   leading: IconButton(
                     icon: const BackButtonIcon(),
                     onPressed: state.busy ? null : _back,
-                    tooltip:
-                        MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                   ),
                 )
               : null,
@@ -246,9 +248,7 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
               height: mapHeight,
               child: AddressMapPreview(
                 location: state.location,
-                onChooseLocation: state.locked
-                    ? null
-                    : () => _chooseOnMap(),
+                onChooseLocation: state.locked ? null : () => _chooseOnMap(),
                 onBack: state.busy ? null : _back,
               ),
             ),
@@ -303,5 +303,4 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
       },
     );
   }
-
 }
