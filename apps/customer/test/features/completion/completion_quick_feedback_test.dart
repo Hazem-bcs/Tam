@@ -44,6 +44,8 @@ void main() {
     await tester.ensureVisible(find.byKey(const Key('completion-stars-5')));
     await tester.tap(find.byKey(const Key('completion-stars-5')));
     await tester.pumpAndSettle();
+    expect(find.text('ما الذي أعجبك في الرحلة؟'), findsOneWidget);
+    expect(find.text('اختياري'), findsOneWidget);
     await tester.ensureVisible(find.byKey(const Key('completion-tag-2')));
     await tester.tap(find.byKey(const Key('completion-tag-2')));
     await tester.pumpAndSettle();
@@ -51,6 +53,8 @@ void main() {
     await tester.ensureVisible(find.byKey(const Key('completion-stars-2')));
     await tester.tap(find.byKey(const Key('completion-stars-2')));
     await tester.pumpAndSettle();
+    expect(find.text('ما الذي يمكن تحسينه؟'), findsOneWidget);
+    expect(find.text('ما الذي أعجبك في الرحلة؟'), findsNothing);
     expect(find.text('تأخر الوصول'), findsOneWidget);
     await tester.ensureVisible(find.byKey(const Key('completion-submit')));
     await tester.tap(find.byKey(const Key('completion-submit')));

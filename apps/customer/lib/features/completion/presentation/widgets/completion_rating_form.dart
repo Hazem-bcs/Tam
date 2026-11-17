@@ -133,14 +133,66 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: AppSpacing.lg),
-                        Text(
-                          l.completionQuickFeedbackHint,
-                          style: text.labelMedium?.copyWith(
-                            color: colors.onSurfaceVariant,
+                        SizedBox(
+                          height:
+                              44 +
+                              (MediaQuery.textScalerOf(context).scale(1) - 1)
+                                      .clamp(0, 3) *
+                                  68,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.sell_outlined,
+                                size: 18,
+                                color: colors.primary,
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Expanded(
+                                child: AnimatedSwitcher(
+                                  duration:
+                                      MediaQuery.of(context).disableAnimations
+                                      ? Duration.zero
+                                      : AppMotion.short,
+                                  child: Text(
+                                    selected >= 4
+                                        ? l.completionQuickFeedbackHint
+                                        : l.completionQuickFeedbackCritical,
+                                    key: ValueKey(selected >= 4),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: text.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.onSurface,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: colors.surfaceContainerLow,
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadii.sheet,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsetsDirectional.symmetric(
+                                        horizontal: AppSpacing.sm,
+                                        vertical: AppSpacing.xs,
+                                      ),
+                                  child: Text(
+                                    l.completionFeedbackOptional,
+                                    style: text.labelSmall?.copyWith(
+                                      color: colors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: AppSpacing.md),
+                        const SizedBox(height: AppSpacing.sm),
                         CompletionFeedbackOptions(
                           labels: suggestions,
                           positive: selected >= 4,

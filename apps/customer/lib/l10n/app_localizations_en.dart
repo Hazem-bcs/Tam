@@ -1593,7 +1593,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get completionRateHint => 'Help us improve the service';
 
   @override
-  String get completionQuickFeedbackHint => 'Quick notes added to your comment';
+  String get completionQuickFeedbackHint => 'What went well on your ride?';
 
   @override
   String get completionTagDriverRespect => 'Respectful driver';
@@ -1612,6 +1612,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completionTagServiceIssue => 'Uncomfortable trip';
+
+  @override
+  String get completionQuickFeedbackCritical => 'What could we improve?';
+
+  @override
+  String get completionFeedbackOptional => 'Optional';
 
   @override
   String get supportTitle => 'Help and support';
