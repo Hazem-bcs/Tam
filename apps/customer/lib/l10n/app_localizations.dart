@@ -2390,6 +2390,36 @@ abstract class AppLocalizations {
   /// **'الرصيد غير متاح حاليًا'**
   String get settingsWalletUnavailable;
 
+  /// No description provided for @settingsProfileEditorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك الشخصية'**
+  String get settingsProfileEditorTitle;
+
+  /// No description provided for @settingsChoosePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار صورة من المعرض'**
+  String get settingsChoosePhoto;
+
+  /// No description provided for @settingsPhotoError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر اختيار الصورة. اختر صورة واضحة بحجم أقل من 5 ميغابايت وحاول مجددًا.'**
+  String get settingsPhotoError;
+
+  /// No description provided for @settingsProfileLocalNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُحفظ بياناتك تجريبيًا خلال هذه الجلسة فقط، ولا تُرفع الصورة إلى الخادم.'**
+  String get settingsProfileLocalNotice;
+
+  /// No description provided for @settingsProfileSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ البيانات'**
+  String get settingsProfileSave;
+
   /// No description provided for @addressesTitle.
   ///
   /// In ar, this message translates to:

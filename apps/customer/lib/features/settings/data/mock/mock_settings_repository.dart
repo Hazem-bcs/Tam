@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:tam_customer/features/settings/data/mock/settings_fixtures.dart';
 import 'package:tam_customer/features/settings/data/settings_wire_mapper.dart';
 import 'package:tam_customer/features/settings/domain/settings_models.dart';
@@ -38,8 +40,13 @@ final class MockSettingsRepository implements SettingsRepository {
   }
 
   @override
-  Future<SettingsProfile> updateDisplayName(String name) async {
-    if (!SettingsNameRules.isValid(name)) {
+  Future<SettingsProfile> updateDisplayName(
+    String name, {
+    Uint8List? avatarBytes,
+  }) async {
+    if (!SettingsNameRules.isValid(name) ||
+        (avatarBytes != null &&
+            (avatarBytes.isEmpty || avatarBytes.length > 5 * 1024 * 1024))) {
       throw const SettingsFailure(SettingsFailureCode.validationError);
     }
     if (failNextProfileSave) {
@@ -48,6 +55,9 @@ final class MockSettingsRepository implements SettingsRepository {
     }
     _profile = _profile.copyWith(
       displayName: SettingsNameRules.normalize(name),
+      avatarBytes: avatarBytes == null
+          ? null
+          : Uint8List.fromList(avatarBytes).asUnmodifiableView(),
     );
     return _profile;
   }

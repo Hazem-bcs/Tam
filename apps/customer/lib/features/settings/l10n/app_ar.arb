@@ -45,5 +45,10 @@
   "settingsInternalNotificationHint": "إشعارات داخل التطبيق فقط، ولا تشمل تنبيهات الهاتف.",
   "settingsDevelopmentDisclosureTitle": "عن هذه النسخة",
   "settingsCurrentPhoneHint": "رقم هذه الجلسة",
-  "settingsWalletUnavailable": "الرصيد غير متاح حاليًا"
+  "settingsWalletUnavailable": "الرصيد غير متاح حاليًا",
+  "settingsProfileEditorTitle": "بياناتك الشخصية",
+  "settingsChoosePhoto": "اختيار صورة من المعرض",
+  "settingsPhotoError": "تعذر اختيار الصورة. اختر صورة واضحة بحجم أقل من 5 ميغابايت وحاول مجددًا.",
+  "settingsProfileLocalNotice": "تُحفظ بياناتك تجريبيًا خلال هذه الجلسة فقط، ولا تُرفع الصورة إلى الخادم.",
+  "settingsProfileSave": "حفظ البيانات"
 }

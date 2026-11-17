@@ -1,14 +1,25 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tam_customer/features/settings/domain/profile_photo_picker.dart';
 import 'package:tam_customer/features/settings/domain/settings_models.dart';
 import 'package:tam_customer/features/settings/domain/settings_repository.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 
 /// Single source of truth for draft and saved account settings.
 final class SettingsCubit extends Cubit<SettingsState> {
-  SettingsCubit(this._repository) : super(const SettingsState());
+  SettingsCubit(this._repository, {ProfilePhotoPicker? photoPicker})
+    : _photoPicker = photoPicker,
+      super(const SettingsState());
 
   final SettingsRepository _repository;
   bool _loading = false;
+  final ProfilePhotoPicker? _photoPicker;
+
+  Future<Uint8List?> pickPhoto() async {
+    if (_photoPicker == null) throw const ProfilePhotoFailure();
+    return _photoPicker.pickPhoto();
+  }
 
   Future<void> load() async {
     if (isClosed ||
@@ -130,8 +141,12 @@ final class SettingsCubit extends Cubit<SettingsState> {
     return saved;
   }
 
-  Future<bool> saveName() async {
-    if (!state.isReady || state.isBusy || !state.nameDirty) return false;
+  Future<bool> saveName({Uint8List? avatarBytes}) async {
+    if (!state.isReady ||
+        state.isBusy ||
+        (!state.nameDirty && avatarBytes == null)) {
+      return false;
+    }
     if (!SettingsNameRules.isValid(state.draftName)) {
       emit(
         state.copyWith(validationError: true, error: null, errorTarget: null),
@@ -148,7 +163,10 @@ final class SettingsCubit extends Cubit<SettingsState> {
       ),
     );
     try {
-      final updated = await _repository.updateDisplayName(state.draftName);
+      final updated = await _repository.updateDisplayName(
+        state.draftName,
+        avatarBytes: avatarBytes,
+      );
       if (isClosed) return false;
       emit(
         state.copyWith(

@@ -1224,6 +1224,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsWalletUnavailable => 'الرصيد غير متاح حاليًا';
 
   @override
+  String get settingsProfileEditorTitle => 'بياناتك الشخصية';
+
+  @override
+  String get settingsChoosePhoto => 'اختيار صورة من المعرض';
+
+  @override
+  String get settingsPhotoError =>
+      'تعذر اختيار الصورة. اختر صورة واضحة بحجم أقل من 5 ميغابايت وحاول مجددًا.';
+
+  @override
+  String get settingsProfileLocalNotice =>
+      'تُحفظ بياناتك تجريبيًا خلال هذه الجلسة فقط، ولا تُرفع الصورة إلى الخادم.';
+
+  @override
+  String get settingsProfileSave => 'حفظ البيانات';
+
+  @override
   String get addressesTitle => 'عناويني';
 
   @override

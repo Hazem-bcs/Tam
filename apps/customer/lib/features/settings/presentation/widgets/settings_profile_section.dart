@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 
 /// One welcoming identity surface; profile edits never change Auth identity.
 class SettingsProfileSection extends StatelessWidget {
@@ -11,27 +9,18 @@ class SettingsProfileSection extends StatelessWidget {
     super.key,
     required this.state,
     required this.phoneE164,
-    required this.nameController,
-    required this.isEditing,
     required this.onToggleEdit,
-    required this.onNameChanged,
-    required this.onSave,
   });
 
   final SettingsState state;
   final String? phoneE164;
-  final TextEditingController nameController;
-  final bool isEditing;
   final VoidCallback onToggleEdit;
-  final ValueChanged<String> onNameChanged;
-  final VoidCallback onSave;
 
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
-    final reducedMotion = MediaQuery.disableAnimationsOf(context);
     final compactDetails =
         MediaQuery.sizeOf(context).width < 360 &&
         MediaQuery.textScalerOf(context).scale(16) > 24;
@@ -43,28 +32,34 @@ class SettingsProfileSection extends StatelessWidget {
         color: colors.surfaceContainerLowest.withValues(alpha: 0.7),
         shape: BoxShape.circle,
       ),
-      child: Image.asset(
-        'assets/notifications/account.webp',
-        excludeFromSemantics: true,
+      child: ClipOval(
+        child: state.profile?.avatarBytes == null
+            ? Image.asset(
+                'assets/notifications/account.webp',
+                excludeFromSemantics: true,
+              )
+            : Image.memory(
+                state.profile!.avatarBytes!,
+                fit: BoxFit.cover,
+                excludeFromSemantics: true,
+              ),
       ),
     );
     final edit = IconButton(
       tooltip: t.settingsEditName,
       onPressed: state.isBusy ? null : onToggleEdit,
-      icon: Icon(isEditing ? Icons.expand_less_rounded : Icons.edit_outlined),
+      icon: const Icon(Icons.edit_outlined),
     );
     final details = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          phoneE164 == null ? t.authGuestTitle : state.profile!.displayName,
+          state.profile!.displayName,
           style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
-          phoneE164 == null
-              ? t.authGuestDescription
-              : t.settingsProfileSubtitle,
+          phoneE164 == null ? t.authGuestTitle : t.settingsProfileSubtitle,
           style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
         ),
       ],
@@ -125,58 +120,6 @@ class SettingsProfileSection extends StatelessWidget {
                     style: text.labelSmall?.copyWith(color: colors.primary),
                   ),
                 ],
-                AnimatedSize(
-                  alignment: AlignmentDirectional.topCenter,
-                  curve: AppMotion.easeOut,
-                  duration: reducedMotion ? Duration.zero : AppMotion.medium,
-                  child: isEditing
-                      ? Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                            top: AppSpacing.lg,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TamTextField(
-                                key: const Key('settings-name-field'),
-                                labelText: t.settingsName,
-                                controller: nameController,
-                                enabled: !state.isBusy,
-                                textInputAction: TextInputAction.done,
-                                onChanged: onNameChanged,
-                                onFieldSubmitted: (_) => onSave(),
-                                errorText: state.validationError
-                                    ? t.settingsNameValidation
-                                    : null,
-                                helperText: t.settingsNameHint,
-                              ),
-                              const SizedBox(height: AppSpacing.md),
-                              TamButton.primary(
-                                label: t.settingsSaveName,
-                                loadingLabel: t.settingsSaving,
-                                isLoading:
-                                    state.activity ==
-                                    SettingsActivity.savingName,
-                                onPressed: state.nameDirty && !state.isBusy
-                                    ? onSave
-                                    : null,
-                              ),
-                              if (state.errorTarget ==
-                                      SettingsErrorTarget.name &&
-                                  state.error != null) ...[
-                                const SizedBox(height: AppSpacing.sm),
-                                Text(
-                                  t.settingsSaveError,
-                                  style: text.bodySmall?.copyWith(
-                                    color: colors.error,
-                                  ),
-                                ),
-                              ],
-                            ],
-                          ),
-                        )
-                      : const SizedBox(width: double.infinity),
-                ),
               ],
             ),
           ),

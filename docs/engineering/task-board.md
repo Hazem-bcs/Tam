@@ -356,3 +356,7 @@ AUI-02-AUTH-20261117: READY_FOR_REVIEW؛root،التسجيلمعاينةفقطل
 AUI-03-ACCOUNT-20261117: READY → IMPLEMENTING؛ root، أساس873853a، settings presentation علىahmad-ui؛ تصميم حسابي مع الأيقونات الموجودة والحفاظ على السلوك.
 
 AUI-03-ACCOUNT-20261117: READY_FOR_REVIEW؛ root،27اختبارًا مستهدفًا ناجحًا،تحليلSettingsنظيف وHot Reload؛ الفحص الشامل819نجاحًا/46إخفاقًا و45ملاحظة،موثقة بالتقرير؛mainدونتغيير.
+
+AUI-04-PROFILE-POPUP-20261117: READY → IMPLEMENTING؛root،أساس5fe5ec6؛نافذةالاسم والصورة محليًا ضمنجلسةSettings،لا رفع للخادم ولا تغييرAuth.
+
+AUI-04-PROFILE-POPUP-20261117: READY_FOR_REVIEW؛root،54اختبارSettingsناجحًا وتحليلمستهدفنظيف؛بناءAndroidومنتقيالصورالأصليوفحصالنافذةنجحت؛الحفظمحليضمنالجلسةفقط،mainدونتغيير.

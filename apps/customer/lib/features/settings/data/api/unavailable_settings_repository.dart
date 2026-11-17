@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:tam_customer/features/settings/domain/settings_models.dart';
 import 'package:tam_customer/features/settings/domain/settings_repository.dart';
 
@@ -15,8 +17,10 @@ final class UnavailableSettingsRepository implements SettingsRepository {
   Future<SettingsPreferences> loadPreferences() async => _unavailable();
 
   @override
-  Future<SettingsProfile> updateDisplayName(String name) async =>
-      _unavailable();
+  Future<SettingsProfile> updateDisplayName(
+    String name, {
+    Uint8List? avatarBytes,
+  }) async => _unavailable();
 
   @override
   Future<SettingsPreferences> updatePreferences(

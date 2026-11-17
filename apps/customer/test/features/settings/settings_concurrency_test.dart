@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_settings_repository.dart';
@@ -24,10 +25,13 @@ final class ControlledSettingsRepository implements SettingsRepository {
   Future<SettingsPreferences> loadPreferences() => delegate.loadPreferences();
 
   @override
-  Future<SettingsProfile> updateDisplayName(String name) async {
+  Future<SettingsProfile> updateDisplayName(
+    String name, {
+    Uint8List? avatarBytes,
+  }) async {
     nameSaves++;
     await saveGate?.future;
-    return delegate.updateDisplayName(name);
+    return delegate.updateDisplayName(name, avatarBytes: avatarBytes);
   }
 
   @override

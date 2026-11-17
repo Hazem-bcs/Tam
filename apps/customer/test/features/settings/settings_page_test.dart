@@ -9,6 +9,7 @@ import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_settings_repository.dart';
+import 'package:tam_customer/features/settings/domain/profile_photo_picker.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/pages/settings_page.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -60,6 +61,7 @@ Widget testApp({
   Future<void> Function()? logout,
   String? phoneE164 = '+963912345678',
   double textScale = 1,
+  ProfilePhotoPicker? photoPicker,
 }) => ValueListenableBuilder<Locale>(
   valueListenable: locale,
   builder: (_, value, _) => MaterialApp(
@@ -84,7 +86,8 @@ Widget testApp({
           builder: (context) => Theme(
             data: AppTheme.account(Theme.of(context)),
             child: BlocProvider(
-              create: (_) => SettingsCubit(repository)..load(),
+              create: (_) =>
+                  SettingsCubit(repository, photoPicker: photoPicker)..load(),
               child: SettingsPage(
                 navigation: navigation,
                 locale: locale,
@@ -470,7 +473,7 @@ void main() {
       'New Display Name',
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('فتح الإشعارات'));
+    await tester.tap(find.byTooltip('إلغاء'));
     await tester.pumpAndSettle();
     expect(find.text('تغييرات غير محفوظة'), findsWidgets);
     expect(navigation.notifications, 0);
@@ -478,10 +481,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(navigation.notifications, 0);
     expect(find.text('New Display Name'), findsOneWidget);
-    await tester.tap(find.byTooltip('فتح الإشعارات'));
+    await tester.tap(find.byTooltip('إلغاء'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('تجاهل التغييرات'));
     await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('فتح الإشعارات'));
     expect(navigation.notifications, 1);
     expect(find.text('New Display Name'), findsNothing);
     final cubit = tester
@@ -509,7 +513,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('settings-name-field')), 'X');
     await tester.pumpAndSettle();
-    await tester.tap(find.text('حفظ الاسم'));
+    await tester.tap(find.byKey(const Key('settings-profile-save')));
     await tester.pumpAndSettle();
     expect(
       tester
@@ -522,10 +526,10 @@ void main() {
       'Valid Display',
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('حفظ الاسم'));
+    await tester.tap(find.byKey(const Key('settings-profile-save')));
     await tester.pumpAndSettle();
     expect(find.textContaining('تعذر حفظ التغييرات'), findsOneWidget);
-    await tester.tap(find.text('حفظ الاسم'));
+    await tester.tap(find.byKey(const Key('settings-profile-save')));
     await tester.pumpAndSettle();
     expect(find.text('Valid Display'), findsWidgets);
     expect((await repository.loadProfile()).displayName, 'Valid Display');

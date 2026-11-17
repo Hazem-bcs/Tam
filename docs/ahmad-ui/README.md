@@ -32,7 +32,7 @@
 |---|---|---|---|---|---|
 | AUI-01 | الرئيسية | UI-04 | root / A01 | READY_FOR_REVIEW | [Android والتقرير](deliveries/AUI-01-HOME-20261117/REPORT.ar.md) |
 | AUI-02 | الهاتف والتحقق ومعاينة التسجيل | UI-06, UI-07 | root / A02 | READY_FOR_REVIEW؛ التسجيل معاينة | [Android وOTP والتقرير](deliveries/AUI-02-AUTH-20261117/REPORT.ar.md) |
-| AUI-03 | الحساب والإعدادات | UI-08 | root / A03 | READY_FOR_REVIEW | [التقرير](deliveries/AUI-03-ACCOUNT-20261117/REPORT.ar.md) |
+| AUI-03 | الحساب والإعدادات ونافذة الاسم والصورة | UI-08 | root / A03 | READY_FOR_REVIEW؛ حفظ محلي للجلسة | [الحساب](deliveries/AUI-03-ACCOUNT-20261117/REPORT.ar.md)، [نافذة الملف](deliveries/AUI-04-PROFILE-POPUP-20261117/REPORT.ar.md) |
 | AUI-04 | العناوين المحفوظة | UI-02 | A04 | NOT_STARTED | — |
 | AUI-05 | نشاطي وقائمة الرحلات | UI-01 | A05 | NOT_STARTED | — |
 | AUI-06 | تفاصيل الرحلة | UI-03 | A06 | NOT_STARTED | — |

@@ -1,15 +1,28 @@
+import 'dart:typed_data';
+
 /// Profile data is independent of Auth identity and its verified phone.
 final class SettingsProfile {
-  const SettingsProfile({required this.displayName, this.avatarUrl});
+  const SettingsProfile({
+    required this.displayName,
+    this.avatarUrl,
+    this.avatarBytes,
+  });
 
   final String displayName;
   final String? avatarUrl;
 
-  SettingsProfile copyWith({String? displayName, String? avatarUrl}) =>
-      SettingsProfile(
-        displayName: displayName ?? this.displayName,
-        avatarUrl: avatarUrl ?? this.avatarUrl,
-      );
+  /// Session-local image; never serialized as backend identity.
+  final Uint8List? avatarBytes;
+
+  SettingsProfile copyWith({
+    String? displayName,
+    String? avatarUrl,
+    Uint8List? avatarBytes,
+  }) => SettingsProfile(
+    displayName: displayName ?? this.displayName,
+    avatarUrl: avatarUrl ?? this.avatarUrl,
+    avatarBytes: avatarBytes ?? this.avatarBytes,
+  );
 }
 
 final class SettingsPreferences {

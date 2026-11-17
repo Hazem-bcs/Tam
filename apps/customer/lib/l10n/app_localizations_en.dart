@@ -1243,6 +1243,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsWalletUnavailable => 'Balance unavailable';
 
   @override
+  String get settingsProfileEditorTitle => 'Your profile';
+
+  @override
+  String get settingsChoosePhoto => 'Choose a photo from gallery';
+
+  @override
+  String get settingsPhotoError =>
+      'Could not select the photo. Choose an image smaller than 5 MB and try again.';
+
+  @override
+  String get settingsProfileLocalNotice =>
+      'Changes are saved for this development session only. Your photo is not uploaded.';
+
+  @override
+  String get settingsProfileSave => 'Save profile';
+
+  @override
   String get addressesTitle => 'My addresses';
 
   @override

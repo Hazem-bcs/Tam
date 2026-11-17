@@ -9,6 +9,7 @@ import 'package:tam_customer/features/settings/presentation/widgets/settings_acc
 import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_actions.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_language_sheet.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_preferences_section.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_editor.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_profile_section.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_wallet_summary.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
@@ -36,16 +37,26 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final _name = TextEditingController();
-  bool _initialized = false;
-  bool _editing = false;
   bool _allowPop = false;
   bool _loggingOut = false;
 
-  @override
-  void dispose() {
-    _name.dispose();
-    super.dispose();
+  Future<void> _editProfile() async {
+    final cubit = context.read<SettingsCubit>();
+    if (cubit.state.isBusy) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      useSafeArea: true,
+      isDismissible: false,
+      enableDrag: false,
+      showDragHandle: true,
+      constraints: const BoxConstraints(maxWidth: 560),
+      builder: (_) => BlocProvider.value(
+        value: cubit,
+        child: const SettingsProfileEditor(),
+      ),
+    );
   }
 
   Future<bool> _confirmDiscard() async {
@@ -77,7 +88,6 @@ class _SettingsPageState extends State<SettingsPage> {
     if (cubit.state.hasUnsavedChanges) {
       if (!await _confirmDiscard() || !mounted) return;
       cubit.discardChanges();
-      _name.text = cubit.state.draftName;
     }
     if (mounted) action();
   }
@@ -168,13 +178,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final t = AppLocalizations.of(context);
     return BlocConsumer<SettingsCubit, SettingsState>(
       listener: (context, state) {
-        if (state.isReady && !_initialized) {
-          _name.text = state.draftName;
-          _initialized = true;
-        }
-        if (state.successAction == 'name') {
-          _name.text = state.draftName;
-        }
         if (state.successAction == 'name') {
           ScaffoldMessenger.of(
             context,
@@ -258,7 +261,6 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       );
     }
-    final cubit = context.read<SettingsCubit>();
     return ListView(
       key: const Key('settings-content'),
       padding: AppSpacing.pagePadding,
@@ -266,11 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsProfileSection(
           state: state,
           phoneE164: widget.phoneE164,
-          nameController: _name,
-          isEditing: _editing,
-          onToggleEdit: () => setState(() => _editing = !_editing),
-          onNameChanged: cubit.nameChanged,
-          onSave: cubit.saveName,
+          onToggleEdit: _editProfile,
         ),
         const SizedBox(height: AppSpacing.md),
         const SettingsWalletSummary(),

@@ -79,6 +79,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('تجاهل التغييرات'));
     await tester.pumpAndSettle();
+    expect(find.byType(SettingsPage), findsOneWidget);
+    expect(find.byKey(const Key('settings-name-field')), findsNothing);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
     expect(find.byType(SettingsPage), findsNothing);
     expect((await repository.loadProfile()).displayName, 'مستخدم تم');
   });
@@ -111,10 +115,10 @@ void main() {
     await tester.ensureVisible(input);
     await tester.enterText(input, 'Long Display Name With Several Words');
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('حفظ الاسم'));
+    await tester.ensureVisible(find.byKey(const Key('settings-profile-save')));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    await tester.tap(find.text('حفظ الاسم'));
+    await tester.tap(find.byKey(const Key('settings-profile-save')));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

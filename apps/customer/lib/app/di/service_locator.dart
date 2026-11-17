@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tam_customer/core/cache/local_cache_store.dart';
 import 'package:tam_customer/core/cache/sqlite_cache_store.dart';
 import 'package:tam_customer/core/config/app_config.dart';
@@ -13,11 +14,16 @@ import 'package:tam_customer/features/completion/completion_entry.dart';
 import 'package:tam_customer/features/driver_contact/driver_contact_entry.dart';
 import 'package:tam_customer/features/maps/maps_dependencies.dart';
 import 'package:tam_customer/features/ride_request/ride_request_dependencies.dart';
+import 'package:tam_customer/features/settings/data/profile_photo_picker_adapter.dart';
+import 'package:tam_customer/features/settings/domain/profile_photo_picker.dart';
 import 'package:tam_customer/features/support/support_entry.dart';
 
 final GetIt locator = GetIt.instance;
 
 void configureDependencies() {
+  locator.registerLazySingleton<ProfilePhotoPicker>(
+    () => ProfilePhotoPickerAdapter(ImagePicker()),
+  );
   locator.registerFactory<MapsDependencies>(
     () => MapsDependencies.configured(AppConfig.maps),
   );

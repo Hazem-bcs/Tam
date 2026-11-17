@@ -45,5 +45,10 @@
   "settingsInternalNotificationHint": "In-app notifications only, not phone push alerts.",
   "settingsDevelopmentDisclosureTitle": "About this version",
   "settingsCurrentPhoneHint": "Phone for this session",
-  "settingsWalletUnavailable": "Balance unavailable"
+  "settingsWalletUnavailable": "Balance unavailable",
+  "settingsProfileEditorTitle": "Your profile",
+  "settingsChoosePhoto": "Choose a photo from gallery",
+  "settingsPhotoError": "Could not select the photo. Choose an image smaller than 5 MB and try again.",
+  "settingsProfileLocalNotice": "Changes are saved for this development session only. Your photo is not uploaded.",
+  "settingsProfileSave": "Save profile"
 }
