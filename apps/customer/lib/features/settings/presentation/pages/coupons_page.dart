@@ -53,28 +53,37 @@ class CouponsPage extends StatelessWidget {
         leadingWidth: 64,
         leading: Padding(
           padding: const EdgeInsetsDirectional.only(start: AppSpacing.md),
-          child: IconButton(
-            key: const Key('coupons-back'),
-            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            style: IconButton.styleFrom(
-              backgroundColor: colors.primaryContainer.withValues(alpha: .55),
-              foregroundColor: colors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadii.md),
-              ),
-            ),
-            icon: SizedBox(
-              width: 19,
-              height: 24,
-              child: CustomPaint(
-                key: const Key('coupons-ios-chevron'),
-                painter: _IosChevronPainter(
-                  color: colors.primary,
-                  pointsRight: Directionality.of(context) == TextDirection.rtl,
+          child: Center(
+            child: SizedBox(
+              width: 44,
+              height: 44,
+              child: IconButton(
+                key: const Key('coupons-back'),
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                style: IconButton.styleFrom(
+                  backgroundColor: colors.primaryContainer.withValues(
+                    alpha: .55,
+                  ),
+                  foregroundColor: colors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                  ),
                 ),
+                icon: SizedBox(
+                  width: 19,
+                  height: 24,
+                  child: CustomPaint(
+                    key: const Key('coupons-ios-chevron'),
+                    painter: _IosChevronPainter(
+                      color: colors.primary,
+                      pointsRight:
+                          Directionality.of(context) == TextDirection.rtl,
+                    ),
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-            onPressed: () => Navigator.pop(context),
           ),
         ),
         actions: [
