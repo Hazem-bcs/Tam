@@ -180,6 +180,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get featureNotConnected => 'This feature is currently unavailable.';
 
   @override
+  String get authLoginTitle => 'Welcome back';
+
+  @override
+  String get authLoginDescription => 'Sign in with your phone number.';
+
+  @override
+  String get authRegisterTitle => 'Let’s start your journey';
+
+  @override
+  String get authRegisterDescription =>
+      'Your name, your number, and you’re on your way with TAM.';
+
+  @override
+  String get authUserName => 'Your name';
+
+  @override
+  String get authUserNameHint => 'Enter your name';
+
+  @override
+  String get authUserNameInvalid => 'Enter a name with at least two characters';
+
+  @override
+  String get authCreateAccount => 'Create account';
+
+  @override
+  String get authHaveAccount => 'Already have an account?';
+
+  @override
+  String get authNoAccount => 'Don’t have an account?';
+
+  @override
+  String get authLegalIntro => 'By continuing, you agree to our';
+
+  @override
+  String get authRegisterPreview =>
+      'Registration preview: saving a name and creating a new account are not connected to the server yet. You can sign in with your phone number or continue as a guest.';
+
+  @override
+  String get authRegisterPreviewAction => 'Preview details';
+
+  @override
+  String get authRegisterPreviewShort =>
+      'Design preview — account registration is not connected yet.';
+
+  @override
   String get homeGreeting => 'Welcome,';
 
   @override

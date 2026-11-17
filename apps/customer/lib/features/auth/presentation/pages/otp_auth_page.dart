@@ -106,48 +106,19 @@ class _OtpAuthPageState extends State<OtpAuthPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppRadii.lg),
-                          color: Theme.of(context).colorScheme.primaryContainer
-                              .withValues(alpha: 0.45),
+                      Text(
+                        challenge.phoneE164,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
                         ),
-                        padding: const EdgeInsetsDirectional.symmetric(
-                          horizontal: AppSpacing.md,
-                          vertical: AppSpacing.sm,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.phone_iphone_outlined,
-                                  size: AppDimensions.iconSize,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(width: AppSpacing.sm),
-                                Flexible(
-                                  child: Text(
-                                    challenge.phoneE164,
-                                    textDirection: TextDirection.ltr,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextButton(
-                              onPressed: state.isBusy
-                                  ? null
-                                  : context.read<AuthCubit>().editPhone,
-                              child: Text(t.authEditPhone),
-                            ),
-                          ],
-                        ),
+                      ),
+                      TextButton(
+                        onPressed: state.isBusy
+                            ? null
+                            : context.read<AuthCubit>().editPhone,
+                        child: Text(t.authEditPhone),
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       AuthOtpInput(

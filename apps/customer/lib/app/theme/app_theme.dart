@@ -39,6 +39,13 @@ abstract final class AppTheme {
     ),
   );
 
+  /// Shared brand typography for the Ahmad authentication reference screens.
+  static ThemeData auth(ThemeData ambient) => _build(
+    ambient.colorScheme,
+    ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
+    textTheme: AppTypography.home(ambient.textTheme),
+  );
+
   // A future dark palette can use the same component and typography rules.
   static ThemeData _build(
     ColorScheme colors,

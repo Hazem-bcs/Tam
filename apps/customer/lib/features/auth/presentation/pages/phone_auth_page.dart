@@ -4,6 +4,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/domain/phone_number.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_caret_gaze.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_legal_footer.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_phone_field.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
@@ -22,6 +23,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   late final TextEditingController _phone;
   late final FocusNode _phoneFocus;
   bool _localInvalid = false;
+  bool _registration = false;
+  final _name = TextEditingController();
 
   void _refreshCaret() {
     if (mounted) setState(() {});
@@ -45,6 +48,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
   @override
   void dispose() {
+    _name.dispose();
     _phoneFocus.removeListener(_refreshFocus);
     _phoneFocus.dispose();
     _phone.removeListener(_refreshCaret);
@@ -59,6 +63,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     }
     if (_localInvalid) setState(() => _localInvalid = false);
     FocusScope.of(context).unfocus();
+    if (_registration) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).authRegisterPreview),
+        ),
+      );
+      return;
+    }
     context.read<AuthCubit>().requestOtp(phoneEntryForRequest(_phone.text));
   }
 
@@ -78,8 +90,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             !hasError &&
             normalizeSyrianPhone(phoneEntryForRequest(_phone.text)) != null;
         return AuthScaffold(
-          title: t.authWelcome,
-          description: t.authPhoneDescription,
+          title: _registration ? t.authRegisterTitle : t.authLoginTitle,
+          description: _registration
+              ? t.authRegisterDescription
+              : t.authLoginDescription,
+          footer: const AuthLegalFooter(),
           busy: state.isBusy,
           inputFocused: _phoneFocus.hasFocus,
           gazeProgress: authCaretProgress(_phone.value, maxDigits: 9),
@@ -91,6 +106,31 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (_registration) ...[
+                    Text(
+                      t.authUserName,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    TextFormField(
+                      key: const Key('auth-name'),
+                      controller: _name,
+                      enabled: !state.isBusy,
+                      maxLength: 50,
+                      textInputAction: TextInputAction.next,
+                      autofillHints: const [AutofillHints.name],
+                      decoration: InputDecoration(
+                        hintText: t.authUserNameHint,
+                        counterText: '',
+                      ),
+                      validator: (value) =>
+                          (value ?? '').trim().runes.length < 2
+                          ? t.authUserNameInvalid
+                          : null,
+                      onFieldSubmitted: (_) => _phoneFocus.requestFocus(),
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
                   AuthPhoneField(
                     key: const Key('auth-phone'),
                     controller: _phone,
@@ -116,7 +156,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     builder: (context, seconds) => TamButton.primary(
                       label: seconds > 0
                           ? t.authRetryIn(seconds)
-                          : directEntry
+                          : _registration || directEntry
                           ? t.authContinue
                           : t.authSendCode,
                       loadingLabel: directEntry
@@ -127,17 +167,46 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        _registration ? t.authHaveAccount : t.authNoAccount,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      TextButton(
+                        key: const Key('auth-toggle-account'),
+                        onPressed: state.isBusy
+                            ? null
+                            : () {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).hideCurrentSnackBar();
+                                FocusScope.of(context).unfocus();
+                                context.read<AuthCubit>().clearFailure();
+                                setState(() {
+                                  _registration = !_registration;
+                                  _localInvalid = false;
+                                });
+                              },
+                        child: Text(
+                          _registration ? t.authSignIn : t.authCreateAccount,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (_registration)
+                    Text(
+                      t.authRegisterPreviewShort,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   TextButton(
                     onPressed: state.isBusy
                         ? null
                         : context.read<AuthCubit>().continueAsGuest,
                     child: Text(t.authContinueGuest),
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
-                  Text(
-                    directEntry ? t.authPhonePrivacy : t.authUnifiedAccount,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

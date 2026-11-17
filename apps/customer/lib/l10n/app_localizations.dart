@@ -404,6 +404,90 @@ abstract class AppLocalizations {
   /// **'هذه الميزة غير متاحة حاليًا.'**
   String get featureNotConnected;
 
+  /// No description provided for @authLoginTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلًا بعودتك'**
+  String get authLoginTitle;
+
+  /// No description provided for @authLoginDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك برقم هاتفك.'**
+  String get authLoginDescription;
+
+  /// No description provided for @authRegisterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّينا نبدأ مشوارك'**
+  String get authRegisterTitle;
+
+  /// No description provided for @authRegisterDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمك ورقمك، ونبدأ مع تم.'**
+  String get authRegisterDescription;
+
+  /// No description provided for @authUserName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم'**
+  String get authUserName;
+
+  /// No description provided for @authUserNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمك'**
+  String get authUserNameHint;
+
+  /// No description provided for @authUserNameInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمًا من حرفين على الأقل'**
+  String get authUserNameInvalid;
+
+  /// No description provided for @authCreateAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء حساب'**
+  String get authCreateAccount;
+
+  /// No description provided for @authHaveAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك حساب بالفعل؟'**
+  String get authHaveAccount;
+
+  /// No description provided for @authNoAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس لديك حساب؟'**
+  String get authNoAccount;
+
+  /// No description provided for @authLegalIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'بمتابعتك، توافق على'**
+  String get authLegalIntro;
+
+  /// No description provided for @authRegisterPreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة إنشاء الحساب: حفظ الاسم والتسجيل الجديد غير مربوطين بالخادم بعد. يمكنك تسجيل الدخول برقم هاتفك أو المتابعة كضيف.'**
+  String get authRegisterPreview;
+
+  /// No description provided for @authRegisterPreviewAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة البيانات'**
+  String get authRegisterPreviewAction;
+
+  /// No description provided for @authRegisterPreviewShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة للتصميم — إنشاء الحساب غير مربوط بالخادم بعد.'**
+  String get authRegisterPreviewShort;
+
   /// No description provided for @homeGreeting.
   ///
   /// In ar, this message translates to:

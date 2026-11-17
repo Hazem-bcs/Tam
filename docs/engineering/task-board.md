@@ -348,3 +348,7 @@ TAM-RIDE-VEHICLE-FARE-20261117/COMPACT: DONE؛ root، ضغط اللوحة ضمن
 AUI-01-HOME-20261117: READY → IMPLEMENTING، root؛ أساسahmad-ui1c0c831، الرئيسيةUI-04 معAppBar الحالي، لا تعديلmain. [البطاقة](tasks/AUI-01-HOME-20261117.md).
 
 AUI-01-HOME-20261117: READY_FOR_REVIEW؛root،24اختبارًا مستهدفًا ناجحة وبناءوتشغيلAndroid،بدوندمجmainأوpush. [التقرير](../ahmad-ui/deliveries/AUI-01-HOME-20261117/REPORT.ar.md).
+
+AUI-02-AUTH-20261117: READY → IMPLEMENTING؛root،أساسe06b2ff،auth/presentationوباقيالسلوككماهو. سؤالربطالتسجيلمعلق.
+
+AUI-02-AUTH-20261117: READY_FOR_REVIEW؛root،التسجيلمعاينةفقطلحينتوضيححفظالاسم،51اختبارًاناجحًا،تحليلمستهدفنظيفوبناءAndroidناجح؛mainدونتغيير.

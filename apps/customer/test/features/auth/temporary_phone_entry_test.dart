@@ -126,7 +126,11 @@ void main() {
       await tester.tap(find.text(ar ? 'متابعة' : 'Continue'));
       await tester.pumpAndSettle();
       expect(find.byType(AuthOtpInput), findsNothing);
-      expect(find.text('+963941234567'), findsOneWidget);
+      expect(
+        find.text('+963941234567'),
+        findsNothing,
+        reason: 'Home keeps phone details in Account',
+      );
       final auth = tester.element(find.byType(HomePage)).read<AuthCubit>();
       expect(auth.state.status, AuthStatus.localAccess);
       expect(auth.state.localPhoneE164, '+963941234567');

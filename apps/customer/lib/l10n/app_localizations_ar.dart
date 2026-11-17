@@ -177,6 +177,50 @@ class AppLocalizationsAr extends AppLocalizations {
   String get featureNotConnected => 'هذه الميزة غير متاحة حاليًا.';
 
   @override
+  String get authLoginTitle => 'أهلًا بعودتك';
+
+  @override
+  String get authLoginDescription => 'سجّل دخولك برقم هاتفك.';
+
+  @override
+  String get authRegisterTitle => 'خلّينا نبدأ مشوارك';
+
+  @override
+  String get authRegisterDescription => 'اسمك ورقمك، ونبدأ مع تم.';
+
+  @override
+  String get authUserName => 'اسم المستخدم';
+
+  @override
+  String get authUserNameHint => 'أدخل اسمك';
+
+  @override
+  String get authUserNameInvalid => 'أدخل اسمًا من حرفين على الأقل';
+
+  @override
+  String get authCreateAccount => 'إنشاء حساب';
+
+  @override
+  String get authHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get authNoAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get authLegalIntro => 'بمتابعتك، توافق على';
+
+  @override
+  String get authRegisterPreview =>
+      'معاينة إنشاء الحساب: حفظ الاسم والتسجيل الجديد غير مربوطين بالخادم بعد. يمكنك تسجيل الدخول برقم هاتفك أو المتابعة كضيف.';
+
+  @override
+  String get authRegisterPreviewAction => 'معاينة البيانات';
+
+  @override
+  String get authRegisterPreviewShort =>
+      'معاينة للتصميم — إنشاء الحساب غير مربوط بالخادم بعد.';
+
+  @override
   String get homeGreeting => 'أهلًا بك،';
 
   @override

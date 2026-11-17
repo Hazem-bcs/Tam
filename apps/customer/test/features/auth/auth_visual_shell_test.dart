@@ -4,8 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/app.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
-import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
-import 'package:tam_customer/features/auth/presentation/widgets/auth_rive_mascot.dart';
+import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
 
 import '../../support/fake_auth_repository.dart';
 
@@ -27,12 +26,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('auth-brand-scene')), findsOneWidget);
-    expect(find.byKey(const Key('auth-tam-mascot')), findsOneWidget);
+    expect(find.byKey(const Key('auth-reference-artwork')), findsOneWidget);
     expect(find.byKey(const Key('auth-form-surface')), findsOneWidget);
     expect(find.text('تم'), findsWidgets);
     expect(find.text('مشوار'), findsNothing);
 
-    final illustration = tester.getSize(find.byType(AuthHeaderArtwork));
+    final illustration = tester.getSize(
+      find.byKey(const Key('auth-reference-artwork')),
+    );
     expect(illustration.width, greaterThan(200));
     expect(illustration.height, greaterThan(40));
     expect(tester.takeException(), isNull);
@@ -57,13 +58,15 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('auth-phone')), findsOneWidget);
-    final illustration = tester.getSize(find.byType(AuthHeaderArtwork));
+    final illustration = tester.getSize(
+      find.byKey(const Key('auth-reference-artwork')),
+    );
     expect(illustration.width, greaterThan(170));
     expect(tester.takeException(), isNull);
   });
 
   testWidgets(
-    'keyboard keeps mascot and hero the same size while fields stay scrollable',
+    'keyboard keeps reference artwork the same size while fields stay scrollable',
     (tester) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1;
@@ -80,7 +83,7 @@ void main() {
       await tester.pumpAndSettle();
 
       const hero = Key('auth-brand-scene');
-      const mascot = Key('auth-tam-mascot');
+      const mascot = Key('auth-reference-artwork');
       final heroBefore = tester.getSize(find.byKey(hero));
       final mascotBefore = tester.getSize(find.byKey(mascot));
       expect(mascotBefore.width, greaterThan(200));
@@ -95,7 +98,7 @@ void main() {
     },
   );
 
-  testWidgets('Rive mascot receives focus and OTP phase changes', (
+  testWidgets('reference scene receives focus and OTP phase changes', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -110,8 +113,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    AuthRiveMascot mascot() =>
-        tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+    AuthScaffold mascot() =>
+        tester.widget<AuthScaffold>(find.byType(AuthScaffold));
     expect(mascot().inputFocused, isFalse);
     expect(mascot().otpStage, isFalse);
 
@@ -128,7 +131,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(mascot().gazeProgress, 1);
     // Touching outside the input must release focus and return to living Idle.
-    await tester.tap(find.text('أهلًا بك في تم'));
+    await tester.tap(find.text('أهلًا بعودتك'));
     await tester.pumpAndSettle();
     expect(mascot().inputFocused, isFalse);
 
@@ -154,8 +157,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    AuthRiveMascot mascot() =>
-        tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+    AuthScaffold mascot() =>
+        tester.widget<AuthScaffold>(find.byType(AuthScaffold));
     expect(mascot().hasError, isFalse);
 
     await tester.ensureVisible(find.text('إرسال رمز التحقق'));
@@ -183,15 +186,13 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      AuthRiveMascot mascot() =>
-          tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+      AuthScaffold mascot() =>
+          tester.widget<AuthScaffold>(find.byType(AuthScaffold));
       expect(mascot().success, isFalse);
       await tester.enterText(find.byKey(const Key('auth-phone')), '912345678');
       await tester.pump();
       expect(mascot().success, isTrue);
-      final auth = tester
-          .element(find.byType(AuthRiveMascot))
-          .read<AuthCubit>();
+      final auth = tester.element(find.byType(AuthScaffold)).read<AuthCubit>();
       expect(auth.state.status, AuthStatus.signedOut);
       expect(auth.state.user, isNull);
       expect(await store.read(), isNull);
