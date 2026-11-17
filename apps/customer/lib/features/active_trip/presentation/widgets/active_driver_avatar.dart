@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tam_customer/app/theme/app_tokens.dart';
 
 /// Fictional portrait is restricted to the mock repository composition.
 class ActiveDriverAvatar extends StatelessWidget {
