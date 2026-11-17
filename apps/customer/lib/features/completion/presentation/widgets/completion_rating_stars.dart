@@ -99,7 +99,7 @@ class _RatingStar extends StatelessWidget {
         width: width,
         height: 56,
         child: AnimatedScale(
-          scale: focused ? 1.12 : 1,
+          scale: focused ? 1.07 : 1,
           duration: duration,
           curve: Curves.easeOutBack,
           child: AnimatedContainer(
@@ -132,8 +132,8 @@ class _RatingStar extends StatelessWidget {
                   key: ValueKey(active),
                   child: SvgPicture.asset(
                     image,
-                    width: width - 8,
-                    height: width - 8,
+                    width: width - 13,
+                    height: width - 13,
                   ),
                 ),
               ),
