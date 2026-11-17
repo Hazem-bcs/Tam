@@ -59,8 +59,11 @@ Widget buildSavedAddressPicker({
   required ValueChanged<TripLocation> onSelected,
   required VoidCallback onManage,
   bool compact = false,
-}) => BlocProvider(
-  create: (_) => _listCubit(repository)..load(),
+}) => MultiBlocProvider(
+  providers: [
+    BlocProvider(create: (_) => _listCubit(repository)..load()),
+    _selectionProvider(),
+  ],
   child: SavedAddressPicker(
     onSelected: onSelected,
     onManage: onManage,
