@@ -23,8 +23,9 @@ List<RouteBase> buildSupportRoutes(
       onTicket: (id) => unawaited(
         GoRouter.of(context).push<void>(AppRoutes.supportTicketLocation(id)),
       ),
-      onChooseTrip: () =>
-          unawaited(GoRouter.of(context).push<void>(AppRoutes.trips)),
+      // Trips belongs to the existing StatefulShellRoute branch; pushing it
+      // would insert a second shell page with the same Navigator page key.
+      onChooseTrip: () => GoRouter.of(context).go(AppRoutes.trips),
     ),
   ),
   GoRoute(
