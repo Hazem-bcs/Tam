@@ -32,8 +32,8 @@ Widget buildAddressesFeature(
 
 BlocProvider<PreferredAddressSelection> _selectionProvider() =>
     locator.isRegistered<PreferredAddressSelection>()
-        ? BlocProvider.value(value: locator<PreferredAddressSelection>())
-        : BlocProvider(create: (_) => PreferredAddressSelection());
+    ? BlocProvider.value(value: locator<PreferredAddressSelection>())
+    : BlocProvider(create: (_) => PreferredAddressSelection());
 
 Widget buildAddressEditorFeature(
   BuildContext context, {
