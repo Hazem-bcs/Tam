@@ -3,7 +3,6 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'ride_artwork.dart';
-import 'ride_fare_format.dart';
 
 class RideVehiclePicker extends StatefulWidget {
   const RideVehiclePicker({
@@ -118,7 +117,6 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
                       child: _VehicleCard(
                         vehicle: vehicle,
                         selected: widget.selected == vehicle,
-                        quote: widget.quotes[vehicle],
                         onTap: widget.enabled
                             ? () => widget.onSelected(vehicle)
                             : null,
@@ -149,12 +147,10 @@ class _VehicleCard extends StatelessWidget {
   const _VehicleCard({
     required this.vehicle,
     required this.selected,
-    required this.quote,
     required this.onTap,
   });
   final RideVehicleClass vehicle;
   final bool selected;
-  final RideQuote? quote;
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
@@ -208,23 +204,6 @@ class _VehicleCard extends StatelessWidget {
                     label,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    quote == null
-                        ? '—'
-                        : rideFareFormat(
-                            quote!.fare,
-                            Localizations.localeOf(context).languageCode,
-                          ),
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: selected ? c.primary : c.onSurface,
-                    ),
-                  ),
-                  Text(
-                    l.rideRequestCurrencySyp,
-                    style: theme.textTheme.labelSmall,
                   ),
                 ],
               ),
