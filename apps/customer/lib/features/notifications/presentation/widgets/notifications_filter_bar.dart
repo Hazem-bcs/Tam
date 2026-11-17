@@ -81,10 +81,12 @@ class NotificationsFilterBar extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: entries.length + 2,
-        separatorBuilder: (_, index) =>
-            index == 0 || index == entries.length
-                ? const SizedBox.shrink()
-                : const SizedBox(width: 6),
+        separatorBuilder: (_, index) {
+          if (index == 0 || index == entries.length) {
+            return const SizedBox.shrink();
+          }
+          return const SizedBox(width: 6);
+        },
         itemBuilder: (context, index) {
           if (index == 0) {
             return const SizedBox(
