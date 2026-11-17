@@ -45,8 +45,7 @@ final class ForegroundLocation implements DeviceLocation {
 
   /// Reuse the app's foreground location stream without showing a new
   /// permission prompt. A denied/unavailable location remains unavailable.
-  Future<GeoPoint> locateWithoutPrompt() =>
-      _locate(requestPermission: false);
+  Future<GeoPoint> locateWithoutPrompt() => _locate(requestPermission: false);
 
   void setSession(bool entered) {
     if (_session == entered || _disposed) return;
