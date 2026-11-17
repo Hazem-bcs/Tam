@@ -226,7 +226,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   Future<void> _synchronize() async {
     _syncing = true;
     final epoch = _epoch;
-    final disableAnimations = mounted && MediaQuery.disableAnimationsOf(context);
+    final disableAnimations =
+        mounted && MediaQuery.disableAnimationsOf(context);
     try {
       while (_dirty && _current(epoch) && _installed && _foreground) {
         _dirty = false;
