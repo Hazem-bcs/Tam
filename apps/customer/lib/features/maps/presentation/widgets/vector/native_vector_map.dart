@@ -89,7 +89,11 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   void initState() {
     super.initState();
     final center =
-        widget.scene.origin ?? widget.scene.destination ?? widget.initialCenter;
+        widget.focus?.point ??
+        widget.scene.selection ??
+        widget.scene.origin ??
+        widget.scene.destination ??
+        widget.initialCenter;
     _camera = CameraPosition(target: _latLng(center), zoom: 15);
     WidgetsBinding.instance.addObserver(this);
     widget.bottomInset?.addListener(_schedulePadding);
