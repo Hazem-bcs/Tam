@@ -75,7 +75,8 @@ void main() {
     expect(find.byType(RouteMapView), findsNothing);
     expect(find.text('المزة، شارع الجلاء'), findsOneWidget);
     expect(find.text('أبو رمانة، شارع الحمراء'), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_back_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.circle_outlined), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

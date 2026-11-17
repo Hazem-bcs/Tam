@@ -12,7 +12,7 @@
   "tripsFrom": "من",
   "tripsTo": "إلى",
   "tripsDetails": "التفاصيل",
-  "tripsDetailsTitle": "تفاصيل الرحلة",
+  "tripsDetailsTitle": "تفاصيل الطلب",
   "tripsTripNumber": "الرحلة رقم {id}",
   "@tripsTripNumber": {
     "placeholders": {
@@ -85,8 +85,26 @@
   "tripsHistoryHeading": "آخر مشاويرك",
   "tripsLiveHeading": "على الطريق الآن",
   "tripsVisibleCount": "{count} في السجل",
-  "@tripsVisibleCount": {"placeholders": {"count": {"type": "int"}}},
+  "@tripsVisibleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tripsNextPrompt": "جاهز لمشوار جديد؟",
   "tripsNextSubtitle": "الوجهة الجاية أقرب مما تتخيل",
-  "tripsCurrencySyp": "ل.س"
+  "tripsCurrencySyp": "ل.س",
+  "tripsDriverSection": "بيانات السائق",
+  "tripsDriverUnavailable": "لم تتوفر بيانات السائق لهذه الرحلة",
+  "tripsFareSection": "تفاصيل الأجرة",
+  "tripsRecordedTotal": "إجمالي الأجرة المسجّلة",
+  "tripsPaymentStatus": "حالة الدفع",
+  "tripsUnavailableValue": "غير متوفر",
+  "tripsPaymentUnconfirmed": "غير مؤكدة في بيانات الرحلة",
+  "tripsDiscountUnrecorded": "قيمة الخصم غير محفوظة",
+  "tripsDistance": "المسافة",
+  "tripsDuration": "مدة الرحلة",
+  "tripsRateAction": "تقييم الرحلة",
+  "tripsSupportAction": "التواصل مع الدعم"
 }

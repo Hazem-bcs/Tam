@@ -764,7 +764,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripsDetails => 'التفاصيل';
 
   @override
-  String get tripsDetailsTitle => 'تفاصيل الرحلة';
+  String get tripsDetailsTitle => 'تفاصيل الطلب';
 
   @override
   String tripsTripNumber(String id) {
@@ -957,6 +957,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tripsCurrencySyp => 'ل.س';
+
+  @override
+  String get tripsDriverSection => 'بيانات السائق';
+
+  @override
+  String get tripsDriverUnavailable => 'لم تتوفر بيانات السائق لهذه الرحلة';
+
+  @override
+  String get tripsFareSection => 'تفاصيل الأجرة';
+
+  @override
+  String get tripsRecordedTotal => 'إجمالي الأجرة المسجّلة';
+
+  @override
+  String get tripsPaymentStatus => 'حالة الدفع';
+
+  @override
+  String get tripsUnavailableValue => 'غير متوفر';
+
+  @override
+  String get tripsPaymentUnconfirmed => 'غير مؤكدة في بيانات الرحلة';
+
+  @override
+  String get tripsDiscountUnrecorded => 'قيمة الخصم غير محفوظة';
+
+  @override
+  String get tripsDistance => 'المسافة';
+
+  @override
+  String get tripsDuration => 'مدة الرحلة';
+
+  @override
+  String get tripsRateAction => 'تقييم الرحلة';
+
+  @override
+  String get tripsSupportAction => 'التواصل مع الدعم';
 
   @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';

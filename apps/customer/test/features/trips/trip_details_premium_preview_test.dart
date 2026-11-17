@@ -50,11 +50,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(TripDetailsPage), findsOneWidget);
-    expect(find.text('تفاصيل الرحلة'), findsOneWidget);
+    expect(find.text('تفاصيل الطلب'), findsOneWidget);
     expect(find.text('مسار الرحلة'), findsOneWidget);
-    expect(find.text('معلومات الرحلة'), findsOneWidget);
+    expect(find.text('بيانات السائق'), findsOneWidget);
     expect(find.textContaining('mock-history-001'), findsOneWidget);
+    expect(find.text('توقيت الرحلة'), findsNothing);
+    expect(find.textContaining('تفاصيل أدق'), findsNothing);
+    await tester.drag(
+      find.byKey(const Key('trips-details-scroll')),
+      const Offset(0, -850),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('حالة الدفع'), findsOneWidget);
+    expect(find.text('غير مؤكدة في بيانات الرحلة'), findsOneWidget);
     expect(tester.takeException(), isNull);
+    await tester.drag(
+      find.byKey(const Key('trips-details-scroll')),
+      const Offset(0, 1000),
+    );
+    await tester.pumpAndSettle();
 
     if (_capture) {
       // Ensure the user-supplied bitmap has decoded before capturing a golden.

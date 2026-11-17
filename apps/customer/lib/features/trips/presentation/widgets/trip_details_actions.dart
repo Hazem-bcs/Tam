@@ -88,22 +88,24 @@ class TripDetailsActions extends StatelessWidget {
                   ),
                 )
               : null,
-          quiet: trip.status.isActive,
+          quiet: true,
         ),
         const SizedBox(height: AppSpacing.sm),
         if (trip.status == TripStatus.completed) ...[
           _ActionLink(
             key: const Key('trips-completion'),
             icon: Icons.star_outline_rounded,
-            label: l.tripsCompletion,
+            label: l.tripsRateAction,
             onTap: () => navigation.openCompletion(trip.id),
           ),
         ],
-        _ActionLink(
+        TamButton.primary(
           key: const Key('trips-support'),
           icon: Icons.headset_mic_outlined,
-          label: l.tripsSupport,
-          onTap: enabled ? () => navigation.openSupport(tripId: trip.id) : null,
+          label: l.tripsSupportAction,
+          onPressed: enabled
+              ? () => navigation.openSupport(tripId: trip.id)
+              : null,
         ),
         if (trip.canCancel) ...[
           const SizedBox(height: AppSpacing.sm),
@@ -205,7 +207,14 @@ class _ActionLink extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(icon, size: 19, color: colors.onSurfaceVariant),
+                Image.asset(
+                  icon == Icons.headset_mic_outlined
+                      ? 'assets/notifications/support.webp'
+                      : 'assets/notifications/rating.webp',
+                  width: 30,
+                  height: 30,
+                  excludeFromSemantics: true,
+                ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Text(
@@ -218,7 +227,9 @@ class _ActionLink extends StatelessWidget {
                   ),
                 ),
                 Icon(
-                  Icons.chevron_left_rounded,
+                  Directionality.of(context) == TextDirection.rtl
+                      ? Icons.chevron_left_rounded
+                      : Icons.chevron_right_rounded,
                   color: colors.onSurfaceVariant,
                   size: 20,
                 ),

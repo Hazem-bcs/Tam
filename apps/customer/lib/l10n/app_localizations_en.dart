@@ -778,7 +778,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripsDetails => 'Details';
 
   @override
-  String get tripsDetailsTitle => 'Trip details';
+  String get tripsDetailsTitle => 'Order details';
 
   @override
   String tripsTripNumber(String id) {
@@ -974,6 +974,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tripsCurrencySyp => 'SYP';
+
+  @override
+  String get tripsDriverSection => 'Driver details';
+
+  @override
+  String get tripsDriverUnavailable =>
+      'Driver details are unavailable for this trip';
+
+  @override
+  String get tripsFareSection => 'Fare breakdown';
+
+  @override
+  String get tripsRecordedTotal => 'Recorded trip total';
+
+  @override
+  String get tripsPaymentStatus => 'Payment status';
+
+  @override
+  String get tripsUnavailableValue => 'Unavailable';
+
+  @override
+  String get tripsPaymentUnconfirmed => 'Not confirmed in trip data';
+
+  @override
+  String get tripsDiscountUnrecorded => 'Discount amount not recorded';
+
+  @override
+  String get tripsDistance => 'Distance';
+
+  @override
+  String get tripsDuration => 'Trip duration';
+
+  @override
+  String get tripsRateAction => 'Rate trip';
+
+  @override
+  String get tripsSupportAction => 'Contact support';
 
   @override
   String get notificationsMarkAll => 'Mark all as read';

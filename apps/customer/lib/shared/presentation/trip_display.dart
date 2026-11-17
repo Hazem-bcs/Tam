@@ -33,7 +33,10 @@ String tripMoneyLabel(BuildContext context, Money money) {
   final fraction = money.minorUnit == 0
       ? ''
       : '.${digits.substring(integerLength)}';
-  return '${NumberFormat.decimalPattern(locale).format(integral)}$fraction ${money.currency}';
+  final currency = money.currency == 'SYP'
+      ? AppLocalizations.of(context).tripsCurrencySyp
+      : money.currency;
+  return '${NumberFormat.decimalPattern(locale).format(integral)}$fraction $currency';
 }
 
 String tripDateLabel(BuildContext context, DateTime time) => DateFormat.yMMMd(
@@ -41,7 +44,13 @@ String tripDateLabel(BuildContext context, DateTime time) => DateFormat.yMMMd(
 ).add_jm().format(time.toLocal());
 
 String tripVehicleLabel(AppLocalizations l, String classId) =>
-    classId == 'standard' ? l.tripsVehicleStandard : classId;
+    switch (classId) {
+      'standard' => l.tripsVehicleStandard,
+      'comfort' => l.rideRequestComfort,
+      'van' => l.rideRequestVan,
+      'motorbike' => l.rideRequestMotorbike,
+      _ => classId,
+    };
 
 ({Color foreground, Color background, IconData icon}) tripStatusColors(
   BuildContext context,

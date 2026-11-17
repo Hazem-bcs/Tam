@@ -12,7 +12,7 @@
   "tripsFrom": "From",
   "tripsTo": "To",
   "tripsDetails": "Details",
-  "tripsDetailsTitle": "Trip details",
+  "tripsDetailsTitle": "Order details",
   "tripsTripNumber": "Trip {id}",
   "@tripsTripNumber": {
     "placeholders": {
@@ -85,8 +85,26 @@
   "tripsHistoryHeading": "Recent journeys",
   "tripsLiveHeading": "On the move now",
   "tripsVisibleCount": "{count} shown",
-  "@tripsVisibleCount": {"placeholders": {"count": {"type": "int"}}},
+  "@tripsVisibleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "tripsNextPrompt": "Ready for your next ride?",
   "tripsNextSubtitle": "Your next destination is just a tap away",
-  "tripsCurrencySyp": "SYP"
+  "tripsCurrencySyp": "SYP",
+  "tripsDriverSection": "Driver details",
+  "tripsDriverUnavailable": "Driver details are unavailable for this trip",
+  "tripsFareSection": "Fare breakdown",
+  "tripsRecordedTotal": "Recorded trip total",
+  "tripsPaymentStatus": "Payment status",
+  "tripsUnavailableValue": "Unavailable",
+  "tripsPaymentUnconfirmed": "Not confirmed in trip data",
+  "tripsDiscountUnrecorded": "Discount amount not recorded",
+  "tripsDistance": "Distance",
+  "tripsDuration": "Trip duration",
+  "tripsRateAction": "Rate trip",
+  "tripsSupportAction": "Contact support"
 }

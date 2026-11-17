@@ -48,7 +48,7 @@ class TripDetailsRouteCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppRadii.lg),
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -82,41 +82,11 @@ class TripDetailsRouteCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.md),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final compact =
-                    constraints.maxWidth < 300 ||
-                    MediaQuery.textScalerOf(context).scale(1) >= 1.35;
-                if (!showMap) {
-                  return compact
-                      ? _StopsTimeline(trip: trip)
-                      : _StopsAcrossWidth(trip: trip);
-                }
-                final preview = _RealMapPreview(trip: trip);
-                if (compact) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _StopsTimeline(trip: trip),
-                      const SizedBox(height: AppSpacing.md),
-                      SizedBox(height: 150, child: preview),
-                    ],
-                  );
-                }
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(child: _StopsTimeline(trip: trip)),
-                    const SizedBox(width: AppSpacing.md),
-                    SizedBox(
-                      width: constraints.maxWidth * .41,
-                      height: 156,
-                      child: preview,
-                    ),
-                  ],
-                );
-              },
-            ),
+            if (showMap) ...[
+              SizedBox(height: 190, child: _RealMapPreview(trip: trip)),
+              const SizedBox(height: AppSpacing.lg),
+            ],
+            _StopsTimeline(trip: trip),
           ],
         ),
       ),
@@ -144,98 +114,12 @@ class _RealMapPreview extends StatelessWidget {
         origin: trip.booking.pickup.point,
         destination: trip.booking.destination.point,
         driver: trip.status.isActive ? trip.live?.position?.point : null,
-        height: 156,
+        height: 190,
         markerIconSize: 20,
         compactPreview: true,
       ),
     ),
   );
-}
-
-/// The full-width fallback intentionally distributes stops across the card.
-class _StopsAcrossWidth extends StatelessWidget {
-  const _StopsAcrossWidth({required this.trip});
-  final Trip trip;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
-    final rtl = Directionality.of(context) == TextDirection.rtl;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: _InlineStop(
-            caption: l.tripsFrom,
-            address: trip.booking.pickup.label,
-            destination: false,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(6, 28, 6, 0),
-          child: Icon(
-            rtl ? Icons.arrow_back_rounded : Icons.arrow_forward_rounded,
-            size: 18,
-            color: colors.outline,
-          ),
-        ),
-        Expanded(
-          child: _InlineStop(
-            caption: l.tripsTo,
-            address: trip.booking.destination.label,
-            destination: true,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _InlineStop extends StatelessWidget {
-  const _InlineStop({
-    required this.caption,
-    required this.address,
-    required this.destination,
-  });
-  final String caption;
-  final String address;
-  final bool destination;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final type = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          destination ? Icons.location_on_rounded : Icons.circle_outlined,
-          size: 16,
-          color: colors.primary,
-        ),
-        const SizedBox(height: 7),
-        Text(
-          caption,
-          style: type.bodySmall?.copyWith(
-            color: colors.onSurfaceVariant,
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          address,
-          softWrap: true,
-          style: type.bodyMedium?.copyWith(
-            color: colors.onSurface,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            height: 1.35,
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 class _StopsTimeline extends StatelessWidget {
@@ -294,11 +178,14 @@ class _TimelineStop extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsetsDirectional.only(top: 5),
-          child: Icon(
-            destination ? Icons.location_on_rounded : Icons.circle_outlined,
-            size: 16,
-            color: colors.primary,
-          ),
+          child: destination
+              ? Image.asset(
+                  'assets/images/address_pin.webp',
+                  width: 22,
+                  height: 22,
+                  excludeFromSemantics: true,
+                )
+              : Icon(Icons.circle_outlined, size: 22, color: colors.primary),
         ),
         const SizedBox(width: AppSpacing.md),
         Expanded(

@@ -1517,7 +1517,7 @@ abstract class AppLocalizations {
   /// No description provided for @tripsDetailsTitle.
   ///
   /// In ar, this message translates to:
-  /// **'تفاصيل الرحلة'**
+  /// **'تفاصيل الطلب'**
   String get tripsDetailsTitle;
 
   /// No description provided for @tripsTripNumber.
@@ -1885,6 +1885,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ل.س'**
   String get tripsCurrencySyp;
+
+  /// No description provided for @tripsDriverSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات السائق'**
+  String get tripsDriverSection;
+
+  /// No description provided for @tripsDriverUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تتوفر بيانات السائق لهذه الرحلة'**
+  String get tripsDriverUnavailable;
+
+  /// No description provided for @tripsFareSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الأجرة'**
+  String get tripsFareSection;
+
+  /// No description provided for @tripsRecordedTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الأجرة المسجّلة'**
+  String get tripsRecordedTotal;
+
+  /// No description provided for @tripsPaymentStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة الدفع'**
+  String get tripsPaymentStatus;
+
+  /// No description provided for @tripsUnavailableValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متوفر'**
+  String get tripsUnavailableValue;
+
+  /// No description provided for @tripsPaymentUnconfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مؤكدة في بيانات الرحلة'**
+  String get tripsPaymentUnconfirmed;
+
+  /// No description provided for @tripsDiscountUnrecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الخصم غير محفوظة'**
+  String get tripsDiscountUnrecorded;
+
+  /// No description provided for @tripsDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة'**
+  String get tripsDistance;
+
+  /// No description provided for @tripsDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة الرحلة'**
+  String get tripsDuration;
+
+  /// No description provided for @tripsRateAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييم الرحلة'**
+  String get tripsRateAction;
+
+  /// No description provided for @tripsSupportAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'التواصل مع الدعم'**
+  String get tripsSupportAction;
 
   /// No description provided for @notificationsMarkAll.
   ///
