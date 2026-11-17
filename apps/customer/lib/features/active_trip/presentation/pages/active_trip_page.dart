@@ -4,23 +4,24 @@ import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_card.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_route_map.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_search_journey.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_actions.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_display.dart';
+import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_overview.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
-import 'package:tam_customer/shared/formatters/ride_time_label.dart';
-import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
-import 'package:tam_customer/shared/widgets/trip_route.dart';
 
 class ActiveTripPage extends StatefulWidget {
-  const ActiveTripPage({super.key, required this.navigation});
+  const ActiveTripPage({
+    super.key,
+    required this.navigation,
+    this.showDemoAvatar = false,
+  });
+
   final CustomerNavigation navigation;
+  final bool showDemoAvatar;
+
   @override
   State<ActiveTripPage> createState() => _ActiveTripPageState();
 }
@@ -71,6 +72,7 @@ class _ActiveTripPageState extends State<ActiveTripPage>
     }
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(l.activeTripTitle),
         actions: [
           IconButton(
@@ -95,7 +97,11 @@ class _ActiveTripPageState extends State<ActiveTripPage>
                 }
                 final trip = state.trip;
                 return ListView(
-                  padding: AppSpacing.pagePadding,
+                  key: const Key('active-trip-scroll'),
+                  padding: const EdgeInsetsDirectional.fromSTEB(
+                    AppSpacing.lg, AppSpacing.sm,
+                    AppSpacing.lg, AppSpacing.xl,
+                  ),
                   children: [
                     if (trip == null) ...[
                       Text(
@@ -109,90 +115,19 @@ class _ActiveTripPageState extends State<ActiveTripPage>
                         label: l.activeTripRefresh,
                         isLoading: state.refreshing,
                         loadingLabel: l.activeTripLoading,
-                        onPressed: () =>
-                            context.read<ActiveTripCubit>().refresh(),
+                        onPressed: () => context.read<ActiveTripCubit>().refresh(),
                       ),
                       const SizedBox(height: AppSpacing.md),
                       TamButton.primary(
                         label: l.activeTripNewBooking,
-                        onPressed: () => widget.navigation.openRideRequest(),
+                        onPressed: widget.navigation.openRideRequest,
                       ),
-                    ] else ...[
-                      Semantics(
-                        liveRegion: true,
-                        child: Text(
-                          tripStatusLabel(l, trip.status),
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(activeTripDescription(l, trip.status)),
-                      if (trip.booking.scheduledAt != null) ...[
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(rideTimeLabel(context, trip.booking.scheduledAt!)),
-                      ],
-                      const SizedBox(height: AppSpacing.md),
-                      if (state.offline) ...[
-                        TamCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Icon(Icons.cloud_off_outlined),
-                              Text(activeTripError(l, state.failure)),
-                              Text(l.activeTripCached),
-                              TextButton(
-                                onPressed: state.refreshing
-                                    ? null
-                                    : () => context
-                                          .read<ActiveTripCubit>()
-                                          .refresh(),
-                                child: Text(l.activeTripRefresh),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                      ],
-                      if (state.refreshing) const LinearProgressIndicator(),
-                      ActiveRouteMap(
-                        trip: trip,
-                        stale: state.offline || state.positionStale,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      TripRoute(
-                        pickup: trip.booking.pickup,
-                        destination: trip.booking.destination,
-                      ),
-                      if (trip.live?.driver != null) ...[
-                        const SizedBox(height: AppSpacing.lg),
-                        ActiveDriverCard(driver: trip.live!.driver!),
-                        const SizedBox(height: AppSpacing.md),
-                        TamButton.secondary(
-                          key: const Key('active-chat'),
-                          label: l.activeTripChat,
-                          icon: Icons.chat_bubble_outline,
-                          onPressed: () => widget.navigation.openChat(trip.id),
-                        ),
-                      ],
-                      if (!state.offline &&
-                          !state.positionStale &&
-                          (trip.live?.etaSeconds ?? 0) > 0) ...[
-                        const SizedBox(height: AppSpacing.md),
-                        Text(
-                          l.activeTripEta((trip.live!.etaSeconds! / 60).ceil()),
-                        ),
-                      ],
-                      const SizedBox(height: AppSpacing.lg),
-                      ActiveTripActions(
+                    ] else
+                      ActiveTripOverview(
                         state: state,
                         navigation: widget.navigation,
+                        showDemoAvatar: widget.showDemoAvatar,
                       ),
-                      const SizedBox(height: AppSpacing.lg),
-                      Text(
-                        l.activeTripSimulationNotice,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
                   ],
                 );
               },
