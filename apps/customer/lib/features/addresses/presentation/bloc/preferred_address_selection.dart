@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 final class PreferredAddressSelection extends Cubit<String?> {
   PreferredAddressSelection() : super(null);
 
+  void reset() {
+    if (!isClosed && state != null) emit(null);
+  }
+
   void choose(String id) {
     if (!isClosed && id.isNotEmpty && state != id) emit(id);
   }
