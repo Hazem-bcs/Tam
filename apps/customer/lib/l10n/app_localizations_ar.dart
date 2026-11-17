@@ -316,7 +316,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeCouponHint => 'وفّر على مشوارك القادم مع تم';
 
   @override
-  String get homeCouponDetails => 'التفاصيل';
+  String get homeCouponDetails => 'إضافة الكود';
 
   @override
   String get homeCouponInstructions =>

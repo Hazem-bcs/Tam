@@ -8,9 +8,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
+import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_settings_repository.dart';
 import 'package:tam_customer/features/settings/domain/profile_photo_picker.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
+import 'package:tam_customer/features/settings/presentation/coupon_book_scope.dart';
 import 'package:tam_customer/features/settings/presentation/pages/settings_page.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -279,6 +281,35 @@ void main() {
     expect(find.byKey(const Key('coupons-add')), findsOneWidget);
     expect(find.text('NOW25'), findsOneWidget);
     expect(navigation.home + navigation.trips, 0);
+  });
+
+  testWidgets('account coupons show the code added in a shared app session', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    final book = MockCouponBook();
+    addTearDown(book.dispose);
+    expect(book.add('TAM10'), AddDemoCouponResult.added);
+
+    await tester.pumpWidget(
+      CouponBookScope(
+        book: book,
+        child: testApp(
+          locale: locale,
+          navigation: FakeNavigation(),
+          repository: MockSettingsRepository(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('settings-coupons')));
+    await tester.tap(find.byKey(const Key('settings-coupons')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('TAM10'), findsOneWidget);
+    expect(find.text('10%'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('language changes immediately without changing phone or route', (

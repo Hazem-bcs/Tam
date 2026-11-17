@@ -677,7 +677,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeCouponDetails.
   ///
   /// In ar, this message translates to:
-  /// **'التفاصيل'**
+  /// **'إضافة الكود'**
   String get homeCouponDetails;
 
   /// No description provided for @homeCouponInstructions.
