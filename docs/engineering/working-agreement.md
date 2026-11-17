@@ -32,3 +32,7 @@ session isolation, shared theme, responsiveness and accessibility still apply.
 - Arabic RTL, text scaling, semantics, disabled/loading/error states and accessibility are required for UI review.
 - API keys restricted by application IDs/API scopes; backend secrets must never be packaged into Flutter.
 - Performance: profile on representative low-end devices, poor-network conditions and in release/profile mode. Targets are verified, not asserted.
+
+### تفضيل المستخدم للقوائم الأفقية — 2026-11-17
+
+عند وجود قائمة بتمرير أفقي، تمتد منطقة التمرير إلى حافتي الحاوية دون padding أو margin جانبي خاص بالقائمة؛ لا تُحذف مسافات بقية محتوى الصفحة. تُعاد الاستفادة من الأيقونات المولدة الموجودة عندما تلائم المعنى.

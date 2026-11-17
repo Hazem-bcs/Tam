@@ -288,3 +288,59 @@ TAM-ACTIVITY-FILTER-314F1B3: INTEGRATED، root، أساس4a65090.
 
 أغلق نقل نشاطي والفلتر فقط:48 اختبارًا وتحليل نظيف وتنسيق455/0؛
 حُفظت بقية الصفحات والاعتماديات والأصول دون تغيير، وأُعيد تحميل التطبيق.
+
+
+## TAM-MASCOT-HANDS-V4 — 2026-11-17
+
+READY → IMPLEMENTING، المشرف root؛ تفويض المستخدم تنفيذ الخطة بعدة وكلاء.
+أساس التطبيق3830fc6، مصدر Rive f367df6. HAND-ART / HAND-MOTION / HAND-FLUTTER
+بملكية منفصلة وworktrees مستقلة. [البطاقة والسيناريوهات](tasks/TAM-MASCOT-HANDS-V4.md).
+التجميع محلي، دون push أو دمج main؛ التحقق الواسع عند التكامل.
+
+
+TAM-MASCOT-HANDS-V4: INTEGRATED محليًا، root، على codex/mascot-hands-v4؛
+مرشح الكود edf468b، مصدر Rive62f452e، Flutter81782c3 ثم clearance012feae.
+ثلاثة وكلاء بملكية منفصلة ومراجعة مصدر دقيقة. الرسوم/الحزن/الفرح/Idle
+مكتملة، واختبارات التخطيط المتأثرة18ناجحة. الفحص الكامل784نجاحًا و30إخفاقًا
+سبق رصدها؛ تحليل42infoسابقة؛ لا push أو دمج main.
+[التقرير والمعاينات والقيود](deliveries/TAM-MASCOT-HANDS-V4/REPORT.ar.md).
+
+
+TAM-SHARED-IDLE-V5: READY → IMPLEMENTING، root، أساس التطبيقc6f4b75
+ومصدر Rive62f452e، worktree source idle-v5 مستقل. نطاق Idle16ث فقط؛
+الحركات الحالية التي رضي عنها المستخدم محفوظة.
+[البطاقة](tasks/TAM-SHARED-IDLE-V5.md).
+
+
+TAM-SHARED-IDLE-V5: INTEGRATED محليًا، root، تطبيق30730df ومصدر5177b45.
+دورة Idle16ث بطبقة أساسية مستمرة، دون تبديل رسم الكف أو تغيير الحركات
+المعتمدة. اختبار كامل797نجاحًا و30إخفاقًا قديمًا؛ تحليل42infoسابقة؛461/0تنسيق.
+المصدر في worktree idle-v5؛ لا push أو دمج main.
+[التسليم ومعاينة30fps](deliveries/TAM-SHARED-IDLE-V5/REPORT.ar.md).
+
+
+TAM-FINAL-MAIN-AUDIT-20261117: READY → IMPLEMENTING، root / SUPERVISOR؛
+تفويض المستخدم جمع main النهائية وحفظ جميع الشاشات الأحدث. أساس محلي93b0fb5
+وبعيد47977d9، مرشح دمج8bf8c89، مقارنة شجرات عشر ميزات بمصادرها النهائية.
+[البطاقة](tasks/TAM-FINAL-MAIN-AUDIT-20261117.md).
+
+TAM-FINAL-MAIN-AUDIT-20261117: INTEGRATED إلى main محليًا، root؛ كود8bf8c89
+يجمع origin/main47977d9 مع V5 وبقية التطوير المحلي. عشر شجرات ميزات تطابق
+مصادرها النهائية؛468/0 تنسيق،42infoقديمة،803نجاحًا/32إخفاقًا موجودة مسبقًا
+أو أعيد إثباتها على أساس main. بناء Android x64 وتثبيت ناجحان؛ لا push.
+[المصادر والأدلة والقيود](deliveries/TAM-FINAL-MAIN-AUDIT-20261117/REPORT.ar.md).
+
+
+TAM-RIDE-VEHICLE-FARE-20261117: READY → IMPLEMENTING، root؛ أساسcb4e2e3،
+فرع codex/ride-vehicle-fare-20261117. دمج مركبة/تكلفة مع دفع وكوبون؛
+[البطاقة والملكية](tasks/TAM-RIDE-VEHICLE-FARE-20261117.md).
+
+TAM-RIDE-VEHICLE-FARE-20261117: READY_FOR_REVIEW، root؛ تنفيذ وبناء وتشغيلAndroid مكتملة. 831نجاحًا/27إخفاقًا بأسماء موجودة مسبقًا،42infoقديمة؛ لا دمج أوpush. [التسليم](deliveries/TAM-RIDE-VEHICLE-FARE-20261117/REPORT.ar.md).
+
+TAM-RIDE-VEHICLE-FARE-20261117/UI: READY → IMPLEMENTING، root؛ أساسf3aa151. قائمة أفقية بلا حافة داخلية، أيقونات المحفظة والكوبون الحالية، تحسين محدد للدفع والكوبون.
+
+TAM-RIDE-VEHICLE-FARE-20261117/UI: READY_FOR_REVIEW؛18اختبارًا،42infoقديمة،تنسيق483/0،بناء وتشغيل ناجحان. سجل root تفضيل المستخدم للقوائم الأفقية فيworking-agreement؛ لا دمج أوpush.
+
+TAM-RIDE-VEHICLE-FARE-20261117: INTEGRATING إلىmain بطلب المستخدم؛ أساسmain eb6842a، بطاقات مختصرة9c3c0e4؛ دون اختبارات إضافية بتوجيهه.
+
+TAM-RIDE-VEHICLE-FARE-20261117/COMPACT: DONE؛ root، ضغط اللوحة ضمن67% وجميع الخيارات ظاهرة بالحالة العادية، Hot Reload ناجح دون اختبارات بطلب المستخدم.

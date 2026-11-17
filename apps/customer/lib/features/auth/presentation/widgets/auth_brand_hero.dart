@@ -83,7 +83,9 @@ class AuthBrandHero extends StatelessWidget {
             child: AuthHeaderArtwork(artwork: artwork, compact: compact),
           ),
           Positioned(
-            top: compact ? 78 : 123,
+            // Leave the lowered fingertips clear of the card's 17 dp overlap
+            // in every expression; moving only on error would cause a jump.
+            top: compact ? 63 : 105,
             left: 0,
             right: 0,
             child: Center(

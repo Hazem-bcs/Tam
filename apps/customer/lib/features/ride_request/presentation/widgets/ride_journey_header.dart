@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// Three customer decisions; driver matching is a status after submission.
+/// Two customer decisions; driver matching is a status after submission.
 class RideJourneyHeader extends StatelessWidget {
   const RideJourneyHeader({
     super.key,
@@ -23,17 +23,9 @@ class RideJourneyHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final c = theme.colorScheme;
     final t = AppLocalizations.of(context);
-    final phase = step <= 2
-        ? 0
-        : step == 3
-        ? 1
-        : 2;
-    final labels = [
-      t.rideRequestPhasePlace,
-      t.rideRequestPhaseVehicle,
-      t.rideRequestPhaseConfirm,
-    ];
-    final progress = step > 4 ? label : t.rideRequestFlowStep(phase + 1, 3);
+    final phase = step <= 2 ? 0 : 1;
+    final labels = [t.rideRequestPhasePlace, t.rideRequestVehicleAndConfirm];
+    final progress = step > 4 ? label : t.rideRequestFlowStep(phase + 1, 2);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,9 +102,32 @@ class RideJourneyHeader extends StatelessWidget {
                                   ) +
                                   24;
                               final compact = requiredWidth > bounds.maxWidth;
+                              if (compact) {
+                                return Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 24,
+                                      child: _PhaseBadge(
+                                        index: phase,
+                                        active: phase,
+                                        label: labels[phase],
+                                        showLabel: false,
+                                      ),
+                                    ),
+                                    const SizedBox(width: AppSpacing.sm),
+                                    Expanded(
+                                      child: Text(
+                                        labels[phase],
+                                        style: theme.textTheme.labelSmall
+                                            ?.copyWith(color: c.primary),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
                               return Row(
                                 children: [
-                                  for (var i = 0; i < 3; i++) ...[
+                                  for (var i = 0; i < labels.length; i++) ...[
                                     if (i > 0)
                                       Expanded(
                                         child: Padding(

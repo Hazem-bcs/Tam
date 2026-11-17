@@ -13,9 +13,11 @@ class RideSchedulePicker extends StatelessWidget {
     required this.policy,
     required this.now,
     required this.onChanged,
+    this.compact = false,
   });
 
   final DateTime? scheduledAt;
+  final bool compact;
   final bool enabled;
   final RideSchedulePolicy policy;
   final DateTime Function() now;
@@ -45,6 +47,12 @@ class RideSchedulePicker extends StatelessWidget {
           children: [
             ChoiceChip(
               showCheckmark: false,
+              labelStyle: compact
+                  ? Theme.of(context).textTheme.labelSmall
+                  : null,
+              labelPadding: compact
+                  ? const EdgeInsets.symmetric(horizontal: AppSpacing.xs)
+                  : null,
               key: const Key('ride-immediate'),
               avatar: const Icon(Icons.bolt_outlined),
               label: Text(l.rideRequestImmediate),
@@ -53,6 +61,12 @@ class RideSchedulePicker extends StatelessWidget {
             ),
             ChoiceChip(
               showCheckmark: false,
+              labelStyle: compact
+                  ? Theme.of(context).textTheme.labelSmall
+                  : null,
+              labelPadding: compact
+                  ? const EdgeInsets.symmetric(horizontal: AppSpacing.xs)
+                  : null,
               key: const Key('ride-scheduled'),
               avatar: const Icon(Icons.calendar_month_outlined),
               label: Text(l.rideRequestScheduled),
@@ -64,10 +78,11 @@ class RideSchedulePicker extends StatelessWidget {
         if (scheduledAt != null) ...[
           const SizedBox(height: AppSpacing.sm),
           Text(rideTimeLabel(context, scheduledAt!, policy: policy)),
-          Text(
-            l.rideRequestScheduledNotice,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          if (!compact)
+            Text(
+              l.rideRequestScheduledNotice,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
         ],
       ],
     );

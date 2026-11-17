@@ -55,5 +55,15 @@
   "completionAlreadyRated": "سبق تقييم هذه الرحلة. جارٍ التحقق من التقييم المحفوظ.",
   "completionInvalidResponse": "تعذر التحقق من نتيجة العملية. أعد المحاولة للتحقق أو تواصل مع الدعم.",
   "completionOffline": "تعذر الاتصال. تحقق من الشبكة وأعد المحاولة.",
-  "completionSimulationNotice": "التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة."
+  "completionSimulationNotice": "التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.",
+  "completionRateHint": "ساعدنا على تحسين الخدمة",
+  "completionQuickFeedbackHint": "ما الذي أعجبك في الرحلة؟",
+  "completionTagDriverRespect": "سائق محترم",
+  "completionTagCleanCar": "مركبة نظيفة",
+  "completionTagComfort": "رحلة مريحة",
+  "completionTagArrivalDelay": "تأخر الوصول",
+  "completionTagCarIssue": "مشكلة بالمركبة",
+  "completionTagServiceIssue": "تجربة غير مريحة",
+  "completionQuickFeedbackCritical": "ما الذي يمكن تحسينه؟",
+  "completionFeedbackOptional": "اختياري"
 }

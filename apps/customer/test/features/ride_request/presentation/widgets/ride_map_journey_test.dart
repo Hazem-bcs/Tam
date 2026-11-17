@@ -351,7 +351,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.pump(const Duration(milliseconds: 500));
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 1; i++) {
       final next = find.byKey(const Key('ride-flow-continue'));
       await tester.ensureVisible(next);
       await tester.tap(next);
@@ -359,26 +359,29 @@ void main() {
     }
   }
 
-  testWidgets('back from collapsed review returns through the journey stages', (
+  testWidgets('back from the combined sheet returns to route planning', (
     tester,
   ) async {
     phone(tester);
     final bloc = await launch(tester, LocationProbe());
     await tester.pumpAndSettle();
     await review(tester, bloc);
-    expect(find.text('تأكيد تفاصيل الرحلة'), findsOneWidget);
+    expect(find.text('حدد نوع الرحلة'), findsOneWidget);
     await tester.tap(find.byKey(const Key('ride-sheet-toggle')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('ride-flow-back')));
     await tester.pumpAndSettle();
     expect(
       tester.widget<RideJourneyBody>(find.byType(RideJourneyBody)).step,
-      RideJourneyStep.vehicle,
+      RideJourneyStep.entry,
     );
     expect(find.byTooltip('طي التفاصيل وتوسيع الخريطة'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
-    expect(find.text('من أين؟'), findsOneWidget);
+    expect(
+      tester.widget<RideJourneyBody>(find.byType(RideJourneyBody)).step,
+      RideJourneyStep.entry,
+    );
     expect(bloc.state.confirmedTrip, isNull);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());

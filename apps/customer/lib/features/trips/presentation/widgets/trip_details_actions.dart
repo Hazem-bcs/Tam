@@ -8,6 +8,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 
+/// One strong action. Rating and help stay easy to reach but visually quiet.
 class TripDetailsActions extends StatelessWidget {
   const TripDetailsActions({
     super.key,
@@ -52,78 +53,178 @@ class TripDetailsActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(
-          AppSpacing.lg,
-          AppSpacing.sm,
-          AppSpacing.lg,
-          AppSpacing.lg,
+    final colors = Theme.of(context).colorScheme;
+    final enabled = !state.isCancelling;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (state.actionErrorCode != null) ...[
+          Text(
+            tripsErrorLabel(l, state.actionErrorCode),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colors.error),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+        if (trip.status.isActive) ...[
+          _PrimaryTripAction(
+            icon: Icons.route_outlined,
+            label: l.activeTripFollow,
+            onPressed: enabled
+                ? () => navigation.openActiveTrip(id: trip.id)
+                : null,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+        _PrimaryTripAction(
+          icon: Icons.replay_rounded,
+          label: l.tripsRebook,
+          onPressed: enabled
+              ? () => navigation.openRideRequest(
+                  prefill: TripPrefill(
+                    pickup: trip.booking.pickup,
+                    destination: trip.booking.destination,
+                  ),
+                )
+              : null,
+          quiet: trip.status.isActive,
         ),
-        child: Column(
+        const SizedBox(height: AppSpacing.sm),
+        if (trip.status == TripStatus.completed) ...[
+          _ActionLink(
+            key: const Key('trips-completion'),
+            icon: Icons.star_outline_rounded,
+            label: l.tripsCompletion,
+            onTap: () => navigation.openCompletion(trip.id),
+          ),
+        ],
+        _ActionLink(
+          key: const Key('trips-support'),
+          icon: Icons.headset_mic_outlined,
+          label: l.tripsSupport,
+          onTap: enabled ? () => navigation.openSupport(tripId: trip.id) : null,
+        ),
+        if (trip.canCancel) ...[
+          const SizedBox(height: AppSpacing.sm),
+          TamButton.secondary(
+            label: l.tripsCancel,
+            isLoading: state.isCancelling,
+            loadingLabel: l.tripsCancelling,
+            onPressed: enabled ? () => _confirmCancel(context) : null,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _PrimaryTripAction extends StatelessWidget {
+  const _PrimaryTripAction({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    this.quiet = false,
+  });
+  final IconData icon;
+  final String label;
+  final VoidCallback? onPressed;
+  final bool quiet;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final type = Theme.of(context).textTheme;
+    return SizedBox(
+      width: double.infinity,
+      child: FilledButton(
+        onPressed: onPressed,
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(0, 52),
+          backgroundColor: quiet ? colors.primaryContainer : colors.primary,
+          foregroundColor: quiet ? colors.primary : colors.onPrimary,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        child: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (state.actionErrorCode != null) ...[
-              Text(
-                tripsErrorLabel(l, state.actionErrorCode),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
+            Icon(icon, size: 19),
+            const SizedBox(width: AppSpacing.sm),
+            Flexible(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: type.labelLarge?.copyWith(
+                  color: quiet ? colors.primary : colors.onPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: AppSpacing.sm),
-            ],
-            if (trip.status.isActive) ...[
-              TamButton.primary(
-                label: l.activeTripFollow,
-                onPressed: state.isCancelling
-                    ? null
-                    : () => navigation.openActiveTrip(id: trip.id),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-            ],
-            if (trip.status == TripStatus.completed) ...[
-              TamButton.primary(
-                key: const Key('trips-completion'),
-                label: l.tripsCompletion,
-                onPressed: () => navigation.openCompletion(trip.id),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-            ],
-            TamButton.primary(
-              label: l.tripsRebook,
-              icon: Icons.replay,
-              onPressed: state.isCancelling
-                  ? null
-                  : () {
-                      navigation.openRideRequest(
-                        prefill: TripPrefill(
-                          pickup: trip.booking.pickup,
-                          destination: trip.booking.destination,
-                        ),
-                      );
-                    },
             ),
-            const SizedBox(height: AppSpacing.sm),
-            TamButton.secondary(
-              key: const Key('trips-support'),
-              label: l.tripsSupport,
-              onPressed: state.isCancelling
-                  ? null
-                  : () => navigation.openSupport(tripId: trip.id),
-            ),
-            if (trip.canCancel) ...[
-              const SizedBox(height: AppSpacing.sm),
-              TamButton.secondary(
-                label: l.tripsCancel,
-                isLoading: state.isCancelling,
-                loadingLabel: l.tripsCancelling,
-                onPressed: state.isCancelling
-                    ? null
-                    : () => _confirmCancel(context),
-              ),
-            ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionLink extends StatelessWidget {
+  const _ActionLink({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              children: [
+                Icon(icon, size: 19, color: colors.onSurfaceVariant),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colors.onSurface,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_left_rounded,
+                  color: colors.onSurfaceVariant,
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

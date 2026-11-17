@@ -2,173 +2,113 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_vehicle_picker.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/formatters/ride_time_label.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
+import 'ride_animated_fare.dart';
 
+/// One compact row keeps the fare, distance and duration visible together.
 class RideQuoteReview extends StatelessWidget {
   const RideQuoteReview({
     super.key,
     required this.quote,
     required this.loading,
   });
-
   final RideQuote? quote;
   final bool loading;
 
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+    final l = AppLocalizations.of(context), theme = Theme.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(l.rideRequestQuoteTitle, style: theme.textTheme.titleMedium),
-        const SizedBox(height: AppSpacing.md),
-        TamCard(
-          child: loading
-              ? Row(
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(width: AppSpacing.md),
-                    Flexible(child: Text(l.rideRequestQuoteLoading)),
-                  ],
-                )
-              : quote == null
-              ? Text(l.rideRequestRouteHint)
-              : Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  spacing: AppSpacing.lg,
-                  runSpacing: AppSpacing.lg,
-                  children: [
-                    _Stat(
-                      title: l.rideRequestDistance,
-                      value:
-                          '${(quote!.distanceMeters / 1000).toStringAsFixed(1)} ${l.rideRequestKm}',
-                    ),
-                    _Stat(
-                      title: l.rideRequestDuration,
-                      value: '${quote!.durationMinutes} ${l.rideRequestMinute}',
-                    ),
-                    _Stat(
-                      title: l.rideRequestFare,
-                      value:
-                          '${_formatMoney(quote!.fare.amountMinor, quote!.fare.minorUnit, locale)} ${l.rideRequestCurrencySyp}',
-                      highlighted: true,
-                    ),
-                  ],
-                ),
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.sm),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.sm,
+          horizontal: AppSpacing.sm,
         ),
-        const SizedBox(height: AppSpacing.xl),
-        Text(l.rideRequestReview, style: theme.textTheme.titleMedium),
-        const SizedBox(height: AppSpacing.md),
-        TamCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _ReviewLine(
-                label: l.rideRequestPickup,
-                value: quote?.pickup.label ?? '—',
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _ReviewLine(
-                label: l.rideRequestDestination,
-                value: quote?.destination.label ?? '—',
-              ),
-              const Divider(),
-              if (quote != null) ...[
-                _ReviewLine(
-                  label: l.tripsVehicleClass,
-                  value: RideVehiclePicker.labelFor(l, quote!.vehicleClass),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(AppRadii.md),
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Tooltip(
+                    message: quote == null
+                        ? l.rideRequestFareUnavailable
+                        : l.rideRequestFareDisclaimer,
+                    child: Column(
+                      children: [
+                        Text(
+                          quote?.discount == null
+                              ? l.rideRequestEstimatedFare
+                              : l.rideRequestDiscountedFare,
+                          style: theme.textTheme.labelSmall,
+                          textAlign: TextAlign.center,
+                        ),
+                        RideAnimatedFare(value: quote?.fare, loading: loading),
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: _Stat(
+                    icon: Icons.route_outlined,
+                    label: l.rideRequestDistance,
+                    value: quote == null
+                        ? '—'
+                        : '${NumberFormat.decimalPatternDigits(locale: locale, decimalDigits: 1).format(quote!.distanceMeters / 1000)} ${l.rideRequestKm}',
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: _Stat(
+                    icon: Icons.schedule_outlined,
+                    label: l.rideRequestDuration,
+                    value: quote == null
+                        ? '—'
+                        : '${NumberFormat.decimalPattern(locale).format(quote!.durationMinutes)} ${l.rideRequestMinute}',
+                  ),
+                ),
               ],
-              _ReviewLine(
-                label: l.rideRequestScheduleTime,
-                value: quote?.scheduledAt == null
-                    ? l.rideRequestImmediate
-                    : rideTimeLabel(context, quote!.scheduledAt!),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              _ReviewLine(
-                label: l.rideRequestPayment,
-                value: l.rideRequestCash,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                l.rideRequestCashOnly,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  static String _formatMoney(int minor, int minorUnit, String locale) {
-    final scale = List.filled(minorUnit, 10).fold<int>(1, (a, b) => a * b);
-    final integerPart = NumberFormat.decimalPattern(
-      locale,
-    ).format(minor ~/ scale);
-    if (minorUnit == 0) return integerPart;
-    final fractional = (minor % scale).toString().padLeft(minorUnit, '0');
-    return '$integerPart.$fractional';
-  }
-}
-
-class _Stat extends StatelessWidget {
-  const _Stat({
-    required this.title,
-    required this.value,
-    this.highlighted = false,
-  });
-  final String title;
-  final String value;
-  final bool highlighted;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 88),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: theme.textTheme.labelSmall),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            value,
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: highlighted ? theme.colorScheme.primary : null,
             ),
-          ),
-        ],
+            if (loading)
+              LinearProgressIndicator(
+                semanticsLabel: l.rideRequestQuoteLoading,
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ReviewLine extends StatelessWidget {
-  const _ReviewLine({required this.label, required this.value});
-  final String label;
-  final String value;
-
+class _Stat extends StatelessWidget {
+  const _Stat({required this.icon, required this.label, required this.value});
+  final IconData icon;
+  final String label, value;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Expanded(flex: 2, child: Text(label, style: theme.textTheme.bodySmall)),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          flex: 3,
-          child: Text(value, style: theme.textTheme.bodyMedium),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
+            const SizedBox(width: AppSpacing.xs),
+            Flexible(child: Text(label, style: theme.textTheme.labelSmall)),
+          ],
+        ),
+        Text(
+          value,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.labelLarge,
         ),
       ],
     );

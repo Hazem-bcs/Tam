@@ -29,12 +29,15 @@ abstract final class RideContractParser {
 
   static RideQuote quote(Map<String, dynamic> response) {
     final data = _map(response['data']);
-    return RideQuote(
+    final quote = RideQuote(
       id: _text(data, 'quote_id'),
       pickup: _location(data['pickup']),
       destination: _location(data['destination']),
       vehicleClass: _vehicle(_text(data, 'vehicle_class_id')),
       fare: _money(data['fare']),
+      paymentMethod: TripWireCodec.paymentMethod(data['payment_method']),
+      couponCode: TripWireCodec.couponCode(data['coupon_code']),
+      discount: data['discount'] == null ? null : _money(data['discount']),
       distanceMeters: _positiveInt(data, 'distance_meters'),
       durationMinutes: _positiveInt(data, 'duration_minutes'),
       expiresAt: UtcTimestamp.parse(data['expires_at']),
@@ -42,6 +45,13 @@ abstract final class RideContractParser {
           ? null
           : UtcTimestamp.parse(data['scheduled_at']),
     );
+    if ((quote.couponCode == null) != (quote.discount == null) ||
+        (quote.discount != null &&
+            (quote.discount!.currency != quote.fare.currency ||
+                quote.discount!.minorUnit != quote.fare.minorUnit))) {
+      throw const FormatException('Invalid quote discount');
+    }
+    return quote;
   }
 
   static Trip trip(Map<String, dynamic> response) =>

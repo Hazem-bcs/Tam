@@ -300,6 +300,48 @@ void main() {
     expect(find.text('تعذر تحميل الإشعارات'), findsNothing);
   });
 
+  testWidgets('notification header and filter strip adapt to RTL', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = MockNotificationsRepository();
+    final navigation = _NavigationSpy();
+    final cubit = await _pumpInbox(tester, repository, navigation);
+    addTearDown(() async {
+      await cubit.close();
+      await repository.dispose();
+    });
+
+    expect(find.byIcon(Icons.arrow_forward_ios_rounded), findsOneWidget);
+    final filterStrip = find.byKey(const Key('notifications-filter-list'));
+    expect(filterStrip, findsOneWidget);
+    final stripRect = tester.getRect(filterStrip);
+    expect(stripRect.left, 0);
+    expect(stripRect.right, 390);
+
+    await tester.tap(find.byKey(const Key('notifications-back')));
+    await tester.pumpAndSettle();
+    expect(navigation.homeCount, 1);
+  });
+
+  testWidgets('back chevron mirrors naturally for English', (tester) async {
+    final repository = MockNotificationsRepository();
+    final cubit = await _pumpInbox(
+      tester,
+      repository,
+      _NavigationSpy(),
+      locale: 'en',
+    );
+    addTearDown(() async {
+      await cubit.close();
+      await repository.dispose();
+    });
+    expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
+  });
+
   testWidgets('category tabs filter by kind without changing read state', (
     tester,
   ) async {
@@ -321,6 +363,11 @@ void main() {
       findsNothing,
     );
 
+    await tester.drag(
+      find.byKey(const Key('notifications-filter-list')),
+      const Offset(220, 0),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('notifications-filter-offers')));
     await tester.pumpAndSettle();
     expect(

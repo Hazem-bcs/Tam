@@ -125,7 +125,7 @@
   "homeRideUnavailable": "Ride requests are not currently available.",
   "homeLatest": "What's new",
   "homeChooseDestination": "Choose your destination",
-  "homePromotionsTitle": "Offers & updates",
+  "homePromotionsTitle": "TAM ads",
   "homePromotionEyebrow": "Discover TAM",
   "homeServicesComingSoon": "Coming soon to TAM",
   "homeBrowsingLabel": "Explore TAM services",
@@ -273,6 +273,31 @@
   "@rideRequestSearchTo": {
     "placeholders": {
       "place": {
+        "type": "String"
+      }
+    }
+  },
+  "rideRequestWallet": "Wallet",
+  "rideRequestEstimatedFare": "Estimated fare",
+  "rideRequestDiscountedFare": "Fare after discount",
+  "rideRequestLivePriceHint": "Choose a vehicle and see your fare",
+  "rideRequestVehicleAndConfirm": "Vehicle & confirm",
+  "rideRequestVehicleScrollHint": "Swipe to compare vehicles",
+  "rideRequestNextVehicles": "More vehicles",
+  "rideRequestPreviousVehicles": "Previous vehicles",
+  "rideRequestCoupon": "Discount code",
+  "rideRequestCouponHint": "Enter your code",
+  "rideRequestApplyCoupon": "Apply",
+  "rideRequestRemoveCoupon": "Remove code",
+  "rideRequestCouponInvalid": "This code is invalid or expired. Correct or remove it to continue.",
+  "rideRequestCouponSaving": "You saved {amount} SYP",
+  "rideRequestFareUnavailable": "Fare is currently unavailable",
+  "rideRequestFareDisclaimer": "The estimate may change when the route or time changes",
+  "rideRequestPaymentUnavailable": "This payment method is unavailable. Choose cash or retry.",
+  "rideRequestWalletInsufficient": "Your wallet balance is insufficient. Choose cash to continue.",
+  "@rideRequestCouponSaving": {
+    "placeholders": {
+      "amount": {
         "type": "String"
       }
     }
@@ -683,6 +708,16 @@
   "completionInvalidResponse": "The result could not be verified. Retry to check or contact support.",
   "completionOffline": "Could not connect. Check your network and retry.",
   "completionSimulationNotice": "Ratings in this version are stored locally for testing until the service is connected.",
+  "completionRateHint": "Help us improve the service",
+  "completionQuickFeedbackHint": "What went well on your ride?",
+  "completionTagDriverRespect": "Respectful driver",
+  "completionTagCleanCar": "Clean vehicle",
+  "completionTagComfort": "Comfortable ride",
+  "completionTagArrivalDelay": "Delayed arrival",
+  "completionTagCarIssue": "Vehicle issue",
+  "completionTagServiceIssue": "Uncomfortable trip",
+  "completionQuickFeedbackCritical": "What could we improve?",
+  "completionFeedbackOptional": "Optional",
   "supportTitle": "Help and support",
   "supportIntro": "Create a general support request or choose a trip to report an issue.",
   "supportNewTicket": "New support request",
@@ -741,6 +776,11 @@
     }
   },
   "supportSimulationNotice": "Support operations in this version are simulated and are not sent to a real support team.",
+  "supportEditorHeadline": "How can we help?",
+  "supportEditorSubtitle": "Tell us about your question or the issue you are facing.",
+  "supportEditorPlaceholder": "Describe your question or issue in detail...",
+  "supportEditorCategory": "Inquiry type",
+  "supportEditorTripContext": "Regarding a previous trip",
   "accountManagementChangePhone": "Change phone number",
   "accountManagementDeleteAccount": "Delete account",
   "accountManagementSimulation": "Local simulation; no server account is changed or deleted.",

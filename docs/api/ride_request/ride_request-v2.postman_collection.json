@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "Tam Ride Request v2 — payment & coupons",
+    "description": "Proposed v2 additive contract; no live backend. Quotes bind vehicle, payment method and validated coupon. API mode never falls back to mock.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.invalid/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "description": "A real authenticated bearer token only when backend is available"
+    },
+    {
+      "key": "idempotency_key",
+      "value": "550e8400-e29b-41d4-a716-446655440000",
+      "description": "Replace for every new booking intention; reuse on retries"
+    },
+    {
+      "key": "quote_id",
+      "value": "mock-quote-1",
+      "description": "Replace with POST ride-quotes response quote_id"
+    }
+  ],
+  "item": [
+    {
+      "name": "Quote — wallet with coupon",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"pickup\": {\n    \"label\": \"المزة، شارع الجلاء\",\n    \"latitude\": 33.5,\n    \"longitude\": 36.25\n  },\n  \"destination\": {\n    \"label\": \"أبو رمانة، شارع الحمراء\",\n    \"latitude\": 33.519,\n    \"longitude\": 36.283\n  },\n  \"vehicle_class_id\": \"standard\",\n  \"payment_method\": \"wallet\",\n  \"coupon_code\": \"TAM10\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/v1/ride-quotes"
+      },
+      "response": [
+        {
+          "name": "quote_wallet_coupon_success",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"quote_id\": \"mock-quote-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 24300,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"distance_meters\": 5019,\n    \"duration_minutes\": 18,\n    \"expires_at\": \"2026-11-07T12:01:30Z\",\n    \"payment_method\": \"wallet\",\n    \"coupon_code\": \"TAM10\",\n    \"discount\": {\n      \"amount_minor\": 2700,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    }\n  }\n}"
+        },
+        {
+          "name": "error_coupon",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"COUPON_INVALID\",\n    \"message\": {\n      \"ar\": \"الكوبون غير صالح أو انتهت صلاحيته.\",\n      \"en\": \"The coupon is invalid or expired.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_payment",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"PAYMENT_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"طريقة الدفع غير متاحة.\",\n      \"en\": \"This payment method is unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_wallet_insufficient",
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"WALLET_INSUFFICIENT\",\n    \"message\": {\n      \"ar\": \"رصيد المحفظة غير كافٍ.\",\n      \"en\": \"Insufficient wallet balance.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Confirm bound quote — idempotent",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{idempotency_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quote_id\": \"mock-quote-1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/v1/trips"
+      },
+      "response": [
+        {
+          "name": "Confirmed wallet/coupon booking",
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"id\": \"mock-trip-1\",\n    \"pickup\": {\n      \"label\": \"المزة، شارع الجلاء\",\n      \"latitude\": 33.5,\n      \"longitude\": 36.25\n    },\n    \"destination\": {\n      \"label\": \"أبو رمانة، شارع الحمراء\",\n      \"latitude\": 33.519,\n      \"longitude\": 36.283\n    },\n    \"vehicle_class_id\": \"standard\",\n    \"fare\": {\n      \"amount_minor\": 24300,\n      \"currency\": \"SYP\",\n      \"minor_unit\": 0\n    },\n    \"status\": \"requested\",\n    \"created_at\": \"2026-11-07T12:00:30Z\",\n    \"payment_method\": \"wallet\",\n    \"coupon_code\": \"TAM10\"\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

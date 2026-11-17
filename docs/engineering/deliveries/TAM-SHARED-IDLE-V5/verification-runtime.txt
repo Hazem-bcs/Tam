@@ -1,0 +1,3 @@
+00:00 +0: loading /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_shared_idle_test.dart
+00:00 +0: shared idle loops around its anchor and resumes after an event
+00:00 +1: All tests passed!

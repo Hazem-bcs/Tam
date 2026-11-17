@@ -261,7 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeChooseDestination => 'Choose your destination';
 
   @override
-  String get homePromotionsTitle => 'Offers & updates';
+  String get homePromotionsTitle => 'TAM ads';
 
   @override
   String get homePromotionEyebrow => 'Discover TAM';
@@ -619,6 +619,66 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rideRequestClearSearch => 'Clear search';
+
+  @override
+  String get rideRequestWallet => 'Wallet';
+
+  @override
+  String get rideRequestEstimatedFare => 'Estimated fare';
+
+  @override
+  String get rideRequestDiscountedFare => 'Fare after discount';
+
+  @override
+  String get rideRequestLivePriceHint => 'Choose a vehicle and see your fare';
+
+  @override
+  String get rideRequestVehicleAndConfirm => 'Vehicle & confirm';
+
+  @override
+  String get rideRequestVehicleScrollHint => 'Swipe to compare vehicles';
+
+  @override
+  String get rideRequestNextVehicles => 'More vehicles';
+
+  @override
+  String get rideRequestPreviousVehicles => 'Previous vehicles';
+
+  @override
+  String get rideRequestCoupon => 'Discount code';
+
+  @override
+  String get rideRequestCouponHint => 'Enter your code';
+
+  @override
+  String get rideRequestApplyCoupon => 'Apply';
+
+  @override
+  String get rideRequestRemoveCoupon => 'Remove code';
+
+  @override
+  String get rideRequestCouponInvalid =>
+      'This code is invalid or expired. Correct or remove it to continue.';
+
+  @override
+  String rideRequestCouponSaving(String amount) {
+    return 'You saved $amount SYP';
+  }
+
+  @override
+  String get rideRequestFareUnavailable => 'Fare is currently unavailable';
+
+  @override
+  String get rideRequestFareDisclaimer =>
+      'The estimate may change when the route or time changes';
+
+  @override
+  String get rideRequestPaymentUnavailable =>
+      'This payment method is unavailable. Choose cash or retry.';
+
+  @override
+  String get rideRequestWalletInsufficient =>
+      'Your wallet balance is insufficient. Choose cash to continue.';
 
   @override
   String get tripsAll => 'All';
@@ -1590,6 +1650,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ratings in this version are stored locally for testing until the service is connected.';
 
   @override
+  String get completionRateHint => 'Help us improve the service';
+
+  @override
+  String get completionQuickFeedbackHint => 'What went well on your ride?';
+
+  @override
+  String get completionTagDriverRespect => 'Respectful driver';
+
+  @override
+  String get completionTagCleanCar => 'Clean vehicle';
+
+  @override
+  String get completionTagComfort => 'Comfortable ride';
+
+  @override
+  String get completionTagArrivalDelay => 'Delayed arrival';
+
+  @override
+  String get completionTagCarIssue => 'Vehicle issue';
+
+  @override
+  String get completionTagServiceIssue => 'Uncomfortable trip';
+
+  @override
+  String get completionQuickFeedbackCritical => 'What could we improve?';
+
+  @override
+  String get completionFeedbackOptional => 'Optional';
+
+  @override
   String get supportTitle => 'Help and support';
 
   @override
@@ -1708,6 +1798,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'Support operations in this version are simulated and are not sent to a real support team.';
+
+  @override
+  String get supportEditorHeadline => 'How can we help?';
+
+  @override
+  String get supportEditorSubtitle =>
+      'Tell us about your question or the issue you are facing.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'Describe your question or issue in detail...';
+
+  @override
+  String get supportEditorCategory => 'Inquiry type';
+
+  @override
+  String get supportEditorTripContext => 'Regarding a previous trip';
 
   @override
   String get accountManagementChangePhone => 'Change phone number';

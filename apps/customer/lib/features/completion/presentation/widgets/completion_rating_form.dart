@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_card.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 import '../../domain/completion_repository.dart';
 import '../bloc/completion_state.dart';
+import 'completion_feedback_options.dart';
+import 'completion_rating_stars.dart';
+import 'completion_surface.dart';
 
 class CompletionRatingForm extends StatefulWidget {
   const CompletionRatingForm({
@@ -14,29 +16,64 @@ class CompletionRatingForm extends StatefulWidget {
     required this.policy,
     required this.onSubmit,
   });
+
   final CompletionState state;
   final CompletionPolicy policy;
   final void Function(int, String) onSubmit;
+
   @override
   State<CompletionRatingForm> createState() => _CompletionRatingFormState();
 }
 
 class _CompletionRatingFormState extends State<CompletionRatingForm> {
   final _comment = TextEditingController();
+  final Set<int> _tags = {};
   int _stars = 0;
+
   @override
   void dispose() {
     _comment.dispose();
     super.dispose();
   }
 
+  List<String> _suggestions(AppLocalizations l, int stars) => stars >= 4
+      ? [
+          l.completionTagDriverRespect,
+          l.completionTagCleanCar,
+          l.completionTagComfort,
+        ]
+      : [
+          l.completionTagArrivalDelay,
+          l.completionTagCarIssue,
+          l.completionTagServiceIssue,
+        ];
+
+  String _reviewComment(BuildContext context, List<String> suggestions) {
+    final chosen = _tags.toList()..sort();
+    final parts = <String>[
+      if (_comment.text.trim().isNotEmpty) _comment.text.trim(),
+      for (final index in chosen) suggestions[index],
+    ];
+    return parts.join(
+      Localizations.localeOf(context).languageCode == 'ar' ? '، ' : ', ',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context), state = widget.state;
+    final l = AppLocalizations.of(context);
+    final state = widget.state;
+    final colors = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
     final rating = state.completion?.rating;
     final selected = rating?.stars ?? state.intent?.stars ?? _stars;
     final editable = state.canEdit;
-    return TamCard(
+    final suggestions = _suggestions(l, selected);
+    final composed = _reviewComment(context, suggestions);
+    final withinLimit =
+        composed.runes.length <= widget.policy.maxCommentCodePoints;
+
+    return CompletionSurface(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -44,75 +81,165 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
             liveRegion: rating != null,
             child: Text(
               rating == null ? l.completionRateTrip : l.completionSaved,
-              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+              style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
-          Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              for (var value = 1; value <= 5; value++)
-                Semantics(
-                  label: l.completionStars(value),
-                  selected: selected == value,
-                  child: IconButton(
-                    key: ValueKey('completion-stars-$value'),
-                    tooltip: l.completionStars(value),
-                    onPressed: editable
-                        ? () => setState(() => _stars = value)
-                        : null,
-                    icon: Icon(
-                      value <= selected ? Icons.star : Icons.star_border,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: AppDimensions.minTapTarget,
-                      minHeight: AppDimensions.minTapTarget,
-                    ),
-                  ),
-                ),
-            ],
+          if (rating == null) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              l.completionRateHint,
+              textAlign: TextAlign.center,
+              style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
+            ),
+          ],
+          const SizedBox(height: AppSpacing.lg),
+          CompletionRatingStars(
+            value: selected,
+            onChanged: editable
+                ? (value) => setState(() {
+                    _stars = value;
+                    _tags.clear();
+                  })
+                : null,
           ),
-          const SizedBox(height: AppSpacing.md),
           if (rating != null) ...[
-            Text(l.completionStars(rating.stars)),
-            if (rating.comment.isNotEmpty) Text(rating.comment),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              l.completionStars(rating.stars),
+              textAlign: TextAlign.center,
+              style: text.bodyMedium,
+            ),
+            if (rating.comment.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(rating.comment, textAlign: TextAlign.center),
+            ],
+            const SizedBox(height: AppSpacing.sm),
             Text(
               l.completionImmutable,
-              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+              style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
           ] else ...[
+            AnimatedSize(
+              duration: MediaQuery.of(context).disableAnimations
+                  ? Duration.zero
+                  : AppMotion.medium,
+              curve: AppMotion.easeOut,
+              alignment: Alignment.topCenter,
+              child: selected == 0
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: AppSpacing.lg),
+                        SizedBox(
+                          height:
+                              44 +
+                              (MediaQuery.textScalerOf(context).scale(1) - 1)
+                                      .clamp(0, 3) *
+                                  68,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.sell_outlined,
+                                size: 18,
+                                color: colors.primary,
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Expanded(
+                                child: AnimatedSwitcher(
+                                  duration:
+                                      MediaQuery.of(context).disableAnimations
+                                      ? Duration.zero
+                                      : AppMotion.short,
+                                  child: Text(
+                                    selected >= 4
+                                        ? l.completionQuickFeedbackHint
+                                        : l.completionQuickFeedbackCritical,
+                                    key: ValueKey(selected >= 4),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: text.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.onSurface,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                              DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: colors.surfaceContainerLow,
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadii.sheet,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsetsDirectional.symmetric(
+                                        horizontal: AppSpacing.sm,
+                                        vertical: AppSpacing.xs,
+                                      ),
+                                  child: Text(
+                                    l.completionFeedbackOptional,
+                                    style: text.labelSmall?.copyWith(
+                                      color: colors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        CompletionFeedbackOptions(
+                          labels: suggestions,
+                          positive: selected >= 4,
+                          selected: _tags,
+                          enabled: editable,
+                          onToggle: (index) => setState(() {
+                            if (_tags.contains(index)) {
+                              _tags.remove(index);
+                            } else {
+                              _tags.add(index);
+                            }
+                          }),
+                        ),
+                      ],
+                    ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
             TamTextField(
               key: const ValueKey('completion-comment'),
               controller: _comment,
               labelText: l.completionComment,
-              helperText: l.completionCommentLimit(
-                widget.policy.maxCommentCodePoints,
-              ),
               enabled: editable,
-              maxLines: 4,
+              maxLines: 3,
               keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
               onChanged: (_) => setState(() {}),
-              errorText:
-                  _comment.text.trim().runes.length >
-                      widget.policy.maxCommentCodePoints
-                  ? l.completionValidation
-                  : null,
+              errorText: withinLimit ? null : l.completionValidation,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              l.completionCommentLimit(widget.policy.maxCommentCodePoints),
+              style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
             const SizedBox(height: AppSpacing.lg),
             TamButton.primary(
               key: const ValueKey('completion-submit'),
               label: l.completionSubmit,
+              icon: Icons.send_outlined,
               loadingLabel: l.completionSubmitting,
               isLoading: state.submitting,
-              onPressed:
-                  editable &&
-                      selected > 0 &&
-                      _comment.text.trim().runes.length <=
-                          widget.policy.maxCommentCodePoints
+              onPressed: editable && selected > 0 && withinLimit
                   ? () {
                       FocusScope.of(context).unfocus();
-                      widget.onSubmit(_stars, _comment.text);
+                      widget.onSubmit(
+                        selected,
+                        _reviewComment(context, suggestions),
+                      );
                     }
                   : null,
             ),

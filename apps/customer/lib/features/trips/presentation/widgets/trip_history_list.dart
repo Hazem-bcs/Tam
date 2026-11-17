@@ -122,6 +122,7 @@ class TripHistoryList extends StatelessWidget {
           label: l.tripsHistoryHeading,
           count: l.tripsVisibleCount(history.length),
           icon: Icons.route_rounded,
+          artwork: 'assets/notifications/ride_repeat.webp',
         ),
       );
       children.add(const SizedBox(height: AppSpacing.md));
@@ -173,10 +174,16 @@ class TripHistoryList extends StatelessWidget {
 }
 
 class _SectionHeading extends StatelessWidget {
-  const _SectionHeading({required this.label, required this.icon, this.count});
+  const _SectionHeading({
+    required this.label,
+    required this.icon,
+    this.count,
+    this.artwork,
+  });
   final String label;
   final IconData icon;
   final String? count;
+  final String? artwork;
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +207,17 @@ class _SectionHeading extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Icon(icon, color: colors.primary, size: 18),
+                child: artwork == null
+                    ? Icon(icon, color: colors.primary, size: 18)
+                    : ExcludeSemantics(
+                        child: Image.asset(
+                          artwork!,
+                          width: 25,
+                          height: 25,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.medium,
+                        ),
+                      ),
               ),
             ),
             Text(

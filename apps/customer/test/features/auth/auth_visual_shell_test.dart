@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/app.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
+import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_rive_mascot.dart';
 
@@ -166,4 +168,56 @@ void main() {
     expect(mascot().hasError, isFalse);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'happy phone readiness recovers and yields to waiting and error',
+    (tester) async {
+      final store = MemoryAuthSessionStore();
+      await tester.pumpWidget(
+        TamApp(
+          authRepository: FakeAuthRepository(
+            deliveryAvailable: false,
+            latency: const Duration(seconds: 1),
+          ),
+          sessionStore: store,
+        ),
+      );
+      await tester.pumpAndSettle();
+      AuthRiveMascot mascot() =>
+          tester.widget<AuthRiveMascot>(find.byType(AuthRiveMascot));
+      expect(mascot().success, isFalse);
+      await tester.enterText(find.byKey(const Key('auth-phone')), '912345678');
+      await tester.pump();
+      expect(mascot().success, isTrue);
+      final auth = tester
+          .element(find.byType(AuthRiveMascot))
+          .read<AuthCubit>();
+      expect(auth.state.status, AuthStatus.signedOut);
+      expect(auth.state.user, isNull);
+      expect(await store.read(), isNull);
+
+      await tester.enterText(find.byKey(const Key('auth-phone')), '9123');
+      await tester.pump();
+      expect(mascot().success, isFalse);
+      expect(mascot().hasError, isFalse);
+      await tester.enterText(find.byKey(const Key('auth-phone')), '912345678');
+      await tester.pump();
+      await tester.ensureVisible(find.text('إرسال رمز التحقق'));
+      await tester.tap(find.text('إرسال رمز التحقق'));
+      await tester.pump();
+      expect(mascot().busy, isTrue);
+      expect(mascot().success, isFalse);
+      await tester.pumpAndSettle();
+      expect(mascot().hasError, isTrue);
+      expect(mascot().success, isFalse);
+
+      await tester.enterText(find.byKey(const Key('auth-phone')), '912345677');
+      await tester.pump();
+      expect(mascot().hasError, isFalse);
+      expect(mascot().success, isTrue);
+      expect(auth.state.status, AuthStatus.signedOut);
+      expect(await store.read(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
 }

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/app/theme/app_typography.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trip_details_cubit.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_details_actions.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_details_body.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
@@ -18,24 +20,37 @@ class TripDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l.tripsDetailsTitle),
-        leading: IconButton(
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          icon: const BackButtonIcon(),
-          onPressed: () {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            } else {
-              navigation.openTrips();
-            }
-          },
+    final colors = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(textTheme: AppTypography.home(theme.textTheme)),
+      child: Scaffold(
+        backgroundColor: colors.surface,
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: colors.surface,
+          foregroundColor: colors.onSurface,
+          surfaceTintColor: colors.surface,
+          title: Text(
+            l.tripsDetailsTitle,
+            style: AppTypography.home(
+              theme.textTheme,
+            ).titleLarge?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+          ),
+          leading: IconButton(
+            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+            icon: const BackButtonIcon(),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else {
+                navigation.openTrips();
+              }
+            },
+          ),
         ),
-      ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
+        body: SafeArea(
+          top: false,
           child: BlocBuilder<TripDetailsCubit, TripDetailsState>(
             builder: (context, state) {
               if (state.isLoading && state.trip == null) {
@@ -60,29 +75,46 @@ class TripDetailsPage extends StatelessWidget {
                   buttonLabel: l.tripsBackToList,
                 );
               }
-              return LayoutBuilder(
-                builder: (context, constraints) => Column(
-                  children: [
-                    if (state.errorCode != null)
-                      TripsFailureBanner(
-                        errorCode: state.errorCode!,
-                        onRetry: () =>
-                            context.read<TripDetailsCubit>().reload(),
-                      ),
-                    Expanded(child: TripDetailsBody(trip: state.trip!)),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: constraints.maxHeight * .55,
-                      ),
-                      child: SingleChildScrollView(
-                        child: TripDetailsActions(
+              return Align(
+                alignment: AlignmentDirectional.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: SingleChildScrollView(
+                    key: const Key('trips-details-scroll'),
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      AppSpacing.lg,
+                      AppSpacing.sm,
+                      AppSpacing.lg,
+                      AppSpacing.xxl,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (state.errorCode != null) ...[
+                          TripsFailureBanner(
+                            errorCode: state.errorCode!,
+                            onRetry: () =>
+                                context.read<TripDetailsCubit>().reload(),
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                        ],
+                        TripDetailsBody(
+                          trip: state.trip!,
+                          onOpenFullMap: state.trip!.status.isActive
+                              ? () => navigation.openActiveTrip(
+                                  id: state.trip!.id,
+                                )
+                              : null,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        TripDetailsActions(
                           trip: state.trip!,
                           state: state,
                           navigation: navigation,
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             },

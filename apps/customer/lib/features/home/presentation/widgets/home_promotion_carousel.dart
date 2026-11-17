@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/home/domain/entities/home_content.dart';
@@ -14,12 +16,89 @@ class HomePromotionCarousel extends StatefulWidget {
   State<HomePromotionCarousel> createState() => _HomePromotionCarouselState();
 }
 
-class _HomePromotionCarouselState extends State<HomePromotionCarousel> {
-  late final PageController _controller = PageController(viewportFraction: .96);
+class _HomePromotionCarouselState extends State<HomePromotionCarousel>
+    with WidgetsBindingObserver {
+  static const _autoAdvanceDelay = Duration(seconds: 5);
+  static const _transitionDuration = Duration(milliseconds: 420);
+
+  final PageController _controller = PageController();
+  Timer? _autoAdvanceTimer;
   int _index = 0;
+  bool _pointerDown = false;
+  AppLifecycleState? _lifecycle;
+
+  int get _enabledCount =>
+      widget.promotions.where((promotion) => promotion.enabled).length;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _lifecycle = WidgetsBinding.instance.lifecycleState;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _restartAutoAdvance();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomePromotionCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final previousCount = oldWidget.promotions
+        .where((promotion) => promotion.enabled)
+        .length;
+    final count = _enabledCount;
+    if (count == 0) {
+      _index = 0;
+    } else if (_index >= count) {
+      _index = count - 1;
+    }
+    if (count != previousCount && count > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _controller.hasClients) {
+          _controller.jumpToPage(_index);
+        }
+      });
+    }
+    _restartAutoAdvance();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _lifecycle = state;
+    _restartAutoAdvance();
+  }
+
+  void _restartAutoAdvance() {
+    _autoAdvanceTimer?.cancel();
+    if (_enabledCount < 2 ||
+        _pointerDown ||
+        (_lifecycle != null && _lifecycle != AppLifecycleState.resumed) ||
+        MediaQuery.disableAnimationsOf(context) ||
+        !TickerMode.valuesOf(context).enabled) {
+      return;
+    }
+    _autoAdvanceTimer = Timer(_autoAdvanceDelay, () {
+      if (!mounted || !_controller.hasClients) return;
+      _controller.animateToPage(
+        (_index + 1) % _enabledCount,
+        duration: _transitionDuration,
+        curve: Curves.easeInOutCubic,
+      );
+    });
+  }
+
+  void _onPageChanged(int index) {
+    setState(() => _index = index);
+    _restartAutoAdvance();
+  }
 
   @override
   void dispose() {
+    _autoAdvanceTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     super.dispose();
   }
@@ -43,8 +122,8 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel> {
         Padding(
           padding: const EdgeInsetsDirectional.only(
             bottom: 11,
-            start: 2,
-            end: 2,
+            start: 18,
+            end: 18,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,15 +150,30 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel> {
         ),
         SizedBox(
           height: scale > 24 ? scale * 12 : 182,
-          child: PageView.builder(
-            key: const Key('home-promotions-slider'),
-            controller: _controller,
-            padEnds: false,
-            itemCount: items.length,
-            onPageChanged: (index) => setState(() => _index = index),
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsetsDirectional.only(end: 10),
-              child: _PromotionSlide(promotion: items[index], index: index),
+          child: Listener(
+            onPointerDown: (_) {
+              _pointerDown = true;
+              _autoAdvanceTimer?.cancel();
+            },
+            onPointerUp: (_) {
+              _pointerDown = false;
+              _restartAutoAdvance();
+            },
+            onPointerCancel: (_) {
+              _pointerDown = false;
+              _restartAutoAdvance();
+            },
+            child: PageView.builder(
+              key: const Key('home-promotions-slider'),
+              controller: _controller,
+              itemCount: items.length,
+              onPageChanged: _onPageChanged,
+              // The viewport is edge-to-edge. Only the card is inset,
+              // so incoming and outgoing slides pass the page gutters.
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+                child: _PromotionSlide(promotion: items[index], index: index),
+              ),
             ),
           ),
         ),
@@ -145,6 +239,7 @@ class _PromotionSlide extends StatelessWidget {
       container: true,
       label: promotion.title.forLanguage(lang),
       child: DecoratedBox(
+        key: Key('home-promotion-slide-$index'),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(23),

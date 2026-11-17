@@ -176,6 +176,8 @@ final class _DelayedQuoteRepository implements RideRequestRepository {
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
     DateTime? scheduledAt,
+    TripPaymentMethod paymentMethod = TripPaymentMethod.cash,
+    String? couponCode,
   }) {
     final pending = delayNext;
     delayNext = null;
@@ -185,6 +187,8 @@ final class _DelayedQuoteRepository implements RideRequestRepository {
           destination: destination,
           vehicleClass: vehicleClass,
           scheduledAt: scheduledAt,
+          paymentMethod: paymentMethod,
+          couponCode: couponCode,
         );
   }
 

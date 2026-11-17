@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
+import 'package:tam_customer/features/ride_request/domain/usecases/load_ride_quotes.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_state.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -40,7 +41,22 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       (event, emit) => _edit(state.copyWith(destination: event.location), emit),
     );
     on<VehicleClassSelected>((event, emit) {
-      if (state.vehicleClass != event.vehicleClass) {
+      if (_locked || state.vehicleClass == event.vehicleClass) return;
+      final cached = state.vehicleQuotes[event.vehicleClass];
+      if (cached != null &&
+          cached.isValidAt(_now()) &&
+          schedulePolicy.allows(cached.scheduledAt, _now())) {
+        _resetQuote();
+        emit(
+          state.copyWith(
+            vehicleClass: event.vehicleClass,
+            quote: cached,
+            status: RideFlowStatus.ready,
+            clearError: true,
+          ),
+        );
+        _armExpiry(cached);
+      } else {
         _edit(state.copyWith(vehicleClass: event.vehicleClass), emit);
       }
     });
@@ -64,6 +80,22 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
           ),
           emit,
         );
+      }
+    });
+    on<RidePaymentChanged>((event, emit) {
+      if (event.paymentMethod != state.paymentMethod) {
+        _edit(state.copyWith(paymentMethod: event.paymentMethod), emit);
+      }
+    });
+    on<RideCouponApplied>((event, emit) {
+      final code = event.code.trim().toUpperCase();
+      if (code != state.couponCode) {
+        _edit(state.copyWith(couponCode: code), emit);
+      }
+    });
+    on<RideCouponRemoved>((event, emit) {
+      if (state.couponCode != null) {
+        _edit(state.copyWith(clearCoupon: true), emit);
       }
     });
     on<RidePlaceSearchChanged>(_search);
@@ -104,6 +136,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     emit(
       edited.copyWith(
         clearQuote: true,
+        vehicleQuotes: const {},
         clearError: true,
         status: RideFlowStatus.editing,
       ),
@@ -180,9 +213,12 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     final destination = state.destination!;
     final vehicle = state.vehicleClass;
     final scheduledAt = state.scheduledAt;
+    final payment = state.paymentMethod;
+    final coupon = state.couponCode;
     emit(
       state.copyWith(
         status: RideFlowStatus.quoting,
+        vehicleQuotes: const {},
         clearQuote: true,
         clearError: true,
       ),
@@ -191,12 +227,15 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       if (!schedulePolicy.allows(scheduledAt, _now())) {
         throw const RideRequestFailure('SCHEDULE_OUT_OF_RANGE');
       }
-      final quote = await _repository.requestQuote(
+      final catalog = await LoadRideQuotes(_repository)(
         pickup: pickup,
         destination: destination,
-        vehicleClass: vehicle,
+        selected: vehicle,
         scheduledAt: scheduledAt,
+        paymentMethod: payment,
+        couponCode: coupon,
       );
+      final quote = catalog[vehicle]!;
       if (isClosed || revision != _revision) return;
       if (quote.scheduledAt != scheduledAt) {
         throw const RideRequestFailure('INVALID_RESPONSE');
@@ -210,21 +249,12 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       emit(
         state.copyWith(
           quote: quote,
+          vehicleQuotes: catalog,
           status: RideFlowStatus.ready,
           clearError: true,
         ),
       );
-      _expiryTimer?.cancel();
-      var deadline = quote.expiresAt;
-      if (scheduledAt != null) {
-        final scheduleDeadline = scheduledAt
-            .subtract(schedulePolicy.minimumLeadTime)
-            .add(const Duration(microseconds: 1));
-        if (scheduleDeadline.isBefore(deadline)) deadline = scheduleDeadline;
-      }
-      _expiryTimer = Timer(deadline.difference(_now()), () {
-        if (!isClosed) add(RideQuoteExpired(quote.id));
-      });
+      _armExpiry(quote);
     } on RideRequestFailure catch (error) {
       if (isClosed || revision != _revision) return;
       emit(
@@ -236,6 +266,21 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
         ),
       );
     }
+  }
+
+  void _armExpiry(RideQuote quote) {
+    _expiryTimer?.cancel();
+    var deadline = quote.expiresAt;
+    final scheduledAt = quote.scheduledAt;
+    if (scheduledAt != null) {
+      final scheduleDeadline = scheduledAt
+          .subtract(schedulePolicy.minimumLeadTime)
+          .add(const Duration(microseconds: 1));
+      if (scheduleDeadline.isBefore(deadline)) deadline = scheduleDeadline;
+    }
+    _expiryTimer = Timer(deadline.difference(_now()), () {
+      if (!isClosed) add(RideQuoteExpired(quote.id));
+    });
   }
 
   Future<void> _confirm(
@@ -292,6 +337,9 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
         'SCHEDULE_UNAVAILABLE',
         'VALIDATION_ERROR',
         'IDEMPOTENCY_CONFLICT',
+        'COUPON_INVALID',
+        'PAYMENT_UNAVAILABLE',
+        'WALLET_INSUFFICIENT',
       }.contains(error.code);
       if (definitive) _pendingKey = null;
       emit(

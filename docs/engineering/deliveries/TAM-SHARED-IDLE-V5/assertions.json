@@ -1,0 +1,32 @@
+{
+  "duration_frames": 960,
+  "fps": 60,
+  "loop_property_count": 26,
+  "rendered_preview_fps": 30,
+  "loop_seam_pixel_rms": 0.006666666666666667,
+  "idle_artwork_swaps": false,
+  "static_pixel_identical": {
+    "idle": true,
+    "focus": true,
+    "waiting": true,
+    "sad": true,
+    "happy": true
+  },
+  "preserved_event_animation_tracks": [
+    "V4 Static Idle",
+    "V4 Living Focus",
+    "V4 Static Focus",
+    "V4 Living Waiting",
+    "V4 Static Waiting",
+    "V4 Living Sad",
+    "V4 Static Sad",
+    "V4 Living Happy",
+    "V4 Static Happy",
+    "V4 Welcome Once",
+    "V4 Success Once",
+    "ContactAttention",
+    "NaturalIdle",
+    "LifeBlink"
+  ],
+  "source_sha256": "6aa6d000bb6db7e9b58624740ce0655de4d5d1f37b9b48a3e2a9003847935e5a"
+}

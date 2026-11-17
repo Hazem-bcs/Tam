@@ -254,7 +254,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeChooseDestination => 'حدد وجهتك';
 
   @override
-  String get homePromotionsTitle => 'عروض وإعلانات';
+  String get homePromotionsTitle => 'إعلانات تم';
 
   @override
   String get homePromotionEyebrow => 'جديد في تم';
@@ -606,6 +606,66 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get rideRequestClearSearch => 'مسح البحث';
+
+  @override
+  String get rideRequestWallet => 'المحفظة';
+
+  @override
+  String get rideRequestEstimatedFare => 'التكلفة التقديرية';
+
+  @override
+  String get rideRequestDiscountedFare => 'التكلفة بعد الحسم';
+
+  @override
+  String get rideRequestLivePriceHint => 'اختر مركبتك وشاهد التكلفة مباشرة';
+
+  @override
+  String get rideRequestVehicleAndConfirm => 'المركبة والتأكيد';
+
+  @override
+  String get rideRequestVehicleScrollHint => 'اسحب لمقارنة الفئات';
+
+  @override
+  String get rideRequestNextVehicles => 'مركبات أخرى';
+
+  @override
+  String get rideRequestPreviousVehicles => 'المركبات السابقة';
+
+  @override
+  String get rideRequestCoupon => 'كوبون حسم';
+
+  @override
+  String get rideRequestCouponHint => 'أدخل رمز الكوبون';
+
+  @override
+  String get rideRequestApplyCoupon => 'تطبيق';
+
+  @override
+  String get rideRequestRemoveCoupon => 'إزالة الكوبون';
+
+  @override
+  String get rideRequestCouponInvalid =>
+      'الكوبون غير صالح أو انتهت صلاحيته. صحّحه أو أزله للمتابعة.';
+
+  @override
+  String rideRequestCouponSaving(String amount) {
+    return 'وفّرت $amount ل.س';
+  }
+
+  @override
+  String get rideRequestFareUnavailable => 'السعر غير متاح حاليًا';
+
+  @override
+  String get rideRequestFareDisclaimer =>
+      'قد يتغير التقدير عند تعديل المسار أو الموعد';
+
+  @override
+  String get rideRequestPaymentUnavailable =>
+      'طريقة الدفع غير متاحة. اختر النقد أو أعد المحاولة.';
+
+  @override
+  String get rideRequestWalletInsufficient =>
+      'رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.';
 
   @override
   String get tripsAll => 'الكل';
@@ -1560,6 +1620,36 @@ class AppLocalizationsAr extends AppLocalizations {
       'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.';
 
   @override
+  String get completionRateHint => 'ساعدنا على تحسين الخدمة';
+
+  @override
+  String get completionQuickFeedbackHint => 'ما الذي أعجبك في الرحلة؟';
+
+  @override
+  String get completionTagDriverRespect => 'سائق محترم';
+
+  @override
+  String get completionTagCleanCar => 'مركبة نظيفة';
+
+  @override
+  String get completionTagComfort => 'رحلة مريحة';
+
+  @override
+  String get completionTagArrivalDelay => 'تأخر الوصول';
+
+  @override
+  String get completionTagCarIssue => 'مشكلة بالمركبة';
+
+  @override
+  String get completionTagServiceIssue => 'تجربة غير مريحة';
+
+  @override
+  String get completionQuickFeedbackCritical => 'ما الذي يمكن تحسينه؟';
+
+  @override
+  String get completionFeedbackOptional => 'اختياري';
+
+  @override
   String get supportTitle => 'المساعدة والدعم';
 
   @override
@@ -1672,6 +1762,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.';
+
+  @override
+  String get supportEditorHeadline => 'كيف نقدر نساعدك؟';
+
+  @override
+  String get supportEditorSubtitle =>
+      'صف لنا استفسارك أو المشكلة التي تواجهها.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'اكتب التفاصيل التي تساعدنا على فهم طلبك...';
+
+  @override
+  String get supportEditorCategory => 'نوع الاستفسار';
+
+  @override
+  String get supportEditorTripContext => 'بخصوص رحلة سابقة';
 
   @override
   String get accountManagementChangePhone => 'تغيير رقم الهاتف';
