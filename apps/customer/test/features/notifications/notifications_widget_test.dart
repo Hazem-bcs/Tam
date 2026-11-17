@@ -323,11 +323,20 @@ void main() {
     expect(stripRect.right, 390);
     final firstFilter = find.byKey(const Key('notifications-filter-all'));
     final initialRight = tester.getRect(firstFilter).right;
+    final scrollPosition = tester
+        .state<ScrollableState>(
+          find
+              .descendant(of: filterStrip, matching: find.byType(Scrollable))
+              .first,
+        )
+        .position;
     expect(stripRect.right - initialRight, closeTo(16, 0.1));
-    // The start gutter belongs to the scroll content, not the viewport.
-    await tester.drag(filterStrip, const Offset(40, 0));
+    // In RTL the start gutter is part of the scroll contents. Dragging far
+    // enough towards later chips advances the scroll position; the first
+    // chip may leave the viewport entirely, so don't query its geometry.
+    await tester.drag(filterStrip, const Offset(180, 0));
     await tester.pumpAndSettle();
-    expect(tester.getRect(firstFilter).right, greaterThan(initialRight + 20));
+    expect(scrollPosition.pixels, greaterThan(20));
 
     await tester.tap(find.byKey(const Key('notifications-back')));
     await tester.pumpAndSettle();
