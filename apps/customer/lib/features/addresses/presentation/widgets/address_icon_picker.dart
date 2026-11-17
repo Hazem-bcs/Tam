@@ -37,7 +37,7 @@ class AddressIconPicker extends StatelessWidget {
           builder: (context, bounds) {
             const gap = AppSpacing.sm;
             final available = (bounds.maxWidth - gap * 4) / 5;
-            final itemWidth = available.clamp(64.0, 84.0);
+            final itemWidth = available.clamp(64.0, 84.0).toDouble();
             return SingleChildScrollView(
               key: const Key('address-icons-scroll'),
               scrollDirection: Axis.horizontal,
