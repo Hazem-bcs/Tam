@@ -20,6 +20,8 @@ extension NotificationsFeedFilterX on NotificationsFeedFilter {
   };
 }
 
+/// Edge-to-edge horizontal filters. The next partially visible chip is the
+/// scroll affordance; spacing exists between chips, never around the strip.
 class NotificationsFilterBar extends StatelessWidget {
   const NotificationsFilterBar({
     super.key,
@@ -66,83 +68,85 @@ class NotificationsFilterBar extends StatelessWidget {
         Icons.tune_rounded,
       ),
     ];
-    // Keep every filter fully visible inside the page's horizontal padding.
-    // Horizontal scrolling can leave half-cut chips at both screen edges.
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: LayoutBuilder(
-        builder: (context, bounds) => Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final entry in entries)
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: bounds.maxWidth),
-                child: Semantics(
-                  button: true,
-                  selected: selected == entry.$1,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      key: Key('notifications-filter-${entry.$1.name}'),
-                      onTap: () => onChanged(entry.$1),
-                      borderRadius: BorderRadius.circular(28),
-                      child: AnimatedContainer(
-                        duration: MediaQuery.disableAnimationsOf(context)
-                            ? Duration.zero
-                            : const Duration(milliseconds: 180),
-                        curve: Curves.easeOutCubic,
-                        constraints: const BoxConstraints(minHeight: 46),
-                        padding: const EdgeInsetsDirectional.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: selected == entry.$1
-                              ? colors.primary
-                              : colors.surfaceContainerLowest,
-                          borderRadius: BorderRadius.circular(28),
-                          border: Border.all(
-                            color: selected == entry.$1
-                                ? colors.primary
-                                : colors.outlineVariant,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              entry.$3,
-                              size: 17,
-                              color: selected == entry.$1
-                                  ? colors.onPrimary
-                                  : colors.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 7),
-                            Flexible(
-                              child: Text(
-                                entry.$2,
-                                softWrap: true,
-                                style: Theme.of(context).textTheme.labelMedium
-                                    ?.copyWith(
-                                      color: selected == entry.$1
-                                          ? colors.onPrimary
-                                          : colors.onSurface,
-                                      fontWeight: selected == entry.$1
-                                          ? FontWeight.w800
-                                          : FontWeight.w600,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+    final scaledTextHeight = MediaQuery.textScalerOf(context).scale(20);
+    final stripHeight = scaledTextHeight + 32 < 52
+        ? 52.0
+        : scaledTextHeight + 32;
+
+    return SizedBox(
+      height: stripHeight,
+      child: ListView.separated(
+        key: const Key('notifications-filter-list'),
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.zero,
+        physics: const BouncingScrollPhysics(),
+        itemCount: entries.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final entry = entries[index];
+          final isSelected = selected == entry.$1;
+          return Semantics(
+            button: true,
+            selected: isSelected,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                key: Key('notifications-filter-${entry.$1.name}'),
+                onTap: () => onChanged(entry.$1),
+                borderRadius: BorderRadius.circular(28),
+                child: AnimatedContainer(
+                  duration: MediaQuery.disableAnimationsOf(context)
+                      ? Duration.zero
+                      : const Duration(milliseconds: 180),
+                  curve: Curves.easeOutCubic,
+                  constraints: const BoxConstraints(minHeight: 48),
+                  padding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? colors.primary
+                        : colors.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(28),
+                    border: Border.all(
+                      color: isSelected
+                          ? colors.primary
+                          : colors.outlineVariant,
                     ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        entry.$3,
+                        size: 17,
+                        color: isSelected
+                            ? colors.onPrimary
+                            : colors.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 7),
+                      Text(
+                        entry.$2,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: isSelected
+                                  ? colors.onPrimary
+                                  : colors.onSurface,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w600,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+          );
+        },
       ),
     );
   }
