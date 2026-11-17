@@ -35,7 +35,7 @@ class AddressEditorSheet extends StatelessWidget {
       minChildSize: .16,
       maxChildSize: .90,
       snap: true,
-      snapSizes: const [.16, .52, .90],
+      snapSizes: const [.52],
       builder: (context, scrollController) => Material(
         elevation: AppElevation.raised,
         color: colors.surface,
@@ -45,7 +45,7 @@ class AddressEditorSheet extends StatelessWidget {
           ),
         ),
         clipBehavior: Clip.antiAlias,
-        child: ListView(
+        child: SingleChildScrollView(
           key: const Key('address-editor-scroll'),
           controller: scrollController,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -55,7 +55,9 @@ class AddressEditorSheet extends StatelessWidget {
             AppSpacing.xl,
             AppSpacing.lg,
           ),
-          children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             Center(
               child: Semantics(
                 label: t.addressesAdd,
@@ -84,7 +86,8 @@ class AddressEditorSheet extends StatelessWidget {
               onPressed: canSave ? editor.save : null,
             ),
             const SizedBox(height: AppSpacing.sm),
-          ],
+            ],
+          ),
         ),
       ),
     );
