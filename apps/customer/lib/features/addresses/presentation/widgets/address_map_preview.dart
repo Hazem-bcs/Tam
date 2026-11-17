@@ -60,6 +60,8 @@ class AddressMapPreview extends StatelessWidget {
             ),
           ),
         Positioned.fill(
+          // Leave the map provider's attribution link unobstructed.
+          bottom: AppSpacing.xxl,
           child: Semantics(
             button: true,
             label: l.mapsPickLocation,
