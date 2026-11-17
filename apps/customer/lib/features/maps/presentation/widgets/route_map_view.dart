@@ -26,6 +26,7 @@ class RouteMapView extends StatefulWidget {
     this.locating = false,
     this.focus,
     this.markerIconSize = 36,
+    this.compactPreview = false,
   });
   final GeoPoint? origin, destination, driver;
   final double height;
@@ -36,6 +37,7 @@ class RouteMapView extends StatefulWidget {
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
+  final bool compactPreview;
   @override
   State<RouteMapView> createState() => _RouteMapViewState();
 }
@@ -90,6 +92,7 @@ class _RouteMapViewState extends State<RouteMapView> {
           locating: widget.locating,
           focus: widget.focus,
           markerIconSize: widget.markerIconSize,
+          compactPreview: widget.compactPreview,
           origin: widget.origin,
           destination: widget.destination,
           driver: widget.driver,
@@ -114,6 +117,7 @@ class _RouteMapViewState extends State<RouteMapView> {
                   locating: widget.locating,
                   focus: widget.focus,
                   markerIconSize: widget.markerIconSize,
+                  compactPreview: widget.compactPreview,
                   onAttribution: dependencies.attribution.open,
                   tileProviderFactory: dependencies.tileProviderFactory,
                   origin: widget.origin,

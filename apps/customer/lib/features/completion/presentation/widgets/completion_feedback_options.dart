@@ -46,7 +46,7 @@ class CompletionFeedbackOptions extends StatelessWidget {
             (constraints.maxWidth - (columns - 1) * AppSpacing.sm) / columns;
         // Reserve height for the longest translation at large accessibility scales.
         // Both rating sentiments always occupy identical, fixed-size slots.
-        final tileHeight = 132.0 + (scale - 1).clamp(0, 3) * 220.0;
+        final tileHeight = 124.0 + (scale - 1).clamp(0, 3) * 228.0;
 
         return Wrap(
           alignment: WrapAlignment.center,
@@ -145,7 +145,7 @@ class _FeedbackOption extends StatelessWidget {
                       color: selected
                           ? colors.primary
                           : colors.onSurfaceVariant,
-                      size: 22,
+                      size: 19,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),

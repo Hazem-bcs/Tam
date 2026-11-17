@@ -27,6 +27,7 @@ class TamMapCanvas extends StatelessWidget {
     this.locating = false,
     this.focus,
     this.markerIconSize = 36,
+    this.compactPreview = false,
   });
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
@@ -34,6 +35,7 @@ class TamMapCanvas extends StatelessWidget {
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
+  final bool compactPreview;
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
   final MapRoute? route;
@@ -46,6 +48,7 @@ class TamMapCanvas extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadii.lg),
           child: VectorMapSurface(
             configuration: configuration,
+            compactPreview: compactPreview,
             origin: origin,
             destination: destination,
             driver: driver,
@@ -60,6 +63,7 @@ class TamMapCanvas extends StatelessWidget {
         )
       : RasterMapCanvas(
           configuration: configuration,
+          compactPreview: compactPreview,
           origin: origin,
           destination: destination,
           driver: driver,
