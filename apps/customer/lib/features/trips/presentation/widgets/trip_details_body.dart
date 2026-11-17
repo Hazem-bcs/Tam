@@ -7,8 +7,9 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
 class TripDetailsBody extends StatelessWidget {
-  const TripDetailsBody({super.key, required this.trip});
+  const TripDetailsBody({super.key, required this.trip, this.onOpenFullMap});
   final Trip trip;
+  final VoidCallback? onOpenFullMap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class TripDetailsBody extends StatelessWidget {
       children: [
         TripDetailsStatusCard(trip: trip),
         const SizedBox(height: AppSpacing.md),
-        TripDetailsRouteCard(trip: trip),
+        TripDetailsRouteCard(trip: trip, onOpenFullMap: onOpenFullMap),
         const SizedBox(height: AppSpacing.md),
         TripDetailsInformationCard(trip: trip),
         if (trip.status == TripStatus.inProgress) ...[
