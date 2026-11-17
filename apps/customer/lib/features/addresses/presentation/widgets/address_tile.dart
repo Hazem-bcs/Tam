@@ -151,10 +151,14 @@ class AddressTile extends StatelessWidget {
                             color: colors.primary,
                           ),
                           const SizedBox(width: AppSpacing.md),
-                          Text(
-                            t.addressesEdit,
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
+                          Expanded(
+                            child: Text(
+                              t.addressesEdit,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ],
@@ -173,11 +177,15 @@ class AddressTile extends StatelessWidget {
                             size: 20,
                           ),
                           const SizedBox(width: AppSpacing.md),
-                          Text(
-                            t.addressesDelete,
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: colors.error,
-                              fontWeight: FontWeight.w700,
+                          Expanded(
+                            child: Text(
+                              t.addressesDelete,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: colors.error,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ],
