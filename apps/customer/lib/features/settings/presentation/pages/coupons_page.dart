@@ -38,13 +38,57 @@ class CouponsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: colors.surface,
       appBar: AppBar(
-        title: Text(t.settingsCouponsTitle),
-        leading: IconButton(
-          key: const Key('coupons-back'),
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pop(context),
+        toolbarHeight: 70,
+        centerTitle: true,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: colors.surface,
+        title: Text(
+          t.settingsCouponsTitle,
+          style: type.titleLarge?.copyWith(
+            color: colors.onSurface,
+            fontWeight: FontWeight.w800,
+          ),
         ),
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsetsDirectional.only(start: AppSpacing.md),
+          child: IconButton(
+            key: const Key('coupons-back'),
+            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+            style: IconButton.styleFrom(
+              backgroundColor: colors.primaryContainer.withValues(alpha: .55),
+              foregroundColor: colors.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+              ),
+            ),
+            icon: SizedBox(
+              width: 19,
+              height: 24,
+              child: CustomPaint(
+                key: const Key('coupons-ios-chevron'),
+                painter: _IosChevronPainter(
+                  color: colors.primary,
+                  pointsRight: Directionality.of(context) == TextDirection.rtl,
+                ),
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsetsDirectional.only(end: AppSpacing.lg),
+            child: Image.asset(
+              'assets/notifications/discount_offer.webp',
+              width: 40,
+              height: 40,
+              fit: BoxFit.contain,
+              excludeFromSemantics: true,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -69,8 +113,19 @@ class CouponsPage extends StatelessWidget {
                       ),
                       TextButton.icon(
                         key: const Key('coupons-add'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: colors.primary,
+                          backgroundColor: colors.primaryContainer.withValues(
+                            alpha: .64,
+                          ),
+                          padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: AppSpacing.sm,
+                          ),
+                          shape: const StadiumBorder(),
+                        ),
                         onPressed: () => _openAddSheet(context),
-                        icon: const Icon(Icons.add_rounded),
+                        icon: const Icon(Icons.add_rounded, size: 20),
                         label: Text(t.settingsCouponsAdd),
                       ),
                     ],
@@ -128,4 +183,36 @@ class CouponsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Cupertino-style back stroke without an icon-font dependency.
+class _IosChevronPainter extends CustomPainter {
+  const _IosChevronPainter({required this.color, required this.pointsRight});
+
+  final Color color;
+  final bool pointsRight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final outerX = pointsRight ? 3.5 : size.width - 3.5;
+    final pointX = pointsRight ? size.width - 3.5 : 3.5;
+    final path = Path()
+      ..moveTo(outerX, 3)
+      ..lineTo(pointX, size.height / 2)
+      ..lineTo(outerX, size.height - 3);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color
+        ..strokeWidth = 2.4
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..style = PaintingStyle.stroke
+        ..isAntiAlias = true,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _IosChevronPainter old) =>
+      old.color != color || old.pointsRight != pointsRight;
 }
