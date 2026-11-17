@@ -87,7 +87,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     } else if (_step == RideJourneyStep.entry) {
       Navigator.of(context).maybePop();
     } else {
-      setState(() => _step = RideJourneyStep.values[_step.index - 1]);
+      setState(() => _step = RideJourneyStep.entry);
     }
   }
 
@@ -161,8 +161,6 @@ class _RideRequestPageState extends State<RideRequestPage>
       case RideJourneyStep.places:
         if (state.hasRoute) setState(() => _step = RideJourneyStep.vehicle);
       case RideJourneyStep.vehicle:
-        if (state.hasRoute) setState(() => _step = RideJourneyStep.review);
-      case RideJourneyStep.review:
         unawaited(_confirmWithCurrentPickup(state));
     }
   }
@@ -284,12 +282,7 @@ class _RideRequestPageState extends State<RideRequestPage>
       final enabled = switch (_step) {
         RideJourneyStep.entry => !state.confirmationPending,
         RideJourneyStep.places => state.hasRoute && !state.confirmationPending,
-        RideJourneyStep.vehicle =>
-          state.hasRoute &&
-              state.quote != null &&
-              !state.confirmationPending &&
-              state.status != RideFlowStatus.quoting,
-        RideJourneyStep.review => canConfirm,
+        RideJourneyStep.vehicle => canConfirm && !location.locating,
       };
       return PopScope(
         canPop:
@@ -317,11 +310,7 @@ class _RideRequestPageState extends State<RideRequestPage>
                 onPickup: () => _pick(true),
                 onDestination: () => _pick(false),
                 onSelected: _select,
-                onContinue:
-                    enabled &&
-                        (_step != RideJourneyStep.review || !location.locating)
-                    ? () => _continue(state)
-                    : null,
+                onContinue: enabled ? () => _continue(state) : null,
                 onMapPoint: (point) => _location?.selectPoint(point),
                 onMapPickup: (value) => _useMapPoint(value, pickup: true),
                 onMapDestination: (value) => _useMapPoint(value, pickup: false),

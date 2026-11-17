@@ -51,7 +51,6 @@ class RideJourneyBody extends StatelessWidget {
       RideJourneyStep.places =>
         pickingPickup ? t.rideRequestPickup : t.rideRequestDestination,
       RideJourneyStep.vehicle => t.rideRequestProgressVehicle,
-      RideJourneyStep.review => t.rideRequestProgressReview,
     };
     return LayoutBuilder(
       builder: (context, bounds) {
@@ -72,8 +71,7 @@ class RideJourneyBody extends StatelessWidget {
                   .85,
                 ),
                 RideJourneyStep.places => .70,
-                RideJourneyStep.vehicle => .66,
-                RideJourneyStep.review => .64,
+                RideJourneyStep.vehicle => .82,
               };
         return RideJourneyShell(
           stageKey: selecting ? 'map-selection' : (step, pickingPickup),

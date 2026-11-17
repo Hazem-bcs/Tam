@@ -79,6 +79,8 @@ extension TripStatusRules on TripStatus {
       };
 }
 
+enum TripPaymentMethod { cash, wallet }
+
 final class TripBookingInput extends Equatable {
   const TripBookingInput({
     required this.pickup,
@@ -86,12 +88,16 @@ final class TripBookingInput extends Equatable {
     required this.vehicleClassId,
     required this.fare,
     this.scheduledAt,
+    this.paymentMethod = TripPaymentMethod.cash,
+    this.couponCode,
   });
   final TripLocation pickup;
   final TripLocation destination;
   final String vehicleClassId;
   final Money fare;
   final DateTime? scheduledAt;
+  final TripPaymentMethod paymentMethod;
+  final String? couponCode;
   @override
   List<Object?> get props => [
     pickup,
@@ -99,6 +105,8 @@ final class TripBookingInput extends Equatable {
     vehicleClassId,
     fare,
     scheduledAt,
+    paymentMethod,
+    couponCode,
   ];
 }
 

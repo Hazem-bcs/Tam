@@ -147,12 +147,13 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                 ),
               ),
             ),
-            PositionedDirectional(
-              top: AppSpacing.md,
-              start: AppSpacing.lg,
-              end: AppSpacing.lg,
-              child: widget.header,
-            ),
+            if (keyboardInset == 0)
+              PositionedDirectional(
+                top: AppSpacing.md,
+                start: AppSpacing.lg,
+                end: AppSpacing.lg,
+                child: widget.header,
+              ),
             AnimatedBuilder(
               animation: _extent,
               builder: (context, child) => Positioned(
@@ -163,7 +164,12 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                   constraints: BoxConstraints(
                     maxHeight: math.min(
                       (_extent.value * _height).clamp(0, _height),
-                      math.max(0, _height - keyboardInset - 96),
+                      math.max(
+                        0,
+                        _height -
+                            keyboardInset -
+                            (keyboardInset > 0 ? AppSpacing.sm : 96),
+                      ),
                     ),
                   ),
                   child: child!,
@@ -188,44 +194,48 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onVerticalDragStart: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            onVerticalDragUpdate: (details) {
-                              _extent.stop();
-                              _extent.value =
-                                  (_extent.value - details.delta.dy / _height)
-                                      .clamp(_minimum, _maximum);
-                            },
-                            onVerticalDragEnd: (details) {
-                              final velocity = details.primaryVelocity ?? 0;
-                              final fold =
-                                  velocity > 250 ||
-                                  (velocity >= -250 &&
-                                      _extent.value <
-                                          (_minimum + _preferred) / 2);
-                              _move(fold ? _minimum : _preferred);
-                            },
-                            child: Tooltip(
-                              message: _compact
-                                  ? t.rideRequestExpandPanel
-                                  : t.rideRequestCollapsePanel,
-                              child: InkWell(
-                                key: const Key('ride-sheet-toggle'),
-                                onTap: () =>
-                                    _move(_compact ? _preferred : _minimum),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: AppDimensions.minTapTarget,
-                                  child: Center(
-                                    child: Container(
-                                      width: 36,
-                                      height: 4,
-                                      decoration: BoxDecoration(
-                                        color: c.outlineVariant,
-                                        borderRadius: BorderRadius.circular(
-                                          AppRadii.sm,
+                          if (keyboardInset > 0)
+                            const SizedBox(height: AppSpacing.sm),
+                          if (keyboardInset == 0)
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onVerticalDragStart: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              onVerticalDragUpdate: (details) {
+                                _extent.stop();
+                                _extent.value =
+                                    (_extent.value - details.delta.dy / _height)
+                                        .clamp(_minimum, _maximum);
+                              },
+                              onVerticalDragEnd: (details) {
+                                final velocity = details.primaryVelocity ?? 0;
+                                final fold =
+                                    velocity > 250 ||
+                                    (velocity >= -250 &&
+                                        _extent.value <
+                                            (_minimum + _preferred) / 2);
+                                _move(fold ? _minimum : _preferred);
+                              },
+                              child: Tooltip(
+                                message: _compact
+                                    ? t.rideRequestExpandPanel
+                                    : t.rideRequestCollapsePanel,
+                                child: InkWell(
+                                  key: const Key('ride-sheet-toggle'),
+                                  onTap: () =>
+                                      _move(_compact ? _preferred : _minimum),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: AppDimensions.minTapTarget,
+                                    child: Center(
+                                      child: Container(
+                                        width: 36,
+                                        height: 4,
+                                        decoration: BoxDecoration(
+                                          color: c.outlineVariant,
+                                          borderRadius: BorderRadius.circular(
+                                            AppRadii.sm,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -233,7 +243,6 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                 ),
                               ),
                             ),
-                          ),
                           Flexible(
                             fit: FlexFit.loose,
                             child: AnimatedSize(

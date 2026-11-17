@@ -10,6 +10,8 @@ abstract interface class RideRequestRepository {
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
     DateTime? scheduledAt,
+    TripPaymentMethod paymentMethod = TripPaymentMethod.cash,
+    String? couponCode,
   });
 
   /// Keep the same idempotency key on retries of this exact booking.

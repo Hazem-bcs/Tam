@@ -37,6 +37,8 @@ abstract final class TripWireCodec {
         vehicleClassId: _string(value, 'vehicle_class_id'),
         fare: _money(value['fare']),
         scheduledAt: scheduledAt,
+        paymentMethod: paymentMethod(value['payment_method']),
+        couponCode: couponCode(value['coupon_code']),
       ),
     );
   }
@@ -51,6 +53,9 @@ abstract final class TripWireCodec {
       'currency': trip.booking.fare.currency,
       'minor_unit': trip.booking.fare.minorUnit,
     },
+    if (trip.booking.paymentMethod != TripPaymentMethod.cash)
+      'payment_method': trip.booking.paymentMethod.name,
+    if (trip.booking.couponCode != null) 'coupon_code': trip.booking.couponCode,
     'status': switch (trip.status) {
       TripStatus.scheduled => 'scheduled',
       TripStatus.requested => 'requested',
@@ -67,6 +72,20 @@ abstract final class TripWireCodec {
     if (trip.booking.scheduledAt != null)
       'scheduled_at': trip.booking.scheduledAt!.toUtc().toIso8601String(),
   };
+
+  static TripPaymentMethod paymentMethod(Object? raw) => switch (raw) {
+    null || 'cash' => TripPaymentMethod.cash,
+    'wallet' => TripPaymentMethod.wallet,
+    _ => throw const FormatException('Unknown payment method'),
+  };
+
+  static String? couponCode(Object? raw) {
+    if (raw == null) return null;
+    if (raw is! String || !RegExp(r'^[A-Z0-9_-]{1,32}$').hasMatch(raw)) {
+      throw const FormatException('Invalid coupon code');
+    }
+    return raw;
+  }
 
   static TripLocation _location(Object? raw) {
     final value = _map(raw);

@@ -329,3 +329,10 @@ TAM-FINAL-MAIN-AUDIT-20261117: INTEGRATED إلى main محليًا، root؛ كو
 مصادرها النهائية؛468/0 تنسيق،42infoقديمة،803نجاحًا/32إخفاقًا موجودة مسبقًا
 أو أعيد إثباتها على أساس main. بناء Android x64 وتثبيت ناجحان؛ لا push.
 [المصادر والأدلة والقيود](deliveries/TAM-FINAL-MAIN-AUDIT-20261117/REPORT.ar.md).
+
+
+TAM-RIDE-VEHICLE-FARE-20261117: READY → IMPLEMENTING، root؛ أساسcb4e2e3،
+فرع codex/ride-vehicle-fare-20261117. دمج مركبة/تكلفة مع دفع وكوبون؛
+[البطاقة والملكية](tasks/TAM-RIDE-VEHICLE-FARE-20261117.md).
+
+TAM-RIDE-VEHICLE-FARE-20261117: READY_FOR_REVIEW، root؛ تنفيذ وبناء وتشغيلAndroid مكتملة. 831نجاحًا/27إخفاقًا بأسماء موجودة مسبقًا،42infoقديمة؛ لا دمج أوpush. [التسليم](deliveries/TAM-RIDE-VEHICLE-FARE-20261117/REPORT.ar.md).

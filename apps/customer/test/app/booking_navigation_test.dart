@@ -25,9 +25,6 @@ void main() {
     final next = find.byKey(const Key('ride-flow-continue'));
     await tester.ensureVisible(next);
     await tester.tap(next);
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(next);
-    await tester.tap(next);
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(ActiveTripPage), findsOneWidget);

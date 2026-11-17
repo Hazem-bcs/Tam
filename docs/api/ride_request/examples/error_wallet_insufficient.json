@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "WALLET_INSUFFICIENT",
+    "message": {
+      "ar": "رصيد المحفظة غير كافٍ.",
+      "en": "Insufficient wallet balance."
+    }
+  }
+}

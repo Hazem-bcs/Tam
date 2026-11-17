@@ -30,6 +30,9 @@ final class RideQuote extends Equatable {
     required this.durationMinutes,
     required this.expiresAt,
     this.scheduledAt,
+    this.paymentMethod = TripPaymentMethod.cash,
+    this.couponCode,
+    this.discount,
   });
 
   final String id;
@@ -41,6 +44,9 @@ final class RideQuote extends Equatable {
   final int durationMinutes;
   final DateTime expiresAt;
   final DateTime? scheduledAt;
+  final TripPaymentMethod paymentMethod;
+  final String? couponCode;
+  final Money? discount;
 
   bool isValidAt(DateTime now) => now.toUtc().isBefore(expiresAt.toUtc());
 
@@ -55,6 +61,9 @@ final class RideQuote extends Equatable {
     durationMinutes,
     expiresAt,
     scheduledAt,
+    paymentMethod,
+    couponCode,
+    discount,
   ];
 }
 

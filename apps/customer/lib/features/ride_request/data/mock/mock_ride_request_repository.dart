@@ -7,6 +7,8 @@ import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
+import 'mock_ride_pricing.dart';
+
 /// Deterministic simulation. Trips are written exclusively to the injected store.
 final class MockRideRequestRepository implements RideRequestRepository {
   MockRideRequestRepository({
@@ -16,6 +18,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
     this.loseFirstConfirmationResponse = false,
     this.schedulePolicy = const RideSchedulePolicy(),
     this.schedulingAvailable = true,
+    this.walletAvailable = true,
   }) : _trips = trips,
        _now = now ?? DateTime.now;
 
@@ -25,6 +28,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
   bool loseFirstConfirmationResponse;
   final RideSchedulePolicy schedulePolicy;
   bool schedulingAvailable;
+  final bool walletAvailable;
   int _sequence = 0;
   final Map<String, RideQuote> _quotes = {};
   // Tracks successful store writes only, not another trip collection.
@@ -48,9 +52,14 @@ final class MockRideRequestRepository implements RideRequestRepository {
     required TripLocation destination,
     required RideVehicleClass vehicleClass,
     DateTime? scheduledAt,
+    TripPaymentMethod paymentMethod = TripPaymentMethod.cash,
+    String? couponCode,
   }) async {
     _checkRoute(pickup, destination);
     _checkSchedule(scheduledAt);
+    if (paymentMethod == TripPaymentMethod.wallet && !walletAvailable) {
+      throw const RideRequestFailure('PAYMENT_UNAVAILABLE');
+    }
     if (failNextQuote) {
       failNextQuote = false;
       throw const RideRequestFailure('SERVICE_UNAVAILABLE');
@@ -64,12 +73,21 @@ final class MockRideRequestRepository implements RideRequestRepository {
       RideVehicleClass.van => 35000,
       RideVehicleClass.motorbike => 5000,
     };
+    final code = couponCode?.trim().toUpperCase();
+    if (code != null && code != MockRidePricing.couponCode) {
+      throw const RideRequestFailure('COUPON_INVALID');
+    }
+    final gross = base + kilometers * 2000;
+    final discount = code == null ? 0 : MockRidePricing.discountFor(gross);
     final quote = RideQuote(
       id: 'mock-quote-${++_sequence}',
       pickup: pickup,
       destination: destination,
       vehicleClass: vehicleClass,
-      fare: Money(amountMinor: base + kilometers * 2000),
+      fare: Money(amountMinor: gross - discount),
+      paymentMethod: paymentMethod,
+      couponCode: code,
+      discount: code == null ? null : Money(amountMinor: discount),
       distanceMeters: distanceMeters,
       durationMinutes: math.max(5, (distanceMeters / 280).ceil()),
       expiresAt: _now().toUtc().add(const Duration(seconds: 90)),
@@ -110,6 +128,8 @@ final class MockRideRequestRepository implements RideRequestRepository {
           vehicleClassId: quote.vehicleClass.name,
           fare: quote.fare,
           scheduledAt: quote.scheduledAt,
+          paymentMethod: quote.paymentMethod,
+          couponCode: quote.couponCode,
         ),
         idempotencyKey: idempotencyKey,
       );

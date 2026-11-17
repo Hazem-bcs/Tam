@@ -608,6 +608,66 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestClearSearch => 'مسح البحث';
 
   @override
+  String get rideRequestWallet => 'المحفظة';
+
+  @override
+  String get rideRequestEstimatedFare => 'التكلفة التقديرية';
+
+  @override
+  String get rideRequestDiscountedFare => 'التكلفة بعد الحسم';
+
+  @override
+  String get rideRequestLivePriceHint => 'اختر مركبتك وشاهد التكلفة مباشرة';
+
+  @override
+  String get rideRequestVehicleAndConfirm => 'المركبة والتأكيد';
+
+  @override
+  String get rideRequestVehicleScrollHint => 'اسحب لمقارنة الفئات';
+
+  @override
+  String get rideRequestNextVehicles => 'مركبات أخرى';
+
+  @override
+  String get rideRequestPreviousVehicles => 'المركبات السابقة';
+
+  @override
+  String get rideRequestCoupon => 'كوبون حسم';
+
+  @override
+  String get rideRequestCouponHint => 'أدخل رمز الكوبون';
+
+  @override
+  String get rideRequestApplyCoupon => 'تطبيق';
+
+  @override
+  String get rideRequestRemoveCoupon => 'إزالة الكوبون';
+
+  @override
+  String get rideRequestCouponInvalid =>
+      'الكوبون غير صالح أو انتهت صلاحيته. صحّحه أو أزله للمتابعة.';
+
+  @override
+  String rideRequestCouponSaving(String amount) {
+    return 'وفّرت $amount ل.س';
+  }
+
+  @override
+  String get rideRequestFareUnavailable => 'السعر غير متاح حاليًا';
+
+  @override
+  String get rideRequestFareDisclaimer =>
+      'قد يتغير التقدير عند تعديل المسار أو الموعد';
+
+  @override
+  String get rideRequestPaymentUnavailable =>
+      'طريقة الدفع غير متاحة. اختر النقد أو أعد المحاولة.';
+
+  @override
+  String get rideRequestWalletInsufficient =>
+      'رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.';
+
+  @override
   String get tripsAll => 'الكل';
 
   @override

@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "PAYMENT_UNAVAILABLE",
+    "message": {
+      "ar": "طريقة الدفع غير متاحة.",
+      "en": "This payment method is unavailable."
+    }
+  }
+}

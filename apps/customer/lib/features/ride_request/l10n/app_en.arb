@@ -147,5 +147,30 @@
         "type": "String"
       }
     }
+  },
+  "rideRequestWallet": "Wallet",
+  "rideRequestEstimatedFare": "Estimated fare",
+  "rideRequestDiscountedFare": "Fare after discount",
+  "rideRequestLivePriceHint": "Choose a vehicle and see your fare",
+  "rideRequestVehicleAndConfirm": "Vehicle & confirm",
+  "rideRequestVehicleScrollHint": "Swipe to compare vehicles",
+  "rideRequestNextVehicles": "More vehicles",
+  "rideRequestPreviousVehicles": "Previous vehicles",
+  "rideRequestCoupon": "Discount code",
+  "rideRequestCouponHint": "Enter your code",
+  "rideRequestApplyCoupon": "Apply",
+  "rideRequestRemoveCoupon": "Remove code",
+  "rideRequestCouponInvalid": "This code is invalid or expired. Correct or remove it to continue.",
+  "rideRequestCouponSaving": "You saved {amount} SYP",
+  "rideRequestFareUnavailable": "Fare is currently unavailable",
+  "rideRequestFareDisclaimer": "The estimate may change when the route or time changes",
+  "rideRequestPaymentUnavailable": "This payment method is unavailable. Choose cash or retry.",
+  "rideRequestWalletInsufficient": "Your wallet balance is insufficient. Choose cash to continue.",
+  "@rideRequestCouponSaving": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   }
 }

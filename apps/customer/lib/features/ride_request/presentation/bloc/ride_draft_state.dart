@@ -60,6 +60,24 @@ final class RideQuoteExpired extends RideDraftEvent {
   List<Object?> get props => [id];
 }
 
+final class RidePaymentChanged extends RideDraftEvent {
+  const RidePaymentChanged(this.paymentMethod);
+  final TripPaymentMethod paymentMethod;
+  @override
+  List<Object?> get props => [paymentMethod];
+}
+
+final class RideCouponApplied extends RideDraftEvent {
+  const RideCouponApplied(this.code);
+  final String code;
+  @override
+  List<Object?> get props => [code];
+}
+
+final class RideCouponRemoved extends RideDraftEvent {
+  const RideCouponRemoved();
+}
+
 enum RideFlowStatus { editing, quoting, ready, confirming, booked, failed }
 
 enum RideFailureStep { places, quote, confirmation }
@@ -79,6 +97,9 @@ final class RideDraftState extends Equatable {
     this.searching = false,
     this.searchError,
     this.scheduledAt,
+    this.paymentMethod = TripPaymentMethod.cash,
+    this.couponCode,
+    this.vehicleQuotes = const {},
   });
 
   final TripLocation? pickup;
@@ -94,6 +115,9 @@ final class RideDraftState extends Equatable {
   final bool searching;
   final String? searchError;
   final DateTime? scheduledAt;
+  final TripPaymentMethod paymentMethod;
+  final String? couponCode;
+  final Map<RideVehicleClass, RideQuote> vehicleQuotes;
 
   // An unanswered confirmation must resolve before a new booking intent.
   bool get confirmationPending =>
@@ -118,6 +142,8 @@ final class RideDraftState extends Equatable {
       quote!.destination == destination &&
       quote!.vehicleClass == vehicleClass &&
       quote!.scheduledAt == scheduledAt &&
+      quote!.paymentMethod == paymentMethod &&
+      quote!.couponCode == couponCode &&
       policy.allows(scheduledAt, now) &&
       quote!.isValidAt(now) &&
       status != RideFlowStatus.quoting &&
@@ -142,6 +168,10 @@ final class RideDraftState extends Equatable {
     bool clearSearchError = false,
     DateTime? scheduledAt,
     bool clearSchedule = false,
+    TripPaymentMethod? paymentMethod,
+    String? couponCode,
+    bool clearCoupon = false,
+    Map<RideVehicleClass, RideQuote>? vehicleQuotes,
   }) => RideDraftState(
     pickup: pickup ?? this.pickup,
     pickupFromDevice: pickupFromDevice ?? this.pickupFromDevice,
@@ -156,6 +186,9 @@ final class RideDraftState extends Equatable {
     searching: searching ?? this.searching,
     searchError: clearSearchError ? null : searchError ?? this.searchError,
     scheduledAt: clearSchedule ? null : scheduledAt ?? this.scheduledAt,
+    paymentMethod: paymentMethod ?? this.paymentMethod,
+    couponCode: clearCoupon ? null : couponCode ?? this.couponCode,
+    vehicleQuotes: vehicleQuotes ?? this.vehicleQuotes,
   );
 
   @override
@@ -173,5 +206,8 @@ final class RideDraftState extends Equatable {
     searching,
     searchError,
     scheduledAt,
+    paymentMethod,
+    couponCode,
+    vehicleQuotes,
   ];
 }

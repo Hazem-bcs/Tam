@@ -277,6 +277,31 @@
       }
     }
   },
+  "rideRequestWallet": "المحفظة",
+  "rideRequestEstimatedFare": "التكلفة التقديرية",
+  "rideRequestDiscountedFare": "التكلفة بعد الحسم",
+  "rideRequestLivePriceHint": "اختر مركبتك وشاهد التكلفة مباشرة",
+  "rideRequestVehicleAndConfirm": "المركبة والتأكيد",
+  "rideRequestVehicleScrollHint": "اسحب لمقارنة الفئات",
+  "rideRequestNextVehicles": "مركبات أخرى",
+  "rideRequestPreviousVehicles": "المركبات السابقة",
+  "rideRequestCoupon": "كوبون حسم",
+  "rideRequestCouponHint": "أدخل رمز الكوبون",
+  "rideRequestApplyCoupon": "تطبيق",
+  "rideRequestRemoveCoupon": "إزالة الكوبون",
+  "rideRequestCouponInvalid": "الكوبون غير صالح أو انتهت صلاحيته. صحّحه أو أزله للمتابعة.",
+  "rideRequestCouponSaving": "وفّرت {amount} ل.س",
+  "rideRequestFareUnavailable": "السعر غير متاح حاليًا",
+  "rideRequestFareDisclaimer": "قد يتغير التقدير عند تعديل المسار أو الموعد",
+  "rideRequestPaymentUnavailable": "طريقة الدفع غير متاحة. اختر النقد أو أعد المحاولة.",
+  "rideRequestWalletInsufficient": "رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.",
+  "@rideRequestCouponSaving": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "tripsAll": "الكل",
   "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",

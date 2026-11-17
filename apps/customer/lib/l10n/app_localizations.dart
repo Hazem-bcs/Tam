@@ -1220,6 +1220,114 @@ abstract class AppLocalizations {
   /// **'مسح البحث'**
   String get rideRequestClearSearch;
 
+  /// No description provided for @rideRequestWallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحفظة'**
+  String get rideRequestWallet;
+
+  /// No description provided for @rideRequestEstimatedFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكلفة التقديرية'**
+  String get rideRequestEstimatedFare;
+
+  /// No description provided for @rideRequestDiscountedFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكلفة بعد الحسم'**
+  String get rideRequestDiscountedFare;
+
+  /// No description provided for @rideRequestLivePriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مركبتك وشاهد التكلفة مباشرة'**
+  String get rideRequestLivePriceHint;
+
+  /// No description provided for @rideRequestVehicleAndConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'المركبة والتأكيد'**
+  String get rideRequestVehicleAndConfirm;
+
+  /// No description provided for @rideRequestVehicleScrollHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب لمقارنة الفئات'**
+  String get rideRequestVehicleScrollHint;
+
+  /// No description provided for @rideRequestNextVehicles.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركبات أخرى'**
+  String get rideRequestNextVehicles;
+
+  /// No description provided for @rideRequestPreviousVehicles.
+  ///
+  /// In ar, this message translates to:
+  /// **'المركبات السابقة'**
+  String get rideRequestPreviousVehicles;
+
+  /// No description provided for @rideRequestCoupon.
+  ///
+  /// In ar, this message translates to:
+  /// **'كوبون حسم'**
+  String get rideRequestCoupon;
+
+  /// No description provided for @rideRequestCouponHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز الكوبون'**
+  String get rideRequestCouponHint;
+
+  /// No description provided for @rideRequestApplyCoupon.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق'**
+  String get rideRequestApplyCoupon;
+
+  /// No description provided for @rideRequestRemoveCoupon.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة الكوبون'**
+  String get rideRequestRemoveCoupon;
+
+  /// No description provided for @rideRequestCouponInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكوبون غير صالح أو انتهت صلاحيته. صحّحه أو أزله للمتابعة.'**
+  String get rideRequestCouponInvalid;
+
+  /// No description provided for @rideRequestCouponSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّرت {amount} ل.س'**
+  String rideRequestCouponSaving(String amount);
+
+  /// No description provided for @rideRequestFareUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر غير متاح حاليًا'**
+  String get rideRequestFareUnavailable;
+
+  /// No description provided for @rideRequestFareDisclaimer.
+  ///
+  /// In ar, this message translates to:
+  /// **'قد يتغير التقدير عند تعديل المسار أو الموعد'**
+  String get rideRequestFareDisclaimer;
+
+  /// No description provided for @rideRequestPaymentUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع غير متاحة. اختر النقد أو أعد المحاولة.'**
+  String get rideRequestPaymentUnavailable;
+
+  /// No description provided for @rideRequestWalletInsufficient.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.'**
+  String get rideRequestWalletInsufficient;
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:
