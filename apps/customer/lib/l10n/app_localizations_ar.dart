@@ -266,6 +266,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeBrowsingLabel => 'تصفح خدمات تم';
 
   @override
+  String get homeCouponTitle => 'معك كوبون حسم؟';
+
+  @override
+  String get homeCouponHint => 'وفّر على مشوارك القادم مع تم';
+
+  @override
+  String get homeCouponDetails => 'التفاصيل';
+
+  @override
+  String get homeCouponInstructions =>
+      'اختر مشوارك، ثم أضف الكوبون في خانة كوبون الحسم قبل تأكيد الرحلة. ستظهر قيمة الحسم والسعر الجديد إذا كان الكوبون صالحًا.';
+
+  @override
+  String get homeSelectDefaultAddress => 'حدد عنوانك الافتراضي';
+
+  @override
   String get rideRequestTitle => 'احجز مشوارك';
 
   @override

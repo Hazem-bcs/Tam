@@ -35,5 +35,10 @@
   "homePromotionsTitle": "إعلانات تم",
   "homePromotionEyebrow": "جديد في تم",
   "homeServicesComingSoon": "قريباً في تم",
-  "homeBrowsingLabel": "تصفح خدمات تم"
+  "homeBrowsingLabel": "تصفح خدمات تم",
+  "homeCouponTitle": "معك كوبون حسم؟",
+  "homeCouponHint": "وفّر على مشوارك القادم مع تم",
+  "homeCouponDetails": "التفاصيل",
+  "homeCouponInstructions": "اختر مشوارك، ثم أضف الكوبون في خانة كوبون الحسم قبل تأكيد الرحلة. ستظهر قيمة الحسم والسعر الجديد إذا كان الكوبون صالحًا.",
+  "homeSelectDefaultAddress": "حدد عنوانك الافتراضي"
 }

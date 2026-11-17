@@ -88,24 +88,24 @@ void main() {
       find.byKey(const Key('home-promotion-slide-0')),
     );
     expect(viewport.width, closeTo(390, 0.1));
-    expect(slide.left, closeTo(viewport.left + 18, 0.1));
-    expect(slide.right, closeTo(viewport.right - 18, 0.1));
-    expect(find.text('إعلانات تم'), findsOneWidget);
+    expect(slide.left, closeTo(viewport.left + 24, 0.1));
+    expect(slide.right, closeTo(viewport.right - 24, 0.1));
+    expect(find.byKey(const Key('home-promotions-slider')), findsOneWidget);
   });
 
   testWidgets('ads advance automatically and wrap to the first card', (
     tester,
   ) async {
     await pumpCarousel(tester, promotions: const [first, second]);
-    expect(find.text('1 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-0')), findsOneWidget);
     await tester.pump(const Duration(seconds: 5));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 450));
-    expect(find.text('2 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-1')), findsOneWidget);
     await tester.pump(const Duration(seconds: 5));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 450));
-    expect(find.text('1 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-0')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -118,13 +118,13 @@ void main() {
       reducedMotion: true,
     );
     await tester.pump(const Duration(seconds: 7));
-    expect(find.text('1 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-0')), findsOneWidget);
     await tester.drag(
       find.byKey(const Key('home-promotions-slider')),
       const Offset(310, 0),
     );
     await tester.pumpAndSettle();
-    expect(find.text('2 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-1')), findsOneWidget);
   });
 
   testWidgets('approved informational campaigns swipe manually', (
@@ -139,6 +139,6 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('خبر تم الثاني'), findsOneWidget);
-    expect(find.text('2 / 2'), findsOneWidget);
+    expect(find.byKey(const Key('home-promotion-current-1')), findsOneWidget);
   });
 }

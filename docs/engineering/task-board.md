@@ -344,3 +344,7 @@ TAM-RIDE-VEHICLE-FARE-20261117/UI: READY_FOR_REVIEW؛18اختبارًا،42info�
 TAM-RIDE-VEHICLE-FARE-20261117: INTEGRATING إلىmain بطلب المستخدم؛ أساسmain eb6842a، بطاقات مختصرة9c3c0e4؛ دون اختبارات إضافية بتوجيهه.
 
 TAM-RIDE-VEHICLE-FARE-20261117/COMPACT: DONE؛ root، ضغط اللوحة ضمن67% وجميع الخيارات ظاهرة بالحالة العادية، Hot Reload ناجح دون اختبارات بطلب المستخدم.
+
+AUI-01-HOME-20261117: READY → IMPLEMENTING، root؛ أساسahmad-ui1c0c831، الرئيسيةUI-04 معAppBar الحالي، لا تعديلmain. [البطاقة](tasks/AUI-01-HOME-20261117.md).
+
+AUI-01-HOME-20261117: READY_FOR_REVIEW؛root،24اختبارًا مستهدفًا ناجحة وبناءوتشغيلAndroid،بدوندمجmainأوpush. [التقرير](../ahmad-ui/deliveries/AUI-01-HOME-20261117/REPORT.ar.md).

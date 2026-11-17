@@ -273,6 +273,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeBrowsingLabel => 'Explore TAM services';
 
   @override
+  String get homeCouponTitle => 'Have a promo code?';
+
+  @override
+  String get homeCouponHint => 'Save on your next ride with TAM';
+
+  @override
+  String get homeCouponDetails => 'Details';
+
+  @override
+  String get homeCouponInstructions =>
+      'Choose your ride, then enter your promo code before confirming. When the code is valid, your discount and updated fare will appear.';
+
+  @override
+  String get homeSelectDefaultAddress => 'Choose your default address';
+
+  @override
   String get rideRequestTitle => 'Book a ride';
 
   @override

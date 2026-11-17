@@ -48,10 +48,10 @@ void main() {
         ),
       ),
     );
-    expect(find.byType(HomeDeparturePortal), findsNothing);
+    expect(find.byKey(const Key('home-ride-entry')), findsNothing);
     await tester.tap(find.text('مشوار'));
     expect(nav.ride, 0);
-    expect(find.text('قريباً في تم'), findsOneWidget);
+    expect(find.text('قريبًا'), findsOneWidget);
   });
 
   testWidgets(
@@ -65,7 +65,7 @@ void main() {
         navigation: nav,
         settle: false,
       );
-      expect(find.byType(HomeDeparturePortal), findsNothing);
+      expect(find.byKey(const Key('home-ride-entry')), findsNothing);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.tap(find.byKey(const Key('home-notifications')));
       expect(nav.notifications, 1);
@@ -73,7 +73,7 @@ void main() {
         await const MockHomeRepository(latency: Duration.zero).load(),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(HomeDeparturePortal), findsOneWidget);
+      expect(find.byKey(const Key('home-ride-entry')), findsOneWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing);
       expect(tester.takeException(), isNull);
     },

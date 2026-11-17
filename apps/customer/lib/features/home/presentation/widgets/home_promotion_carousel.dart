@@ -6,7 +6,7 @@ import 'package:tam_customer/features/home/domain/entities/home_content.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 /// A real swipeable ad slot, sourced from Home data rather than UI fixtures.
-/// No promo triggers ride navigation: the hero already owns that destination.
+/// The service tile owns booking; campaigns remain informational.
 class HomePromotionCarousel extends StatefulWidget {
   const HomePromotionCarousel({super.key, required this.promotions});
 
@@ -111,45 +111,14 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
     if (items.isEmpty) return const SizedBox.shrink();
 
     final colors = Theme.of(context).colorScheme;
-    final type = Theme.of(context).textTheme;
-    final t = AppLocalizations.of(context);
     final scale = MediaQuery.textScalerOf(context).scale(16);
     final visibleIndex = _index.clamp(0, items.length - 1);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(
-            bottom: 11,
-            start: 18,
-            end: 18,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(
-                  t.homePromotionsTitle,
-                  style: type.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: colors.onSurface,
-                  ),
-                ),
-              ),
-              if (items.length > 1)
-                Text(
-                  '${visibleIndex + 1} / ${items.length}',
-                  textDirection: TextDirection.ltr,
-                  style: type.labelMedium?.copyWith(
-                    color: colors.onSurfaceVariant,
-                  ),
-                ),
-            ],
-          ),
-        ),
         SizedBox(
-          height: scale > 24 ? scale * 12 : 182,
+          height: scale > 24 ? scale * 12 : 170,
           child: Listener(
             onPointerDown: (_) {
               _pointerDown = true;
@@ -171,7 +140,9 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
               // The viewport is edge-to-edge. Only the card is inset,
               // so incoming and outgoing slides pass the page gutters.
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+                padding: const EdgeInsetsDirectional.symmetric(
+                  horizontal: AppSpacing.xl,
+                ),
                 child: _PromotionSlide(promotion: items[index], index: index),
               ),
             ),
@@ -180,26 +151,32 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
         if (items.length > 1)
           Padding(
             padding: const EdgeInsetsDirectional.only(top: 11),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (var i = 0; i < items.length; i++) ...[
-                  AnimatedContainer(
-                    duration: MediaQuery.disableAnimationsOf(context)
-                        ? Duration.zero
-                        : AppMotion.short,
-                    width: i == visibleIndex ? 20 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: i == visibleIndex
-                          ? colors.primary
-                          : colors.outlineVariant,
+            child: Semantics(
+              key: ValueKey('home-promotion-current-$visibleIndex'),
+              label: MaterialLocalizations.of(
+                context,
+              ).tabLabel(tabIndex: visibleIndex + 1, tabCount: items.length),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < items.length; i++) ...[
+                    AnimatedContainer(
+                      duration: MediaQuery.disableAnimationsOf(context)
+                          ? Duration.zero
+                          : AppMotion.short,
+                      width: i == visibleIndex ? 8 : 6,
+                      height: i == visibleIndex ? 8 : 6,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: i == visibleIndex
+                            ? colors.primary
+                            : colors.outlineVariant,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 5),
+                    const SizedBox(width: 5),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
       ],
@@ -209,152 +186,104 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
 
 class _PromotionSlide extends StatelessWidget {
   const _PromotionSlide({required this.promotion, required this.index});
-
   final HomePromotion promotion;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final type = Theme.of(context).textTheme;
-    final t = AppLocalizations.of(context);
-    final isMedia = promotion.imageUrl != null;
-    final dark = isMedia || index.isOdd;
-    final fg = dark ? colors.onPrimary : colors.onPrimaryContainer;
-    final secondary = dark
-        ? colors.onPrimary.withValues(alpha: .82)
-        : colors.onSurfaceVariant;
-    final background = index.isOdd
-        ? colors.primary
-        : (index % 3 == 2
-              ? colors.secondaryContainer
-              : colors.primaryContainer);
-    final showArt =
-        !isMedia &&
-        MediaQuery.textScalerOf(context).scale(16) < 22 &&
-        MediaQuery.sizeOf(context).width >= 350;
+    final theme = Theme.of(context), colors = theme.colorScheme;
+    final type = theme.textTheme;
+    final l = AppLocalizations.of(context);
     final lang = Localizations.localeOf(context).languageCode;
-
+    final remote = promotion.imageUrl != null;
+    final foreground = remote ? colors.onPrimary : colors.primary;
     return Semantics(
       container: true,
       label: promotion.title.forLanguage(lang),
-      child: DecoratedBox(
-        key: Key('home-promotion-slide-$index'),
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(23),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(23),
-          child: Stack(
-            children: [
-              if (isMedia) ...[
-                Positioned.fill(
-                  child: Image.network(
-                    promotion.imageUrl!,
-                    fit: BoxFit.cover,
-                    cacheWidth: 1000,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const SizedBox.shrink(),
-                  ),
-                ),
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: AlignmentDirectional.topStart,
-                        end: AlignmentDirectional.bottomEnd,
-                        colors: [
-                          colors.scrim.withValues(alpha: .82),
-                          colors.scrim.withValues(alpha: .45),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              if (!isMedia)
-                PositionedDirectional(
-                  end: -25,
-                  bottom: -55,
-                  child: ExcludeSemantics(
-                    child: Container(
-                      width: 155,
-                      height: 155,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: fg.withValues(alpha: .09),
-                          width: 28,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(18, 16, 14, 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            t.homePromotionEyebrow,
-                            style: type.labelSmall?.copyWith(
-                              color: fg.withValues(alpha: .88),
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const SizedBox(height: 7),
-                          Text(
-                            promotion.title.forLanguage(lang),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: type.titleMedium?.copyWith(
-                              color: fg,
-                              fontWeight: FontWeight.w900,
-                              height: 1.3,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            promotion.subtitle.forLanguage(lang),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: type.bodySmall?.copyWith(
-                              color: secondary,
-                              height: 1.45,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (showArt) ...[
-                      const SizedBox(width: 7),
-                      ExcludeSemantics(
-                        child: index == 0
-                            ? Image.asset(
-                                'assets/images/tam_account_mascot.webp',
-                                height: 111,
-                                width: 93,
-                                fit: BoxFit.contain,
-                              )
-                            : Icon(
-                                index.isOdd
-                                    ? Icons.campaign_outlined
-                                    : Icons.route_rounded,
-                                color: fg.withValues(alpha: .78),
-                                size: 60,
-                              ),
-                      ),
-                    ],
-                  ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        child: Stack(
+          key: Key('home-promotion-slide-$index'),
+          fit: StackFit.expand,
+          children: [
+            if (remote)
+              Image.network(
+                promotion.imageUrl!,
+                fit: BoxFit.cover,
+                cacheWidth: 1000,
+                errorBuilder: (_, error, stack) =>
+                    ColoredBox(color: colors.primary),
+              )
+            else
+              Transform.flip(
+                flipX: Directionality.of(context) == TextDirection.ltr,
+                child: Image.asset(
+                  'assets/images/ahmad_ui/home_hero.webp',
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
                 ),
               ),
-            ],
-          ),
+            if (remote)
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: AlignmentDirectional.centerStart,
+                    end: AlignmentDirectional.centerEnd,
+                    colors: [
+                      colors.scrim.withValues(alpha: .85),
+                      colors.scrim.withValues(alpha: .15),
+                    ],
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l.appName,
+                          style: type.titleSmall?.copyWith(
+                            color: foreground,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          promotion.title.forLanguage(lang),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: type.titleSmall?.copyWith(
+                            color: foreground,
+                            fontWeight: FontWeight.w800,
+                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          promotion.subtitle.forLanguage(lang),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: type.bodySmall?.copyWith(
+                            color: remote
+                                ? colors.onPrimary
+                                : colors.onSurfaceVariant,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(flex: 5),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

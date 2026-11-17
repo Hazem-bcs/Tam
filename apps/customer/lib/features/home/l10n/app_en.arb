@@ -35,5 +35,10 @@
   "homePromotionsTitle": "TAM ads",
   "homePromotionEyebrow": "Discover TAM",
   "homeServicesComingSoon": "Coming soon to TAM",
-  "homeBrowsingLabel": "Explore TAM services"
+  "homeBrowsingLabel": "Explore TAM services",
+  "homeCouponTitle": "Have a promo code?",
+  "homeCouponHint": "Save on your next ride with TAM",
+  "homeCouponDetails": "Details",
+  "homeCouponInstructions": "Choose your ride, then enter your promo code before confirming. When the code is valid, your discount and updated fare will appear.",
+  "homeSelectDefaultAddress": "Choose your default address"
 }

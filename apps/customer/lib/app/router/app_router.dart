@@ -75,6 +75,7 @@ GoRouter createAppRouter(
           phoneE164: phone(),
           logout: auth.logout,
           unreadCountSource: notifications,
+          addressesRepository: addresses,
         ),
         activity: (context) => buildTripsFeature(
           context,

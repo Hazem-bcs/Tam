@@ -578,6 +578,36 @@ abstract class AppLocalizations {
   /// **'تصفح خدمات تم'**
   String get homeBrowsingLabel;
 
+  /// No description provided for @homeCouponTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معك كوبون حسم؟'**
+  String get homeCouponTitle;
+
+  /// No description provided for @homeCouponHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّر على مشوارك القادم مع تم'**
+  String get homeCouponHint;
+
+  /// No description provided for @homeCouponDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفاصيل'**
+  String get homeCouponDetails;
+
+  /// No description provided for @homeCouponInstructions.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مشوارك، ثم أضف الكوبون في خانة كوبون الحسم قبل تأكيد الرحلة. ستظهر قيمة الحسم والسعر الجديد إذا كان الكوبون صالحًا.'**
+  String get homeCouponInstructions;
+
+  /// No description provided for @homeSelectDefaultAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد عنوانك الافتراضي'**
+  String get homeSelectDefaultAddress;
+
   /// No description provided for @rideRequestTitle.
   ///
   /// In ar, this message translates to:

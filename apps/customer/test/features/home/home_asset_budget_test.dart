@@ -9,6 +9,7 @@ void main() {
       'ride_car.webp': 16 * 1024,
       'food.webp': 16 * 1024,
       'shopping.webp': 16 * 1024,
+      'ahmad_ui/home_hero.webp': 256 * 1024,
     };
     var totalBytes = 0;
     for (final entry in maxAssetBytes.entries) {
@@ -18,6 +19,6 @@ void main() {
       totalBytes += size;
       expect(size, lessThan(entry.value), reason: '${entry.key} is oversized');
     }
-    expect(totalBytes, lessThan(64 * 1024));
+    expect(totalBytes, lessThan(320 * 1024));
   });
 }

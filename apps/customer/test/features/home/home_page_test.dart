@@ -57,9 +57,9 @@ void main() {
       expect(find.byType(HomePage), findsOneWidget);
       expect(find.text('تم تسجيل الدخول'), findsOneWidget);
       expect(find.text('+963941234567'), findsNothing);
-      expect(find.text('وين رايح اليوم؟'), findsOneWidget);
-      expect(find.text('قريباً في تم'), findsOneWidget);
-      expect(find.text('إعلانات تم'), findsOneWidget);
+      expect(find.text('اختر خدمتك'), findsOneWidget);
+      expect(find.text('قريبًا'), findsNWidgets(2));
+      expect(find.byKey(const Key('home-coupon-details')), findsOneWidget);
       expect(find.byKey(const Key('home-promotions-slider')), findsOneWidget);
       expect(find.text('مشوارك أسهل مع تم'), findsOneWidget);
       expect(find.text('تسجيل الخروج'), findsNothing);
@@ -76,10 +76,10 @@ void main() {
       expect(find.byKey(const Key('home-active-trip')), findsNothing);
       await tester.ensureVisible(find.text('الطعام'));
       final foodLabel = find.text('الطعام');
-      final foodCard = find
-          .ancestor(of: foodLabel, matching: find.byType(Container))
-          .first;
-      expect(tester.getSize(foodCard).height, greaterThanOrEqualTo(68));
+      expect(
+        tester.getSize(find.byKey(const Key('home-service-food'))).height,
+        greaterThanOrEqualTo(48),
+      );
       await tester.tap(foodLabel);
       expect(nav.ride, 1, reason: 'Coming-soon services must not navigate');
       expect(tester.takeException(), isNull);
@@ -100,9 +100,9 @@ void main() {
         guest: true,
       );
       expect(find.text('You are browsing as a guest'), findsOneWidget);
-      expect(find.text('Where to today?'), findsOneWidget);
-      expect(find.text('Coming soon to TAM'), findsOneWidget);
-      expect(find.text('Choose your destination'), findsOneWidget);
+      expect(find.text('Choose a service'), findsOneWidget);
+      expect(find.text('Coming soon'), findsNWidgets(2));
+      expect(find.text('Have a promo code?'), findsOneWidget);
       expect(find.text('Sign in'), findsNothing);
       expect(tester.takeException(), isNull);
     },

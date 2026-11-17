@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/app/theme/app_typography.dart';
 import 'package:tam_customer/features/home/domain/entities/home_content.dart';
 import 'package:tam_customer/features/home/presentation/bloc/home_cubit.dart';
-import 'package:tam_customer/features/home/presentation/widgets/home_departure_portal.dart';
-import 'package:tam_customer/features/home/presentation/widgets/home_destination_hero.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_address_bar.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_coupon_banner.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_masthead.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_promotion_carousel.dart';
-import 'package:tam_customer/features/home/presentation/widgets/home_service_showcase.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_reference_services.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_status_panel.dart';
-import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// Destination-first home: one ride entry, real campaign paging, no redundant
-/// shortcuts for routes already available in the ride flow or bottom navigation.
+/// Ahmad UI reference layout; the existing masthead and product contracts stay.
 class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
@@ -24,6 +23,7 @@ class HomePage extends StatelessWidget {
     this.isAuthenticated = false,
     this.isGuest = false,
     this.notificationsButton,
+    this.addressBar,
   });
 
   final CustomerNavigation navigation;
@@ -32,125 +32,122 @@ class HomePage extends StatelessWidget {
   final bool isAuthenticated;
   final bool isGuest;
   final Widget? notificationsButton;
+  final Widget? addressBar;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      body: Theme(
-        data: Theme.of(
-          context,
-        ).copyWith(textTheme: AppTypography.home(Theme.of(context).textTheme)),
-        child: SafeArea(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 580),
-              child: SingleChildScrollView(
-                key: const PageStorageKey('home-scroll'),
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsetsDirectional.only(
-                  bottom: AppSpacing.xxl,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    HomeMasthead(
-                      onNotifications: navigation.openNotifications,
-                      isGuest: isGuest,
-                      isAuthenticated: isAuthenticated,
-                      notificationsButton: notificationsButton,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Color.alphaBlend(
+          colors.primaryContainer.withValues(alpha: .85),
+          colors.surface,
+        ),
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        systemStatusBarContrastEnforced: false,
+      ),
+      child: Scaffold(
+        backgroundColor: colors.surface,
+        body: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                colors.primaryContainer.withValues(alpha: .85),
+                colors.surface,
+                colors.surface,
+              ],
+              stops: const [0, .34, 1],
+            ),
+          ),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              textTheme: AppTypography.home(Theme.of(context).textTheme),
+            ),
+            child: SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 580),
+                  child: SingleChildScrollView(
+                    key: const PageStorageKey('home-scroll'),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsetsDirectional.only(
+                      bottom: AppSpacing.xxl,
                     ),
-                    BlocBuilder<HomeCubit, HomeState>(
-                      builder: (context, state) {
-                        final ready =
-                            state.status == HomeLoadStatus.ready &&
-                            state.content != null;
-                        final content = state.content;
-                        final services = ready
-                            ? content!.services
-                            : const <HomeService>[];
-                        final rideService = services
-                            .where(
-                              (service) => service.id == HomeServiceId.ride,
-                            )
-                            .firstOrNull;
-                        final canRide =
-                            ready &&
-                            rideService != null &&
-                            rideService.available &&
-                            rideService.action == HomeAction.rideRequest;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                horizontal: 18,
-                              ),
-                              child: canRide
-                                  ? HomeDeparturePortal(
-                                      onRideRequest: navigation.openRideRequest,
-                                      child: HomeDestinationHero(
-                                        onChooseDestination:
-                                            navigation.openRideRequest,
-                                      ),
-                                    )
-                                  : ready
-                                  ? const _RideUnavailableHint()
-                                  : HomeStatusPanel(state: state),
-                            ),
-                            if (ready &&
-                                content!.promotions.any(
-                                  (promotion) => promotion.enabled,
-                                )) ...[
-                              const SizedBox(height: AppSpacing.xl),
-                              HomePromotionCarousel(
-                                promotions: content.promotions,
-                              ),
-                            ],
-                            if (ready && services.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 18,
-                                ),
-                                child: HomeServiceShowcase(services: services),
-                              ),
-                          ],
-                        );
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        HomeMasthead(
+                          onNotifications: navigation.openNotifications,
+                          isGuest: isGuest,
+                          isAuthenticated: isAuthenticated,
+                          notificationsButton: notificationsButton,
+                        ),
+                        addressBar ??
+                            HomeAddressBar(onManage: navigation.openAddresses),
+                        BlocBuilder<HomeCubit, HomeState>(
+                          builder: (context, state) {
+                            final ready =
+                                state.status == HomeLoadStatus.ready &&
+                                state.content != null;
+                            final content = state.content;
+                            final services = ready
+                                ? content!.services
+                                : const <HomeService>[];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (!ready)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSpacing.xl,
+                                    ),
+                                    child: HomeStatusPanel(state: state),
+                                  ),
+                                if (ready &&
+                                    content!.promotions.any(
+                                      (promotion) => promotion.enabled,
+                                    )) ...[
+                                  const SizedBox(height: AppSpacing.sm),
+                                  HomePromotionCarousel(
+                                    promotions: content.promotions,
+                                  ),
+                                ],
+                                if (ready && services.isNotEmpty)
+                                  Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.symmetric(
+                                          horizontal: AppSpacing.xl,
+                                        ),
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(height: AppSpacing.xl),
+                                        HomeReferenceServices(
+                                          services: services,
+                                          onRideRequest:
+                                              navigation.openRideRequest,
+                                        ),
+                                        const SizedBox(height: AppSpacing.xl),
+                                        const HomeCouponBanner(),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _RideUnavailableHint extends StatelessWidget {
-  const _RideUnavailableHint();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsetsDirectional.all(AppSpacing.lg),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline_rounded, color: colors.primary),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Text(
-              AppLocalizations.of(context).homeRideUnavailable,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-        ],
       ),
     );
   }
