@@ -31,15 +31,7 @@ class AddressEditorForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          cubit.id == null ? t.addressesAdd : t.addressesEdit,
-          style: type.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w800,
-            color: colors.onSurface,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        AddressLocationSummary(locationLabel: state.location?.label),
+        AddressLocationSummary(hasLocation: state.location != null),
         if (state.validationAttempted && state.location == null)
           Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -48,7 +40,7 @@ class AddressEditorForm extends StatelessWidget {
               style: type.bodySmall?.copyWith(color: colors.error),
             ),
           ),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.xs),
         TextField(
           key: const Key('address-name'),
           controller: nameController,
