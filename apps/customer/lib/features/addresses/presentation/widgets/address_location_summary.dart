@@ -5,10 +5,7 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 /// Minimal selection feedback. Exact GPS coordinates remain in the domain,
 /// never printed in the form or mistaken for a human-readable street address.
 class AddressLocationSummary extends StatelessWidget {
-  const AddressLocationSummary({
-    super.key,
-    required this.hasLocation,
-  });
+  const AddressLocationSummary({super.key, required this.hasLocation});
 
   final bool hasLocation;
 
