@@ -68,20 +68,20 @@ class NotificationsFilterBar extends StatelessWidget {
         Icons.tune_rounded,
       ),
     ];
-    final scaledTextHeight = MediaQuery.textScalerOf(context).scale(20);
-    final stripHeight = scaledTextHeight + 32 < 52
-        ? 52.0
-        : scaledTextHeight + 32;
+    final scaledTextHeight = MediaQuery.textScalerOf(context).scale(18);
+    final stripHeight = scaledTextHeight + 30 < 48
+        ? 48.0
+        : scaledTextHeight + 30;
 
     return SizedBox(
       height: stripHeight,
       child: ListView.separated(
         key: const Key('notifications-filter-list'),
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.only(left: 12),
         physics: const BouncingScrollPhysics(),
         itemCount: entries.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 6),
         itemBuilder: (context, index) {
           final entry = entries[index];
           final isSelected = selected == entry.$1;
@@ -101,8 +101,8 @@ class NotificationsFilterBar extends StatelessWidget {
                   curve: Curves.easeOutCubic,
                   constraints: const BoxConstraints(minHeight: 48),
                   padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
+                    horizontal: 11,
+                    vertical: 8,
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
@@ -120,18 +120,19 @@ class NotificationsFilterBar extends StatelessWidget {
                     children: [
                       Icon(
                         entry.$3,
-                        size: 17,
+                        size: 16,
                         color: isSelected
                             ? colors.onPrimary
                             : colors.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 7),
+                      const SizedBox(width: 6),
                       Text(
                         entry.$2,
                         maxLines: 1,
                         softWrap: false,
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(
+                              fontSize: 13,
                               color: isSelected
                                   ? colors.onPrimary
                                   : colors.onSurface,
