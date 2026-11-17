@@ -50,5 +50,38 @@
   "settingsChoosePhoto": "Choose a photo from gallery",
   "settingsPhotoError": "Could not select the photo. Choose an image smaller than 5 MB and try again.",
   "settingsProfileLocalNotice": "Changes are saved for this development session only. Your photo is not uploaded.",
-  "settingsProfileSave": "Save profile"
+  "settingsProfileSave": "Save profile",
+  "settingsCouponsTitle": "Discount codes",
+  "settingsCouponsSubtitle": "Your offers, all in one place",
+  "settingsCouponsAdd": "Add code",
+  "settingsCouponsDemoNotice": "Demo preview only. These are not real promotions and are not connected to a server.",
+  "settingsCouponsAvailable": "Available in demo",
+  "settingsCouponsExpired": "Expired",
+  "settingsCouponsTrips": "Trips remaining: {remaining}",
+  "@settingsCouponsTrips": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCouponsExpiry": "Expired on {date}",
+  "@settingsCouponsExpiry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCouponsCopy": "Copy code",
+  "settingsCouponsCopied": "Coupon code copied",
+  "settingsCouponsSheetTitle": "Add a discount code",
+  "settingsCouponsSheetDescription": "Enter a code to add it to the preview list.",
+  "settingsCouponsCode": "Coupon code",
+  "settingsCouponsHint": "Example: TAM10",
+  "settingsCouponsConfirm": "Add",
+  "settingsCouponsInvalid": "This code is not supported in the demo.",
+  "settingsCouponsDuplicate": "You have already added this code.",
+  "settingsCouponsAdded": "Demo coupon added",
+  "settingsCouponsDemoHelp": "TAM10 works only on the demo booking price screen. Adding it here does not apply it to trips automatically."
 }

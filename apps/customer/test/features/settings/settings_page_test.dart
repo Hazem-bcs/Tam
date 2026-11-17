@@ -258,31 +258,28 @@ void main() {
     expect(navigation.notifications, 1);
   });
 
-  testWidgets(
-    'coupon details explain booking entry without activating an offer',
-    (tester) async {
-      final locale = AppLocaleController();
-      addTearDown(locale.dispose);
-      final navigation = FakeNavigation();
-      await tester.pumpWidget(
-        testApp(
-          locale: locale,
-          navigation: navigation,
-          repository: MockSettingsRepository(),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byKey(const Key('settings-coupons')));
-      await tester.tap(find.byKey(const Key('settings-coupons')));
-      await tester.pumpAndSettle();
-      final context = tester.element(find.byType(AlertDialog));
-      expect(
-        find.text(AppLocalizations.of(context).homeCouponInstructions),
-        findsOneWidget,
-      );
-      expect(navigation.home + navigation.trips, 0);
-    },
-  );
+  testWidgets('coupon tile opens demo codes without activating any offer', (
+    tester,
+  ) async {
+    final locale = AppLocaleController();
+    addTearDown(locale.dispose);
+    final navigation = FakeNavigation();
+    await tester.pumpWidget(
+      testApp(
+        locale: locale,
+        navigation: navigation,
+        repository: MockSettingsRepository(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('settings-coupons')));
+    await tester.tap(find.byKey(const Key('settings-coupons')));
+    await tester.pumpAndSettle();
+    expect(find.text('أكواد الحسم'), findsOneWidget);
+    expect(find.byKey(const Key('coupons-add')), findsOneWidget);
+    expect(find.text('NOW25'), findsOneWidget);
+    expect(navigation.home + navigation.trips, 0);
+  });
 
   testWidgets('language changes immediately without changing phone or route', (
     tester,

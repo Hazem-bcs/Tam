@@ -17,9 +17,11 @@ class SettingsAccountLinks extends StatelessWidget {
     required this.onDeleteAccount,
     this.destinationsOnly = false,
     this.supportOnly = false,
+    this.onCoupons,
   });
 
   final VoidCallback onChangePhone, onDeleteAccount;
+  final VoidCallback? onCoupons;
   final bool enabled;
   final bool destinationsOnly, supportOnly;
   final VoidCallback onAddresses, onSupport, onTerms, onPrivacy;
@@ -48,25 +50,7 @@ class SettingsAccountLinks extends StatelessWidget {
                 icon: Icons.local_offer_outlined,
                 title: t.homeCouponTitle,
                 subtitle: t.homeCouponHint,
-                onTap: !enabled
-                    ? null
-                    : () => showDialog<void>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text(t.homeCouponTitle),
-                          content: Text(t.homeCouponInstructions),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text(
-                                MaterialLocalizations.of(
-                                  context,
-                                ).closeButtonLabel,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                onTap: enabled ? onCoupons : null,
               ),
               SettingsActionTile(
                 key: const Key('settings-change-phone'),

@@ -2528,6 +2528,120 @@ abstract class AppLocalizations {
   /// **'حفظ البيانات'**
   String get settingsProfileSave;
 
+  /// No description provided for @settingsCouponsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكواد الحسم'**
+  String get settingsCouponsTitle;
+
+  /// No description provided for @settingsCouponsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصوماتك في مكان واحد'**
+  String get settingsCouponsSubtitle;
+
+  /// No description provided for @settingsCouponsAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كود'**
+  String get settingsCouponsAdd;
+
+  /// No description provided for @settingsCouponsDemoNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة تجريبية فقط. هذه الأكواد ليست عروضاً حقيقية ولا ترتبط بالخادم.'**
+  String get settingsCouponsDemoNotice;
+
+  /// No description provided for @settingsCouponsAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح للتجربة'**
+  String get settingsCouponsAvailable;
+
+  /// No description provided for @settingsCouponsExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهي'**
+  String get settingsCouponsExpired;
+
+  /// No description provided for @settingsCouponsTrips.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلات المتبقية: {remaining}'**
+  String settingsCouponsTrips(String remaining);
+
+  /// No description provided for @settingsCouponsExpiry.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى في {date}'**
+  String settingsCouponsExpiry(String date);
+
+  /// No description provided for @settingsCouponsCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ الرمز'**
+  String get settingsCouponsCopy;
+
+  /// No description provided for @settingsCouponsCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نسخ رمز الكوبون'**
+  String get settingsCouponsCopied;
+
+  /// No description provided for @settingsCouponsSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كود حسم'**
+  String get settingsCouponsSheetTitle;
+
+  /// No description provided for @settingsCouponsSheetDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز الكوبون لإضافته إلى قائمة المعاينة.'**
+  String get settingsCouponsSheetDescription;
+
+  /// No description provided for @settingsCouponsCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز الكوبون'**
+  String get settingsCouponsCode;
+
+  /// No description provided for @settingsCouponsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: TAM10'**
+  String get settingsCouponsHint;
+
+  /// No description provided for @settingsCouponsConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة'**
+  String get settingsCouponsConfirm;
+
+  /// No description provided for @settingsCouponsInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الكود غير متاح في المعاينة التجريبية.'**
+  String get settingsCouponsInvalid;
+
+  /// No description provided for @settingsCouponsDuplicate.
+  ///
+  /// In ar, this message translates to:
+  /// **'لقد أضفت هذا الكود مسبقاً.'**
+  String get settingsCouponsDuplicate;
+
+  /// No description provided for @settingsCouponsAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة الكوبون التجريبي'**
+  String get settingsCouponsAdded;
+
+  /// No description provided for @settingsCouponsDemoHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن استخدام TAM10 في شاشة الحجز التجريبية فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.'**
+  String get settingsCouponsDemoHelp;
+
   /// No description provided for @addressesTitle.
   ///
   /// In ar, this message translates to:
