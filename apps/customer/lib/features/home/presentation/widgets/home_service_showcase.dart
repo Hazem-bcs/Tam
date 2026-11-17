@@ -53,7 +53,12 @@ class HomeServiceShowcase extends StatelessWidget {
                       minHeight: 68,
                       maxWidth: 225,
                     ),
-                    padding: const EdgeInsetsDirectional.fromSTEB(14, 10, 16, 10),
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      14,
+                      10,
+                      16,
+                      10,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
                       color: colors.surfaceContainerLow,

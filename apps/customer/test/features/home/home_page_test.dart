@@ -51,10 +51,9 @@ void main() {
       expect(find.byKey(const Key('home-active-trip')), findsNothing);
       await tester.ensureVisible(find.text('الطعام'));
       final foodLabel = find.text('الطعام');
-      final foodCard = find.ancestor(
-        of: foodLabel,
-        matching: find.byType(Container),
-      ).first;
+      final foodCard = find
+          .ancestor(of: foodLabel, matching: find.byType(Container))
+          .first;
       expect(tester.getSize(foodCard).height, greaterThanOrEqualTo(68));
       await tester.tap(foodLabel);
       expect(nav.ride, 1, reason: 'Coming-soon services must not navigate');

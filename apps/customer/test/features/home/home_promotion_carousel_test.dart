@@ -43,9 +43,9 @@ void main() {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            disableAnimations: reducedMotion,
-          ),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(disableAnimations: reducedMotion),
           child: child!,
         ),
         home: Scaffold(
@@ -75,7 +75,6 @@ void main() {
     expect(firstSlide, findsOneWidget);
     expect(find.byType(InkWell), findsNothing);
   });
-
 
   testWidgets('ads fill the available width without clipped neighbor slides', (
     tester,
