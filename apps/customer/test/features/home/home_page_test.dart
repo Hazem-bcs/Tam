@@ -3,10 +3,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/home/data/mock/mock_home_repository.dart';
 import 'package:tam_customer/features/home/data/unavailable_home_repository.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_promotion_carousel.dart';
 
 import 'home_test_support.dart';
 
 void main() {
+  testWidgets('Home slider uses the whole scroll width, cards remain inset', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await pumpHome(
+      tester,
+      repository: const MockHomeRepository(latency: Duration.zero),
+      navigation: RecordingHomeNavigation(),
+    );
+    final scroll = tester.getRect(
+      find.byKey(const PageStorageKey('home-scroll')),
+    );
+    final slider = tester.getRect(
+      find.byKey(const Key('home-promotions-slider')),
+    );
+    expect(slider.left, closeTo(scroll.left, 0.1));
+    expect(slider.right, closeTo(scroll.right, 0.1));
+    expect(find.byType(HomePromotionCarousel), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'Home header shows session state without repeating phone details',
     (tester) async {

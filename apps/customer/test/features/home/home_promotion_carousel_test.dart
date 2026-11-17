@@ -76,7 +76,7 @@ void main() {
     expect(find.byType(InkWell), findsNothing);
   });
 
-  testWidgets('ads fill the available width without clipped neighbor slides', (
+  testWidgets('full-width viewport with inset cards avoids gutter clipping', (
     tester,
   ) async {
     await pumpCarousel(tester, promotions: const [first, second]);
@@ -87,8 +87,9 @@ void main() {
     final slide = tester.getRect(
       find.byKey(const Key('home-promotion-slide-0')),
     );
-    expect(slide.left, closeTo(viewport.left, 0.1));
-    expect(slide.right, closeTo(viewport.right, 0.1));
+    expect(viewport.width, closeTo(390, 0.1));
+    expect(slide.left, closeTo(viewport.left + 18, 0.1));
+    expect(slide.right, closeTo(viewport.right - 18, 0.1));
     expect(find.text('إعلانات تم'), findsOneWidget);
   });
 

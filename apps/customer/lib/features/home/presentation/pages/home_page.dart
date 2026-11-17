@@ -63,59 +63,63 @@ class HomePage extends StatelessWidget {
                       isAuthenticated: isAuthenticated,
                       notificationsButton: notificationsButton,
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.symmetric(
-                        horizontal: 18,
-                      ),
-                      child: BlocBuilder<HomeCubit, HomeState>(
-                        builder: (context, state) {
-                          final ready =
-                              state.status == HomeLoadStatus.ready &&
-                              state.content != null;
-                          final content = state.content;
-                          final services = ready
-                              ? content!.services
-                              : const <HomeService>[];
-                          final rideService = services
-                              .where(
-                                (service) => service.id == HomeServiceId.ride,
-                              )
-                              .firstOrNull;
-                          final canRide =
-                              ready &&
-                              rideService != null &&
-                              rideService.available &&
-                              rideService.action == HomeAction.rideRequest;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (canRide)
-                                HomeDeparturePortal(
-                                  onRideRequest: navigation.openRideRequest,
-                                  child: HomeDestinationHero(
-                                    onChooseDestination:
-                                        navigation.openRideRequest,
-                                  ),
-                                )
-                              else if (ready)
-                                const _RideUnavailableHint()
-                              else
-                                HomeStatusPanel(state: state),
-                              if (ready &&
-                                  content!.promotions.any(
-                                    (promotion) => promotion.enabled,
-                                  )) ...[
-                                const SizedBox(height: AppSpacing.xl),
-                                HomePromotionCarousel(
-                                  promotions: content.promotions,
-                                ),
-                              ],
-                              if (ready && services.isNotEmpty)
-                                HomeServiceShowcase(services: services),
+                    BlocBuilder<HomeCubit, HomeState>(
+                      builder: (context, state) {
+                        final ready =
+                            state.status == HomeLoadStatus.ready &&
+                            state.content != null;
+                        final content = state.content;
+                        final services = ready
+                            ? content!.services
+                            : const <HomeService>[];
+                        final rideService = services
+                            .where(
+                              (service) => service.id == HomeServiceId.ride,
+                            )
+                            .firstOrNull;
+                        final canRide =
+                            ready &&
+                            rideService != null &&
+                            rideService.available &&
+                            rideService.action == HomeAction.rideRequest;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 18,
+                              ),
+                              child: canRide
+                                  ? HomeDeparturePortal(
+                                      onRideRequest: navigation.openRideRequest,
+                                      child: HomeDestinationHero(
+                                        onChooseDestination:
+                                            navigation.openRideRequest,
+                                      ),
+                                    )
+                                  : ready
+                                  ? const _RideUnavailableHint()
+                                  : HomeStatusPanel(state: state),
+                            ),
+                            if (ready &&
+                                content!.promotions.any(
+                                  (promotion) => promotion.enabled,
+                                )) ...[
+                              const SizedBox(height: AppSpacing.xl),
+                              HomePromotionCarousel(
+                                promotions: content.promotions,
+                              ),
                             ],
-                          );
-                        },
-                      ),
+                            if (ready && services.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 18,
+                                ),
+                                child: HomeServiceShowcase(services: services),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -122,8 +122,8 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
         Padding(
           padding: const EdgeInsetsDirectional.only(
             bottom: 11,
-            start: 2,
-            end: 2,
+            start: 18,
+            end: 18,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,8 +168,12 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
               controller: _controller,
               itemCount: items.length,
               onPageChanged: _onPageChanged,
-              itemBuilder: (context, index) =>
-                  _PromotionSlide(promotion: items[index], index: index),
+              // The viewport is edge-to-edge. Only the card is inset,
+              // so incoming and outgoing slides pass the page gutters.
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsetsDirectional.symmetric(horizontal: 18),
+                child: _PromotionSlide(promotion: items[index], index: index),
+              ),
             ),
           ),
         ),
