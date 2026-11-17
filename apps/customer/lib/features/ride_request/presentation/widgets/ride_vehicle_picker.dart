@@ -73,29 +73,32 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.showHeading
-                    ? l.rideRequestChooseClass
-                    : l.rideRequestVehicleScrollHint,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.showHeading
+                      ? l.rideRequestChooseClass
+                      : l.rideRequestVehicleScrollHint,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              onPressed: () => _move(-180),
-              tooltip: l.rideRequestPreviousVehicles,
-              icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left),
-            ),
-            IconButton(
-              onPressed: () => _move(180),
-              tooltip: l.rideRequestNextVehicles,
-              icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right),
-            ),
-          ],
+              IconButton(
+                onPressed: () => _move(-180),
+                tooltip: l.rideRequestPreviousVehicles,
+                icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left),
+              ),
+              IconButton(
+                onPressed: () => _move(180),
+                tooltip: l.rideRequestNextVehicles,
+                icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right),
+              ),
+            ],
+          ),
         ),
         SingleChildScrollView(
           key: const Key('ride-vehicle-scroll'),
@@ -107,8 +110,8 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
               children: [
                 for (final vehicle in widget.vehicles)
                   Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: AppSpacing.sm,
+                    padding: EdgeInsetsDirectional.only(
+                      end: vehicle == widget.vehicles.last ? 0 : AppSpacing.sm,
                     ),
                     child: SizedBox(
                       width: 118 + (scale - 1).clamp(0, 3) * 64,
@@ -127,11 +130,14 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
-        Text(
-          RideVehiclePicker.descriptionFor(l, widget.selected),
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+          child: Text(
+            RideVehiclePicker.descriptionFor(l, widget.selected),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ],

@@ -336,3 +336,7 @@ TAM-RIDE-VEHICLE-FARE-20261117: READY → IMPLEMENTING، root؛ أساسcb4e2e3�
 [البطاقة والملكية](tasks/TAM-RIDE-VEHICLE-FARE-20261117.md).
 
 TAM-RIDE-VEHICLE-FARE-20261117: READY_FOR_REVIEW، root؛ تنفيذ وبناء وتشغيلAndroid مكتملة. 831نجاحًا/27إخفاقًا بأسماء موجودة مسبقًا،42infoقديمة؛ لا دمج أوpush. [التسليم](deliveries/TAM-RIDE-VEHICLE-FARE-20261117/REPORT.ar.md).
+
+TAM-RIDE-VEHICLE-FARE-20261117/UI: READY → IMPLEMENTING، root؛ أساسf3aa151. قائمة أفقية بلا حافة داخلية، أيقونات المحفظة والكوبون الحالية، تحسين محدد للدفع والكوبون.
+
+TAM-RIDE-VEHICLE-FARE-20261117/UI: READY_FOR_REVIEW؛18اختبارًا،42infoقديمة،تنسيق483/0،بناء وتشغيل ناجحان. سجل root تفضيل المستخدم للقوائم الأفقية فيworking-agreement؛ لا دمج أوpush.

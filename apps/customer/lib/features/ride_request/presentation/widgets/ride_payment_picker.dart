@@ -13,64 +13,85 @@ class RidePaymentPicker extends StatelessWidget {
   final TripPaymentMethod selected;
   final bool enabled;
   final ValueChanged<TripPaymentMethod> onChanged;
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context), theme = Theme.of(context);
+    final colors = theme.colorScheme;
     return LayoutBuilder(
       builder: (context, bounds) {
         final vertical =
             MediaQuery.textScalerOf(context).scale(14) > 20 ||
             bounds.maxWidth < 280;
-        Widget choice(TripPaymentMethod method, String label, IconData icon) {
+        Widget choice(TripPaymentMethod method, String label) {
           final active = selected == method;
           return Semantics(
             selected: active,
             button: true,
-            child: OutlinedButton(
-              key: Key('ride-payment-${method.name}'),
-              style: OutlinedButton.styleFrom(
-                backgroundColor: active
-                    ? theme.colorScheme.primaryContainer
-                    : theme.colorScheme.surfaceContainerLowest,
-                foregroundColor: active
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface,
+            child: Material(
+              color: active
+                  ? colors.primaryContainer
+                  : colors.surfaceContainerLow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadii.lg),
                 side: BorderSide(
                   color: active
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.outlineVariant,
+                      ? colors.primary
+                      : colors.outlineVariant.withValues(alpha: .5),
                 ),
               ),
-              onPressed: enabled ? () => onChanged(method) : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: 20),
-                    const SizedBox(width: AppSpacing.sm),
-                    Flexible(child: Text(label, textAlign: TextAlign.center)),
-                    if (active) ...[
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                key: Key('ride-payment-${method.name}'),
+                onTap: enabled ? () => onChanged(method) : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: Row(
+                    children: [
+                      if (method == TripPaymentMethod.wallet)
+                        Image.asset(
+                          'assets/notifications/wallet.webp',
+                          width: 40,
+                          height: 40,
+                          excludeFromSemantics: true,
+                        )
+                      else
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Icon(
+                            Icons.payments_rounded,
+                            size: 30,
+                            color: colors.primary,
+                          ),
+                        ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: active ? colors.primary : colors.onSurface,
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: AppSpacing.xs),
-                      const Icon(Icons.check, size: 16),
+                      Icon(
+                        active
+                            ? Icons.check_circle_rounded
+                            : Icons.radio_button_unchecked_rounded,
+                        size: 18,
+                        color: active ? colors.primary : colors.outline,
+                      ),
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
           );
         }
 
-        final wallet = choice(
-          TripPaymentMethod.wallet,
-          l.rideRequestWallet,
-          Icons.account_balance_wallet_outlined,
-        );
-        final cash = choice(
-          TripPaymentMethod.cash,
-          l.rideRequestCash,
-          Icons.payments_outlined,
-        );
+        final wallet = choice(TripPaymentMethod.wallet, l.rideRequestWallet);
+        final cash = choice(TripPaymentMethod.cash, l.rideRequestCash);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -28,6 +28,7 @@ class RideVehicleFareSheet extends StatelessWidget {
     final enabled = !state.confirmationPending;
     final quoting = state.status == RideFlowStatus.quoting;
     return RideJourneySheet(
+      edgeToEdgeContent: true,
       title: l.rideRequestChooseClass,
       subtitle: l.rideRequestLivePriceHint,
       actionLabel: state.failureStep == RideFailureStep.confirmation
@@ -40,7 +41,11 @@ class RideVehicleFareSheet extends StatelessWidget {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ?locationStatus,
+          if (locationStatus != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+              child: locationStatus!,
+            ),
           RideVehiclePicker(
             selected: state.vehicleClass,
             showHeading: false,
@@ -48,52 +53,60 @@ class RideVehicleFareSheet extends StatelessWidget {
             quotes: state.vehicleQuotes,
             onSelected: (value) => bloc.add(VehicleClassSelected(value)),
           ),
-          RideQuoteReview(quote: state.quote, loading: quoting),
-          const SizedBox(height: AppSpacing.md),
-          RideSchedulePicker(
-            scheduledAt: state.scheduledAt,
-            enabled: enabled,
-            policy: bloc.schedulePolicy,
-            now: () => bloc.currentTime,
-            onChanged: (time) => bloc.add(RideScheduleChanged(time)),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          RidePaymentPicker(
-            selected: state.paymentMethod,
-            enabled: enabled,
-            onChanged: (value) => bloc.add(RidePaymentChanged(value)),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          RideCouponField(
-            code: state.couponCode,
-            quote: state.quote,
-            enabled: enabled,
-            loading: quoting,
-            invalid: state.errorCode == 'COUPON_INVALID',
-            onApply: (code) => bloc.add(RideCouponApplied(code)),
-            onRemove: () => bloc.add(const RideCouponRemoved()),
-          ),
-          if (state.errorCode != null &&
-              state.errorCode != 'COUPON_INVALID') ...[
-            const SizedBox(height: AppSpacing.md),
-            Semantics(
-              liveRegion: true,
-              child: Text(
-                _failure(l, state.errorCode!),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                RideQuoteReview(quote: state.quote, loading: quoting),
+                const SizedBox(height: AppSpacing.md),
+                RideSchedulePicker(
+                  scheduledAt: state.scheduledAt,
+                  enabled: enabled,
+                  policy: bloc.schedulePolicy,
+                  now: () => bloc.currentTime,
+                  onChanged: (time) => bloc.add(RideScheduleChanged(time)),
                 ),
-              ),
+                const SizedBox(height: AppSpacing.md),
+                RidePaymentPicker(
+                  selected: state.paymentMethod,
+                  enabled: enabled,
+                  onChanged: (value) => bloc.add(RidePaymentChanged(value)),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                RideCouponField(
+                  code: state.couponCode,
+                  quote: state.quote,
+                  enabled: enabled,
+                  loading: quoting,
+                  invalid: state.errorCode == 'COUPON_INVALID',
+                  onApply: (code) => bloc.add(RideCouponApplied(code)),
+                  onRemove: () => bloc.add(const RideCouponRemoved()),
+                ),
+                if (state.errorCode != null &&
+                    state.errorCode != 'COUPON_INVALID') ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      _failure(l, state.errorCode!),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ],
+                if (state.failureStep == RideFailureStep.quote &&
+                    state.errorCode != 'COUPON_INVALID')
+                  TamButton.secondary(
+                    label: l.rideRequestRefreshQuote,
+                    onPressed: enabled
+                        ? () => bloc.add(const RideQuoteRequested())
+                        : null,
+                  ),
+              ],
             ),
-          ],
-          if (state.failureStep == RideFailureStep.quote &&
-              state.errorCode != 'COUPON_INVALID')
-            TamButton.secondary(
-              label: l.rideRequestRefreshQuote,
-              onPressed: enabled
-                  ? () => bloc.add(const RideQuoteRequested())
-                  : null,
-            ),
+          ),
         ],
       ),
     );
