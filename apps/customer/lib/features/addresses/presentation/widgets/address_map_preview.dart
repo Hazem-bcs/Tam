@@ -26,7 +26,8 @@ class AddressMapPreview extends StatelessWidget {
     final dependencies = MapsScope.maybeOf(context);
     final colors = Theme.of(context).colorScheme;
     final l = AppLocalizations.of(context);
-    final showInitialPin = dependencies != null &&
+    final showInitialPin =
+        dependencies != null &&
         (dependencies.configuration.hasTiles ||
             dependencies.configuration.hasVectorStyle) &&
         location == null;
@@ -38,10 +39,7 @@ class AddressMapPreview extends StatelessWidget {
           ColoredBox(
             color: colors.surfaceContainer,
             child: Center(
-              child: Text(
-                l.mapsNotConfigured,
-                textAlign: TextAlign.center,
-              ),
+              child: Text(l.mapsNotConfigured, textAlign: TextAlign.center),
             ),
           )
         else
@@ -55,9 +53,7 @@ class AddressMapPreview extends StatelessWidget {
           ),
         if (showInitialPin)
           const Center(
-            child: IgnorePointer(
-              child: AddressPinArtwork(size: 64),
-            ),
+            child: IgnorePointer(child: AddressPinArtwork(size: 64)),
           ),
         Positioned.fill(
           // Leave the map provider's attribution link unobstructed.
