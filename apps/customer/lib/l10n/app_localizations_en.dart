@@ -324,7 +324,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCouponHint => 'Save on your next ride with TAM';
 
   @override
-  String get homeCouponDetails => 'Add code';
+  String get homeCouponDetails => 'Add';
 
   @override
   String get homeCouponInstructions =>

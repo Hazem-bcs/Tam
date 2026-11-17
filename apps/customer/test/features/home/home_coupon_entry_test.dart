@@ -50,7 +50,7 @@ void main() {
       await tester.pumpWidget(_app(book));
       await tester.pumpAndSettle();
 
-      expect(find.text('إضافة الكود'), findsOneWidget);
+      expect(find.text('إضافة'), findsOneWidget);
       await tester.tap(find.byKey(const Key('home-coupon-details')));
       await tester.pumpAndSettle();
       expect(find.text('إضافة كود حسم'), findsOneWidget);
