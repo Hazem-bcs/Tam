@@ -77,7 +77,7 @@ class _HomePromotionCarouselState extends State<HomePromotionCarousel>
         _pointerDown ||
         (_lifecycle != null && _lifecycle != AppLifecycleState.resumed) ||
         MediaQuery.disableAnimationsOf(context) ||
-        !TickerMode.of(context)) {
+        !TickerMode.valuesOf(context).enabled) {
       return;
     }
     _autoAdvanceTimer = Timer(_autoAdvanceDelay, () {

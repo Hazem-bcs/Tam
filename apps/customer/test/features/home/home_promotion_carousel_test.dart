@@ -82,7 +82,7 @@ void main() {
     await pumpCarousel(tester, promotions: const [first, second]);
     final slider = find.byKey(const Key('home-promotions-slider'));
     final pageView = tester.widget<PageView>(slider);
-    expect(pageView.controller.viewportFraction, 1.0);
+    expect(pageView.controller!.viewportFraction, 1.0);
     final viewport = tester.getRect(slider);
     final slide = tester.getRect(
       find.byKey(const Key('home-promotion-slide-0')),
@@ -98,9 +98,11 @@ void main() {
     await pumpCarousel(tester, promotions: const [first, second]);
     expect(find.text('1 / 2'), findsOneWidget);
     await tester.pump(const Duration(seconds: 5));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 450));
     expect(find.text('2 / 2'), findsOneWidget);
     await tester.pump(const Duration(seconds: 5));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 450));
     expect(find.text('1 / 2'), findsOneWidget);
     expect(tester.takeException(), isNull);
