@@ -5,8 +5,10 @@ import 'package:tam_customer/features/addresses/data/unavailable_addresses_repos
 import 'package:tam_customer/features/addresses/domain/saved_address.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/address_editor_page.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/addresses_page.dart';
-import 'package:tam_customer/features/addresses/presentation/widgets/address_location_picker.dart';
 import 'package:tam_customer/features/addresses/presentation/widgets/address_map_preview.dart';
+import 'package:tam_customer/shared/widgets/tam_button.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/domain/geo_point.dart';
 
 import 'addresses_test_support.dart';
 
@@ -72,49 +74,52 @@ void main() {
     );
   });
 
-  testWidgets(
-    'editor selects an existing place, validates and saves icon/name',
-    (tester) async {
-      final repository = MockAddressesRepository();
-      final cubit = await pumpAddressEditor(tester, repository);
-      await tester.ensureVisible(find.byKey(const Key('address-save')));
-      await tester.tap(find.byKey(const Key('address-save')));
-      await tester.pumpAndSettle();
-      expect(find.text('اختر موقعًا قبل الحفظ.'), findsOneWidget);
-      await tester.ensureVisible(
-        find.byKey(const Key('address-choose-location')),
-      );
-      await tester.tap(find.byKey(const Key('address-choose-location')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('أبو رمانة، شارع الحمراء'));
-      await tester.pumpAndSettle();
-      await tester.enterText(
-        find.byKey(const Key('address-name')),
-        'مكان جديد',
-      );
-      await tester.ensureVisible(find.byKey(const Key('address-icon-gym')));
-      await tester.tap(find.byKey(const Key('address-icon-gym')));
-      await tester.ensureVisible(find.byKey(const Key('address-save')));
-      await tester.tap(find.byKey(const Key('address-save')));
-      await tester.pumpAndSettle();
-      expect(cubit.state.original!.input.icon, AddressIcon.gym);
-      expect(
-        (await repository.list()).where((a) => a.input.name == 'مكان جديد'),
-        hasLength(1),
-      );
-      await tester.pumpWidget(const SizedBox.shrink());
-      await repository.dispose();
-    },
-  );
+  testWidgets('save stays disabled until name and map coordinate are valid', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    final cubit = await pumpAddressEditor(tester, repository);
+    final save = find.byKey(const Key('address-save'));
+    expect(tester.widget<TamButton>(save).onPressed, isNull);
+    expect(find.byKey(const Key('address-map-tap')), findsNothing);
+    expect(find.byType(AddressMapPreview), findsOneWidget);
 
-  testWidgets('map preview keeps existing location search as fallback', (
+    await tester.enterText(find.byKey(const Key('address-name')), 'مكان جديد');
+    await tester.pump();
+    expect(tester.widget<TamButton>(save).onPressed, isNull);
+
+    cubit.locationSelected(
+      TripLocation(
+        label: '33.50000, 36.25000',
+        point: GeoPoint(latitude: 33.5, longitude: 36.25),
+      ),
+    );
+    await tester.pump();
+    expect(tester.widget<TamButton>(save).onPressed, isNotNull);
+
+    await tester.ensureVisible(find.byKey(const Key('address-icon-gym')));
+    await tester.tap(find.byKey(const Key('address-icon-gym')));
+    await tester.ensureVisible(save);
+    await tester.tap(save);
+    await tester.pumpAndSettle();
+    expect(cubit.state.original!.input.icon, AddressIcon.gym);
+    expect(
+      (await repository.list()).where((a) => a.input.name == 'مكان جديد'),
+      hasLength(1),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+  testWidgets('place editor never opens the old map selection page', (
     tester,
   ) async {
     final repository = MockAddressesRepository();
     await pumpAddressEditor(tester, repository);
-    await tester.tap(find.byKey(const Key('address-map-tap')));
-    await tester.pumpAndSettle();
-    expect(find.byType(AddressLocationPicker), findsOneWidget);
+    expect(find.byKey(const Key('address-editor-sheet')), findsOneWidget);
+    expect(find.byKey(const Key('address-icons-scroll')), findsOneWidget);
+    expect(find.byKey(const Key('address-map-tap')), findsNothing);
+    expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });
@@ -196,12 +201,6 @@ void main() {
       find.byType(AddressEditorPage),
       matchesGoldenFile('goldens/add-ar-390.png'),
     );
-    await tester.tap(find.byKey(const Key('address-choose-location')));
-    await tester.pumpAndSettle();
-    await expectLater(
-      find.byType(MaterialApp),
-      matchesGoldenFile('goldens/location-picker-ar-390.png'),
-    );
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });
@@ -254,32 +253,9 @@ void main() {
           ),
         );
       }
-      await tester.tap(find.byKey(const Key('address-choose-location')));
-      await tester.pumpAndSettle();
+      expect(find.byType(AddressMapPreview), findsOneWidget);
       tester.view.viewInsets = const FakeViewPadding(bottom: 200);
       await tester.pumpAndSettle();
-      expect(tester.takeException(), isNull);
-      final location = find.descendant(
-        of: find.byType(AddressLocationPicker),
-        matching: find.text('المزة، شارع الجلاء'),
-      );
-      await tester.scrollUntilVisible(
-        location,
-        100,
-        scrollable: find
-            .descendant(
-              of: find.byType(AddressLocationPicker),
-              matching: find.byType(Scrollable),
-            )
-            .first,
-      );
-      await tester.pumpAndSettle();
-      expect(location.hitTestable(), findsOneWidget);
-      await tester.tap(location);
-      await tester.pumpAndSettle();
-      tester.view.resetViewInsets();
-      tester.view.viewInsets = const FakeViewPadding(bottom: 200);
-      await tester.pump();
       await tester.ensureVisible(find.byKey(const Key('address-save')));
       expect(
         find.byKey(const Key('address-save')).hitTestable(),
