@@ -41,6 +41,12 @@ class _TripCardState extends State<TripCard> {
     final locale = Localizations.localeOf(context).languageCode;
     final trip = widget.trip;
     final isCompleted = trip.status == TripStatus.completed;
+    final artwork = switch (trip.status) {
+      TripStatus.completed => 'assets/notifications/ride_completed.webp',
+      TripStatus.cancelled => 'assets/notifications/ride_cancelled.webp',
+      TripStatus.noDriver => 'assets/notifications/ride_repeat.webp',
+      _ => 'assets/notifications/ride_scheduled.webp',
+    };
     final tone = tripStatusColors(context, trip.status);
     final date = DateFormat.MMMd(locale).format(trip.createdAt.toLocal());
     final time = DateFormat.jm(locale).format(trip.createdAt.toLocal());
@@ -122,12 +128,14 @@ class _TripCardState extends State<TripCard> {
                           child: SizedBox(
                             width: 48,
                             height: 48,
-                            child: Icon(
-                              Icons.directions_car_outlined,
-                              size: 23,
-                              color: isCompleted
-                                  ? colors.primary
-                                  : colors.onErrorContainer,
+                            child: ExcludeSemantics(
+                              child: Image.asset(
+                                artwork,
+                                width: 45,
+                                height: 45,
+                                fit: BoxFit.contain,
+                                filterQuality: FilterQuality.medium,
+                              ),
                             ),
                           ),
                         ),

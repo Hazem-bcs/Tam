@@ -9,6 +9,47 @@ import 'support_widget_support.dart';
 void main() {
   setUpAll(loadSupportFonts);
   for (final locale in ['ar', 'en']) {
+    testWidgets('category bottom sheet updates the editor in $locale', (
+      tester,
+    ) async {
+      final store = supportStore();
+      final repo = MockSupportRepository(store, now: () => supportNow);
+      addTearDown(repo.dispose);
+      addTearDown(store.dispose);
+      await pumpSupport(
+        tester,
+        buildSupportEditorFeature(
+          repository: repo,
+          policy: const SupportPolicy(),
+          now: () => supportNow,
+          tripId: 'trip-1',
+          onBack: () {},
+          onCreated: (_) {},
+        ),
+        locale: locale,
+      );
+      final field = find.byKey(const Key('support-category'));
+      await tester.ensureVisible(field);
+      await tester.tap(field);
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const Key('support-category-option-app_issue')),
+        findsOneWidget,
+      );
+      await tester.tap(
+        find.byKey(const Key('support-category-option-app_issue')),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.text(locale == 'ar' ? 'مشكلة في التطبيق' : 'App issue'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
+  }
+
+  for (final locale in ['ar', 'en']) {
     for (final target in [
       (320.0, 640.0, 2.0),
       (390.0, 844.0, 1.0),

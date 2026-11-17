@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/auth/domain/phone_number.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_caret_gaze.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_phone_field.dart';
@@ -69,13 +70,21 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         final directEntry = context
             .read<AuthCubit>()
             .temporaryPhoneEntryEnabled;
+        final hasError = state.failure != null || _localInvalid;
+        // Delight means the local number is ready to submit. It never implies
+        // verification, an account, or backend authentication.
+        final phoneReady =
+            !state.isBusy &&
+            !hasError &&
+            normalizeSyrianPhone(phoneEntryForRequest(_phone.text)) != null;
         return AuthScaffold(
           title: t.authWelcome,
           description: t.authPhoneDescription,
           busy: state.isBusy,
           inputFocused: _phoneFocus.hasFocus,
           gazeProgress: authCaretProgress(_phone.value, maxDigits: 9),
-          hasError: state.failure != null || _localInvalid,
+          hasError: hasError,
+          success: phoneReady,
           child: Form(
             key: _form,
             child: AutofillGroup(

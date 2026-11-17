@@ -57,5 +57,10 @@
       }
     }
   },
-  "supportSimulationNotice": "عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي."
+  "supportSimulationNotice": "عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.",
+  "supportEditorHeadline": "كيف نقدر نساعدك؟",
+  "supportEditorSubtitle": "صف لنا استفسارك أو المشكلة التي تواجهها.",
+  "supportEditorPlaceholder": "اكتب التفاصيل التي تساعدنا على فهم طلبك...",
+  "supportEditorCategory": "نوع الاستفسار",
+  "supportEditorTripContext": "بخصوص رحلة سابقة"
 }

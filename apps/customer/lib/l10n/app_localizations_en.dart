@@ -261,7 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeChooseDestination => 'Choose your destination';
 
   @override
-  String get homePromotionsTitle => 'Offers & updates';
+  String get homePromotionsTitle => 'TAM ads';
 
   @override
   String get homePromotionEyebrow => 'Discover TAM';
@@ -1590,6 +1590,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ratings in this version are stored locally for testing until the service is connected.';
 
   @override
+  String get completionRateHint => 'Help us improve the service';
+
+  @override
+  String get completionQuickFeedbackHint => 'What went well on your ride?';
+
+  @override
+  String get completionTagDriverRespect => 'Respectful driver';
+
+  @override
+  String get completionTagCleanCar => 'Clean vehicle';
+
+  @override
+  String get completionTagComfort => 'Comfortable ride';
+
+  @override
+  String get completionTagArrivalDelay => 'Delayed arrival';
+
+  @override
+  String get completionTagCarIssue => 'Vehicle issue';
+
+  @override
+  String get completionTagServiceIssue => 'Uncomfortable trip';
+
+  @override
+  String get completionQuickFeedbackCritical => 'What could we improve?';
+
+  @override
+  String get completionFeedbackOptional => 'Optional';
+
+  @override
   String get supportTitle => 'Help and support';
 
   @override
@@ -1708,6 +1738,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'Support operations in this version are simulated and are not sent to a real support team.';
+
+  @override
+  String get supportEditorHeadline => 'How can we help?';
+
+  @override
+  String get supportEditorSubtitle =>
+      'Tell us about your question or the issue you are facing.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'Describe your question or issue in detail...';
+
+  @override
+  String get supportEditorCategory => 'Inquiry type';
+
+  @override
+  String get supportEditorTripContext => 'Regarding a previous trip';
 
   @override
   String get accountManagementChangePhone => 'Change phone number';

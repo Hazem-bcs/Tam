@@ -557,7 +557,7 @@ abstract class AppLocalizations {
   /// No description provided for @homePromotionsTitle.
   ///
   /// In ar, this message translates to:
-  /// **'عروض وإعلانات'**
+  /// **'إعلانات تم'**
   String get homePromotionsTitle;
 
   /// No description provided for @homePromotionEyebrow.
@@ -2990,6 +2990,66 @@ abstract class AppLocalizations {
   /// **'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.'**
   String get completionSimulationNotice;
 
+  /// No description provided for @completionRateHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعدنا على تحسين الخدمة'**
+  String get completionRateHint;
+
+  /// No description provided for @completionQuickFeedbackHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما الذي أعجبك في الرحلة؟'**
+  String get completionQuickFeedbackHint;
+
+  /// No description provided for @completionTagDriverRespect.
+  ///
+  /// In ar, this message translates to:
+  /// **'سائق محترم'**
+  String get completionTagDriverRespect;
+
+  /// No description provided for @completionTagCleanCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركبة نظيفة'**
+  String get completionTagCleanCar;
+
+  /// No description provided for @completionTagComfort.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة مريحة'**
+  String get completionTagComfort;
+
+  /// No description provided for @completionTagArrivalDelay.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخر الوصول'**
+  String get completionTagArrivalDelay;
+
+  /// No description provided for @completionTagCarIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة بالمركبة'**
+  String get completionTagCarIssue;
+
+  /// No description provided for @completionTagServiceIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة غير مريحة'**
+  String get completionTagServiceIssue;
+
+  /// No description provided for @completionQuickFeedbackCritical.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما الذي يمكن تحسينه؟'**
+  String get completionQuickFeedbackCritical;
+
+  /// No description provided for @completionFeedbackOptional.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختياري'**
+  String get completionFeedbackOptional;
+
   /// No description provided for @supportTitle.
   ///
   /// In ar, this message translates to:
@@ -3193,6 +3253,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.'**
   String get supportSimulationNotice;
+
+  /// No description provided for @supportEditorHeadline.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف نقدر نساعدك؟'**
+  String get supportEditorHeadline;
+
+  /// No description provided for @supportEditorSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صف لنا استفسارك أو المشكلة التي تواجهها.'**
+  String get supportEditorSubtitle;
+
+  /// No description provided for @supportEditorPlaceholder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب التفاصيل التي تساعدنا على فهم طلبك...'**
+  String get supportEditorPlaceholder;
+
+  /// No description provided for @supportEditorCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الاستفسار'**
+  String get supportEditorCategory;
+
+  /// No description provided for @supportEditorTripContext.
+  ///
+  /// In ar, this message translates to:
+  /// **'بخصوص رحلة سابقة'**
+  String get supportEditorTripContext;
 
   /// No description provided for @accountManagementChangePhone.
   ///

@@ -1,0 +1,87 @@
+{
+  "baseline_local_main": "93b0fb5",
+  "baseline_remote_main": "47977d9",
+  "integrated_code": "8bf8c89",
+  "features": [
+    {
+      "feature": "auth",
+      "source": "f505d2b3341d815c36e9f4a6208b1faa7c4f85c5",
+      "candidate_tree": "f91aa8ba9d9f913ace63436cc2b82174e7fd2160",
+      "source_tree": "f91aa8ba9d9f913ace63436cc2b82174e7fd2160",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "home",
+      "source": "f4cd5f1b5e5c473023ffc45a794c14dc00d2be91",
+      "candidate_tree": "0cf17ea84944fb76c562c08d1eb8e771a7b0875b",
+      "source_tree": "0cf17ea84944fb76c562c08d1eb8e771a7b0875b",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "trips",
+      "source": "3b9576eedb6ac0f51c251c0080d1fea1e3acb667",
+      "candidate_tree": "3ae2db52bcb19308640d73b2773148824ffe08ef",
+      "source_tree": "3ae2db52bcb19308640d73b2773148824ffe08ef",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "notifications",
+      "source": "e04d014881d8b838f50ca255b50812e3a0dc1a6e",
+      "candidate_tree": "d3107a85f8d293ce907be83fb09f5280493a87c7",
+      "source_tree": "d3107a85f8d293ce907be83fb09f5280493a87c7",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "support",
+      "source": "60e87df813b995c6a5f8856d21f71bbdd9a3ed29",
+      "candidate_tree": "a79dff737b9493ea131ffd975c1d88cc17f46bdb",
+      "source_tree": "a79dff737b9493ea131ffd975c1d88cc17f46bdb",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "completion",
+      "source": "47977d909e8facf755e6ebe9282e99554eef56eb",
+      "candidate_tree": "9191bde9bcde23c4302a9f7d710470a5e3595bf4",
+      "source_tree": "9191bde9bcde23c4302a9f7d710470a5e3595bf4",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "settings",
+      "source": "bea0f8022e900ee1fd0fe4e1310cb3f8beb9d056",
+      "candidate_tree": "4e0e6e63c56c5e16d5455c57349c217723a3de01",
+      "source_tree": "4e0e6e63c56c5e16d5455c57349c217723a3de01",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "addresses",
+      "source": "70e1d7ade331bfed10fc810e90767e2a2ec85870",
+      "candidate_tree": "d40cc3578191a53a8b03d95bf775b9171199cfea",
+      "source_tree": "d40cc3578191a53a8b03d95bf775b9171199cfea",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "ride_request",
+      "source": "d16e643bb4a36c29be1e7b3afbaa93cf15602186",
+      "candidate_tree": "ed48152166c23f3236b708f39ced0e4bf2adf74d",
+      "source_tree": "ed48152166c23f3236b708f39ced0e4bf2adf74d",
+      "matches": true,
+      "differences": []
+    },
+    {
+      "feature": "maps",
+      "source": "a351c036d1eae05ca1b5e112e2fe4f4d676c8abf",
+      "candidate_tree": "047f4ea106f499f277173dbadbbc305be8f8c89d",
+      "source_tree": "047f4ea106f499f277173dbadbbc305be8f8c89d",
+      "matches": true,
+      "differences": []
+    }
+  ]
+}

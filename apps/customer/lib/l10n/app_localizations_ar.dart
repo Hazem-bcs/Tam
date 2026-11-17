@@ -254,7 +254,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeChooseDestination => 'حدد وجهتك';
 
   @override
-  String get homePromotionsTitle => 'عروض وإعلانات';
+  String get homePromotionsTitle => 'إعلانات تم';
 
   @override
   String get homePromotionEyebrow => 'جديد في تم';
@@ -1560,6 +1560,36 @@ class AppLocalizationsAr extends AppLocalizations {
       'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.';
 
   @override
+  String get completionRateHint => 'ساعدنا على تحسين الخدمة';
+
+  @override
+  String get completionQuickFeedbackHint => 'ما الذي أعجبك في الرحلة؟';
+
+  @override
+  String get completionTagDriverRespect => 'سائق محترم';
+
+  @override
+  String get completionTagCleanCar => 'مركبة نظيفة';
+
+  @override
+  String get completionTagComfort => 'رحلة مريحة';
+
+  @override
+  String get completionTagArrivalDelay => 'تأخر الوصول';
+
+  @override
+  String get completionTagCarIssue => 'مشكلة بالمركبة';
+
+  @override
+  String get completionTagServiceIssue => 'تجربة غير مريحة';
+
+  @override
+  String get completionQuickFeedbackCritical => 'ما الذي يمكن تحسينه؟';
+
+  @override
+  String get completionFeedbackOptional => 'اختياري';
+
+  @override
   String get supportTitle => 'المساعدة والدعم';
 
   @override
@@ -1672,6 +1702,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get supportSimulationNotice =>
       'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.';
+
+  @override
+  String get supportEditorHeadline => 'كيف نقدر نساعدك؟';
+
+  @override
+  String get supportEditorSubtitle =>
+      'صف لنا استفسارك أو المشكلة التي تواجهها.';
+
+  @override
+  String get supportEditorPlaceholder =>
+      'اكتب التفاصيل التي تساعدنا على فهم طلبك...';
+
+  @override
+  String get supportEditorCategory => 'نوع الاستفسار';
+
+  @override
+  String get supportEditorTripContext => 'بخصوص رحلة سابقة';
 
   @override
   String get accountManagementChangePhone => 'تغيير رقم الهاتف';

@@ -31,6 +31,7 @@ class RasterMapCanvas extends StatefulWidget {
     this.locating = false,
     this.focus,
     this.markerIconSize = 36,
+    this.compactPreview = false,
   });
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
@@ -38,6 +39,7 @@ class RasterMapCanvas extends StatefulWidget {
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
+  final bool compactPreview;
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
   final MapRoute? route;
@@ -78,13 +80,13 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
         CameraFit.coordinates(
           coordinates: points,
           padding: EdgeInsets.fromLTRB(
-            48,
-            80,
-            48,
-            (_inset + 48).clamp(
-              48,
+            widget.compactPreview ? 14 : 48,
+            widget.compactPreview ? 16 : 80,
+            widget.compactPreview ? 14 : 48,
+            (_inset + (widget.compactPreview ? 16 : 48)).clamp(
+              widget.compactPreview ? 16 : 48,
               (_controller.camera.nonRotatedSize.height - 120).clamp(
-                48,
+                widget.compactPreview ? 16 : 48,
                 double.infinity,
               ),
             ),
@@ -167,6 +169,9 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
             options: MapOptions(
               initialCenter: _latLng(center),
               initialZoom: 13,
+              interactionOptions: widget.compactPreview
+                  ? const InteractionOptions(flags: InteractiveFlag.none)
+                  : const InteractionOptions(),
               minZoom: 3,
               maxZoom: 19,
               backgroundColor: colors.surfaceContainer,

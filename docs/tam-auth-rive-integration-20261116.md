@@ -28,3 +28,26 @@ The prior experimental prototype remains at `~/projects/tam-mascot-auth-life-v2`
 The new 2D rig coordinates shoulders and wrists more naturally; it still uses fixed open-palm gloves. A professional finish needs separately drawn relaxed/waving hands, improved cuff joins, refined eyelids and reduced visual artifacts on close inspection. The auth page should also be reviewed on a physical device with a profile/release build.
 
 No backend OTP logic, billing, app navigation outside auth test fixes, or network behavior was changed.
+
+## Follow-up: expressive hands V4 (2026-11-17)
+
+The fixed open-palm limitation above was addressed locally by TAM-MASCOT-HANDS-V4.
+Use the current editable worktree `/home/hazem/projects/tam-hand-worktrees/motion`,
+branch `codex/mascot-hands-motion`, source commit `62f452e47db20fbd4ebe412fa312f06d9ebf6415`.
+The original source repository remains preserved at its prior revision; its old
+export must not replace V4. Current app asset SHA256:
+`e89405c26503646ec938fb0a5cf6953eab31da8628a6bd2fe2a14c9061afb296`.
+New relaxed/sad/happy/wave art, connected arms, static reduced-motion states and
+Flutter lifecycle checks are integrated on `codex/mascot-hands-v4`, not merged to main.
+See [the current delivery](engineering/deliveries/TAM-MASCOT-HANDS-V4/REPORT.ar.md)
+for exact SHAs, rendered evidence, actual verification and remaining eyelid/profile limits.
+
+## Shared Idle V5 (2026-11-17)
+
+Latest idle source: `/home/hazem/projects/tam-hand-worktrees/idle-v5`,
+commit `5177b451d0f31fba77cf80842ba485f8b1cd05ae`. The approved V4 source
+worktree remains preserved. App branch `codex/mascot-idle-v5` integrates a
+persistent16-second idle base, with existing event tracks/artwork preserved.
+App/export SHA256 `47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802`.
+See [Idle V5 delivery](engineering/deliveries/TAM-SHARED-IDLE-V5/REPORT.ar.md)
+for the30fps preview, runtime phase/anchor test, exact verification and limits.

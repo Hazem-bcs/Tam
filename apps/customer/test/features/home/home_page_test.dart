@@ -3,10 +3,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/home/data/mock/mock_home_repository.dart';
 import 'package:tam_customer/features/home/data/unavailable_home_repository.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_promotion_carousel.dart';
 
 import 'home_test_support.dart';
 
 void main() {
+  testWidgets('Home slider uses the whole scroll width, cards remain inset', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await pumpHome(
+      tester,
+      repository: const MockHomeRepository(latency: Duration.zero),
+      navigation: RecordingHomeNavigation(),
+    );
+    final scroll = tester.getRect(
+      find.byKey(const PageStorageKey('home-scroll')),
+    );
+    final slider = tester.getRect(
+      find.byKey(const Key('home-promotions-slider')),
+    );
+    expect(slider.left, closeTo(scroll.left, 0.1));
+    expect(slider.right, closeTo(scroll.right, 0.1));
+    expect(find.byType(HomePromotionCarousel), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'Home header shows session state without repeating phone details',
     (tester) async {
@@ -34,6 +59,7 @@ void main() {
       expect(find.text('+963941234567'), findsNothing);
       expect(find.text('وين رايح اليوم؟'), findsOneWidget);
       expect(find.text('قريباً في تم'), findsOneWidget);
+      expect(find.text('إعلانات تم'), findsOneWidget);
       expect(find.byKey(const Key('home-promotions-slider')), findsOneWidget);
       expect(find.text('مشوارك أسهل مع تم'), findsOneWidget);
       expect(find.text('تسجيل الخروج'), findsNothing);
@@ -49,7 +75,12 @@ void main() {
       expect(find.byKey(const Key('home-addresses')), findsNothing);
       expect(find.byKey(const Key('home-active-trip')), findsNothing);
       await tester.ensureVisible(find.text('الطعام'));
-      await tester.tap(find.text('الطعام'));
+      final foodLabel = find.text('الطعام');
+      final foodCard = find
+          .ancestor(of: foodLabel, matching: find.byType(Container))
+          .first;
+      expect(tester.getSize(foodCard).height, greaterThanOrEqualTo(68));
+      await tester.tap(foodLabel);
       expect(nav.ride, 1, reason: 'Coming-soon services must not navigate');
       expect(tester.takeException(), isNull);
     },

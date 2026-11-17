@@ -70,6 +70,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('مكتملة'), findsWidgets);
     expect(find.text('إلغاء الرحلة'), findsNothing);
+    await tester.ensureVisible(find.text('اطلب مجددًا'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('اطلب مجددًا'));
     expect(
       nav.prefill,
@@ -102,11 +104,15 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('إلغاء الرحلة'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('إلغاء الرحلة'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('الاحتفاظ بالرحلة'));
     await tester.pumpAndSettle();
     expect(store.find(created.id)?.status, TripStatus.requested);
+    await tester.ensureVisible(find.text('إلغاء الرحلة'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('إلغاء الرحلة'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('تأكيد الإلغاء'));

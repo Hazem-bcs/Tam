@@ -1,0 +1,21 @@
+{
+  "source_sha": "5177b451d0f31fba77cf80842ba485f8b1cd05ae",
+  "source_worktree": "/home/hazem/projects/tam-hand-worktrees/idle-v5",
+  "export_bytes": 1854700,
+  "app_export_sha256": "47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802",
+  "apk_export_sha256": "47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802",
+  "match": true,
+  "native_idle_phase_and_anchor_test": "PASS",
+  "tests_passed": 797,
+  "tests_failed": 30,
+  "new_failures": [],
+  "format_files": 461,
+  "format_changed": 0,
+  "analyzer_info": 42,
+  "new_analyzer_diagnostics": 0,
+  "new_sprites": false,
+  "native_device": "emulator-5554 reused",
+  "android_incremental_debug_build_seconds": 29.2,
+  "profile_benchmark": "NOT_RUN",
+  "app_candidate": "30730dfb5eeddf182492a5c237576991a9b6842e"
+}

@@ -128,6 +128,20 @@ void main() {
     );
   });
 
+  test('compact map camera keeps endpoints visible at thumbnail size', () {
+    const thumbnail = Size(145, 156);
+    final scene = VectorMapScene(origin: origin, destination: destination);
+    final fullMapPadding = VectorCamera.position(scene, thumbnail, 0)!.zoom;
+    final thumbnailPadding = VectorCamera.position(
+      scene,
+      thumbnail,
+      0,
+      compactPreview: true,
+    )!.zoom;
+    expect(thumbnailPadding, greaterThan(fullMapPadding));
+    expect(thumbnailPadding, lessThanOrEqualTo(16));
+  });
+
   test('invalid styles fail explicitly', () {
     expect(
       () => VectorMapStyle.build('{}', AppColors.mapLight, 'ar'),

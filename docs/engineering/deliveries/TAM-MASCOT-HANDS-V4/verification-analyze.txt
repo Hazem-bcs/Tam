@@ -1,0 +1,46 @@
+Analyzing customer...                                           
+
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:4:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/raster_map_canvas.dart:10:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/maps/presentation/widgets/raster_map_canvas.dart:11:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:4:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/route_map_view.dart:8:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/maps/presentation/widgets/route_map_view.dart:10:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/tam_map_canvas.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/tam_map_canvas.dart:4:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/tam_map_canvas.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/tam_map_canvas.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/tam_map_canvas.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/maps/presentation/widgets/tam_map_canvas.dart:9:1 • directives_ordering
+   info • Place 'dart:' imports before other imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:10:1 • directives_ordering
+   info • Don't use 'BuildContext's across async gaps • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:241:48 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:264:48 • use_build_context_synchronously
+   info • Statements in an if should be enclosed in a block • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:319:7 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block • lib/features/maps/presentation/widgets/vector/native_vector_map.dart:351:7 • curly_braces_in_flow_control_structures
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:4:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/maps/presentation/widgets/vector/vector_map_surface.dart:8:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/ride_request/presentation/widgets/ride_journey_backdrop.dart:3:1 • directives_ordering
+   info • Invalid use of a private type in a public API • lib/features/ride_request/presentation/widgets/ride_panel_size_observer.dart:21:15 • library_private_types_in_public_api
+   info • Sort directive sections alphabetically • test/features/maps/native_vector_map_test.dart:8:1 • directives_ordering
+
+42 issues found. (ran in 5.4s)

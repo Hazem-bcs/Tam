@@ -1,0 +1,1685 @@
+00:00 +0: loading /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart
+00:00 +0: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: confirmation and cancellation publish the same shared trip state
+00:00 +1: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: retry does not duplicate a booking or resurrect a cancelled trip
+00:00 +2: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: history cannot be cancelled and unknown IDs fail clearly
+00:00 +3: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: clearing ends the session dataset including idempotency records
+00:00 +4: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: session reset removes operations but restores shared fixture targets
+00:00 +5: /home/hazem/projects/mashwar/apps/customer/test/shared/mock_trip_store_test.dart: money rejects ambiguous or invalid fare representations
+00:00 +6: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: semantic text/background pairs meet normal-text contrast
+00:00 +7: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: native button themes provide pressed and keyboard focus feedback
+00:00 +8: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: primary button blocks disabled/loading taps and exposes state
+00:02 +9: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: secondary button blocks disabled/loading taps and exposes state
+00:02 +10: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: primary button supports keyboard activation
+00:02 +11: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: field validates, accepts input and clears corrected errors
+00:03 +12: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: field exposes server errors and caller-owned focus/controller
+00:03 +13: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: disabled and read-only fields block editing
+00:03 +14: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: cards expose interaction only when they have an action
+00:03 +15: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: progress exposes a localized label and determinate value
+00:03 +16: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.rtl at 1.0x text
+00:03 +17: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.rtl at 2.0x text
+00:03 +18: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.rtl at 3.2x text
+00:03 +19: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.ltr at 1.0x text
+00:04 +20: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.ltr at 2.0x text
+00:04 +21: /home/hazem/projects/mashwar/apps/customer/test/shared/design_system_test.dart: 320px layout supports TextDirection.ltr at 3.2x text
+00:05 +22: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +23: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +24: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +25: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +26: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +27: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +28: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +29: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +30: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +31: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +32: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +33: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +34: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +35: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +36: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +37: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +38: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +39: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +40: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:09 +41: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:12 +42: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:12 +43: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:12 +44: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:12 +45: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:13 +46: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:13 +47: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +48: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +49: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +50: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +50: /home/hazem/projects/mashwar/apps/customer/test/app/scheduled_booking_integration_test.dart: schedule with saved addresses, list, cancel, rebook and logout
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+The finder "Found 0 widgets with text "حدد نقطة الانطلاق والوجهة لطلب رحلة": []" (used in a call to
+"tap()") could not find any matching widgets.
+
+When the exception was thrown, this was the stack:
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2090:7)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1942:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1075:7)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/scheduled_booking_integration_test.dart:22:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  schedule with saved addresses, list, cancel, rebook and logout
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:14 +50 -1: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +50 -1: /home/hazem/projects/mashwar/apps/customer/test/app/scheduled_booking_integration_test.dart: schedule with saved addresses, list, cancel, rebook and logout [E]
+  Test failed. See exception logs above.
+  The test description was: schedule with saved addresses, list, cancel, rebook and logout
+  
+00:14 +51 -1: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:14 +52 -1: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:15 +53 -1: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:15 +53 -1: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_integration_test.dart: CRUD integrates with saved pickup/destination and resets on logout
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+The finder "Found 0 widgets with key [<'home-addresses'>]: []" (used in a call to "tap()") could not
+find any matching widgets.
+
+When the exception was thrown, this was the stack:
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2090:7)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1942:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1075:7)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/addresses_integration_test.dart:28:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  CRUD integrates with saved pickup/destination and resets on logout
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:15 +53 -2: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+00:15 +53 -2: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_integration_test.dart: CRUD integrates with saved pickup/destination and resets on logout [E]
+  Test failed. See exception logs above.
+  The test description was: CRUD integrates with saved pickup/destination and resets on logout
+  
+00:15 +54 -2: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart:46:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  Home logout resets account data before entry 0941234567
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:16 +54 -3: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: Settings phone change completes and ends local session without backend user
+00:16 +54 -3: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0941234567 [E]
+  Test failed. See exception logs above.
+  The test description was: Home logout resets account data before entry 0941234567
+  
+00:16 +55 -3: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: Settings phone change completes and ends local session without backend user
+00:16 +56 -3: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: Settings phone change completes and ends local session without backend user
+00:16 +57 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:17 +58 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:17 +59 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:17 +60 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:17 +61 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:17 +62 -3: /home/hazem/projects/mashwar/apps/customer/test/app/main_shell_integration_test.dart: one shell retains tab state without pushing duplicate pages
+00:18 +63 -3: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:20 +63 -3: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0951234567
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart:46:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  Home logout resets account data before entry 0951234567
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:20 +63 -4: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:20 +63 -4: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry 0951234567 [E]
+  Test failed. See exception logs above.
+  The test description was: Home logout resets account data before entry 0951234567
+  
+00:20 +64 -4: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:21 +65 -4: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:21 +66 -4: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:22 +66 -4: /home/hazem/projects/mashwar/apps/customer/test/app/router/app_router_test.dart: production router blocks bare OTP and ignores an external return URL
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "+963941234567": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/router/app_router_test.dart:310:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/app/router/app_router_test.dart line 310
+The test description was:
+  production router blocks bare OTP and ignores an external return URL
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:22 +66 -5: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:22 +66 -5: /home/hazem/projects/mashwar/apps/customer/test/app/router/app_router_test.dart: production router blocks bare OTP and ignores an external return URL [E]
+  Test failed. See exception logs above.
+  The test description was: production router blocks bare OTP and ignores an external return URL
+  
+00:24 +66 -5: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry null
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart:46:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  Home logout resets account data before entry null
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:24 +66 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:24 +66 -6: /home/hazem/projects/mashwar/apps/customer/test/app/customer_session_integration_test.dart: Home logout resets account data before entry null [E]
+  Test failed. See exception logs above.
+  The test description was: Home logout resets account data before entry null
+  
+00:24 +67 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:24 +68 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:25 +69 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:26 +70 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:26 +71 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:26 +72 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:27 +73 -6: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:29 +73 -6: /home/hazem/projects/mashwar/apps/customer/test/app/feature_foundation_test.dart: changing app locale preserves the route and local phone state
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "+963941234567": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/feature_foundation_test.dart:136:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/app/feature_foundation_test.dart line 136
+The test description was:
+  changing app locale preserves the route and local phone state
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:29 +73 -7: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:29 +73 -7: /home/hazem/projects/mashwar/apps/customer/test/app/feature_foundation_test.dart: changing app locale preserves the route and local phone state [E]
+  Test failed. See exception logs above.
+  The test description was: changing app locale preserves the route and local phone state
+  
+00:34 +73 -7: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart: integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart:22:22)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:34 +73 -8: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:34 +73 -8: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart: integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text [E]
+  Test failed. See exception logs above.
+  The test description was: integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text
+  
+00:35 +74 -8: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:36 +74 -8: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart: integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart:22:22)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:36 +74 -9: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:36 +74 -9: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_picker_layout_test.dart: integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text [E]
+  Test failed. See exception logs above.
+  The test description was: integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text
+  
+00:37 +75 -9: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:37 +75 -9: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_management_navigation_test.dart: managing addresses from booking returns to the live picker
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:694:25)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      WidgetController.ensureVisible (package:flutter_test/src/controller.dart:2382:32)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/addresses_management_navigation_test.dart:14:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  managing addresses from booking returns to the live picker
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:37 +75 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:37 +75 -10: /home/hazem/projects/mashwar/apps/customer/test/app/addresses_management_navigation_test.dart: managing addresses from booking returns to the live picker [E]
+  Test failed. See exception logs above.
+  The test description was: managing addresses from booking returns to the live picker
+  
+00:39 +76 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:40 +77 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:44 +78 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:44 +79 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:45 +80 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:45 +81 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:45 +82 -10: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:47 +82 -10: /home/hazem/projects/mashwar/apps/customer/test/app/customer_booking_integration_test.dart: book, list, cancel and rebook use one shared trip source
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+The finder "Found 0 widgets with text "حدد نقطة الانطلاق والوجهة لطلب رحلة": []" (used in a call to
+"tap()") could not find any matching widgets.
+
+When the exception was thrown, this was the stack:
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2090:7)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1942:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1075:7)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/customer_booking_integration_test.dart:22:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  book, list, cancel and rebook use one shared trip source
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:47 +82 -11: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+00:47 +82 -11: /home/hazem/projects/mashwar/apps/customer/test/app/customer_booking_integration_test.dart: book, list, cancel and rebook use one shared trip source [E]
+  Test failed. See exception logs above.
+  The test description was: book, list, cancel and rebook use one shared trip source
+  
+00:49 +82 -11: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart:27:7)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  completed booking can be rated and reported using the same trip
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:49 +82 -12: /home/hazem/projects/mashwar/apps/customer/test/app/chat_integration_test.dart: driver chat survives navigation and clears on session exit
+00:49 +82 -12: /home/hazem/projects/mashwar/apps/customer/test/app/after_trip_journey_test.dart: completed booking can be rated and reported using the same trip [E]
+  Test failed. See exception logs above.
+  The test description was: completed booking can be rated and reported using the same trip
+  
+00:50 +83 -12: /home/hazem/projects/mashwar/apps/customer/test/app/chat_integration_test.dart: driver chat survives navigation and clears on session exit
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/chat_integration_test.dart:26:5)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  driver chat survives navigation and clears on session exit
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:52 +84 -12: /home/hazem/projects/mashwar/apps/customer/test/app/chat_integration_test.dart: driver chat survives navigation and clears on session exit
+00:52 +84 -13: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: contact from assigned trip simulates without dialing fixture
+00:52 +84 -13: /home/hazem/projects/mashwar/apps/customer/test/app/chat_integration_test.dart: driver chat survives navigation and clears on session exit [E]
+  Test failed. See exception logs above.
+  The test description was: driver chat survives navigation and clears on session exit
+  
+00:52 +84 -13: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: contact from assigned trip simulates without dialing fixture
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart:77:5)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  contact from assigned trip simulates without dialing fixture
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:52 +84 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:52 +84 -14: /home/hazem/projects/mashwar/apps/customer/test/app/account_management_integration_test.dart: contact from assigned trip simulates without dialing fixture [E]
+  Test failed. See exception logs above.
+  The test description was: contact from assigned trip simulates without dialing fixture
+  
+00:52 +85 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:53 +86 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:54 +87 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:54 +88 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:54 +89 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:54 +90 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:55 +91 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:55 +92 -14: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:56 +92 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:56 +92 -15: /home/hazem/projects/mashwar/apps/customer/test/features/notifications/notifications_contract_test.dart: saved pages match exact mock fixtures and parse in Flutter [E]
+  Expected: [
+              {
+                'id': 'notice-trip-complete-001',
+                'type': 'ride.completed',
+                'kind': 'trip',
+                'title': {'ar': 'اكتملت رحلتك', 'en': 'Your trip is complete'},
+                'body': {
+                  'ar': 'شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.',
+                  'en': 'Thanks for choosing Tam. Review your trip details.'
+                },
+                'created_at': '2026-11-07T12:20:00Z',
+                'read_at': null,
+                'target': {'type': 'trip', 'trip_id': 'mock-history-001'}
+              },
+              {
+                'id': 'notice-offer-001',
+                'type': 'offer.available',
+                'kind': 'offer',
+                'title': {'ar': 'عرض جديد على رحلاتك', 'en': 'A new ride offer'},
+                'body': {
+                  'ar': 'تعرّف على عروض الرحلات المتاحة داخل التطبيق.',
+                  'en': 'Explore available ride offers in the app.'
+                },
+                'created_at': '2026-11-07T11:40:00Z',
+                'read_at': null,
+                'target': {'type': 'home'}
+              }
+            ]
+    Actual: [
+              {
+                'id': 'notice-trip-complete-001',
+                'kind': 'trip',
+                'title': {'ar': 'اكتملت رحلتك', 'en': 'Your trip is complete'},
+                'body': {
+                  'ar': 'شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.',
+                  'en': 'Thanks for choosing Tam. Review your trip details.'
+                },
+                'created_at': '2026-11-07T12:20:00Z',
+                'read_at': null,
+                'target': {'type': 'trip', 'trip_id': 'mock-history-001'}
+              },
+              {
+                'id': 'notice-offer-001',
+                'kind': 'offer',
+                'title': {'ar': 'عرض جديد على رحلاتك', 'en': 'A new ride offer'},
+                'body': {
+                  'ar': 'تعرّف على عروض الرحلات المتاحة داخل التطبيق.',
+                  'en': 'Explore available ride offers in the app.'
+                },
+                'created_at': '2026-11-07T11:40:00Z',
+                'read_at': null,
+                'target': {'type': 'home'}
+              }
+            ]
+     Which: at location [0] is {
+              'id': 'notice-trip-complete-001',
+              'kind': 'trip',
+              'title': {'ar': 'اكتملت رحلتك', 'en': 'Your trip is complete'},
+              'body': {
+                'ar': 'شكرًا لاختيارك تم. يمكنك مراجعة تفاصيل رحلتك.',
+                'en': 'Thanks for choosing Tam. Review your trip details.'
+              },
+              'created_at': '2026-11-07T12:20:00Z',
+              'read_at': null,
+              'target': {'type': 'trip', 'trip_id': 'mock-history-001'}
+            } which has different length and is missing map key 'type'
+  
+  package:matcher                                                    expect
+  package:flutter_test/src/widget_tester.dart 473:18                 expect
+  test/features/notifications/notifications_contract_test.dart 18:5  main.<fn>
+  
+00:56 +93 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:56 +94 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:56 +95 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:57 +96 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:57 +97 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +98 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +99 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +100 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +101 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +102 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +103 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +104 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +105 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +106 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +107 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +108 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +109 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +110 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +111 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +112 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +113 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:58 +114 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:59 +115 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+00:59 +116 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:00 +117 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:00 +118 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:01 +119 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:01 +120 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:02 +121 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:02 +122 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:02 +123 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:02 +124 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +125 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +126 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +127 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +128 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +129 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +130 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +131 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +132 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +133 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:03 +134 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:04 +135 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +136 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +137 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +138 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +139 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +140 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +141 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:05 +142 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +143 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +144 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +145 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +146 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +147 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +148 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +149 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +150 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +151 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:06 +152 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:07 +153 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:07 +154 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:07 +155 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:07 +156 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:07 +157 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +158 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +159 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +160 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +161 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +162 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +163 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +164 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:08 +165 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:09 +166 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:09 +167 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:09 +168 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:09 +169 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:09 +170 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +171 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +172 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +173 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +174 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +175 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +176 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +177 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:10 +178 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:11 +179 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:11 +180 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+01:11 +181 -15: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart:58:7)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  logout disposes pending GPS and a new session starts without its point
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:11 +181 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:11 +181 -16: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: logout disposes pending GPS and a new session starts without its point [E]
+  Test failed. See exception logs above.
+  The test description was: logout disposes pending GPS and a new session starts without its point
+  
+01:11 +182 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:11 +183 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:12 +184 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:12 +185 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +186 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +187 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +188 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +189 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +190 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +191 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +192 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +193 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +194 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +195 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +196 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +197 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +198 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:13 +199 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:14 +200 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:14 +201 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:14 +202 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:14 +203 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:14 +204 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +205 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +206 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +207 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +208 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +209 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +210 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +211 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +212 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +213 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +214 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +215 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +216 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +217 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +218 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +219 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +220 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +221 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +222 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:15 +223 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:17 +224 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:17 +225 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:17 +226 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +227 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +228 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +229 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +230 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +231 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:18 +232 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +233 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +234 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +235 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +236 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +237 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +238 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +239 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:19 +240 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:20 +241 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:20 +242 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:20 +243 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:21 +244 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:21 +245 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:21 +246 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:21 +247 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +248 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +249 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +250 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +251 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +252 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +253 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +254 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +255 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +256 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +257 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +258 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +259 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +260 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +261 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +262 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:22 +263 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:23 +264 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:23 +265 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:24 +266 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:24 +267 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:24 +268 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:24 +269 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:24 +270 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:25 +271 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:25 +272 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:25 +273 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+01:25 +274 -16: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart:28:7)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  booking opens tracking, Home restores it, history cancellation stays in sync
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:25 +274 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:25 +274 -17: /home/hazem/projects/mashwar/apps/customer/test/app/active_trip_integration_test.dart: booking opens tracking, Home restores it, history cancellation stays in sync [E]
+  Test failed. See exception logs above.
+  The test description was: booking opens tracking, Home restores it, history cancellation stays in sync
+  
+01:25 +275 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:26 +276 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:26 +277 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:26 +278 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:27 +279 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:27 +280 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:27 +281 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:27 +282 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:27 +283 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:28 +284 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+01:29 +285 -17: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart:91:7)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  manual map pin reaches booking draft without a backend or public tiles
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:29 +285 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:29 +285 -18: /home/hazem/projects/mashwar/apps/customer/test/app/maps_integration_test.dart: manual map pin reaches booking draft without a backend or public tiles [E]
+  Test failed. See exception logs above.
+  The test description was: manual map pin reaches booking draft without a backend or public tiles
+  
+01:30 +286 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +287 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +288 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +289 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +290 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +291 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +292 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +293 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +294 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +295 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +296 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +297 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:30 +298 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +299 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +300 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +301 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +302 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +303 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +304 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +305 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +306 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +307 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +308 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +309 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +310 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +311 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +312 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +313 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +314 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +315 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +316 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +317 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +318 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +319 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +320 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +321 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +322 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +323 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +324 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +325 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:31 +326 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:32 +327 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:32 +328 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:32 +329 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:32 +330 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +331 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +332 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +333 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +334 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +335 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:33 +336 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +337 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +338 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +339 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +340 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +341 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +342 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_flow_test.dart: Arabic sign-in, wrong OTP and sign-out
+01:34 +343 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:34 +344 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:34 +345 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:35 +346 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:35 +347 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:35 +348 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:35 +349 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:36 +350 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:36 +351 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:36 +352 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +353 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +354 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +355 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +356 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +357 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +358 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +359 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +360 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +361 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +362 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +363 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +364 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +365 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +366 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +367 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +368 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +369 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +370 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +371 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +372 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +373 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:37 +374 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:38 +375 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+01:38 +376 -18: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "+963941234567": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart:129:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart line 129
+The test description was:
+  direct entry and clean home / ar
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:38 +376 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:38 +376 -19: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / ar [E]
+  Test failed. See exception logs above.
+  The test description was: direct entry and clean home / ar
+  
+01:38 +377 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:38 +378 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:38 +379 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:39 +380 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:39 +381 -19: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:40 +381 -19: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / en
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "+963941234567": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart:129:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart line 129
+The test description was:
+  direct entry and clean home / en
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:40 +381 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:40 +381 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/temporary_phone_entry_test.dart: direct entry and clean home / en [E]
+  Test failed. See exception logs above.
+  The test description was: direct entry and clean home / en
+  
+01:40 +382 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:40 +383 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:40 +384 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +385 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +386 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +387 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +388 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +389 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +390 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +391 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +392 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +393 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +394 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +395 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +396 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +397 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +398 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +399 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +400 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +401 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:41 +402 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:42 +403 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:42 +404 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(320.0, 740.0) pin, label, keyboard and confirm stay reachable
+01:42 +405 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:42 +406 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:43 +407 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:43 +408 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:43 +409 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:43 +410 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+01:43 +411 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(390.0, 844.0) pin, label, keyboard and confirm stay reachable
+01:43 +412 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(390.0, 844.0) pin, label, keyboard and confirm stay reachable
+01:43 +413 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:43 +414 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:43 +415 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:44 +416 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:44 +417 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:44 +418 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:44 +419 -20: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_inputs_test.dart: phone and OTP fit Size(430.0, 932.0) / en
+01:44 +420 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(800.0, 1000.0) pin, label, keyboard and confirm stay reachable
+01:44 +421 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(800.0, 1000.0) pin, label, keyboard and confirm stay reachable
+01:44 +422 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(800.0, 1000.0) pin, label, keyboard and confirm stay reachable
+01:44 +423 -20: /home/hazem/projects/mashwar/apps/customer/test/features/maps/maps_widget_test.dart: ar Size(800.0, 1000.0) pin, label, keyboard and confirm stay reachable
+01:44 +424 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:44 +425 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:44 +426 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:44 +427 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +428 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +429 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +430 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +431 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +432 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +433 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +434 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +435 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +436 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:45 +437 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +438 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +439 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +440 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +441 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +442 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +443 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +444 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +445 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +446 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +447 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:46 +448 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +449 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +450 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +451 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +452 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +453 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +454 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +455 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +456 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +457 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +458 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +459 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +460 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +461 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +462 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +463 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +464 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:47 +465 -20: /home/hazem/projects/mashwar/apps/customer/test/features/driver_contact/driver_contact_race_test.dart: covering the contact route prevents a delayed dialer launch
+01:48 +466 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:48 +467 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:48 +468 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:48 +469 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:49 +470 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:50 +471 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:50 +472 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +473 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +474 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +475 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +476 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +477 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +478 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +479 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +480 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +481 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +482 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:51 +483 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +484 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +485 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +486 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +487 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +488 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +489 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +490 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +491 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +492 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +493 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:52 +494 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:53 +495 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:53 +496 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:53 +497 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:54 +498 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:54 +499 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:54 +500 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:54 +501 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +502 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +503 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +504 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +505 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +506 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +507 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +508 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +509 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +510 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +511 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +512 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +513 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +514 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +515 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +516 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +517 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +518 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +519 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +520 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:55 +521 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +522 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +523 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +524 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +525 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +526 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +527 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +528 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +529 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +530 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +531 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +532 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +533 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +534 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +535 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +536 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +537 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:56 +538 -20: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:57 +538 -20: /home/hazem/projects/mashwar/apps/customer/test/features/home/home_entry_integration_test.dart: real Home entry opens registered routes and retains local Auth
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: Too many elements
+
+When the exception was thrown, this was the stack:
+#0      Iterable.single (dart:core/iterable.dart:696:24)
+#1      WidgetController.element (package:flutter_test/src/controller.dart:883:30)
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/home/home_entry_integration_test.dart:40:25)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  real Home entry opens registered routes and retains local Auth
+════════════════════════════════════════════════════════════════════════════════════════════════════
+01:57 +538 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:57 +538 -21: /home/hazem/projects/mashwar/apps/customer/test/features/home/home_entry_integration_test.dart: real Home entry opens registered routes and retains local Auth [E]
+  Test failed. See exception logs above.
+  The test description was: real Home entry opens registered routes and retains local Auth
+  
+01:57 +539 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +540 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +541 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +542 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +543 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +544 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +545 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +546 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +547 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:58 +548 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +549 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +550 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +551 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +552 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +553 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +554 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +555 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +556 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+01:59 +557 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +558 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +559 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +560 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +561 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +562 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +563 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +564 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:00 +565 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +566 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +567 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +568 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +569 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +570 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +571 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +572 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:01 +573 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +574 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +575 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +576 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +577 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +578 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +579 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +580 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +581 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +582 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +583 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +584 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +585 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +586 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:02 +587 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:03 +588 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:03 +589 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +590 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +591 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +592 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +593 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +594 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +595 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +596 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:04 +597 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +598 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +599 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +600 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +601 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +602 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +603 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +604 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +605 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +606 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:05 +607 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +608 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +609 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +610 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +611 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +612 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:06 +613 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +614 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +615 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +616 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +617 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +618 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +619 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +620 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +621 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:07 +622 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +623 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +624 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +625 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +626 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +627 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +628 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +629 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:08 +630 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +631 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +632 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +633 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +634 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +635 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +636 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:09 +637 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +638 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +639 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +640 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +641 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +642 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +643 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +644 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +645 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:10 +646 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +647 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +648 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +649 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +650 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +651 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +652 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:11 +653 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:12 +654 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:12 +655 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:12 +656 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:13 +657 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:13 +658 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:13 +659 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:14 +660 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:14 +661 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:14 +662 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +663 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +664 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +665 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +666 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +667 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +668 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:15 +669 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:16 +670 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:17 +671 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:17 +672 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:17 +673 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:18 +674 -21: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:18 +674 -21: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart: time text input with keyboard keeps the schedule action reachable
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 20 pixels on the right.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart:100:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart line 100
+The test description was:
+  time text input with keyboard keeps the schedule action reachable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:18 +674 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:18 +674 -22: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart: time text input with keyboard keeps the schedule action reachable [E]
+  Test failed. See exception logs above.
+  The test description was: time text input with keyboard keeps the schedule action reachable
+  
+02:19 +675 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:19 +676 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:19 +677 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:19 +678 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:19 +679 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:19 +680 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +681 -22: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +681 -22: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/schedule_date_input_test.dart: date text entry stays usable with keyboard and large text
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 20 pixels on the right.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/schedule_date_input_test.dart:60:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/schedule_date_input_test.dart line 60
+The test description was:
+  date text entry stays usable with keyboard and large text
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:20 +681 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +681 -23: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/schedule_date_input_test.dart: date text entry stays usable with keyboard and large text [E]
+  Test failed. See exception logs above.
+  The test description was: date text entry stays usable with keyboard and large text
+  
+02:20 +682 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +683 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +684 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +685 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +686 -23: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +686 -23: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: Arabic 390: pick both places, show quote and open saved trip
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following StateError was thrown running a test:
+Bad state: No element
+
+When the exception was thrown, this was the stack:
+#0      Iterable.last (dart:core/iterable.dart:679:7)
+#1      _LastFinderMixin.filter (package:flutter_test/src/finders.dart:1367:28)
+#3      _AncestorFinderMixin.allCandidates (package:flutter_test/src/finders.dart:1814:49)
+#4      FinderBase.evaluate (package:flutter_test/src/finders.dart:987:76)
+#5      WidgetController.widgetList (package:flutter_test/src/controller.dart:843:19)
+#6      WidgetController._maybeViewOf (package:flutter_test/src/controller.dart:790:34)
+#7      WidgetController.tap (package:flutter_test/src/controller.dart:1073:31)
+#8      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart:154:18)
+<asynchronous suspension>
+#9      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#10     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 2 frames from dart:async-patch and package:stack_trace)
+
+The test description was:
+  Arabic 390: pick both places, show quote and open saved trip
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:20 +686 -24: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+02:20 +686 -24: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: Arabic 390: pick both places, show quote and open saved trip [E]
+  Test failed. See exception logs above.
+  The test description was: Arabic 390: pick both places, show quote and open saved trip
+  
+02:20 +687 -24: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      pumpActiveTrip (file:///home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_support.dart:54:3)
+<asynchronous suspension>
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart:32:5)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  cancel requires confirmation and updates the shared trip
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:21 +687 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:21 +687 -25: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: cancel requires confirmation and updates the shared trip [E]
+  Test failed. See exception logs above.
+  The test description was: cancel requires confirmation and updates the shared trip
+  
+02:22 +688 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +689 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +690 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +691 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +692 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +693 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +694 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +695 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +696 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +697 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +698 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +699 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +700 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +701 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +702 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +703 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +704 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +705 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +706 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +707 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +708 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +709 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:22 +710 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:23 +710 -25: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: English 390: prefill and quote in LTR
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Cash": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart:196:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart line 196
+The test description was:
+  English 390: prefill and quote in LTR
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:23 +710 -26: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:23 +710 -26: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: English 390: prefill and quote in LTR [E]
+  Test failed. See exception logs above.
+  The test description was: English 390: prefill and quote in LTR
+  
+02:23 +711 -26: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:23 +712 -26: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:23 +712 -26: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart: schedule picker Size(320.0, 780.0) ar x2.0
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 20 pixels on the right.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart:170:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart line 170
+The test description was:
+  schedule picker Size(320.0, 780.0) ar x2.0
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:23 +712 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: map confirmation updates the existing journey without an intermediate empty point
+02:23 +712 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/scheduling/ride_schedule_widget_test.dart: schedule picker Size(320.0, 780.0) ar x2.0 [E]
+  Test failed. See exception logs above.
+  The test description was: schedule picker Size(320.0, 780.0) ar x2.0
+  
+02:24 +713 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_place_picker_test.dart: ar saved shortcuts, search, clear and selection at 320dp/2x/keyboard
+02:24 +714 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_place_picker_test.dart: ar saved shortcuts, search, clear and selection at 320dp/2x/keyboard
+02:25 +715 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_place_picker_test.dart: ar saved shortcuts, search, clear and selection at 320dp/2x/keyboard
+02:25 +716 -27: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: Small 320, 2x text, keyboard and place search
+
+Warning: A call to tap() with finder "Found 1 widget with text "Aleppo Citadel": [
+  Text("Aleppo Citadel", debugLabel: ((((englishLike titleSmall 2021).merge(((blackMountainView titleSmall).apply).merge(unknown))).apply).copyWith).apply, inherit: false, color: Color(alpha: 1.0000, red: 0.1412, green: 0.1020, blue: 0.1176, colorSpace: ColorSpace.sRGB), family: TamSansArabic, familyFallback: [TamSansLatin], size: 14.0, weight: 500, letterSpacing: 0.0, baseline: alphabetic, height: 1.4x, leadingDistribution: even, decoration: Color(alpha: 1.0000, red: 0.1412, green: 0.1020, blue: 0.1176, colorSpace: ColorSpace.sRGB) TextDecoration.none, dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+]" derived an Offset (Offset(171.0, 464.5)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: RenderParagraph#ef8c5 relayoutBoundary=up54
+The hit test result at that offset is: HitTestResult(_RenderColoredBox#5809d@Offset(171.0, 464.5), RenderStack#8f5e4@Offset(171.0, 464.5), RenderClipRect#ac3fe@Offset(171.0, 464.5), RenderPointerListener#579c2@Offset(171.0, 464.5), RenderSemanticsGestureHandler#b13da@Offset(171.0, 464.5), RenderPointerListener#58861@Offset(171.0, 464.5), RenderSemanticsAnnotations#cd87a@Offset(171.0, 464.5), _RenderLayoutBuilder#545ea@Offset(171.0, 464.5), RenderRepaintBoundary#4276c@Offset(171.0, 464.5), RenderStack#e1696@Offset(171.0, 464.5), _RenderLayoutBuilder#04e32@Offset(171.0, 464.5), RenderClipRRect#03002@Offset(171.0, 464.5), RenderConstrainedBox#22639@Offset(171.0, 464.5), _RenderLayoutBuilder#41908@Offset(171.0, 464.5), RenderRepaintBoundary#864bc@Offset(171.0, 464.5), RenderPointerListener#e50dd@Offset(171.0, 464.5), RenderStack#41d76@Offset(171.0, 464.5), _RenderLayoutBuilder#ddfc5@Offset(171.0, 464.5), _RenderLayoutBuilder#e8ef4@Offset(171.0, 464.5), RenderPadding#56a61@Offset(171.0, 464.5), RenderCustomMultiChildLayoutBox#9b433@Offset(171.0, 464.5), _RenderInkFeatures#c2fab@Offset(171.0, 464.5), RenderPhysicalModel#4497b@Offset(171.0, 464.5), RenderAnnotatedRegion<SystemUiOverlayStyle>#3a703@Offset(171.0, 464.5), RenderSemanticsAnnotations#c085e@Offset(171.0, 464.5), RenderRepaintBoundary#4b979@Offset(171.0, 464.5), RenderIgnorePointer#e33a7@Offset(171.0, 464.5), RenderAnimatedOpacity#bff83@Offset(171.0, 464.5), RenderAnimatedOpacity#e4e7a@Offset(171.0, 464.5), _RenderColoredBox#b6839@Offset(171.0, 464.5), RenderAnimatedOpacity#26925@Offset(171.0, 464.5), RenderIgnorePointer#815fd@Offset(171.0, 464.5), RenderAnimatedOpacity#4b42a@Offset(171.0, 464.5), RenderRepaintBoundary#816da@Offset(171.0, 464.5), RenderSemanticsAnnotations#44e6a@Offset(171.0, 464.5), RenderOffstage#5ecde@Offset(171.0, 464.5), RenderSemanticsAnnotations#9f84f@Offset(171.0, 464.5), _RenderTheater#13cec@Offset(171.0, 464.5), RenderAbsorbPointer#6e839@Offset(171.0, 464.5), RenderPointerListener#6b4de@Offset(171.0, 464.5), RenderSemanticsAnnotations#85860@Offset(171.0, 464.5), RenderSemanticsAnnotations#1cc04@Offset(171.0, 464.5), RenderSemanticsAnnotations#e0aff@Offset(171.0, 464.5), RenderSemanticsAnnotations#218f3@Offset(171.0, 464.5), RenderTapRegionSurface#549eb@Offset(171.0, 464.5), RenderSemanticsAnnotations#a1781@Offset(171.0, 464.5), RenderSemanticsAnnotations#af0bd@Offset(171.0, 464.5), RenderRepaintBoundary#33c43@Offset(171.0, 464.5), HitTestEntry<HitTestTarget>#2b847(_ReusableRenderView#2fc62), HitTestEntry<HitTestTarget>#06bc2(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2158:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1942:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1075:7)
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart:240:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+Pending timers:
+Timer (duration: 0:00:00.250000, periodic: false), created:
+#0      new FakeTimer._ (package:fake_async/fake_async.dart:342:62)
+#1      FakeAsync._createTimer (package:fake_async/fake_async.dart:260:29)
+#2      FakeAsync.run.<anonymous closure> (package:fake_async/fake_async.dart:185:15)
+#5      MapInteractiveViewerState._handleOnTapUp (package:flutter_map/src/gestures/map_interactive_viewer.dart:956:32)
+#6      TapGestureRecognizer.handleTapUp.<anonymous closure> (package:flutter/src/gestures/tap.dart:755:57)
+#7      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:345:24)
+#8      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:755:11)
+#9      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)
+#10     BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)
+#11     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#12     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:532:20)
+#13     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:498:22)
+#14     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)
+#15     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#16     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#17     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:1301:42)
+#18     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:1311:11)
+#19     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:1301:5)
+#20     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:869:15)
+#23     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#24     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:868:27)
+#25     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:587:26)
+#28     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#29     TestGesture.up (package:flutter_test/src/test_pointer.dart:580:27)
+#30     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1150:21)
+<asynchronous suspension>
+#31     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#32     main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart:240:5)
+<asynchronous suspension>
+#33     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#34     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from dart:async and package:stack_trace)
+
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+A Timer is still pending even after the widget tree was disposed.
+'package:flutter_test/src/binding.dart':
+Failed assertion: line 2242 pos 12: '!timersPending'
+
+When the exception was thrown, this was the stack:
+#2      AutomatedTestWidgetsFlutterBinding._verifyInvariants (package:flutter_test/src/binding.dart:2242:12)
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1703:7)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from class _AssertionError and package:stack_trace)
+
+The test description was:
+  Small 320, 2x text, keyboard and place search
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:25 +716 -28: /home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_system_bar_test.dart: activity screen uses the ambient surface and dark system icons
+02:25 +716 -28: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_request_page_test.dart: Small 320, 2x text, keyboard and place search [E]
+  Test failed. See exception logs above.
+  The test description was: Small 320, 2x text, keyboard and place search
+  
+02:25 +716 -28: /home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_system_bar_test.dart: activity screen uses the ambient surface and dark system icons
+02:25 +717 -28: /home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_system_bar_test.dart: activity screen uses the ambient surface and dark system icons
+02:26 +718 -28: /home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_system_bar_test.dart: activity screen uses the ambient surface and dark system icons
+02:27 +719 -28: /home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_system_bar_test.dart: activity screen uses the ambient surface and dark system icons
+02:28 +720 -28: /home/hazem/projects/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_map_journey_test.dart: keyboard keeps map viewport and camera inset stable
+02:28 +721 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +722 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +723 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +724 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +725 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +726 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:28 +727 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:29 +728 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:29 +729 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:30 +730 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:30 +731 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:30 +732 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:31 +733 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:31 +734 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:31 +735 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:31 +736 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +737 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +738 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +739 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +740 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +741 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +742 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +743 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +744 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +745 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +746 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +747 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:32 +748 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +749 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +750 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +751 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +752 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +753 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +754 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:33 +755 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +756 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +757 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +758 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +759 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +760 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +761 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:34 +762 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +763 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +764 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +765 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +766 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +767 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:35 +768 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:36 +769 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:36 +770 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:36 +771 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:37 +772 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:37 +773 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:38 +774 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+02:38 +775 -28: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart:151:5)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  scheduled tracking waits for due time before driver search
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:41 +775 -29: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: scheduled tracking waits for due time before driver search [E]
+  Test failed. See exception logs above.
+  The test description was: scheduled tracking waits for due time before driver search
+  
+02:41 +775 -29: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render requested at 390dp
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      pumpActiveTrip (file:///home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_support.dart:54:3)
+<asynchronous suspension>
+#3      main.<anonymous closure> (file:///home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart:172:7)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  render requested at 390dp
+════════════════════════════════════════════════════════════════════════════════════════════════════
+02:48 +775 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render requested at 390dp [E]
+  Test failed. See exception logs above.
+  The test description was: render requested at 390dp
+  
+02:48 +775 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render confirmed at 390dp
+02:48 +776 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render en-route at 390dp
+02:48 +777 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render arrived at 390dp
+02:48 +778 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render in-progress at 390dp
+02:48 +779 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: render completed at 390dp
+02:48 +780 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: driver profile and actions Size(320.0, 780.0)/ar/2.0
+02:49 +781 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: driver profile and actions Size(800.0, 980.0)/ar/1.0
+02:49 +782 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: driver profile and actions Size(390.0, 844.0)/en/1.0
+02:49 +783 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: driver profile and actions Size(800.0, 360.0)/en/2.0
+02:49 +784 -30: /home/hazem/projects/mashwar/apps/customer/test/features/active_trip/active_trip_widget_test.dart: (tearDownAll)
+02:50 +784 -30: Some tests failed.

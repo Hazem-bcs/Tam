@@ -1,0 +1,11 @@
+{
+  "full_suite_candidate": "0beccec",
+  "passed": 784,
+  "failed": 30,
+  "baseline_log": "/tmp/tam-main-ui-tests.log",
+  "new_failure_names": [],
+  "previous_only_failure_names": [
+    "/home/hazem/projects/mashwar/apps/customer/test/features/trips/trips_widget_test.dart: responsive list Size(320.0, 700.0) / ar / 2.0"
+  ],
+  "note": "Historical full-suite baseline was a1b5fe0; current starting code3830fc6 also includes separately integrated activity/filter work. Failure name comparison establishes these30 were already observed."
+}
