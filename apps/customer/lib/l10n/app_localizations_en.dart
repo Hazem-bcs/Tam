@@ -261,7 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeChooseDestination => 'Choose your destination';
 
   @override
-  String get homePromotionsTitle => 'Offers & updates';
+  String get homePromotionsTitle => 'TAM ads';
 
   @override
   String get homePromotionEyebrow => 'Discover TAM';

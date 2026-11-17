@@ -34,6 +34,7 @@ void main() {
   Future<void> pumpCarousel(
     WidgetTester tester, {
     required List<HomePromotion> promotions,
+    bool reducedMotion = false,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -41,6 +42,12 @@ void main() {
         locale: const Locale('ar'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            disableAnimations: reducedMotion,
+          ),
+          child: child!,
+        ),
         home: Scaffold(
           body: Center(
             child: SizedBox(
@@ -67,6 +74,55 @@ void main() {
     final firstSlide = find.text('خبر تم الأول');
     expect(firstSlide, findsOneWidget);
     expect(find.byType(InkWell), findsNothing);
+  });
+
+
+  testWidgets('ads fill the available width without clipped neighbor slides', (
+    tester,
+  ) async {
+    await pumpCarousel(tester, promotions: const [first, second]);
+    final slider = find.byKey(const Key('home-promotions-slider'));
+    final pageView = tester.widget<PageView>(slider);
+    expect(pageView.controller.viewportFraction, 1.0);
+    final viewport = tester.getRect(slider);
+    final slide = tester.getRect(
+      find.byKey(const Key('home-promotion-slide-0')),
+    );
+    expect(slide.left, closeTo(viewport.left, 0.1));
+    expect(slide.right, closeTo(viewport.right, 0.1));
+    expect(find.text('إعلانات تم'), findsOneWidget);
+  });
+
+  testWidgets('ads advance automatically and wrap to the first card', (
+    tester,
+  ) async {
+    await pumpCarousel(tester, promotions: const [first, second]);
+    expect(find.text('1 / 2'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pump(const Duration(milliseconds: 450));
+    expect(find.text('2 / 2'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pump(const Duration(milliseconds: 450));
+    expect(find.text('1 / 2'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('reduced motion keeps ads still until the user swipes', (
+    tester,
+  ) async {
+    await pumpCarousel(
+      tester,
+      promotions: const [first, second],
+      reducedMotion: true,
+    );
+    await tester.pump(const Duration(seconds: 7));
+    expect(find.text('1 / 2'), findsOneWidget);
+    await tester.drag(
+      find.byKey(const Key('home-promotions-slider')),
+      const Offset(310, 0),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('2 / 2'), findsOneWidget);
   });
 
   testWidgets('approved informational campaigns swipe manually', (

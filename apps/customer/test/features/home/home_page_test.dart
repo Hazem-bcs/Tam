@@ -34,6 +34,7 @@ void main() {
       expect(find.text('+963941234567'), findsNothing);
       expect(find.text('وين رايح اليوم؟'), findsOneWidget);
       expect(find.text('قريباً في تم'), findsOneWidget);
+      expect(find.text('إعلانات تم'), findsOneWidget);
       expect(find.byKey(const Key('home-promotions-slider')), findsOneWidget);
       expect(find.text('مشوارك أسهل مع تم'), findsOneWidget);
       expect(find.text('تسجيل الخروج'), findsNothing);
@@ -49,7 +50,13 @@ void main() {
       expect(find.byKey(const Key('home-addresses')), findsNothing);
       expect(find.byKey(const Key('home-active-trip')), findsNothing);
       await tester.ensureVisible(find.text('الطعام'));
-      await tester.tap(find.text('الطعام'));
+      final foodLabel = find.text('الطعام');
+      final foodCard = find.ancestor(
+        of: foodLabel,
+        matching: find.byType(Container),
+      ).first;
+      expect(tester.getSize(foodCard).height, greaterThanOrEqualTo(68));
+      await tester.tap(foodLabel);
       expect(nav.ride, 1, reason: 'Coming-soon services must not navigate');
       expect(tester.takeException(), isNull);
     },

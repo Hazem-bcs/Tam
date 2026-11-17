@@ -50,12 +50,12 @@ class HomeServiceShowcase extends StatelessWidget {
                   label: '${item.$1}, ${t.homeComingSoon}',
                   child: Container(
                     constraints: const BoxConstraints(
-                      minHeight: 52,
+                      minHeight: 68,
                       maxWidth: 225,
                     ),
-                    padding: const EdgeInsetsDirectional.fromSTEB(10, 7, 14, 7),
+                    padding: const EdgeInsetsDirectional.fromSTEB(14, 10, 16, 10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       color: colors.surfaceContainerLow,
                       border: Border.all(color: colors.outlineVariant),
                     ),
@@ -65,24 +65,24 @@ class HomeServiceShowcase extends StatelessWidget {
                         if (item.$2 == null)
                           Icon(
                             Icons.route_outlined,
-                            size: 31,
+                            size: 40,
                             color: colors.primary,
                           )
                         else
                           Image.asset(
                             item.$2!,
-                            width: 34,
-                            height: 34,
+                            width: 42,
+                            height: 42,
                             fit: BoxFit.contain,
                             excludeFromSemantics: true,
                           ),
-                        const SizedBox(width: 7),
+                        const SizedBox(width: 9),
                         Flexible(
                           child: Text(
                             item.$1,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.labelMedium
+                            style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(color: colors.onSurfaceVariant),
                           ),
                         ),
