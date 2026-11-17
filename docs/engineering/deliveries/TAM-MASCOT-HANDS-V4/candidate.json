@@ -1,0 +1,30 @@
+{
+  "source_sha": "62f452e47db20fbd4ebe412fa312f06d9ebf6415",
+  "flutter_sha": "81782c3483b519e130b04ee50f42597357c16d07",
+  "art_sha": "68961a8b85720d074d6c389a28de413d2b544603",
+  "source_worktree": "/home/hazem/projects/tam-hand-worktrees/motion",
+  "source_scene_sha256": "b83004a6348ad732576c666b420bad78fa1b5e0e6702925a04ea16d2d3c484b4",
+  "export_sha256": "e89405c26503646ec938fb0a5cf6953eab31da8628a6bd2fe2a14c9061afb296",
+  "review": {
+    "art": "Supervisor inspected pose sheet and assembled current states at native/mobile scale.",
+    "motion": "hand_art APPROVED_AT_SHA62f452e, rig/motion only; authored art excluded.",
+    "flutter": "Supervisor full code review and hand_motion independent review at81782c3, no actionable findings; final integrated checks pending."
+  },
+  "app_code_candidate": "edf468b42e26e0d840953512435244594253c9b5",
+  "clearance_sha": "012feaea97100bbba86cd8f204e074390e46c4c0",
+  "full_suite": {
+    "at_sha": "0beccec",
+    "passed": 784,
+    "failed": 30,
+    "new_failure_names": 0
+  },
+  "final_affected_layout_tests": {
+    "passed": 18,
+    "failed": 0
+  },
+  "final_format": {
+    "files": 460,
+    "changed": 0
+  },
+  "final_clearance_review": "Supervisor code/render review and12native pixel clearance cases; independent follow-up agent unavailable due usage limit."
+}

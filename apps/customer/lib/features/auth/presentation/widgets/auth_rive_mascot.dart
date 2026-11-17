@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart' as rive;
+import 'package:tam_customer/features/auth/presentation/widgets/auth_mascot_expression.dart';
 
 /// Interactive TAM mascot: Rive owns its autonomous idle and blinking.
 /// Flutter only sends auth state and the text caret position.
@@ -33,6 +36,8 @@ class AuthRiveMascot extends StatefulWidget {
 class _AuthRiveMascotState extends State<AuthRiveMascot>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   static const _asset = 'assets/animations/tam_mascot_auth.riv';
+  // Longer than the exported static pose's 350 ms maximum transition.
+  static const _staticPoseSettleSeconds = 0.4;
 
   late final rive.FileLoader _loader = rive.FileLoader.fromAsset(
     _asset,
@@ -45,6 +50,8 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
   @override
   void initState() {
     super.initState();
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _appVisible = lifecycle == null || lifecycle == AppLifecycleState.resumed;
     WidgetsBinding.instance.addObserver(this);
     _lookEasing = AnimationController(
       vsync: this,
@@ -61,8 +68,10 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    _appVisible = state == AppLifecycleState.resumed;
-    _syncPlayback();
+    setState(() {
+      _appVisible = state == AppLifecycleState.resumed;
+      _syncPlayback();
+    });
   }
 
   void _syncPlayback() {
@@ -71,7 +80,20 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
     if (controller != null && controller.active != shouldPlay) {
       controller.active = shouldPlay;
     }
-    if (!shouldPlay) _lookEasing.stop();
+    if (!shouldPlay) {
+      _lookEasing.stop();
+      _currentX = _targetX;
+      _currentY = _targetY;
+      _writeLookValues();
+    }
+    if (_appVisible && _routeVisible && widget.reduceMotion && _posePending) {
+      // Evaluate the changed bindings, then settle the short pose transition
+      // synchronously. No timer/ticker is needed to update a static expression.
+      controller?.advance(0);
+      controller?.advance(_staticPoseSettleSeconds);
+      controller?.scheduleRepaint();
+      _posePending = false;
+    }
   }
 
   rive.ViewModelInstance? _model;
@@ -80,6 +102,7 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
   rive.RiveWidgetController? _riveController;
   bool _appVisible = true;
   bool _routeVisible = true;
+  bool _posePending = false;
 
   double _fromX = 0;
   double _fromY = 0;
@@ -130,13 +153,25 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
   void _syncInputs() {
     final model = _model;
     if (model == null) return;
-    final focused = widget.inputFocused && !widget.busy && !widget.hasError;
+    // Inputs and inherited route visibility can change in the same rebuild.
+    _routeVisible = TickerMode.valuesOf(context).enabled;
+    final expression = resolveAuthMascotExpression(
+      inputFocused: widget.inputFocused,
+      busy: widget.busy,
+      hasError: widget.hasError,
+      success: widget.success,
+    );
+    final focused = expression == AuthMascotExpression.focus;
 
     model.boolean('phoneFocused')?.value = focused;
-    model.boolean('waiting')?.value = widget.busy;
-    model.boolean('hasError')?.value = widget.hasError;
+    model.boolean('waiting')?.value =
+        expression == AuthMascotExpression.waiting;
+    model.boolean('hasError')?.value = expression == AuthMascotExpression.error;
     model.boolean('otpStage')?.value = widget.otpStage;
-    model.boolean('success')?.value = widget.success;
+    model.boolean('success')?.value =
+        expression == AuthMascotExpression.success;
+    model.boolean('reduceMotion')?.value = widget.reduceMotion;
+    _posePending = true;
 
     if (focused) {
       final caret = widget.gazeProgress.clamp(0.0, 1.0).toDouble();
@@ -175,7 +210,18 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
     _gazeY = null;
     _model = null;
     _riveController = null;
-    _loader.dispose();
+    if (_loader.isFileAvailable) {
+      _loader.dispose();
+    } else {
+      // A route can disappear while the native asset is still decoding. Wait
+      // for that load before releasing its file/completer; no widget is kept.
+      unawaited(
+        _loader.file().then<void>(
+          (_) => _loader.dispose(),
+          onError: (Object error, StackTrace stack) => _loader.dispose(),
+        ),
+      );
+    }
     super.dispose();
   }
 
@@ -189,11 +235,14 @@ class _AuthRiveMascotState extends State<AuthRiveMascot>
         dataBind: rive.DataBind.auto(),
         onLoaded: _onLoaded,
         builder: (context, state) => switch (state) {
-          rive.RiveLoaded() => rive.RiveWidget(
-            controller: state.controller,
-            fit: rive.Fit.contain,
-            // All gestures belong to the Flutter form, not to the mascot.
-            hitTestBehavior: rive.RiveHitTestBehavior.none,
+          rive.RiveLoaded() => TickerMode(
+            enabled: _appVisible && _routeVisible && !widget.reduceMotion,
+            child: rive.RiveWidget(
+              controller: state.controller,
+              fit: rive.Fit.contain,
+              // All gestures belong to the Flutter form, not to the mascot.
+              hitTestBehavior: rive.RiveHitTestBehavior.none,
+            ),
           ),
           rive.RiveLoading() => const SizedBox.shrink(),
           rive.RiveFailed() => Builder(

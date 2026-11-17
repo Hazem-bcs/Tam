@@ -1,0 +1,21 @@
+{
+  "task": "TAM-MASCOT-HANDS-V4",
+  "date": "2026-11-17",
+  "app_baseline": "3830fc63cb10d1b5f0cc595c62eee4b6456f3b90",
+  "source_baseline": "f367df66f5c0b9a784d3857b02ff271e017ddfa3",
+  "baseline_assets": [
+    {
+      "path": "/home/hazem/projects/mashwar/apps/customer/assets/animations/tam_mascot_auth.riv",
+      "bytes": 1677459,
+      "sha256": "1e95cf5e94c8c30ac3feb53376f83d16fd56ae57caf12420b79bccfc76811c57"
+    },
+    {
+      "path": "/home/hazem/projects/tam-mascot-performance-rig-v1/build/tam-mascot-performance-rig-v1.riv",
+      "bytes": 1675684,
+      "sha256": "44919a41a3b91c809fa47726f96aac2313e64bdac2fff120e7122843ff1f2cad"
+    }
+  ],
+  "observed": "Running auth screenshot shows tiny front paws. Source scene has restored full arms. V4 must verify exact exported and embedded hash.",
+  "emulator": "emulator-5554 already running, reused; 1080x2400 physical / 420dpi",
+  "verification": "Not run yet. Batch checks at integration."
+}

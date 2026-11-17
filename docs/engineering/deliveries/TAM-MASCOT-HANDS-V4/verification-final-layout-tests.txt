@@ -1,0 +1,20 @@
+00:00 +0: loading /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_mascot_clearance_test.dart
+00:00 +0: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_mascot_clearance_test.dart: both gloves clear the card / ar / layout 0
+00:00 +1: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: brand scene gives the route artwork real horizontal space
+00:00 +2: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: brand scene gives the route artwork real horizontal space
+00:00 +3: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: brand scene gives the route artwork real horizontal space
+00:00 +4: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: brand scene gives the route artwork real horizontal space
+00:00 +5: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: brand scene gives the route artwork real horizontal space
+00:00 +6: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_mascot_clearance_test.dart: both gloves clear the card / ar / layout 5
+00:00 +7: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: compact auth keeps fields present with enlarged text
+00:01 +8: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_mascot_clearance_test.dart: both gloves clear the card / en / layout 0
+00:01 +9: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: keyboard keeps mascot and hero the same size while fields stay scrollable
+00:01 +10: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: keyboard keeps mascot and hero the same size while fields stay scrollable
+00:01 +11: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: keyboard keeps mascot and hero the same size while fields stay scrollable
+00:01 +12: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_mascot_clearance_test.dart: both gloves clear the card / en / layout 3
+00:01 +13: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: Rive mascot receives focus and OTP phase changes
+00:01 +14: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: Rive mascot receives focus and OTP phase changes
+00:01 +15: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: Rive mascot receives focus and OTP phase changes
+00:01 +16: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: local invalid phone drives concern and clears when corrected
+00:01 +17: /home/hazem/projects/mashwar/apps/customer/test/features/auth/auth_visual_shell_test.dart: happy phone readiness recovers and yields to waiting and error
+00:01 +18: All tests passed!

@@ -288,3 +288,32 @@ TAM-ACTIVITY-FILTER-314F1B3: INTEGRATED، root، أساس4a65090.
 
 أغلق نقل نشاطي والفلتر فقط:48 اختبارًا وتحليل نظيف وتنسيق455/0؛
 حُفظت بقية الصفحات والاعتماديات والأصول دون تغيير، وأُعيد تحميل التطبيق.
+
+
+## TAM-MASCOT-HANDS-V4 — 2026-11-17
+
+READY → IMPLEMENTING، المشرف root؛ تفويض المستخدم تنفيذ الخطة بعدة وكلاء.
+أساس التطبيق3830fc6، مصدر Rive f367df6. HAND-ART / HAND-MOTION / HAND-FLUTTER
+بملكية منفصلة وworktrees مستقلة. [البطاقة والسيناريوهات](tasks/TAM-MASCOT-HANDS-V4.md).
+التجميع محلي، دون push أو دمج main؛ التحقق الواسع عند التكامل.
+
+
+TAM-MASCOT-HANDS-V4: INTEGRATED محليًا، root، على codex/mascot-hands-v4؛
+مرشح الكود edf468b، مصدر Rive62f452e، Flutter81782c3 ثم clearance012feae.
+ثلاثة وكلاء بملكية منفصلة ومراجعة مصدر دقيقة. الرسوم/الحزن/الفرح/Idle
+مكتملة، واختبارات التخطيط المتأثرة18ناجحة. الفحص الكامل784نجاحًا و30إخفاقًا
+سبق رصدها؛ تحليل42infoسابقة؛ لا push أو دمج main.
+[التقرير والمعاينات والقيود](deliveries/TAM-MASCOT-HANDS-V4/REPORT.ar.md).
+
+
+TAM-SHARED-IDLE-V5: READY → IMPLEMENTING، root، أساس التطبيقc6f4b75
+ومصدر Rive62f452e، worktree source idle-v5 مستقل. نطاق Idle16ث فقط؛
+الحركات الحالية التي رضي عنها المستخدم محفوظة.
+[البطاقة](tasks/TAM-SHARED-IDLE-V5.md).
+
+
+TAM-SHARED-IDLE-V5: INTEGRATED محليًا، root، تطبيق30730df ومصدر5177b45.
+دورة Idle16ث بطبقة أساسية مستمرة، دون تبديل رسم الكف أو تغيير الحركات
+المعتمدة. اختبار كامل797نجاحًا و30إخفاقًا قديمًا؛ تحليل42infoسابقة؛461/0تنسيق.
+المصدر في worktree idle-v5؛ لا push أو دمج main.
+[التسليم ومعاينة30fps](deliveries/TAM-SHARED-IDLE-V5/REPORT.ar.md).

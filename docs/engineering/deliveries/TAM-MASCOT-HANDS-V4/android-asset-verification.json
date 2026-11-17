@@ -1,0 +1,11 @@
+{
+  "apk_asset_sha256": "e89405c26503646ec938fb0a5cf6953eab31da8628a6bd2fe2a14c9061afb296",
+  "app_source_asset_sha256": "e89405c26503646ec938fb0a5cf6953eab31da8628a6bd2fe2a14c9061afb296",
+  "match": true,
+  "apk_bytes": 167767324,
+  "apk_build_mode": "debug",
+  "incremental_build_seconds": 8.8,
+  "device": "emulator-5554 reused",
+  "profile_benchmark": "NOT_RUN",
+  "new_apk_installed": true
+}
