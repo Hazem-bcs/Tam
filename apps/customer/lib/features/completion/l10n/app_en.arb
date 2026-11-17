@@ -57,11 +57,13 @@
   "completionOffline": "Could not connect. Check your network and retry.",
   "completionSimulationNotice": "Ratings in this version are stored locally for testing until the service is connected.",
   "completionRateHint": "Help us improve the service",
-  "completionQuickFeedbackHint": "Quick notes added to your comment",
+  "completionQuickFeedbackHint": "What went well on your ride?",
   "completionTagDriverRespect": "Respectful driver",
   "completionTagCleanCar": "Clean vehicle",
   "completionTagComfort": "Comfortable ride",
   "completionTagArrivalDelay": "Delayed arrival",
   "completionTagCarIssue": "Vehicle issue",
-  "completionTagServiceIssue": "Uncomfortable trip"
+  "completionTagServiceIssue": "Uncomfortable trip",
+  "completionQuickFeedbackCritical": "What could we improve?",
+  "completionFeedbackOptional": "Optional"
 }

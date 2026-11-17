@@ -5,7 +5,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 
-/// Trip identity, recorded status, and request time on a branded surface.
+/// A calm trip summary: status first, metadata second.
 class TripDetailsStatusCard extends StatelessWidget {
   const TripDetailsStatusCard({super.key, required this.trip});
 
@@ -14,63 +14,50 @@ class TripDetailsStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
+    final type = Theme.of(context).textTheme;
     final l = AppLocalizations.of(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: AlignmentDirectional.topStart,
-          end: AlignmentDirectional.bottomEnd,
-          colors: [
-            colors.primary,
-            Color.lerp(colors.primary, colors.onSurface, .32)!,
-          ],
-        ),
-        borderRadius: BorderRadius.circular(26),
+        color: colors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.lg,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.receipt_long_outlined,
-                  color: colors.onPrimary,
-                  size: 24,
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Text(
-                    l.tripsTripNumber(trip.id),
-                    style: text.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: colors.onPrimary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: TripStatusBadge(status: trip.status),
             ),
-            const SizedBox(height: AppSpacing.lg),
-            Divider(height: 1, color: colors.onPrimary.withValues(alpha: .24)),
             const SizedBox(height: AppSpacing.md),
-            _LightMetadata(
-              icon: Icons.schedule_outlined,
+            Directionality(
+              textDirection: Directionality.of(context),
+              child: Text(
+                l.tripsTripNumber(trip.id),
+                maxLines: 3,
+                softWrap: true,
+                style: type.bodySmall?.copyWith(
+                  color: colors.onSurfaceVariant,
+                  fontSize: 12,
+                  height: 1.45,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            _DetailMeta(
+              icon: Icons.access_time_rounded,
               label: l.tripsCreatedAt,
               value: tripDateLabel(context, trip.createdAt),
             ),
             if (trip.booking.scheduledAt != null) ...[
-              const SizedBox(height: AppSpacing.md),
-              _LightMetadata(
-                icon: Icons.calendar_month_outlined,
+              const SizedBox(height: AppSpacing.sm),
+              _DetailMeta(
+                icon: Icons.event_outlined,
                 label: l.tripsScheduledTime,
                 value: rideTimeLabel(context, trip.booking.scheduledAt!),
               ),
@@ -82,13 +69,12 @@ class TripDetailsStatusCard extends StatelessWidget {
   }
 }
 
-class _LightMetadata extends StatelessWidget {
-  const _LightMetadata({
+class _DetailMeta extends StatelessWidget {
+  const _DetailMeta({
     required this.icon,
     required this.label,
     required this.value,
   });
-
   final IconData icon;
   final String label;
   final String value;
@@ -96,31 +82,32 @@ class _LightMetadata extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
+    final type = Theme.of(context).textTheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: colors.onPrimary),
+        Icon(icon, size: 16, color: colors.onSurfaceVariant),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: text.bodySmall?.copyWith(
-                  color: colors.onPrimary.withValues(alpha: .85),
-                ),
-              ),
-              const SizedBox(height: 3),
-              Text(
-                value,
-                style: text.bodyMedium?.copyWith(
-                  color: colors.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+          child: Text(
+            label,
+            style: type.bodySmall?.copyWith(
+              color: colors.onSurfaceVariant,
+              fontSize: 12,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Flexible(
+          flex: 2,
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: type.bodySmall?.copyWith(
+              color: colors.onSurface,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],

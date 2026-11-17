@@ -27,6 +27,7 @@ class VectorMapSurface extends StatefulWidget {
     this.onLocate,
     this.locating = false,
     this.focus,
+    this.compactPreview = false,
   });
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver, selection;
@@ -36,6 +37,7 @@ class VectorMapSurface extends StatefulWidget {
   final VoidCallback? onLocate;
   final bool locating;
   final MapCameraFocus? focus;
+  final bool compactPreview;
   @override
   State<VectorMapSurface> createState() => _VectorMapSurfaceState();
 }
@@ -104,6 +106,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
           }
           return NativeVectorMap(
             style: _style!,
+            compactPreview: widget.compactPreview,
             initialCenter: widget.configuration.initialCenter,
             scene: VectorMapScene(
               origin: widget.origin,

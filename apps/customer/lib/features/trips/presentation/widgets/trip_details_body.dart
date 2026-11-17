@@ -6,12 +6,10 @@ import 'package:tam_customer/features/trips/presentation/widgets/trip_details_st
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
-/// Sections are part of the parent scroll view, rather than independent cards
-/// competing with a permanently docked action area.
 class TripDetailsBody extends StatelessWidget {
-  const TripDetailsBody({super.key, required this.trip});
-
+  const TripDetailsBody({super.key, required this.trip, this.onOpenFullMap});
   final Trip trip;
+  final VoidCallback? onOpenFullMap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +18,18 @@ class TripDetailsBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TripDetailsStatusCard(trip: trip),
-        const SizedBox(height: AppSpacing.lg),
-        TripDetailsRouteCard(trip: trip),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
+        TripDetailsRouteCard(trip: trip, onOpenFullMap: onOpenFullMap),
+        const SizedBox(height: AppSpacing.md),
         TripDetailsInformationCard(trip: trip),
         if (trip.status == TripStatus.inProgress) ...[
           const SizedBox(height: AppSpacing.md),
           Text(
             l.tripsNoLiveTracking,
-            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ],

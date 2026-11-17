@@ -57,6 +57,14 @@ void main() {
     expect(tester.takeException(), isNull);
 
     if (_capture) {
+      // Ensure the user-supplied bitmap has decoded before capturing a golden.
+      await tester.runAsync(() async {
+        await precacheImage(
+          const AssetImage('assets/maps/vehicle-sedan-user.png'),
+          tester.element(find.byType(TripDetailsPage)),
+        );
+      });
+      await tester.pumpAndSettle();
       await expectLater(
         find.byKey(const Key('trip-details-premium-preview')),
         matchesGoldenFile('goldens/trip-details-premium-ar-390.png'),

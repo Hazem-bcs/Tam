@@ -8,6 +8,7 @@ import 'package:tam_customer/features/trips/presentation/widgets/trip_details_ac
 import 'package:tam_customer/features/trips/presentation/widgets/trip_details_body.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trips_failure_banner.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
@@ -34,7 +35,7 @@ class TripDetailsPage extends StatelessWidget {
             l.tripsDetailsTitle,
             style: AppTypography.home(
               theme.textTheme,
-            ).titleLarge?.copyWith(fontWeight: FontWeight.w700),
+            ).titleLarge?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
           ),
           leading: IconButton(
             tooltip: MaterialLocalizations.of(context).backButtonTooltip,
@@ -82,7 +83,7 @@ class TripDetailsPage extends StatelessWidget {
                     key: const Key('trips-details-scroll'),
                     padding: const EdgeInsetsDirectional.fromSTEB(
                       AppSpacing.lg,
-                      AppSpacing.md,
+                      AppSpacing.sm,
                       AppSpacing.lg,
                       AppSpacing.xxl,
                     ),
@@ -97,8 +98,15 @@ class TripDetailsPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppSpacing.md),
                         ],
-                        TripDetailsBody(trip: state.trip!),
-                        const SizedBox(height: AppSpacing.xl),
+                        TripDetailsBody(
+                          trip: state.trip!,
+                          onOpenFullMap: state.trip!.status.isActive
+                              ? () => navigation.openActiveTrip(
+                                  id: state.trip!.id,
+                                )
+                              : null,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
                         TripDetailsActions(
                           trip: state.trip!,
                           state: state,

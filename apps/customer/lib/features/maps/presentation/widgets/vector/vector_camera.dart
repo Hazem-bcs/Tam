@@ -6,16 +6,27 @@ import 'vector_map_scene.dart';
 /// Fits the *visible* viewport, with a restrained automatic zoom. Manual zoom
 /// still reaches street detail; nearby endpoints do not zoom into a building.
 abstract final class VectorCamera {
-  static CameraUpdate? fit(VectorMapScene scene, Size viewport, double inset) {
-    final camera = position(scene, viewport, inset);
+  static CameraUpdate? fit(
+    VectorMapScene scene,
+    Size viewport,
+    double inset, {
+    bool compactPreview = false,
+  }) {
+    final camera = position(
+      scene,
+      viewport,
+      inset,
+      compactPreview: compactPreview,
+    );
     return camera == null ? null : CameraUpdate.newCameraPosition(camera);
   }
 
   static CameraPosition? position(
     VectorMapScene scene,
     Size viewport,
-    double inset,
-  ) {
+    double inset, {
+    bool compactPreview = false,
+  }) {
     final points = scene.bounds.toSet().toList();
     if (points.isEmpty) return null;
     if (points.length == 1) {
@@ -40,9 +51,12 @@ abstract final class VectorCamera {
     }
     final west = longitudes[start];
     final east = west + 360 - gap;
-    final width = math.max(1, viewport.width - 72);
+    final width = math.max(1, viewport.width - (compactPreview ? 24 : 72));
     final bottom = inset.clamp(0.0, math.max(0.0, viewport.height - 160));
-    final height = math.max(1, viewport.height - bottom - 144);
+    final height = math.max(
+      1,
+      viewport.height - bottom - (compactPreview ? 40 : 144),
+    );
     final dx = (east - west) / 360;
     final dy = (ys.last - ys.first) / (2 * math.pi);
     double zoom(double pixels, double span) =>

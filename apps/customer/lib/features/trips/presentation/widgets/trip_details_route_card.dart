@@ -1,25 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/core/config/map_configuration.dart';
+import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
-/// A decorative local street motif; it is intentionally NOT a geographic
-/// route preview. No fictitious polyline or pins are attributed to the trip.
+/// Only actual booking coordinates and a configured map provider authorize a
+/// geographic preview. A geocoded label or a decorative route is not enough.
+bool canPreviewTripRoute(Trip trip, MapConfiguration? configuration) {
+  if (configuration == null ||
+      (!configuration.hasTiles && !configuration.hasVectorStyle)) {
+    return false;
+  }
+  final start = trip.booking.pickup.point;
+  final end = trip.booking.destination.point;
+  return _usableCoordinate(start) && _usableCoordinate(end) && start != end;
+}
+
+bool _usableCoordinate(GeoPoint point) =>
+    point.latitude.abs() <= 85.0511 &&
+    point.longitude.abs() <= 180 &&
+    (point.latitude != 0 || point.longitude != 0);
+
+/// A route card that gives the entire width to real trip data. The map is
+/// never fabricated: without a provider or genuine coordinates, both
+/// addresses use the available width instead of an empty illustration slot.
 class TripDetailsRouteCard extends StatelessWidget {
-  const TripDetailsRouteCard({super.key, required this.trip});
+  const TripDetailsRouteCard({
+    super.key,
+    required this.trip,
+    this.onOpenFullMap,
+  });
+
   final Trip trip;
+  final VoidCallback? onOpenFullMap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
+    final type = Theme.of(context).textTheme;
     final l = AppLocalizations.of(context);
+    final config = MapsScope.maybeOf(context)?.configuration;
+    final showMap = canPreviewTripRoute(trip, config);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.outlineVariant),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -28,59 +57,61 @@ class TripDetailsRouteCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colors.primaryContainer,
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.alt_route_rounded,
-                      color: colors.primary,
-                      size: 22,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
                     l.tripsRoute,
-                    style: text.titleLarge?.copyWith(
+                    style: type.titleSmall?.copyWith(
                       color: colors.onSurface,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
+                if (showMap && onOpenFullMap != null)
+                  IconButton(
+                    key: const Key('trips-open-full-map'),
+                    tooltip: l.activeTripFollow,
+                    onPressed: onOpenFullMap,
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(
+                      Icons.open_in_full_rounded,
+                      size: 18,
+                      color: colors.primary,
+                    ),
+                  ),
               ],
             ),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.md),
             LayoutBuilder(
               builder: (context, constraints) {
-                final sideBySide =
-                    constraints.maxWidth >= 304 &&
-                    MediaQuery.textScalerOf(context).scale(1) < 1.35;
-                final timeline = _TripStops(trip: trip);
-                final visual = const _StreetMotif();
-                if (!sideBySide) {
+                final compact =
+                    constraints.maxWidth < 300 ||
+                    MediaQuery.textScalerOf(context).scale(1) >= 1.35;
+                if (!showMap) {
+                  return compact
+                      ? _StopsTimeline(trip: trip)
+                      : _StopsAcrossWidth(trip: trip);
+                }
+                final preview = _RealMapPreview(trip: trip);
+                if (compact) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      timeline,
+                      _StopsTimeline(trip: trip),
                       const SizedBox(height: AppSpacing.md),
-                      SizedBox(height: 142, child: visual),
+                      SizedBox(height: 150, child: preview),
                     ],
                   );
                 }
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(child: timeline),
+                    Expanded(child: _StopsTimeline(trip: trip)),
                     const SizedBox(width: AppSpacing.md),
                     SizedBox(
-                      width: constraints.maxWidth * .42,
-                      height: 166,
-                      child: visual,
+                      width: constraints.maxWidth * .41,
+                      height: 156,
+                      child: preview,
                     ),
                   ],
                 );
@@ -93,8 +124,122 @@ class TripDetailsRouteCard extends StatelessWidget {
   }
 }
 
-class _TripStops extends StatelessWidget {
-  const _TripStops({required this.trip});
+/// Uses the same configured map engine as the ride-request and active-trip
+/// screens. If routing is available, RouteMapView draws its returned geometry;
+/// otherwise it displays only real endpoints, not a straight or fake road.
+class _RealMapPreview extends StatelessWidget {
+  const _RealMapPreview({required this.trip});
+  final Trip trip;
+
+  @override
+  Widget build(BuildContext context) => RepaintBoundary(
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(13),
+      child: RouteMapView(
+        key: ValueKey((
+          trip.id,
+          trip.booking.pickup.point,
+          trip.booking.destination.point,
+        )),
+        origin: trip.booking.pickup.point,
+        destination: trip.booking.destination.point,
+        driver: trip.status.isActive ? trip.live?.position?.point : null,
+        height: 156,
+        markerIconSize: 20,
+        compactPreview: true,
+      ),
+    ),
+  );
+}
+
+/// The full-width fallback intentionally distributes stops across the card.
+class _StopsAcrossWidth extends StatelessWidget {
+  const _StopsAcrossWidth({required this.trip});
+  final Trip trip;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
+    final rtl = Directionality.of(context) == TextDirection.rtl;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: _InlineStop(
+            caption: l.tripsFrom,
+            address: trip.booking.pickup.label,
+            destination: false,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(6, 28, 6, 0),
+          child: Icon(
+            rtl ? Icons.arrow_back_rounded : Icons.arrow_forward_rounded,
+            size: 18,
+            color: colors.outline,
+          ),
+        ),
+        Expanded(
+          child: _InlineStop(
+            caption: l.tripsTo,
+            address: trip.booking.destination.label,
+            destination: true,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _InlineStop extends StatelessWidget {
+  const _InlineStop({
+    required this.caption,
+    required this.address,
+    required this.destination,
+  });
+  final String caption;
+  final String address;
+  final bool destination;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final type = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          destination ? Icons.location_on_rounded : Icons.circle_outlined,
+          size: 16,
+          color: colors.primary,
+        ),
+        const SizedBox(height: 7),
+        Text(
+          caption,
+          style: type.bodySmall?.copyWith(
+            color: colors.onSurfaceVariant,
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          address,
+          softWrap: true,
+          style: type.bodyMedium?.copyWith(
+            color: colors.onSurface,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            height: 1.35,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StopsTimeline extends StatelessWidget {
+  const _StopsTimeline({required this.trip});
   final Trip trip;
 
   @override
@@ -104,61 +249,76 @@ class _TripStops extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _Stop(
-          icon: Icons.trip_origin_rounded,
+        _TimelineStop(
           label: l.tripsFrom,
           address: trip.booking.pickup.label,
+          destination: false,
         ),
         Padding(
-          padding: const EdgeInsetsDirectional.only(start: 10),
+          padding: const EdgeInsetsDirectional.only(start: 7),
           child: Align(
             alignment: AlignmentDirectional.centerStart,
             child: Container(
-              width: 2,
-              height: 28,
-              color: colors.primary.withValues(alpha: .42),
+              width: 1.5,
+              height: 24,
+              color: colors.outlineVariant,
             ),
           ),
         ),
-        _Stop(
-          icon: Icons.location_on_rounded,
+        _TimelineStop(
           label: l.tripsTo,
           address: trip.booking.destination.label,
+          destination: true,
         ),
       ],
     );
   }
 }
 
-class _Stop extends StatelessWidget {
-  const _Stop({required this.icon, required this.label, required this.address});
-  final IconData icon;
+class _TimelineStop extends StatelessWidget {
+  const _TimelineStop({
+    required this.label,
+    required this.address,
+    required this.destination,
+  });
   final String label;
   final String address;
+  final bool destination;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
+    final type = Theme.of(context).textTheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 23, color: colors.primary),
-        const SizedBox(width: AppSpacing.sm),
+        Padding(
+          padding: const EdgeInsetsDirectional.only(top: 5),
+          child: Icon(
+            destination ? Icons.location_on_rounded : Icons.circle_outlined,
+            size: 16,
+            color: colors.primary,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+                style: type.bodySmall?.copyWith(
+                  color: colors.onSurfaceVariant,
+                  fontSize: 12,
+                ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 3),
               Text(
                 address,
-                style: text.bodyMedium?.copyWith(
+                style: type.bodyMedium?.copyWith(
                   color: colors.onSurface,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                   height: 1.35,
                 ),
               ),
@@ -168,120 +328,4 @@ class _Stop extends StatelessWidget {
       ],
     );
   }
-}
-
-class _StreetMotif extends StatelessWidget {
-  const _StreetMotif();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return ExcludeSemantics(
-      child: RepaintBoundary(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: ColoredBox(
-            color: colors.surfaceContainerLow,
-            child: CustomPaint(
-              painter: _StreetPainter(
-                road: colors.surfaceContainerLowest,
-                edge: colors.outlineVariant.withValues(alpha: .55),
-                park: colors.secondaryContainer.withValues(alpha: .55),
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/maps/vehicle-sedan.svg',
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Small static street geometry avoids downloading map tiles or shipping
-/// decorative bitmap assets. It never depicts the route's actual coordinates.
-class _StreetPainter extends CustomPainter {
-  const _StreetPainter({
-    required this.road,
-    required this.edge,
-    required this.park,
-  });
-  final Color road;
-  final Color edge;
-  final Color park;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width, h = size.height;
-    final parks = Paint()..color = park;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(.07 * w, .04 * h, .30 * w, .23 * h),
-        const Radius.circular(12),
-      ),
-      parks,
-    );
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(.69 * w, .65 * h, .29 * w, .34 * h),
-        const Radius.circular(14),
-      ),
-      parks,
-    );
-
-    Path path(List<Offset> points) {
-      final line = Path()..moveTo(points.first.dx * w, points.first.dy * h);
-      for (final point in points.skip(1)) {
-        line.lineTo(point.dx * w, point.dy * h);
-      }
-      return line;
-    }
-
-    final streets = [
-      [const Offset(-.1, .16), const Offset(.44, .31), const Offset(1.1, .17)],
-      [const Offset(-.1, .59), const Offset(.40, .52), const Offset(1.1, .84)],
-      [const Offset(.12, -.1), const Offset(.27, .45), const Offset(.18, 1.1)],
-      [const Offset(.66, -.1), const Offset(.59, .52), const Offset(.78, 1.1)],
-      [const Offset(.9, -.1), const Offset(.87, .46), const Offset(.98, 1.1)],
-      [
-        const Offset(-.1, .95),
-        const Offset(.49, .82),
-        const Offset(.89, .31),
-        const Offset(1.1, .22),
-      ],
-    ];
-
-    for (final points in streets) {
-      canvas.drawPath(
-        path(points),
-        Paint()
-          ..color = edge
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 13
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round,
-      );
-      canvas.drawPath(
-        path(points),
-        Paint()
-          ..color = road
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 11
-          ..strokeCap = StrokeCap.round
-          ..strokeJoin = StrokeJoin.round,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _StreetPainter oldDelegate) =>
-      oldDelegate.road != road ||
-      oldDelegate.edge != edge ||
-      oldDelegate.park != park;
 }

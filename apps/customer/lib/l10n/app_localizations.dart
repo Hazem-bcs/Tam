@@ -3107,7 +3107,7 @@ abstract class AppLocalizations {
   /// No description provided for @completionQuickFeedbackHint.
   ///
   /// In ar, this message translates to:
-  /// **'ملاحظات سريعة تُضاف إلى تعليقك'**
+  /// **'ما الذي أعجبك في الرحلة؟'**
   String get completionQuickFeedbackHint;
 
   /// No description provided for @completionTagDriverRespect.
@@ -3145,6 +3145,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تجربة غير مريحة'**
   String get completionTagServiceIssue;
+
+  /// No description provided for @completionQuickFeedbackCritical.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما الذي يمكن تحسينه؟'**
+  String get completionQuickFeedbackCritical;
+
+  /// No description provided for @completionFeedbackOptional.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختياري'**
+  String get completionFeedbackOptional;
 
   /// No description provided for @supportTitle.
   ///
