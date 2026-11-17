@@ -7,6 +7,7 @@ import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
 import '../bloc/addresses_cubit.dart';
 import '../bloc/addresses_state.dart';
+import '../bloc/preferred_address_selection.dart';
 import '../widgets/address_display.dart';
 import '../widgets/address_tile.dart';
 import '../widgets/addresses_empty_state.dart';
@@ -123,15 +124,25 @@ class AddressesPage extends StatelessWidget {
                             if (state.items.isEmpty &&
                                 state.status != AddressesStatus.error)
                               const AddressesEmptyState(),
-                            for (final item in state.items) ...[
-                              AddressTile(
-                                address: item,
-                                enabled: !state.busy,
-                                onEdit: () => onEdit(item.id),
-                                onDelete: () => _delete(context, item.id),
+                            BlocBuilder<PreferredAddressSelection, String?>(
+                              builder: (context, preferredId) => Column(
+                                children: [
+                                  for (final item in state.items) ...[
+                                    AddressTile(
+                                      address: item,
+                                      enabled: !state.busy,
+                                      selected: preferredId == item.id,
+                                      onSelect: () => context
+                                          .read<PreferredAddressSelection>()
+                                          .choose(item.id),
+                                      onEdit: () => onEdit(item.id),
+                                      onDelete: () => _delete(context, item.id),
+                                    ),
+                                    const SizedBox(height: AppSpacing.md),
+                                  ],
+                                ],
                               ),
-                              const SizedBox(height: AppSpacing.md),
-                            ],
+                            ),
                           ],
                         ),
                       ),
