@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'coupon_ticket_shape.dart';
 
 /// Restrained ticket artwork, using TAM's semantic colors instead of a new palette.
 class CouponTicket extends StatelessWidget {
@@ -18,32 +19,44 @@ class CouponTicket extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final stacked = constraints.maxWidth < 315 || scale > 1.55;
-        return Material(
-          color: colors.surfaceContainerLowest,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadii.sheet),
-            side: BorderSide(color: colors.outlineVariant),
+        final clipper = CouponTicketClipper(
+          isRtl: Directionality.of(context) == TextDirection.rtl,
+          horizontalSplit: !stacked,
+        );
+        return CustomPaint(
+          foregroundPainter: CouponTicketOutlinePainter(
+            color: colors.outlineVariant,
+            clipper: clipper,
           ),
-          clipBehavior: Clip.antiAlias,
-          child: stacked
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _DiscountPanel(offer: offer, horizontal: true),
-                    const _TicketDivider(horizontal: true),
-                    _CouponInformation(offer: offer),
-                  ],
-                )
-              : IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(width: 112, child: _DiscountPanel(offer: offer)),
-                      const _TicketDivider(horizontal: false),
-                      Expanded(child: _CouponInformation(offer: offer)),
-                    ],
-                  ),
-                ),
+          child: ClipPath(
+            key: const Key('coupon-ticket-cutout'),
+            clipper: clipper,
+            child: Material(
+              color: colors.surfaceContainerLowest,
+              child: stacked
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _DiscountPanel(offer: offer, horizontal: true),
+                        const _TicketDivider(horizontal: true),
+                        _CouponInformation(offer: offer),
+                      ],
+                    )
+                  : IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(
+                            width: 112,
+                            child: _DiscountPanel(offer: offer),
+                          ),
+                          const _TicketDivider(horizontal: false),
+                          Expanded(child: _CouponInformation(offer: offer)),
+                        ],
+                      ),
+                    ),
+            ),
+          ),
         );
       },
     );
@@ -186,10 +199,12 @@ class _CouponInformation extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.confirmation_number_outlined,
-                size: 20,
-                color: colors.primary,
+              Image.asset(
+                'assets/notifications/discount_offer.webp',
+                width: 27,
+                height: 27,
+                fit: BoxFit.contain,
+                excludeFromSemantics: true,
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
@@ -208,6 +223,7 @@ class _CouponInformation extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             _MetaLine(
               icon: Icons.directions_car_outlined,
+              asset: 'assets/images/ride_car.webp',
               label: t.settingsCouponsTrips(
                 '${offer.remainingTrips}/${offer.totalTrips}',
               ),
@@ -246,9 +262,10 @@ class _CouponInformation extends StatelessWidget {
 }
 
 class _MetaLine extends StatelessWidget {
-  const _MetaLine({required this.icon, required this.label});
+  const _MetaLine({required this.icon, required this.label, this.asset});
   final IconData icon;
   final String label;
+  final String? asset;
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +273,16 @@ class _MetaLine extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 17, color: theme.colorScheme.onSurfaceVariant),
+        if (asset == null)
+          Icon(icon, size: 17, color: theme.colorScheme.onSurfaceVariant)
+        else
+          Image.asset(
+            asset!,
+            width: 24,
+            height: 19,
+            fit: BoxFit.contain,
+            excludeFromSemantics: true,
+          ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Text(

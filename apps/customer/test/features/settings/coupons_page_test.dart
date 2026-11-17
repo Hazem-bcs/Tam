@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/features/settings/presentation/pages/coupons_page.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/coupon_ticket_shape.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
@@ -24,6 +25,27 @@ Widget _app(Widget child, {String language = 'ar', double scale = 1}) {
 }
 
 void main() {
+  test(
+    'ticket clipper cuts actual edge and seam notches in both directions',
+    () {
+      const size = Size(342, 150);
+      for (final isRtl in [true, false]) {
+        final clipper = CouponTicketClipper(
+          isRtl: isRtl,
+          horizontalSplit: true,
+        );
+        final path = clipper.getClip(size);
+        final outsideEdge = isRtl ? 1.0 : size.width - 1;
+        final insideEdge = isRtl ? 15.0 : size.width - 15;
+        expect(path.contains(Offset(outsideEdge, size.height * .22)), isFalse);
+        expect(path.contains(Offset(insideEdge, size.height * .22)), isTrue);
+        final seam = isRtl ? size.width - 113 : 113.0;
+        expect(path.contains(Offset(seam, 2)), isFalse);
+        expect(path.contains(Offset(seam, 14)), isTrue);
+      }
+    },
+  );
+
   test('coupon book validates the actual demo booking code', () {
     final book = MockCouponBook();
     addTearDown(book.dispose);
@@ -119,6 +141,18 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
+      expect(find.byKey(const Key('coupons-ios-chevron')), findsOneWidget);
+      final couponArt = find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName ==
+                'assets/notifications/discount_offer.webp',
+      );
+      expect(couponArt, findsWidgets);
+      if (size.width >= 390) {
+        expect(find.byKey(const Key('coupon-ticket-cutout')), findsWidgets);
+      }
       await tester.tap(find.byKey(const Key('coupons-add')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('coupon-code-input')), findsOneWidget);

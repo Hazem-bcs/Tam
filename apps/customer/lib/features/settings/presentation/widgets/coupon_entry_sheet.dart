@@ -65,10 +65,12 @@ class _CouponEntrySheetState extends State<CouponEntrySheet> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: Icon(
-                        Icons.confirmation_number_rounded,
-                        color: colors.primary,
-                        size: 32,
+                      child: Image.asset(
+                        'assets/notifications/discount_offer.webp',
+                        width: 55,
+                        height: 55,
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true,
                       ),
                     ),
                   ),
@@ -102,7 +104,16 @@ class _CouponEntrySheetState extends State<CouponEntrySheet> {
                     labelText: t.settingsCouponsCode,
                     hintText: t.settingsCouponsHint,
                     errorText: _error,
-                    prefixIcon: const Icon(Icons.local_offer_outlined),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.sm),
+                      child: Image.asset(
+                        'assets/notifications/discount_offer.webp',
+                        width: 28,
+                        height: 28,
+                        fit: BoxFit.contain,
+                        excludeFromSemantics: true,
+                      ),
+                    ),
                   ),
                   onChanged: (_) {
                     if (_error != null) setState(() => _error = null);
