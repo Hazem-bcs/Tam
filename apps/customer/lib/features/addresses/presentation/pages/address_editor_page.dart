@@ -1,8 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/maps/maps_entry.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
@@ -10,21 +10,25 @@ import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
 import '../bloc/address_editor_cubit.dart';
 import '../bloc/address_editor_state.dart';
+import '../bloc/address_map_selection_cubit.dart';
 import '../widgets/address_display.dart';
-import '../widgets/address_editor_form.dart';
-import '../widgets/address_location_picker.dart';
+import '../widgets/address_editor_sheet.dart';
 import '../widgets/address_map_preview.dart';
 
+/// One screen: a real interactive map and a draggable details sheet.
 class AddressEditorPage extends StatefulWidget {
   const AddressEditorPage({super.key, required this.onBack});
   final VoidCallback onBack;
+
   @override
   State<AddressEditorPage> createState() => _AddressEditorPageState();
 }
 
 class _AddressEditorPageState extends State<AddressEditorPage> {
   final _name = TextEditingController();
-  bool _initialized = false, _allowPop = false;
+  AddressMapSelectionCubit? _mapSelection;
+  bool _initialized = false;
+  bool _allowPop = false;
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
 
   @override
   void dispose() {
+    if (_mapSelection != null) unawaited(_mapSelection!.close());
     _name.dispose();
     super.dispose();
   }
@@ -78,44 +83,6 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
     });
   }
 
-  Future<void> _chooseOnMap() async {
-    // Keep the existing place-search sheet functional in map-free tests and
-    // configurations; the production app injects MapsScope at its root.
-    if (MapsScope.maybeOf(context) == null) {
-      await _chooseLocation();
-      return;
-    }
-    final cubit = context.read<AddressEditorCubit>();
-    final selected = await showMapLocationPicker(
-      context,
-      initial: cubit.state.location,
-    );
-    if (!mounted || selected == null) return;
-    cubit.locationSelected(selected);
-  }
-
-  Future<void> _chooseLocation() async {
-    final cubit = context.read<AddressEditorCubit>();
-    unawaited(cubit.search(''));
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (sheetContext) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
-        ),
-        child: FractionallySizedBox(
-          heightFactor: 0.85,
-          child: BlocProvider.value(
-            value: cubit,
-            child: const AddressLocationPicker(),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
@@ -134,18 +101,14 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
         }
       },
       builder: (context, state) => PopScope(
-        canPop:
-            _allowPop ||
+        canPop: _allowPop ||
             state.phase == AddressEditorPhase.saved ||
             (!state.dirty && !state.busy),
         onPopInvokedWithResult: (didPop, _) {
           if (!didPop) _back();
         },
         child: Scaffold(
-          // The ready editor uses its map as the hero and hosts back there.
-          // Loading and failure states still expose an accessible back action.
-          appBar:
-              state.phase == AddressEditorPhase.loading ||
+          appBar: state.phase == AddressEditorPhase.loading ||
                   state.phase == AddressEditorPhase.error ||
                   state.phase == AddressEditorPhase.notFound
               ? AppBar(
@@ -157,57 +120,18 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
                   leading: IconButton(
                     icon: const BackButtonIcon(),
                     onPressed: state.busy ? null : _back,
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
                   ),
                 )
               : null,
           body: SafeArea(
-            child: Align(
-              alignment: Alignment.topCenter,
+            child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 640),
+                constraints: const BoxConstraints(maxWidth: 840),
                 child: _body(context, state),
               ),
             ),
           ),
-          bottomNavigationBar:
-              (state.phase == AddressEditorPhase.ready ||
-                  state.phase == AddressEditorPhase.saving)
-              ? SafeArea(
-                  top: false,
-                  child: Center(
-                    heightFactor: 1,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 640),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          AppSpacing.xl,
-                          AppSpacing.sm,
-                          AppSpacing.xl,
-                          AppSpacing.lg,
-                        ),
-                        child: TamButton.primary(
-                          key: const Key('address-save'),
-                          label: state.retryPending
-                              ? t.addressesRetry
-                              : t.addressesSave,
-                          loadingLabel: t.addressesSaving,
-                          isLoading: state.phase == AddressEditorPhase.saving,
-                          onPressed:
-                              state.busy ||
-                                  (!state.dirty &&
-                                      context.read<AddressEditorCubit>().id !=
-                                          null)
-                              ? null
-                              : context.read<AddressEditorCubit>().save,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : null,
         ),
       ),
     );
@@ -215,7 +139,7 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
 
   Widget _body(BuildContext context, AddressEditorState state) {
     final t = AppLocalizations.of(context);
-    final cubit = context.read<AddressEditorCubit>();
+    final editor = context.read<AddressEditorCubit>();
     if (state.phase == AddressEditorPhase.loading) {
       return Center(
         child: TamLoadingIndicator(semanticLabel: t.addressesLoading),
@@ -234,80 +158,67 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
                   : t.addressesRetry,
               onPressed: state.phase == AddressEditorPhase.notFound
                   ? widget.onBack
-                  : cubit.load,
+                  : editor.load,
             ),
           ],
         ),
       );
     }
-    return LayoutBuilder(
-      builder: (context, bounds) {
-        final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
-        final mapHeight = keyboardOpen
-            ? (bounds.maxHeight * .18).clamp(24.0, 72.0)
-            : (bounds.maxHeight * .52).clamp(100.0, 400.0);
-        return Stack(
-          children: [
-            PositionedDirectional(
-              top: 0,
-              start: 0,
-              end: 0,
-              height: mapHeight,
-              child: AddressMapPreview(
-                location: state.location,
-                onChooseLocation: state.locked ? null : () => _chooseOnMap(),
-                onBack: state.busy ? null : _back,
-              ),
+
+    final dependencies = MapsScope.maybeOf(context);
+    if (dependencies == null) {
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: AddressMapPreview(
+              location: state.location,
+              onSelected: null,
+              onBack: state.busy ? null : _back,
+              onLocate: null,
             ),
-            Positioned.fill(
-              top: mapHeight - AppSpacing.xl,
-              child: Material(
-                key: const Key('address-editor-sheet'),
-                elevation: AppElevation.raised,
-                color: Theme.of(context).colorScheme.surface,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(AppRadii.sheet),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    const SizedBox(height: AppSpacing.sm),
-                    Center(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.outlineVariant,
-                          borderRadius: BorderRadius.circular(AppRadii.sm),
-                        ),
-                        child: const SizedBox(width: 36, height: 4),
-                      ),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        key: const Key('address-editor-scroll'),
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          AppSpacing.xl,
-                          AppSpacing.lg,
-                          AppSpacing.xl,
-                          AppSpacing.xl,
-                        ),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        child: AddressEditorForm(
-                          state: state,
-                          nameController: _name,
-                          onChooseLocation: _chooseLocation,
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+          AddressEditorSheet(state: state, nameController: _name),
+        ],
+      );
+    }
+
+    _mapSelection ??= AddressMapSelectionCubit(
+      repository: dependencies.repository,
+      deviceLocation: dependencies.deviceLocation,
+      reverseAvailable: dependencies.configuration.hasServices,
+      language: Localizations.localeOf(context).languageCode,
+      initialLocation: state.location,
+    );
+
+    return BlocProvider<AddressMapSelectionCubit>.value(
+      value: _mapSelection!,
+      child: BlocListener<AddressMapSelectionCubit, AddressMapSelectionState>(
+        listenWhen: (previous, current) =>
+            previous.location != current.location && current.location != null,
+        listener: (context, mapState) {
+          if (editor.state.location != mapState.location) {
+            editor.locationSelected(mapState.location!);
+          }
+        },
+        child: BlocBuilder<AddressMapSelectionCubit, AddressMapSelectionState>(
+          builder: (context, mapState) => Stack(
+            children: [
+              Positioned.fill(
+                child: AddressMapPreview(
+                  location: mapState.location,
+                  onSelected: state.locked ? null : _mapSelection!.select,
+                  onBack: state.busy ? null : _back,
+                  onLocate: state.locked || mapState.locating
+                      ? null
+                      : _mapSelection!.locate,
+                  locating: mapState.locating,
                 ),
               ),
-            ),
-          ],
-        );
-      },
+              AddressEditorSheet(state: state, nameController: _name),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
