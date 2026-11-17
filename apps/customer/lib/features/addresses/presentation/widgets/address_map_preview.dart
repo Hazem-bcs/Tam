@@ -3,34 +3,32 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/tam_map_canvas.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
-import 'address_visual_icon.dart';
-
-/// Reuses the application's real map surface. Selection and reverse-geocoding
-/// remain owned by the existing Maps picker instead of this visual preview.
+/// An interactive TAM map, not an image or a link to a second picker page.
+/// The parent owns the coordinate selection and permission flow.
 class AddressMapPreview extends StatelessWidget {
   const AddressMapPreview({
     super.key,
     required this.location,
-    required this.onChooseLocation,
+    required this.onSelected,
     required this.onBack,
+    required this.onLocate,
+    this.locating = false,
   });
 
   final TripLocation? location;
-  final VoidCallback? onChooseLocation;
+  final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onBack;
+  final VoidCallback? onLocate;
+  final bool locating;
 
   @override
   Widget build(BuildContext context) {
     final dependencies = MapsScope.maybeOf(context);
     final colors = Theme.of(context).colorScheme;
     final l = AppLocalizations.of(context);
-    final showInitialPin =
-        dependencies != null &&
-        (dependencies.configuration.hasTiles ||
-            dependencies.configuration.hasVectorStyle) &&
-        location == null;
 
     return Stack(
       fit: StackFit.expand,
@@ -48,28 +46,9 @@ class AddressMapPreview extends StatelessWidget {
             configuration: dependencies.configuration,
             tileProviderFactory: dependencies.tileProviderFactory,
             onAttribution: dependencies.attribution.open,
-            origin: location?.point,
-            compactPreview: true,
+            selection: location?.point,
+            onSelected: onSelected,
           ),
-        if (showInitialPin)
-          const Center(
-            child: IgnorePointer(child: AddressPinArtwork(size: 64)),
-          ),
-        Positioned.fill(
-          // Leave the map provider's attribution link unobstructed.
-          bottom: AppSpacing.xxl,
-          child: Semantics(
-            button: true,
-            label: l.mapsPickLocation,
-            child: Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                key: const Key('address-map-tap'),
-                onTap: onChooseLocation,
-              ),
-            ),
-          ),
-        ),
         PositionedDirectional(
           top: AppSpacing.md,
           start: AppSpacing.lg,
@@ -81,13 +60,19 @@ class AddressMapPreview extends StatelessWidget {
           ),
         ),
         PositionedDirectional(
-          bottom: 54,
+          top: AppSpacing.md + AppDimensions.minTapTarget + AppSpacing.lg,
           start: AppSpacing.lg,
           child: _MapAction(
             key: const Key('address-map-locate'),
-            tooltip: l.mapsPickLocation,
-            onPressed: onChooseLocation,
-            icon: const Icon(Icons.my_location_rounded),
+            tooltip: l.mapsUseMyLocation,
+            onPressed: onLocate,
+            icon: locating
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.my_location_rounded),
           ),
         ),
       ],
