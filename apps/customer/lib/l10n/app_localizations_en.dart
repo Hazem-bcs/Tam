@@ -1297,6 +1297,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsProfileSave => 'Save profile';
 
   @override
+  String get settingsCouponsTitle => 'Discount codes';
+
+  @override
+  String get settingsCouponsSubtitle => 'Your offers, all in one place';
+
+  @override
+  String get settingsCouponsAdd => 'Add code';
+
+  @override
+  String get settingsCouponsDemoNotice =>
+      'Demo preview only. These are not real promotions and are not connected to a server.';
+
+  @override
+  String get settingsCouponsAvailable => 'Available in demo';
+
+  @override
+  String get settingsCouponsExpired => 'Expired';
+
+  @override
+  String settingsCouponsTrips(String remaining) {
+    return 'Trips remaining: $remaining';
+  }
+
+  @override
+  String settingsCouponsExpiry(String date) {
+    return 'Expired on $date';
+  }
+
+  @override
+  String get settingsCouponsCopy => 'Copy code';
+
+  @override
+  String get settingsCouponsCopied => 'Coupon code copied';
+
+  @override
+  String get settingsCouponsSheetTitle => 'Add a discount code';
+
+  @override
+  String get settingsCouponsSheetDescription =>
+      'Enter a code to add it to the preview list.';
+
+  @override
+  String get settingsCouponsCode => 'Coupon code';
+
+  @override
+  String get settingsCouponsHint => 'Example: TAM10';
+
+  @override
+  String get settingsCouponsConfirm => 'Add';
+
+  @override
+  String get settingsCouponsInvalid =>
+      'This code is not supported in the demo.';
+
+  @override
+  String get settingsCouponsDuplicate => 'You have already added this code.';
+
+  @override
+  String get settingsCouponsAdded => 'Demo coupon added';
+
+  @override
+  String get settingsCouponsDemoHelp =>
+      'TAM10 works only on the demo booking price screen. Adding it here does not apply it to trips automatically.';
+
+  @override
   String get addressesTitle => 'My addresses';
 
   @override

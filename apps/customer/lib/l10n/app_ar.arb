@@ -524,6 +524,39 @@
   "settingsPhotoError": "تعذر اختيار الصورة. اختر صورة واضحة بحجم أقل من 5 ميغابايت وحاول مجددًا.",
   "settingsProfileLocalNotice": "تُحفظ بياناتك تجريبيًا خلال هذه الجلسة فقط، ولا تُرفع الصورة إلى الخادم.",
   "settingsProfileSave": "حفظ البيانات",
+  "settingsCouponsTitle": "أكواد الحسم",
+  "settingsCouponsSubtitle": "خصوماتك في مكان واحد",
+  "settingsCouponsAdd": "إضافة كود",
+  "settingsCouponsDemoNotice": "معاينة تجريبية فقط. هذه الأكواد ليست عروضاً حقيقية ولا ترتبط بالخادم.",
+  "settingsCouponsAvailable": "متاح للتجربة",
+  "settingsCouponsExpired": "منتهي",
+  "settingsCouponsTrips": "الرحلات المتبقية: {remaining}",
+  "@settingsCouponsTrips": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCouponsExpiry": "انتهى في {date}",
+  "@settingsCouponsExpiry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCouponsCopy": "نسخ الرمز",
+  "settingsCouponsCopied": "تم نسخ رمز الكوبون",
+  "settingsCouponsSheetTitle": "إضافة كود حسم",
+  "settingsCouponsSheetDescription": "أدخل رمز الكوبون لإضافته إلى قائمة المعاينة.",
+  "settingsCouponsCode": "رمز الكوبون",
+  "settingsCouponsHint": "مثال: TAM10",
+  "settingsCouponsConfirm": "إضافة",
+  "settingsCouponsInvalid": "هذا الكود غير متاح في المعاينة التجريبية.",
+  "settingsCouponsDuplicate": "لقد أضفت هذا الكود مسبقاً.",
+  "settingsCouponsAdded": "تمت إضافة الكوبون التجريبي",
+  "settingsCouponsDemoHelp": "يمكن استخدام TAM10 في شاشة الحجز التجريبية فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.",
   "addressesTitle": "عناويني",
   "addressesDescription": "احفظ أماكنك للوصول إليها أسرع",
   "addressesAdd": "إضافة موقع",

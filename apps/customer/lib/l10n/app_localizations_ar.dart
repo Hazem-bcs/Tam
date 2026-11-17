@@ -1277,6 +1277,71 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsProfileSave => 'حفظ البيانات';
 
   @override
+  String get settingsCouponsTitle => 'أكواد الحسم';
+
+  @override
+  String get settingsCouponsSubtitle => 'خصوماتك في مكان واحد';
+
+  @override
+  String get settingsCouponsAdd => 'إضافة كود';
+
+  @override
+  String get settingsCouponsDemoNotice =>
+      'معاينة تجريبية فقط. هذه الأكواد ليست عروضاً حقيقية ولا ترتبط بالخادم.';
+
+  @override
+  String get settingsCouponsAvailable => 'متاح للتجربة';
+
+  @override
+  String get settingsCouponsExpired => 'منتهي';
+
+  @override
+  String settingsCouponsTrips(String remaining) {
+    return 'الرحلات المتبقية: $remaining';
+  }
+
+  @override
+  String settingsCouponsExpiry(String date) {
+    return 'انتهى في $date';
+  }
+
+  @override
+  String get settingsCouponsCopy => 'نسخ الرمز';
+
+  @override
+  String get settingsCouponsCopied => 'تم نسخ رمز الكوبون';
+
+  @override
+  String get settingsCouponsSheetTitle => 'إضافة كود حسم';
+
+  @override
+  String get settingsCouponsSheetDescription =>
+      'أدخل رمز الكوبون لإضافته إلى قائمة المعاينة.';
+
+  @override
+  String get settingsCouponsCode => 'رمز الكوبون';
+
+  @override
+  String get settingsCouponsHint => 'مثال: TAM10';
+
+  @override
+  String get settingsCouponsConfirm => 'إضافة';
+
+  @override
+  String get settingsCouponsInvalid =>
+      'هذا الكود غير متاح في المعاينة التجريبية.';
+
+  @override
+  String get settingsCouponsDuplicate => 'لقد أضفت هذا الكود مسبقاً.';
+
+  @override
+  String get settingsCouponsAdded => 'تمت إضافة الكوبون التجريبي';
+
+  @override
+  String get settingsCouponsDemoHelp =>
+      'يمكن استخدام TAM10 في شاشة الحجز التجريبية فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.';
+
+  @override
   String get addressesTitle => 'عناويني';
 
   @override

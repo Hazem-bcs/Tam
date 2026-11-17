@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
+import 'package:tam_customer/features/settings/presentation/pages/coupons_page.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_actions.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_language_sheet.dart';
@@ -38,6 +40,20 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool _allowPop = false;
+  final MockCouponBook _couponBook = MockCouponBook();
+
+  @override
+  void dispose() {
+    _couponBook.dispose();
+    super.dispose();
+  }
+
+  void _openCoupons() {
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute<void>(builder: (_) => CouponsPage(book: _couponBook)),
+    );
+  }
+
   bool _loggingOut = false;
 
   Future<void> _editProfile() async {
@@ -276,6 +292,7 @@ class _SettingsPageState extends State<SettingsPage> {
         SettingsAccountLinks(
           destinationsOnly: true,
           enabled: !state.isBusy,
+          onCoupons: () => _navigate(_openCoupons),
           onAddresses: () => _navigate(widget.navigation.openAddresses),
           onSupport: () => _navigate(() => widget.navigation.openSupport()),
           onTerms: () => _navigate(widget.navigation.openTerms),
