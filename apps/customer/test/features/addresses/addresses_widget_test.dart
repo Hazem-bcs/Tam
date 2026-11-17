@@ -131,6 +131,15 @@ void main() {
     expect(find.byType(AddressMapPreview), findsOneWidget);
     expect(find.byKey(const Key('address-editor-sheet')), findsOneWidget);
     expect(find.byKey(const Key('address-icons-scroll')), findsOneWidget);
+    // On Arabic screens, the map actions follow the reading start (right).
+    expect(
+      tester.getTopLeft(find.byKey(const Key('address-map-back'))).dx,
+      greaterThan(195),
+    );
+    expect(
+      tester.getTopLeft(find.byKey(const Key('address-map-locate'))).dx,
+      greaterThan(195),
+    );
 
     final home = find.byKey(const Key('address-icon-home'));
     final work = find.byKey(const Key('address-icon-work'));
