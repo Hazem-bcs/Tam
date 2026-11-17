@@ -304,3 +304,9 @@ TAM-MASCOT-HANDS-V4: INTEGRATED محليًا، root، على codex/mascot-hands-
 مكتملة، واختبارات التخطيط المتأثرة18ناجحة. الفحص الكامل784نجاحًا و30إخفاقًا
 سبق رصدها؛ تحليل42infoسابقة؛ لا push أو دمج main.
 [التقرير والمعاينات والقيود](deliveries/TAM-MASCOT-HANDS-V4/REPORT.ar.md).
+
+
+TAM-SHARED-IDLE-V5: READY → IMPLEMENTING، root، أساس التطبيقc6f4b75
+ومصدر Rive62f452e، worktree source idle-v5 مستقل. نطاق Idle16ث فقط؛
+الحركات الحالية التي رضي عنها المستخدم محفوظة.
+[البطاقة](tasks/TAM-SHARED-IDLE-V5.md).
