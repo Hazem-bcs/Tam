@@ -557,7 +557,7 @@ abstract class AppLocalizations {
   /// No description provided for @homePromotionsTitle.
   ///
   /// In ar, this message translates to:
-  /// **'عروض وإعلانات'**
+  /// **'إعلانات تم'**
   String get homePromotionsTitle;
 
   /// No description provided for @homePromotionEyebrow.
@@ -3193,6 +3193,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عمليات الدعم في هذا الإصدار محاكاة للتجربة، ولا تُرسل إلى فريق دعم فعلي.'**
   String get supportSimulationNotice;
+
+  /// No description provided for @supportEditorHeadline.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف نقدر نساعدك؟'**
+  String get supportEditorHeadline;
+
+  /// No description provided for @supportEditorSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صف لنا استفسارك أو المشكلة التي تواجهها.'**
+  String get supportEditorSubtitle;
+
+  /// No description provided for @supportEditorPlaceholder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب التفاصيل التي تساعدنا على فهم طلبك...'**
+  String get supportEditorPlaceholder;
+
+  /// No description provided for @supportEditorCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الاستفسار'**
+  String get supportEditorCategory;
+
+  /// No description provided for @supportEditorTripContext.
+  ///
+  /// In ar, this message translates to:
+  /// **'بخصوص رحلة سابقة'**
+  String get supportEditorTripContext;
 
   /// No description provided for @accountManagementChangePhone.
   ///
