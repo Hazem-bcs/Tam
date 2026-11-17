@@ -129,21 +129,21 @@ class _ActivityServices extends StatelessWidget {
             Expanded(
               child: _Service(
                 label: l.tripsServiceRides,
-                icon: Icons.directions_car_outlined,
+                asset: 'assets/images/ride_car.webp',
                 selected: true,
               ),
             ),
             Expanded(
               child: _Service(
                 label: l.tripsServiceShopping,
-                icon: Icons.shopping_bag_outlined,
+                asset: 'assets/images/shopping.webp',
                 subtitle: l.tripsSoon,
               ),
             ),
             Expanded(
               child: _Service(
                 label: l.tripsServiceFood,
-                icon: Icons.restaurant_outlined,
+                asset: 'assets/images/food.webp',
                 subtitle: l.tripsSoon,
               ),
             ),
@@ -158,13 +158,13 @@ class _ActivityServices extends StatelessWidget {
 class _Service extends StatelessWidget {
   const _Service({
     required this.label,
-    required this.icon,
+    required this.asset,
     this.subtitle,
     this.selected = false,
   });
 
   final String label;
-  final IconData icon;
+  final String asset;
   final String? subtitle;
   final bool selected;
 
@@ -195,7 +195,15 @@ class _Service extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 17, color: foreground),
+                ExcludeSemantics(
+                  child: Image.asset(
+                    asset,
+                    width: 27,
+                    height: 27,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.medium,
+                  ),
+                ),
                 const SizedBox(width: 5),
                 Flexible(
                   child: Text(

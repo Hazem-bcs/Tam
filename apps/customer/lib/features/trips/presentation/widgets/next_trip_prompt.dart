@@ -31,7 +31,15 @@ class NextTripPrompt extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(Icons.alt_route_rounded, color: colors.primary, size: 24),
+              const ExcludeSemantics(
+                child: Image(
+                  image: AssetImage('assets/notifications/ride_repeat.webp'),
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.medium,
+                ),
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
