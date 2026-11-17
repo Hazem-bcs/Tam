@@ -45,23 +45,23 @@ class RidePaymentPicker extends StatelessWidget {
                 key: Key('ride-payment-${method.name}'),
                 onTap: enabled ? () => onChanged(method) : null,
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.md),
+                  padding: const EdgeInsets.all(AppSpacing.sm),
                   child: Row(
                     children: [
                       if (method == TripPaymentMethod.wallet)
                         Image.asset(
                           'assets/notifications/wallet.webp',
-                          width: 40,
-                          height: 40,
+                          width: 32,
+                          height: 32,
                           excludeFromSemantics: true,
                         )
                       else
                         SizedBox(
-                          width: 40,
-                          height: 40,
+                          width: 32,
+                          height: 32,
                           child: Icon(
                             Icons.payments_rounded,
-                            size: 30,
+                            size: 26,
                             color: colors.primary,
                           ),
                         ),
@@ -95,8 +95,6 @@ class RidePaymentPicker extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l.rideRequestPayment, style: theme.textTheme.labelMedium),
-            const SizedBox(height: AppSpacing.sm),
             if (vertical) ...[
               wallet,
               const SizedBox(height: AppSpacing.sm),

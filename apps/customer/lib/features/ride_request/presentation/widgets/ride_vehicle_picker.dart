@@ -72,33 +72,34 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.showHeading
-                      ? l.rideRequestChooseClass
-                      : l.rideRequestVehicleScrollHint,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+        if (widget.showHeading)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.showHeading
+                        ? l.rideRequestChooseClass
+                        : l.rideRequestVehicleScrollHint,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-              ),
-              IconButton(
-                onPressed: () => _move(-180),
-                tooltip: l.rideRequestPreviousVehicles,
-                icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left),
-              ),
-              IconButton(
-                onPressed: () => _move(180),
-                tooltip: l.rideRequestNextVehicles,
-                icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right),
-              ),
-            ],
+                IconButton(
+                  onPressed: () => _move(-180),
+                  tooltip: l.rideRequestPreviousVehicles,
+                  icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left),
+                ),
+                IconButton(
+                  onPressed: () => _move(180),
+                  tooltip: l.rideRequestNextVehicles,
+                  icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right),
+                ),
+              ],
+            ),
           ),
-        ),
         SingleChildScrollView(
           key: const Key('ride-vehicle-scroll'),
           controller: _scroll,
@@ -127,17 +128,19 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
             ),
           ),
         ),
-        const SizedBox(height: AppSpacing.sm),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-          child: Text(
-            RideVehiclePicker.descriptionFor(l, widget.selected),
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+        if (widget.selected == RideVehicleClass.motorbike)
+          const SizedBox(height: AppSpacing.xs),
+        if (widget.selected == RideVehicleClass.motorbike)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+            child: Text(
+              RideVehiclePicker.descriptionFor(l, widget.selected),
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -181,23 +184,29 @@ class _VehicleCard extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Align(
-                    alignment: AlignmentDirectional.topEnd,
-                    child: Icon(
-                      selected ? Icons.check_circle : Icons.circle_outlined,
-                      size: 16,
-                      color: selected ? c.primary : c.outlineVariant,
-                    ),
-                  ),
-                  RideArtwork(
-                    type: switch (vehicle) {
-                      RideVehicleClass.standard => RideArtworkType.sedan,
-                      RideVehicleClass.comfort => RideArtworkType.comfort,
-                      RideVehicleClass.van => RideArtworkType.van,
-                      RideVehicleClass.motorbike => RideArtworkType.motorbike,
-                    },
-                    width: 88,
-                    height: 54,
+                  Stack(
+                    children: [
+                      RideArtwork(
+                        type: switch (vehicle) {
+                          RideVehicleClass.standard => RideArtworkType.sedan,
+                          RideVehicleClass.comfort => RideArtworkType.comfort,
+                          RideVehicleClass.van => RideArtworkType.van,
+                          RideVehicleClass.motorbike =>
+                            RideArtworkType.motorbike,
+                        },
+                        width: 88,
+                        height: 44,
+                      ),
+                      PositionedDirectional(
+                        top: 0,
+                        end: 0,
+                        child: Icon(
+                          selected ? Icons.check_circle : Icons.circle_outlined,
+                          size: 16,
+                          color: selected ? c.primary : c.outlineVariant,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(

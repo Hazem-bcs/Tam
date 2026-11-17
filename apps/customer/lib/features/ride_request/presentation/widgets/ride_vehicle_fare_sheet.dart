@@ -29,6 +29,29 @@ class RideVehicleFareSheet extends StatelessWidget {
     final quoting = state.status == RideFlowStatus.quoting;
     return RideJourneySheet(
       edgeToEdgeContent: true,
+      compact: true,
+      header: Row(
+        children: [
+          Expanded(
+            child: Text(
+              l.rideRequestChooseClass,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Flexible(
+            flex: 2,
+            child: RideSchedulePicker(
+              compact: true,
+              scheduledAt: state.scheduledAt,
+              enabled: enabled,
+              policy: bloc.schedulePolicy,
+              now: () => bloc.currentTime,
+              onChanged: (time) => bloc.add(RideScheduleChanged(time)),
+            ),
+          ),
+        ],
+      ),
       title: l.rideRequestChooseClass,
       subtitle: l.rideRequestLivePriceHint,
       actionLabel: state.failureStep == RideFailureStep.confirmation
@@ -59,21 +82,13 @@ class RideVehicleFareSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 RideQuoteReview(quote: state.quote, loading: quoting),
-                const SizedBox(height: AppSpacing.md),
-                RideSchedulePicker(
-                  scheduledAt: state.scheduledAt,
-                  enabled: enabled,
-                  policy: bloc.schedulePolicy,
-                  now: () => bloc.currentTime,
-                  onChanged: (time) => bloc.add(RideScheduleChanged(time)),
-                ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.sm),
                 RidePaymentPicker(
                   selected: state.paymentMethod,
                   enabled: enabled,
                   onChanged: (value) => bloc.add(RidePaymentChanged(value)),
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.sm),
                 RideCouponField(
                   code: state.couponCode,
                   quote: state.quote,
@@ -85,7 +100,7 @@ class RideVehicleFareSheet extends StatelessWidget {
                 ),
                 if (state.errorCode != null &&
                     state.errorCode != 'COUPON_INVALID') ...[
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
                   Semantics(
                     liveRegion: true,
                     child: Text(

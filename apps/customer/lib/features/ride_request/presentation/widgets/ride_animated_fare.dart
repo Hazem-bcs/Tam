@@ -88,7 +88,7 @@ class _RideAnimatedFareState extends State<RideAnimatedFare>
               : '${rideFareFormat(value, locale, amountMinor: (_current ?? value.amountMinor).round())} ${l.rideRequestCurrencySyp}',
           key: const Key('ride-animated-fare'),
           textAlign: TextAlign.center,
-          style: theme.textTheme.headlineLarge?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.w800,
             fontFeatures: const [FontFeature.tabularFigures()],

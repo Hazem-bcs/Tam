@@ -17,12 +17,15 @@ class RideJourneySheet extends StatelessWidget {
     this.notice,
     this.showAction = true,
     this.edgeToEdgeContent = false,
+    this.compact = false,
+    this.header,
   });
   final String title, subtitle, actionLabel;
   final String? notice, loadingLabel;
   final Widget content;
+  final Widget? header;
   final VoidCallback? onContinue;
-  final bool loading, showAction, edgeToEdgeContent;
+  final bool loading, showAction, edgeToEdgeContent, compact;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context), colors = theme.colorScheme;
@@ -33,7 +36,9 @@ class RideJourneySheet extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        padding: EdgeInsets.symmetric(
+          vertical: compact ? AppSpacing.xs : AppSpacing.md,
+        ),
         child: LayoutBuilder(
           builder: (context, bounds) {
             final pinAction = bounds.maxHeight >= 320;
@@ -64,27 +69,29 @@ class RideJourneySheet extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.xl,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Semantics(
-                              header: true,
-                              child: Text(
-                                title,
-                                style: theme.textTheme.titleLarge,
-                              ),
+                        child:
+                            header ??
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Semantics(
+                                  header: true,
+                                  child: Text(
+                                    title,
+                                    style: theme.textTheme.titleLarge,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacing.xs),
+                                Text(
+                                  subtitle,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: AppSpacing.xs),
-                            Text(
-                              subtitle,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colors.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: compact ? AppSpacing.sm : AppSpacing.lg),
                       if (edgeToEdgeContent)
                         content
                       else
@@ -95,7 +102,9 @@ class RideJourneySheet extends StatelessWidget {
                           child: content,
                         ),
                       if (notice != null) ...[
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(
+                          height: compact ? AppSpacing.xs : AppSpacing.md,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.xl,
@@ -108,7 +117,7 @@ class RideJourneySheet extends StatelessWidget {
                           ),
                         ),
                       ],
-                      const SizedBox(height: AppSpacing.lg),
+                      SizedBox(height: compact ? AppSpacing.xs : AppSpacing.lg),
                       if (showAction && !pinAction) action,
                     ],
                   ),

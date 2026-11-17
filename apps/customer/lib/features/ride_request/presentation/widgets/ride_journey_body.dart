@@ -71,11 +71,14 @@ class RideJourneyBody extends StatelessWidget {
                   .85,
                 ),
                 RideJourneyStep.places => .70,
-                RideJourneyStep.vehicle => .82,
+                RideJourneyStep.vehicle => .67,
               };
         return RideJourneyShell(
           stageKey: selecting ? 'map-selection' : (step, pickingPickup),
           preferredExtent: extent,
+          maximumExtent: !selecting && step == RideJourneyStep.vehicle
+              ? .67
+              : null,
           expandOnChange: location.point,
           collapsedLabel: selecting
               ? t.rideRequestMapPointTitle

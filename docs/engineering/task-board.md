@@ -342,3 +342,5 @@ TAM-RIDE-VEHICLE-FARE-20261117/UI: READY → IMPLEMENTING، root؛ أساسf3aa1
 TAM-RIDE-VEHICLE-FARE-20261117/UI: READY_FOR_REVIEW؛18اختبارًا،42infoقديمة،تنسيق483/0،بناء وتشغيل ناجحان. سجل root تفضيل المستخدم للقوائم الأفقية فيworking-agreement؛ لا دمج أوpush.
 
 TAM-RIDE-VEHICLE-FARE-20261117: INTEGRATING إلىmain بطلب المستخدم؛ أساسmain eb6842a، بطاقات مختصرة9c3c0e4؛ دون اختبارات إضافية بتوجيهه.
+
+TAM-RIDE-VEHICLE-FARE-20261117/COMPACT: DONE؛ root، ضغط اللوحة ضمن67% وجميع الخيارات ظاهرة بالحالة العادية، Hot Reload ناجح دون اختبارات بطلب المستخدم.

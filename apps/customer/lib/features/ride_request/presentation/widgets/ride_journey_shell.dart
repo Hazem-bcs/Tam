@@ -19,6 +19,7 @@ class RideJourneyShell extends StatefulWidget {
     required this.collapsedLabel,
     required this.preferredExtent,
     this.expandOnChange,
+    this.maximumExtent,
   }) : assert(panel != null || panelBuilder != null);
   final Widget header;
   final Widget? panel;
@@ -27,6 +28,7 @@ class RideJourneyShell extends StatefulWidget {
   final Object stageKey;
   final String collapsedLabel;
   final double preferredExtent;
+  final double? maximumExtent;
   final Object? expandOnChange;
 
   @override
@@ -45,7 +47,10 @@ class _RideJourneyShellState extends State<RideJourneyShell>
   bool _compact = false;
   Offset? _mapDragOrigin;
 
-  double get _preferred => widget.preferredExtent.clamp(_minimum, _maximum);
+  double get _maximumAllowed =>
+      math.max(_minimum, math.min(_maximum, widget.maximumExtent ?? _maximum));
+  double get _preferred =>
+      widget.preferredExtent.clamp(_minimum, _maximumAllowed);
   void _changed() {
     final compact =
         _extent.value * _height < math.min(180, math.max(108, _height * .30));
@@ -205,7 +210,7 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                 _extent.stop();
                                 _extent.value =
                                     (_extent.value - details.delta.dy / _height)
-                                        .clamp(_minimum, _maximum);
+                                        .clamp(_minimum, _maximumAllowed);
                               },
                               onVerticalDragEnd: (details) {
                                 final velocity = details.primaryVelocity ?? 0;

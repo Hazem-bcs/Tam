@@ -65,13 +65,13 @@ class _RideCouponFieldState extends State<RideCouponField> {
             color: theme.colorScheme.primary.withValues(alpha: .2),
           ),
         ),
-        padding: const EdgeInsetsDirectional.all(AppSpacing.md),
+        padding: const EdgeInsetsDirectional.all(AppSpacing.sm),
         child: Row(
           children: [
             Image.asset(
               'assets/notifications/discount_offer.webp',
-              width: 44,
-              height: 44,
+              width: 32,
+              height: 32,
               excludeFromSemantics: true,
             ),
             const SizedBox(width: AppSpacing.sm),
