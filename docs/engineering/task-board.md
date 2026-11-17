@@ -340,3 +340,5 @@ TAM-RIDE-VEHICLE-FARE-20261117: READY_FOR_REVIEW، root؛ تنفيذ وبناء 
 TAM-RIDE-VEHICLE-FARE-20261117/UI: READY → IMPLEMENTING، root؛ أساسf3aa151. قائمة أفقية بلا حافة داخلية، أيقونات المحفظة والكوبون الحالية، تحسين محدد للدفع والكوبون.
 
 TAM-RIDE-VEHICLE-FARE-20261117/UI: READY_FOR_REVIEW؛18اختبارًا،42infoقديمة،تنسيق483/0،بناء وتشغيل ناجحان. سجل root تفضيل المستخدم للقوائم الأفقية فيworking-agreement؛ لا دمج أوpush.
+
+TAM-RIDE-VEHICLE-FARE-20261117: INTEGRATING إلىmain بطلب المستخدم؛ أساسmain eb6842a، بطاقات مختصرة9c3c0e4؛ دون اختبارات إضافية بتوجيهه.
