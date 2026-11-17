@@ -1560,6 +1560,30 @@ class AppLocalizationsAr extends AppLocalizations {
       'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.';
 
   @override
+  String get completionRateHint => 'ساعدنا على تحسين الخدمة';
+
+  @override
+  String get completionQuickFeedbackHint => 'ملاحظات سريعة تُضاف إلى تعليقك';
+
+  @override
+  String get completionTagDriverRespect => 'سائق محترم';
+
+  @override
+  String get completionTagCleanCar => 'مركبة نظيفة';
+
+  @override
+  String get completionTagComfort => 'رحلة مريحة';
+
+  @override
+  String get completionTagArrivalDelay => 'تأخر الوصول';
+
+  @override
+  String get completionTagCarIssue => 'مشكلة بالمركبة';
+
+  @override
+  String get completionTagServiceIssue => 'تجربة غير مريحة';
+
+  @override
   String get supportTitle => 'المساعدة والدعم';
 
   @override

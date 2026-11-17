@@ -2990,6 +2990,54 @@ abstract class AppLocalizations {
   /// **'التقييمات في هذا الإصدار محفوظة محليًا للتجربة حتى ربط الخدمة.'**
   String get completionSimulationNotice;
 
+  /// No description provided for @completionRateHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعدنا على تحسين الخدمة'**
+  String get completionRateHint;
+
+  /// No description provided for @completionQuickFeedbackHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات سريعة تُضاف إلى تعليقك'**
+  String get completionQuickFeedbackHint;
+
+  /// No description provided for @completionTagDriverRespect.
+  ///
+  /// In ar, this message translates to:
+  /// **'سائق محترم'**
+  String get completionTagDriverRespect;
+
+  /// No description provided for @completionTagCleanCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'مركبة نظيفة'**
+  String get completionTagCleanCar;
+
+  /// No description provided for @completionTagComfort.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة مريحة'**
+  String get completionTagComfort;
+
+  /// No description provided for @completionTagArrivalDelay.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخر الوصول'**
+  String get completionTagArrivalDelay;
+
+  /// No description provided for @completionTagCarIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة بالمركبة'**
+  String get completionTagCarIssue;
+
+  /// No description provided for @completionTagServiceIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة غير مريحة'**
+  String get completionTagServiceIssue;
+
   /// No description provided for @supportTitle.
   ///
   /// In ar, this message translates to:
