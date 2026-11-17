@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/completion/domain/completion_repository.dart';
+import 'package:tam_customer/features/completion/presentation/widgets/inline_trip_rating.dart';
 import 'package:tam_customer/features/trips/data/api/unavailable_trips_repository.dart';
 import 'package:tam_customer/features/trips/data/mock/mock_trips_repository.dart';
 import 'package:tam_customer/features/trips/domain/trips_repository.dart';
@@ -18,6 +20,7 @@ Widget buildTripsFeature(
   required FeatureDataMode dataMode,
   required MockTripStore mockTrips,
   String? tripId,
+  CompletionRepository? completionRepository,
 }) {
   final TripsRepository repository = switch (dataMode) {
     FeatureDataMode.mock => MockTripsRepository(mockTrips),
@@ -33,7 +36,15 @@ Widget buildTripsFeature(
         : BlocProvider(
             key: ValueKey(tripId),
             create: (_) => TripDetailsCubit(repository, tripId),
-            child: TripDetailsPage(navigation: navigation),
+            child: TripDetailsPage(
+              navigation: navigation,
+              ratingBuilder: completionRepository == null
+                  ? null
+                  : (id) => InlineTripRating(
+                      repository: completionRepository,
+                      tripId: id,
+                    ),
+            ),
           ),
   );
 }

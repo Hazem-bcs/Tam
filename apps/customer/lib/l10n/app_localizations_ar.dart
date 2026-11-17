@@ -995,6 +995,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripsSupportAction => 'التواصل مع الدعم';
 
   @override
+  String tripsRecordedDistance(String value) {
+    return '$value كم';
+  }
+
+  @override
+  String tripsRecordedDuration(String value) {
+    return '$value دقيقة';
+  }
+
+  @override
+  String get tripsDiscountAmount => 'خصم الكوبون';
+
+  @override
+  String get tripsPaid => 'مدفوع';
+
+  @override
+  String get tripsUnpaid => 'غير مدفوع';
+
+  @override
+  String get tripsDemoReceipt =>
+      'معاينة ببيانات رحلة تجريبية، وليست عملية دفع حقيقية.';
+
+  @override
   String get notificationsMarkAll => 'تعيين الكل كمقروء';
 
   @override

@@ -106,5 +106,25 @@
   "tripsDistance": "المسافة",
   "tripsDuration": "مدة الرحلة",
   "tripsRateAction": "تقييم الرحلة",
-  "tripsSupportAction": "التواصل مع الدعم"
+  "tripsSupportAction": "التواصل مع الدعم",
+  "tripsRecordedDistance": "{value} كم",
+  "tripsRecordedDuration": "{value} دقيقة",
+  "tripsDiscountAmount": "خصم الكوبون",
+  "tripsPaid": "مدفوع",
+  "tripsUnpaid": "غير مدفوع",
+  "tripsDemoReceipt": "معاينة ببيانات رحلة تجريبية، وليست عملية دفع حقيقية.",
+  "@tripsRecordedDistance": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@tripsRecordedDuration": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  }
 }

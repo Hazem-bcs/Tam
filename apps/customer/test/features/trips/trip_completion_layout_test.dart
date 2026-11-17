@@ -1,12 +1,13 @@
+import '../../support/preview_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/completion/data/mock/mock_completion_repository.dart';
 import 'package:tam_customer/features/trips/trips_entry.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/data/mock/seed_trips.dart';
-import '../../support/preview_fonts.dart';
 import 'support/trips_test_support.dart';
 
 const _capture = bool.fromEnvironment('CAPTURE_TRIP_COMPLETION_UI');
@@ -34,6 +35,8 @@ void main() {
           final store = MockTripStore(seed: seedMockTrips());
           addTearDown(store.dispose);
           final nav = _Navigation();
+          final completion = MockCompletionRepository(store);
+          addTearDown(completion.dispose);
           await tester.pumpWidget(
             RepaintBoundary(
               key: const Key('trip-completion-preview'),
@@ -55,6 +58,7 @@ void main() {
                     navigation: nav,
                     dataMode: FeatureDataMode.mock,
                     mockTrips: store,
+                    completionRepository: completion,
                     tripId: 'mock-history-001',
                   ),
                 ),
@@ -63,7 +67,7 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
-          for (final key in ['trips-completion', 'trips-support']) {
+          for (final key in ['completion-stars-5', 'trips-support']) {
             final target = find.byKey(Key(key));
             await tester.ensureVisible(target);
             await tester.pumpAndSettle();
@@ -71,7 +75,9 @@ void main() {
             await tester.tap(target);
             await tester.pumpAndSettle();
           }
-          expect(nav.completion, 'mock-history-001');
+          expect(nav.completion, isNull);
+          expect(find.text('اطلب مجددًا'), findsNothing);
+          expect(find.text('Book again'), findsNothing);
           expect(nav.support, 'mock-history-001');
           if (_capture) {
             await expectLater(

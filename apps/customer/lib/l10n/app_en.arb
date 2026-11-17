@@ -428,6 +428,26 @@
   "tripsDuration": "Trip duration",
   "tripsRateAction": "Rate trip",
   "tripsSupportAction": "Contact support",
+  "tripsRecordedDistance": "{value} km",
+  "tripsRecordedDuration": "{value} min",
+  "tripsDiscountAmount": "Coupon discount",
+  "tripsPaid": "Paid",
+  "tripsUnpaid": "Unpaid",
+  "tripsDemoReceipt": "Preview with simulated trip data, not a real payment.",
+  "@tripsRecordedDistance": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@tripsRecordedDuration": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "notificationsMarkAll": "Mark all as read",
   "notificationsUnreadCount": "Unread: {count}",
   "@notificationsUnreadCount": {

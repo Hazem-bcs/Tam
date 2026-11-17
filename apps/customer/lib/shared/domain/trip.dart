@@ -110,6 +110,31 @@ final class TripBookingInput extends Equatable {
   ];
 }
 
+/// Optional recorded receipt facts; absent values must never be inferred.
+final class TripReceipt extends Equatable {
+  const TripReceipt({
+    required this.distanceMeters,
+    required this.durationSeconds,
+    required this.baseFare,
+    required this.discount,
+    required this.settled,
+    this.isSimulated = false,
+  });
+  final int distanceMeters, durationSeconds;
+  final Money baseFare, discount;
+  final bool settled;
+  final bool isSimulated;
+  @override
+  List<Object?> get props => [
+    distanceMeters,
+    durationSeconds,
+    baseFare,
+    discount,
+    settled,
+    isSimulated,
+  ];
+}
+
 final class Trip extends Equatable {
   const Trip({
     required this.id,
@@ -117,12 +142,14 @@ final class Trip extends Equatable {
     required this.createdAt,
     required this.status,
     this.live,
+    this.receipt,
   });
   final String id;
   final TripBookingInput booking;
   final DateTime createdAt;
   final TripStatus status;
   final TripLiveDetails? live;
+  final TripReceipt? receipt;
   bool get canCancel => status.canCancel;
   Trip withStatus(TripStatus value) => Trip(
     id: id,
@@ -130,6 +157,7 @@ final class Trip extends Equatable {
     createdAt: createdAt,
     status: value,
     live: live,
+    receipt: receipt,
   );
   Trip withLive(TripStatus status, TripLiveDetails details) => Trip(
     id: id,
@@ -137,7 +165,8 @@ final class Trip extends Equatable {
     createdAt: createdAt,
     status: status,
     live: details,
+    receipt: receipt,
   );
   @override
-  List<Object?> get props => [id, booking, createdAt, status, live];
+  List<Object?> get props => [id, booking, createdAt, status, live, receipt];
 }

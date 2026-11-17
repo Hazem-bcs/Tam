@@ -23,7 +23,7 @@ class CompletionRatingStars extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = (constraints.maxWidth / 5).clamp(40.0, 56.0);
+        const width = AppDimensions.minTapTarget;
         return Center(
           child: DecoratedBox(
             decoration: BoxDecoration(
@@ -32,18 +32,18 @@ class CompletionRatingStars extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsetsDirectional.symmetric(
-                horizontal: AppSpacing.xs,
+                horizontal: 0,
                 vertical: AppSpacing.xs,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              child: Wrap(
+                alignment: WrapAlignment.center,
                 children: [
                   for (var star = 1; star <= 5; star++)
                     _RatingStar(
                       key: ValueKey('completion-star-item-$star'),
                       number: star,
                       value: value,
-                      width: width - 2,
+                      width: width,
                       duration: reduceMotion
                           ? Duration.zero
                           : Duration(milliseconds: 200 + star * 35),
@@ -97,9 +97,9 @@ class _RatingStar extends StatelessWidget {
       selected: focused,
       child: SizedBox(
         width: width,
-        height: 56,
+        height: AppDimensions.minTapTarget,
         child: AnimatedScale(
-          scale: focused ? 1.07 : 1,
+          scale: focused ? 1.02 : 1,
           duration: duration,
           curve: Curves.easeOutBack,
           child: AnimatedContainer(
@@ -130,11 +130,7 @@ class _RatingStar extends StatelessWidget {
                 ),
                 child: ExcludeSemantics(
                   key: ValueKey(active),
-                  child: SvgPicture.asset(
-                    image,
-                    width: width - 13,
-                    height: width - 13,
-                  ),
+                  child: SvgPicture.asset(image, width: 28, height: 28),
                 ),
               ),
             ),

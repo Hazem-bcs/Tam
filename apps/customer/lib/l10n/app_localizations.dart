@@ -1958,6 +1958,42 @@ abstract class AppLocalizations {
   /// **'التواصل مع الدعم'**
   String get tripsSupportAction;
 
+  /// No description provided for @tripsRecordedDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} كم'**
+  String tripsRecordedDistance(String value);
+
+  /// No description provided for @tripsRecordedDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} دقيقة'**
+  String tripsRecordedDuration(String value);
+
+  /// No description provided for @tripsDiscountAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الكوبون'**
+  String get tripsDiscountAmount;
+
+  /// No description provided for @tripsPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدفوع'**
+  String get tripsPaid;
+
+  /// No description provided for @tripsUnpaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مدفوع'**
+  String get tripsUnpaid;
+
+  /// No description provided for @tripsDemoReceipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة ببيانات رحلة تجريبية، وليست عملية دفع حقيقية.'**
+  String get tripsDemoReceipt;
+
   /// No description provided for @notificationsMarkAll.
   ///
   /// In ar, this message translates to:

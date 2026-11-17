@@ -82,7 +82,7 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
             child: Text(
               rating == null ? l.completionRateTrip : l.completionSaved,
               textAlign: TextAlign.center,
-              style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+              style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
           if (rating == null) ...[
@@ -93,7 +93,7 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
             ),
           ],
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: AppSpacing.md),
           CompletionRatingStars(
             value: selected,
             onChanged: editable
@@ -132,65 +132,27 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: AppSpacing.lg),
-                        SizedBox(
-                          height:
-                              44 +
-                              (MediaQuery.textScalerOf(context).scale(1) - 1)
-                                      .clamp(0, 3) *
-                                  68,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.sell_outlined,
-                                size: 18,
-                                color: colors.primary,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Expanded(
-                                child: AnimatedSwitcher(
-                                  duration:
-                                      MediaQuery.of(context).disableAnimations
-                                      ? Duration.zero
-                                      : AppMotion.short,
-                                  child: Text(
-                                    selected >= 4
-                                        ? l.completionQuickFeedbackHint
-                                        : l.completionQuickFeedbackCritical,
-                                    key: ValueKey(selected >= 4),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: text.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: colors.onSurface,
-                                    ),
-                                  ),
+                        const SizedBox(height: AppSpacing.md),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                selected >= 4
+                                    ? l.completionQuickFeedbackHint
+                                    : l.completionQuickFeedbackCritical,
+                                style: text.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(width: AppSpacing.xs),
-                              DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: colors.surfaceContainerLow,
-                                  borderRadius: BorderRadius.circular(
-                                    AppRadii.sheet,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsetsDirectional.symmetric(
-                                        horizontal: AppSpacing.sm,
-                                        vertical: AppSpacing.xs,
-                                      ),
-                                  child: Text(
-                                    l.completionFeedbackOptional,
-                                    style: text.labelSmall?.copyWith(
-                                      color: colors.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ),
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            Text(
+                              l.completionFeedbackOptional,
+                              style: text.bodySmall?.copyWith(
+                                color: colors.onSurfaceVariant,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         CompletionFeedbackOptions(
@@ -209,13 +171,13 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
                       ],
                     ),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.md),
             TamTextField(
               key: const ValueKey('completion-comment'),
               controller: _comment,
               labelText: l.completionComment,
               enabled: editable,
-              maxLines: 3,
+              maxLines: 2,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               onChanged: (_) => setState(() {}),
@@ -226,7 +188,7 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               l.completionCommentLimit(widget.policy.maxCommentCodePoints),
               style: text.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.md),
             TamButton.primary(
               key: const ValueKey('completion-submit'),
               label: l.completionSubmit,

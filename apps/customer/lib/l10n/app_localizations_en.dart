@@ -1013,6 +1013,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripsSupportAction => 'Contact support';
 
   @override
+  String tripsRecordedDistance(String value) {
+    return '$value km';
+  }
+
+  @override
+  String tripsRecordedDuration(String value) {
+    return '$value min';
+  }
+
+  @override
+  String get tripsDiscountAmount => 'Coupon discount';
+
+  @override
+  String get tripsPaid => 'Paid';
+
+  @override
+  String get tripsUnpaid => 'Unpaid';
+
+  @override
+  String get tripsDemoReceipt =>
+      'Preview with simulated trip data, not a real payment.';
+
+  @override
   String get notificationsMarkAll => 'Mark all as read';
 
   @override

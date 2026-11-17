@@ -82,6 +82,7 @@ GoRouter createAppRouter(
           navigation: navigation(context),
           dataMode: dataModes.forFeature(CustomerFeature.trips),
           mockTrips: trips,
+          completionRepository: completion,
         ),
         account: (context) => buildSettingsFeature(
           context,
@@ -107,25 +108,8 @@ GoRouter createAppRouter(
       ),
       GoRoute(
         path: AppRoutes.completion,
-        builder: (context, state) {
-          final id = state.pathParameters['tripId']!;
-          return buildCompletionFeature(
-            repository: completion,
-            tripId: id,
-            policy: AppConfig.completionPolicy,
-            now: clock ?? DateTime.now,
-            onBack: () {
-              final router = GoRouter.of(context);
-              if (router.canPop()) {
-                router.pop();
-              } else {
-                router.go(AppRoutes.tripLocation(id));
-              }
-            },
-            onSupport: () => navigation(context).openSupport(tripId: id),
-            onHome: navigation(context).openHome,
-          );
-        },
+        redirect: (context, state) =>
+            AppRoutes.tripLocation(state.pathParameters['tripId']!),
       ),
       GoRoute(
         path: AppRoutes.chat,
@@ -186,6 +170,7 @@ GoRouter createAppRouter(
           navigation: navigation(context),
           dataMode: dataModes.forFeature(CustomerFeature.trips),
           mockTrips: trips,
+          completionRepository: completion,
           tripId: state.pathParameters['tripId'],
         ),
       ),

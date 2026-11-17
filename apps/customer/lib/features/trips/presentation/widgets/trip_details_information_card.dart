@@ -14,6 +14,7 @@ class TripDetailsInformationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final receipt = trip.receipt;
     final wallet = trip.booking.paymentMethod == TripPaymentMethod.wallet;
     return TamCard(
       child: Column(
@@ -36,18 +37,31 @@ class TripDetailsInformationCard extends StatelessWidget {
               ),
             ],
           ),
+          if (receipt != null) ...[
+            const SizedBox(height: AppSpacing.md),
+            _ReceiptRow(
+              label: t.tripsFare,
+              value: tripMoneyLabel(context, receipt.baseFare),
+            ),
+            const Divider(height: AppSpacing.xl),
+            _ReceiptRow(
+              label: t.tripsDiscountAmount,
+              value: '−${tripMoneyLabel(context, receipt.discount)}',
+            ),
+          ],
           if (trip.booking.couponCode != null) ...[
             const SizedBox(height: AppSpacing.md),
             _ReceiptRow(
               label: t.rideRequestCoupon,
               value: trip.booking.couponCode!,
             ),
-            Text(
-              t.tripsDiscountUnrecorded,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            if (receipt == null)
+              Text(
+                t.tripsDiscountUnrecorded,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
           ],
           const SizedBox(height: AppSpacing.lg),
           Container(
@@ -94,14 +108,11 @@ class TripDetailsInformationCard extends StatelessWidget {
           const Divider(height: AppSpacing.xl),
           _ReceiptRow(
             label: t.tripsPaymentStatus,
-            value: t.tripsPaymentUnconfirmed,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            t.tripsFareNote,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
+            value: receipt == null
+                ? t.tripsPaymentUnconfirmed
+                : receipt.settled
+                ? t.tripsPaid
+                : t.tripsUnpaid,
           ),
         ],
       ),

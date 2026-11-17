@@ -107,7 +107,10 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _maps = locator.isRegistered<MapsDependencies>()
         ? locator<MapsDependencies>()
         : MapsDependencies.configured(AppConfig.maps);
-    _mockTrips = MockTripStore(seed: seedMockTrips(), now: widget.clock);
+    _mockTrips = MockTripStore(
+      seed: seedMockTrips(includeReceiptPreview: true),
+      now: widget.clock,
+    );
     final modes = widget.dataModes ?? AppConfig.featureDataModes;
     final ActiveTripRepository activeTrips =
         modes.forFeature(CustomerFeature.activeTrip) == FeatureDataMode.mock

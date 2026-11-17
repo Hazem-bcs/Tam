@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_details_driver_card.dart';
 import 'package:tam_customer/features/trips/presentation/widgets/trip_details_information_card.dart';
@@ -16,9 +17,20 @@ class TripDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final receipt = trip.receipt;
+    final numbers = NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (receipt?.isSimulated == true) ...[
+          Text(
+            l.tripsDemoReceipt,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
         TripDetailsStatusCard(trip: trip),
         const SizedBox(height: AppSpacing.md),
         TripDetailsRouteCard(trip: trip, onOpenFullMap: onOpenFullMap),
@@ -30,7 +42,11 @@ class TripDetailsBody extends StatelessWidget {
                 child: _Metric(
                   icon: Icons.route_outlined,
                   label: l.tripsDistance,
-                  value: l.tripsUnavailableValue,
+                  value: receipt == null
+                      ? l.tripsUnavailableValue
+                      : l.tripsRecordedDistance(
+                          numbers.format(receipt.distanceMeters / 1000),
+                        ),
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -38,7 +54,13 @@ class TripDetailsBody extends StatelessWidget {
                 child: _Metric(
                   icon: Icons.schedule_rounded,
                   label: l.tripsDuration,
-                  value: l.tripsUnavailableValue,
+                  value: receipt == null
+                      ? l.tripsUnavailableValue
+                      : l.tripsRecordedDuration(
+                          numbers.format(
+                            (receipt.durationSeconds / 60).round(),
+                          ),
+                        ),
                 ),
               ),
             ],

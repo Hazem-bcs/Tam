@@ -14,8 +14,13 @@ import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
 class TripDetailsPage extends StatelessWidget {
-  const TripDetailsPage({super.key, required this.navigation});
+  const TripDetailsPage({
+    super.key,
+    required this.navigation,
+    this.ratingBuilder,
+  });
   final CustomerNavigation navigation;
+  final Widget Function(String)? ratingBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +112,11 @@ class TripDetailsPage extends StatelessWidget {
                               : null,
                         ),
                         const SizedBox(height: AppSpacing.lg),
+                        if (state.trip!.status == TripStatus.completed &&
+                            ratingBuilder != null) ...[
+                          ratingBuilder!(state.trip!.id),
+                          const SizedBox(height: AppSpacing.lg),
+                        ],
                         TripDetailsActions(
                           trip: state.trip!,
                           state: state,

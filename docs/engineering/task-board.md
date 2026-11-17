@@ -362,3 +362,5 @@ AUI-04-PROFILE-POPUP-20261117: READY → IMPLEMENTING؛root،أساس5fe5ec6؛ن
 AUI-04-PROFILE-POPUP-20261117: READY_FOR_REVIEW؛root،54اختبارSettingsناجحًا وتحليلمستهدفنظيف؛بناءAndroidومنتقيالصورالأصليوفحصالنافذةنجحت؛الحفظمحليضمنالجلسةفقط،mainدونتغيير.
 
 AUI-05-ORDER-DETAILS-20261117: READY → IMPLEMENTING → READY_FOR_REVIEW؛root،أساسb0abce1،تفاصيلطلبموحدةعلىahmad-ui؛30اختبارًاناجحًاوتحليلمستهدفنظيفوفحصAndroid،mainدونتغيير.
+
+AUI-06-INLINE-RATING-20261117: READY → IMPLEMENTING → READY_FOR_REVIEW؛root،أساس53ee590؛تقييمداخلتفاصيلالطلب،حذفإعادةالطلب،بياناتإيصالتجريبيةونجومصغيرةوشرائحخيارات؛81اختبارًاناجحًا،تحليلمستهدفنظيف،فحصAndroid؛mainدونتغيير.

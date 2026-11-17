@@ -12,7 +12,7 @@ void main() {
     (name: 'small accessibility', width: 240.0, scale: 2.0),
   ]) {
     testWidgets(
-      '${scenario.name}: changing rating sentiment preserves option geometry',
+      '${scenario.name}: feedback chips wrap without overflow and remain accessible',
       (tester) async {
         tester.view.physicalSize = const Size(800, 1200);
         tester.view.devicePixelRatio = 1;
@@ -60,7 +60,11 @@ void main() {
           for (var i = 0; i < 3; i++)
             tester.getRect(find.byKey(ValueKey('completion-tag-$i'))),
         ];
-        expect(criticalRects, positiveRects);
+        for (final rect in [...positiveRects, ...criticalRects]) {
+          expect(rect.width, lessThanOrEqualTo(scenario.width));
+          expect(rect.height, greaterThanOrEqualTo(48));
+        }
+        expect(find.byType(FilterChip), findsNWidgets(3));
         expect(tester.takeException(), isNull);
       },
     );
