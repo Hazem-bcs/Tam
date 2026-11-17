@@ -1590,6 +1590,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ratings in this version are stored locally for testing until the service is connected.';
 
   @override
+  String get completionRateHint => 'Help us improve the service';
+
+  @override
+  String get completionQuickFeedbackHint => 'Quick notes added to your comment';
+
+  @override
+  String get completionTagDriverRespect => 'Respectful driver';
+
+  @override
+  String get completionTagCleanCar => 'Clean vehicle';
+
+  @override
+  String get completionTagComfort => 'Comfortable ride';
+
+  @override
+  String get completionTagArrivalDelay => 'Delayed arrival';
+
+  @override
+  String get completionTagCarIssue => 'Vehicle issue';
+
+  @override
+  String get completionTagServiceIssue => 'Uncomfortable trip';
+
+  @override
   String get supportTitle => 'Help and support';
 
   @override
