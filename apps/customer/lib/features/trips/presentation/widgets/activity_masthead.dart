@@ -117,9 +117,10 @@ class _ActivityServices extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     return DecoratedBox(
+      key: const Key('trips-services'),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(19),
+        borderRadius: BorderRadius.circular(17),
         border: Border.all(color: colors.outlineVariant),
       ),
       child: Padding(
@@ -178,10 +179,10 @@ class _Service extends StatelessWidget {
       selected: selected,
       enabled: selected,
       child: Container(
-        constraints: const BoxConstraints(minHeight: 58),
+        constraints: const BoxConstraints(minHeight: 48),
         padding: const EdgeInsetsDirectional.symmetric(
           horizontal: AppSpacing.xs,
-          vertical: AppSpacing.sm,
+          vertical: AppSpacing.xs,
         ),
         decoration: BoxDecoration(
           color: selected ? colors.primary : colors.surfaceContainerLowest,
@@ -198,13 +199,13 @@ class _Service extends StatelessWidget {
                 ExcludeSemantics(
                   child: Image.asset(
                     asset,
-                    width: 32,
-                    height: 32,
+                    width: 28,
+                    height: 28,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.medium,
                   ),
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: 4),
                 Flexible(
                   child: Text(
                     label,
@@ -212,6 +213,7 @@ class _Service extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.labelMedium?.copyWith(
+                      fontSize: 12,
                       color: foreground,
                       fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                     ),
