@@ -41,11 +41,7 @@ final class RouterCustomerNavigation implements CustomerNavigation {
       unawaited(router.push<void>(AppRoutes.completionLocation(tripId)));
   @override
   void openSupport({String? tripId}) => unawaited(
-    router.push<void>(
-      tripId == null
-          ? AppRoutes.support
-          : AppRoutes.supportNewLocation(tripId: tripId),
-    ),
+    router.push<void>(AppRoutes.supportNewLocation(tripId: tripId)),
   );
   @override
   void openTerms() => unawaited(router.push<void>(AppRoutes.terms));

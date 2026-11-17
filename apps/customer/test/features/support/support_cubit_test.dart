@@ -5,7 +5,6 @@ import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/features/support/presentation/bloc/legal_cubit.dart';
 import 'package:tam_customer/features/support/presentation/bloc/support_detail_cubit.dart';
 import 'package:tam_customer/features/support/presentation/bloc/support_editor_cubit.dart';
-import 'package:tam_customer/features/support/presentation/bloc/support_list_cubit.dart';
 import 'support_test_support.dart';
 
 SupportEditorCubit editor(SupportRepository repo, {String? tripId}) =>
@@ -170,40 +169,6 @@ void main() {
       expect(detail.state.ticket!.revision, 3);
       repo.events.add(const SupportChange(sessionReset: true));
       expect(detail.state.ticket, isNull);
-    },
-  );
-  test(
-    'list pagination retains content on failure and ignores stale reads and revisions',
-    () async {
-      final repo = ControlledSupportRepository();
-      final c = SupportListCubit(repo);
-      addTearDown(c.close);
-      addTearDown(repo.events.close);
-      final old = Completer<SupportTicketPage>();
-      repo.onList = (_) => old.future;
-      final read = c.load();
-      repo.onList = (_) async => SupportTicketPage(
-        tickets: [supportTicket(revision: 3)],
-        nextCursor: 'next',
-      );
-      await c.load();
-      old.complete(SupportTicketPage(tickets: []));
-      await read;
-      expect(c.state.tickets.single.revision, 3);
-      repo.onList = (_) async => SupportTicketPage(
-        tickets: [supportTicket(revision: 2)],
-        nextCursor: 'next',
-      );
-      await c.load();
-      expect(c.state.tickets.single.revision, 3);
-      repo.onList = (_) async => throw const SupportFailure('NETWORK_ERROR');
-      await c.load(more: true);
-      expect(c.state.tickets.single.revision, 3);
-      expect(c.state.cursor, 'next');
-      expect(c.state.failure, isNotNull);
-      repo.events.add(const SupportChange(sessionReset: true));
-      expect(c.state.tickets, isEmpty);
-      expect(c.state.ended, isTrue);
     },
   );
   test(
