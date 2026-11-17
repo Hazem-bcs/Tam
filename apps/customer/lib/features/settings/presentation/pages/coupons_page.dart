@@ -12,16 +12,8 @@ class CouponsPage extends StatelessWidget {
   final MockCouponBook book;
 
   Future<void> _openAddSheet(BuildContext context) async {
-    final added = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerLowest,
-      constraints: const BoxConstraints(maxWidth: 580),
-      builder: (context) => CouponEntrySheet(book: book),
-    );
-    if (added == true && context.mounted) {
+    final added = await showCouponEntrySheet(context, book: book);
+    if (added && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context).settingsCouponsAdded),

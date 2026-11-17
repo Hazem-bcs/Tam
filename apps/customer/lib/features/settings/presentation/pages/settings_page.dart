@@ -6,6 +6,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_cubit.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
+import 'package:tam_customer/features/settings/presentation/coupon_book_scope.dart';
 import 'package:tam_customer/features/settings/presentation/pages/coupons_page.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_account_links.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_bottom_actions.dart';
@@ -49,9 +50,11 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _openCoupons() {
-    Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute<void>(builder: (_) => CouponsPage(book: _couponBook)),
-    );
+    final book = CouponBookScope.maybeOf(context) ?? _couponBook;
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(MaterialPageRoute<void>(builder: (_) => CouponsPage(book: book)));
   }
 
   bool _loggingOut = false;

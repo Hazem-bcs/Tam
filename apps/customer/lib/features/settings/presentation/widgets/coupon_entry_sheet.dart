@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
+
+/// The same sheet is used from Home and from the coupon collection in Account.
+Future<bool> showCouponEntrySheet(
+  BuildContext context, {
+  required MockCouponBook book,
+}) async {
+  final sheetTheme = AppTheme.account(Theme.of(context));
+  final result = await showModalBottomSheet<bool>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    showDragHandle: true,
+    backgroundColor: sheetTheme.colorScheme.surfaceContainerLowest,
+    constraints: const BoxConstraints(maxWidth: 580),
+    builder: (_) => Theme(
+      data: sheetTheme,
+      child: CouponEntrySheet(book: book),
+    ),
+  );
+  return result ?? false;
+}
 
 class CouponEntrySheet extends StatefulWidget {
   const CouponEntrySheet({super.key, required this.book});

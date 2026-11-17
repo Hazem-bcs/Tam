@@ -41,6 +41,8 @@ import 'package:tam_customer/features/notifications/domain/notifications_reposit
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/data/repositories/unavailable_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
+import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
+import 'package:tam_customer/features/settings/presentation/coupon_book_scope.dart';
 import 'package:tam_customer/features/settings/settings_entry.dart';
 import 'package:tam_customer/features/support/data/mock/mock_support_repository.dart';
 import 'package:tam_customer/features/support/data/unavailable_support_repository.dart';
@@ -78,6 +80,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final AppLocaleController _locale;
   late final MapsDependencies _maps;
   late final MockTripStore _mockTrips;
+  final MockCouponBook _couponBook = MockCouponBook();
   late final MockNotificationsRepository _mockNotifications;
   late final MockAddressesRepository _mockAddresses;
   MockActiveTripRepository? _mockActiveTrips;
@@ -229,6 +232,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
         resetSettingsFeatureSession(_locale);
+        _couponBook.resetSession();
         sessionEntered = false;
       }
     });
@@ -274,6 +278,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());
     resetSettingsFeatureSession(_locale);
+    _couponBook.dispose();
     _locale.dispose();
     unawaited(_auth.close());
     super.dispose();
@@ -281,25 +286,29 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _auth,
-      child: MapsScope(
-        dependencies: _maps,
-        child: ValueListenableBuilder<Locale>(
-          valueListenable: _locale,
-          builder: (context, locale, child) => MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            onGenerateTitle: (context) => AppLocalizations.of(context).appName,
-            routerConfig: _router,
-            theme: AppTheme.light,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: locale,
+    return CouponBookScope(
+      book: _couponBook,
+      child: BlocProvider.value(
+        value: _auth,
+        child: MapsScope(
+          dependencies: _maps,
+          child: ValueListenableBuilder<Locale>(
+            valueListenable: _locale,
+            builder: (context, locale, child) => MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context).appName,
+              routerConfig: _router,
+              theme: AppTheme.light,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: locale,
+            ),
           ),
         ),
       ),

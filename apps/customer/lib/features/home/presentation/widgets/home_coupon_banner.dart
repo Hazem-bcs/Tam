@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
+import 'package:tam_customer/features/settings/presentation/coupon_book_scope.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/coupon_entry_sheet.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// Explains the existing booking coupon field; never invents an active offer.
+/// Opens the shared demo coupon-entry flow without silently applying a fare discount.
 class HomeCouponBanner extends StatelessWidget {
   const HomeCouponBanner({super.key});
+
+  Future<void> _openAddCode(BuildContext context) async {
+    final sharedBook = CouponBookScope.maybeOf(context);
+    final book = sharedBook ?? MockCouponBook();
+    try {
+      final added = await showCouponEntrySheet(context, book: book);
+      if (added && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context).settingsCouponsAdded),
+          ),
+        );
+      }
+    } finally {
+      // Standalone widget tests can render Home without an app scope.
+      if (sharedBook == null) book.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,44 +36,7 @@ class HomeCouponBanner extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         key: const Key('home-coupon-details'),
-        onTap: () => showModalBottomSheet<void>(
-          context: context,
-          showDragHandle: true,
-          isScrollControlled: true,
-          builder: (context) => SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSpacing.xl),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l.homeCouponTitle,
-                          style: theme.textTheme.titleLarge,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        tooltip: MaterialLocalizations.of(
-                          context,
-                        ).closeButtonTooltip,
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  Text(
-                    l.homeCouponInstructions,
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        onTap: () => _openAddCode(context),
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.md),
           child: Row(

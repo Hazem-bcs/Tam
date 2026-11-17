@@ -66,4 +66,11 @@ class MockCouponBook extends ChangeNotifier {
     notifyListeners();
     return AddDemoCouponResult.added;
   }
+
+  /// Clears any locally added code when this app session ends.
+  void resetSession() {
+    final before = _coupons.length;
+    _coupons.removeWhere((coupon) => coupon.code == MockRidePricing.couponCode);
+    if (_coupons.length != before) notifyListeners();
+  }
 }
