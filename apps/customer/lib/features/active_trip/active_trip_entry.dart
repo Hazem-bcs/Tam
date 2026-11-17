@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
+import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/pages/active_trip_page.dart';
 
@@ -41,5 +42,8 @@ Widget buildActiveTripFeature({
           param2: (id: tripId, policy: policy, now: now),
         )
       : ActiveTripCubit(repository, tripId: tripId, policy: policy, now: now),
-  child: ActiveTripPage(navigation: navigation),
+  child: ActiveTripPage(
+    navigation: navigation,
+    showDemoAvatar: repository is MockActiveTripRepository,
+  ),
 );
