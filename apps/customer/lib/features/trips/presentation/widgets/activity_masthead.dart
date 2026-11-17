@@ -198,8 +198,8 @@ class _Service extends StatelessWidget {
                 ExcludeSemantics(
                   child: Image.asset(
                     asset,
-                    width: 27,
-                    height: 27,
+                    width: 32,
+                    height: 32,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.medium,
                   ),
