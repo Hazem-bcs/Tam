@@ -6,9 +6,9 @@ import 'package:tam_customer/features/addresses/domain/saved_address.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/address_editor_page.dart';
 import 'package:tam_customer/features/addresses/presentation/pages/addresses_page.dart';
 import 'package:tam_customer/features/addresses/presentation/widgets/address_map_preview.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/widgets/tam_button.dart';
 
 import 'addresses_test_support.dart';
 
@@ -154,6 +154,35 @@ void main() {
     expect(tester.getTopLeft(home).dy, tester.getTopLeft(work).dy);
     expect(tester.getTopLeft(work).dy, tester.getTopLeft(study).dy);
     expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+  testWidgets('details sheet can collapse and expand without leaving map', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    final surface = find.byKey(const Key('address-sheet-surface'));
+    final start = tester.getTopLeft(surface).dy;
+    await tester.dragFrom(
+      tester.getTopLeft(surface) + const Offset(195, 16),
+      const Offset(0, 240),
+    );
+    await tester.pumpAndSettle();
+    final collapsed = tester.getTopLeft(surface).dy;
+    expect(collapsed, greaterThan(start));
+    await tester.dragFrom(
+      tester.getTopLeft(surface) + const Offset(195, 16),
+      const Offset(0, -440),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getTopLeft(surface).dy, lessThan(collapsed));
+    expect(find.byType(AddressMapPreview), findsOneWidget);
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });

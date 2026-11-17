@@ -23,10 +23,7 @@ void main() {
     expect(cubit.state.location, isNull);
     cubit.select(first);
     expect(cubit.state.location!.point, first);
-    expect(
-      cubit.state.location!.label,
-      '33.51380, 36.27650',
-    );
+    expect(cubit.state.location!.label, '33.51380, 36.27650');
     cubit.select(second);
     expect(cubit.state.location!.point, second);
     await cubit.close();

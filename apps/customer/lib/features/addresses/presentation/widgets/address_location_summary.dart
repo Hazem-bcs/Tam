@@ -4,10 +4,7 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 
 /// Information only. The actual map behind the sheet owns location input.
 class AddressLocationSummary extends StatelessWidget {
-  const AddressLocationSummary({
-    super.key,
-    required this.locationLabel,
-  });
+  const AddressLocationSummary({super.key, required this.locationLabel});
 
   final String? locationLabel;
 
@@ -22,16 +19,10 @@ class AddressLocationSummary extends StatelessWidget {
       key: const Key('address-choose-location'),
       liveRegion: true,
       child: Padding(
-        padding: const EdgeInsetsDirectional.symmetric(
-          vertical: AppSpacing.sm,
-        ),
+        padding: const EdgeInsetsDirectional.symmetric(vertical: AppSpacing.sm),
         child: Row(
           children: [
-            Icon(
-              Icons.place_outlined,
-              color: colors.primary,
-              size: 20,
-            ),
+            Icon(Icons.place_outlined, color: colors.primary, size: 20),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
@@ -39,9 +30,7 @@ class AddressLocationSummary extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: selected
-                      ? colors.onSurfaceVariant
-                      : colors.primary,
+                  color: selected ? colors.onSurfaceVariant : colors.primary,
                 ),
               ),
             ),

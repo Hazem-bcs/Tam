@@ -24,9 +24,8 @@ class AddressEditorSheet extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final t = AppLocalizations.of(context);
     final editor = context.read<AddressEditorCubit>();
-    final canSave = state.valid &&
-        !state.locked &&
-        (editor.id == null || state.dirty);
+    final canSave =
+        state.valid && !state.locked && (editor.id == null || state.dirty);
 
     return DraggableScrollableSheet(
       key: const Key('address-editor-sheet'),
@@ -37,6 +36,7 @@ class AddressEditorSheet extends StatelessWidget {
       snap: true,
       snapSizes: const [.52],
       builder: (context, scrollController) => Material(
+        key: const Key('address-sheet-surface'),
         elevation: AppElevation.raised,
         color: colors.surface,
         shape: const RoundedRectangleBorder(
@@ -58,34 +58,31 @@ class AddressEditorSheet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-            Center(
-              child: Semantics(
-                label: t.addressesAdd,
-                child: Container(
-                  key: const Key('address-sheet-handle'),
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: AppSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: colors.outlineVariant,
-                    borderRadius: BorderRadius.circular(AppRadii.sm),
+              Center(
+                child: Semantics(
+                  label: t.addressesAdd,
+                  child: Container(
+                    key: const Key('address-sheet-handle'),
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+                    decoration: BoxDecoration(
+                      color: colors.outlineVariant,
+                      borderRadius: BorderRadius.circular(AppRadii.sm),
+                    ),
                   ),
                 ),
               ),
-            ),
-            AddressEditorForm(
-              state: state,
-              nameController: nameController,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            TamButton.primary(
-              key: const Key('address-save'),
-              label: state.retryPending ? t.addressesRetry : t.addressesSave,
-              loadingLabel: t.addressesSaving,
-              isLoading: state.phase == AddressEditorPhase.saving,
-              onPressed: canSave ? editor.save : null,
-            ),
-            const SizedBox(height: AppSpacing.sm),
+              AddressEditorForm(state: state, nameController: nameController),
+              const SizedBox(height: AppSpacing.xl),
+              TamButton.primary(
+                key: const Key('address-save'),
+                label: state.retryPending ? t.addressesRetry : t.addressesSave,
+                loadingLabel: t.addressesSaving,
+                isLoading: state.phase == AddressEditorPhase.saving,
+                onPressed: canSave ? editor.save : null,
+              ),
+              const SizedBox(height: AppSpacing.sm),
             ],
           ),
         ),

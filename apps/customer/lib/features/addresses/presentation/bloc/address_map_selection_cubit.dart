@@ -61,10 +61,7 @@ final class AddressMapSelectionCubit extends Cubit<AddressMapSelectionState> {
     // Debounce repeated selection updates caused by map drags.
     _reverseTimer = Timer(const Duration(milliseconds: 400), () async {
       try {
-        final resolved = await _repository.reverse(
-          point,
-          language: _language,
-        );
+        final resolved = await _repository.reverse(point, language: _language);
         if (isClosed || revision != _selectionRevision) return;
         if (resolved.point != point || resolved.label.trim().isEmpty) return;
         emit(AddressMapSelectionState(location: resolved));
@@ -77,12 +74,7 @@ final class AddressMapSelectionCubit extends Cubit<AddressMapSelectionState> {
   Future<void> locate() async {
     if (isClosed || state.locating) return;
     final request = ++_locateRevision;
-    emit(
-      AddressMapSelectionState(
-        location: state.location,
-        locating: true,
-      ),
-    );
+    emit(AddressMapSelectionState(location: state.location, locating: true));
     try {
       final point = await _deviceLocation.locate();
       if (isClosed || request != _locateRevision) return;

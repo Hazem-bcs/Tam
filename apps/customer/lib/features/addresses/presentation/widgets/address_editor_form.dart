@@ -76,8 +76,8 @@ class AddressEditorForm extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppRadii.md),
               borderSide: BorderSide(color: colors.primary),
             ),
-            errorText: state.name.isNotEmpty &&
-                    !AddressInput.validName(state.name)
+            errorText:
+                state.name.isNotEmpty && !AddressInput.validName(state.name)
                 ? t.addressesNameError(AddressInput.maxNameLength)
                 : null,
           ),

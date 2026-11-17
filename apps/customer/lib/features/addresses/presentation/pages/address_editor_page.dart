@@ -101,14 +101,16 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
         }
       },
       builder: (context, state) => PopScope(
-        canPop: _allowPop ||
+        canPop:
+            _allowPop ||
             state.phase == AddressEditorPhase.saved ||
             (!state.dirty && !state.busy),
         onPopInvokedWithResult: (didPop, _) {
           if (!didPop) _back();
         },
         child: Scaffold(
-          appBar: state.phase == AddressEditorPhase.loading ||
+          appBar:
+              state.phase == AddressEditorPhase.loading ||
                   state.phase == AddressEditorPhase.error ||
                   state.phase == AddressEditorPhase.notFound
               ? AppBar(
@@ -120,7 +122,9 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
                   leading: IconButton(
                     icon: const BackButtonIcon(),
                     onPressed: state.busy ? null : _back,
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                   ),
                 )
               : null,
