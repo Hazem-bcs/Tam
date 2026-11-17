@@ -107,6 +107,18 @@ void main() {
     },
   );
 
+  testWidgets('map preview keeps existing location search as fallback', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    await pumpAddressEditor(tester, repository);
+    await tester.tap(find.byKey(const Key('address-map-tap')));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddressLocationPicker), findsOneWidget);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
   testWidgets('editor follows the map and one-row address icon layout', (
     tester,
   ) async {
