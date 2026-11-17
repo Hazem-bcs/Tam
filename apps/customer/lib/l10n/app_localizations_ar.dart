@@ -254,7 +254,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeChooseDestination => 'حدد وجهتك';
 
   @override
-  String get homePromotionsTitle => 'عروض وإعلانات';
+  String get homePromotionsTitle => 'إعلانات تم';
 
   @override
   String get homePromotionEyebrow => 'جديد في تم';
