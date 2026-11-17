@@ -7,6 +7,12 @@ import 'presentation/bloc/preferred_address_selection.dart';
 
 typedef AddressEditorParams = ({AddressPlaceSearch places, String? id});
 
+void resetPreferredAddressSession(GetIt locator) {
+  if (locator.isRegistered<PreferredAddressSelection>()) {
+    locator<PreferredAddressSelection>().reset();
+  }
+}
+
 void registerAddressesDependencies(GetIt locator) {
   locator.registerLazySingleton<PreferredAddressSelection>(
     PreferredAddressSelection.new,
