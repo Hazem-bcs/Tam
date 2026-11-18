@@ -384,3 +384,5 @@ User authorized all sixteen feedback changes, parallel agents, local merge to ah
 | [CF-ROOT](tasks/CF-ROOT.md) | READY → IMPLEMENTING | root | F01,account/legal,integration,F16 |
 
 Full test/build/visual milestones are batched at integration; independent exact-SHA reviews assigned on submission. No writers share worktrees. Existing untracked trip failure images in target worktree are preserved.
+
+CF-THEME: IMPLEMENTED at2a7ea58b59caf83b09ed231bbdbbf304e9865770; review checkout customer-feedback-review-theme created from exact SHA, reviewer assignment pending available owner. CF-BOOKING/CF-TRIPS: IMPLEMENTING in their isolated named worktrees, branches codex/customer-feedback-{booking,trips}-20261118. CF-ROOT: REVIEW, implementation856b990; reviewer theme assigned in /home/hazem/.codex/worktrees/customer-feedback-review-root/mashwar at856b990, branch codex/customer-feedback-review-root-20261118. Ownership limited to CF-ROOT paths and review report; pricing/draft integration explicitly pending booking delivery. F16 asset compression evaluated separately with exact decoded RGBA checks; no original deletion until savings/identity evidence and path integration.
