@@ -20,6 +20,7 @@ class RouteMapView extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
     this.driverIdentity,
@@ -44,6 +45,7 @@ class RouteMapView extends StatefulWidget {
   final GeoPoint? selection;
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onLocate;
+  final bool followDriver;
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
@@ -107,6 +109,7 @@ class _RouteMapViewState extends State<RouteMapView> {
           origin: widget.origin,
           destination: widget.destination,
           driver: widget.driver,
+          followDriver: widget.followDriver,
           driverBearing: widget.driverBearing,
           driverRecordedAt: widget.driverRecordedAt,
           driverIdentity: widget.driverIdentity,
@@ -138,6 +141,7 @@ class _RouteMapViewState extends State<RouteMapView> {
                   origin: widget.origin,
                   destination: widget.destination,
                   driver: widget.driver,
+                  followDriver: widget.followDriver,
                   driverBearing: widget.driverBearing,
                   driverRecordedAt: widget.driverRecordedAt,
                   driverIdentity: widget.driverIdentity,

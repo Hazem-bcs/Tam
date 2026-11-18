@@ -968,5 +968,6 @@
   "mapsNativeUnavailable": "Vector maps are available on Android, iOS and web.",
   "mapsMoveToSelect": "Move the map to choose a place",
   "mapsTurnOnLocation": "Turn on location",
-  "mapsAllowLocation": "Allow location"
+  "mapsAllowLocation": "Allow location",
+  "mapsFollowDriver": "Follow the captain’s car"
 }

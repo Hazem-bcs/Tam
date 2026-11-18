@@ -27,6 +27,7 @@ class NativeVectorMap extends StatefulWidget {
     required this.style,
     required this.scene,
     required this.initialCenter,
+    this.followDriver = false,
     this.onSelected,
     this.bottomInset,
     this.onLocate,
@@ -35,6 +36,7 @@ class NativeVectorMap extends StatefulWidget {
     this.markerImageLoader = VectorMarkerImages.load,
     this.compactPreview = false,
   });
+  final bool followDriver;
   final String style;
   final bool compactPreview;
   final VectorMapScene scene;
@@ -77,6 +79,66 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   Offset? _pointerStart;
   int _tapId = 0;
   bool _cameraAnimating = false, _deviceFocusPending = false;
+  late bool _followingDriver = widget.followDriver;
+  bool _driverFocusPending = true;
+  GeoPoint? _lastFollowPoint;
+  final _followClock = Stopwatch()..start();
+  Duration _lastFollowTime = Duration.zero;
+  Timer? _followTimer;
+
+  void _resumeDriver() {
+    setState(() => _followingDriver = true);
+    _driverFocusPending = true;
+    _queueSync();
+  }
+
+  Future<void> _followDriver(int epoch, bool reducedMotion) async {
+    final driver = widget.scene.driver;
+    if (!widget.followDriver ||
+        !_followingDriver ||
+        driver == null ||
+        _picking) {
+      return;
+    }
+    _fitPending = false;
+    final first = _driverFocusPending;
+    if (!first && _lastFollowPoint == driver) return;
+    final elapsed = _followClock.elapsed - _lastFollowTime;
+    if (!first && elapsed < AppMotion.short) {
+      _followTimer ??= Timer(AppMotion.short - elapsed, () {
+        _followTimer = null;
+        if (mounted) _queueSync();
+      });
+      return;
+    }
+    _followTimer?.cancel();
+    _followTimer = null;
+    _driverFocusPending = false;
+    _lastFollowPoint = driver;
+    _lastFollowTime = _followClock.elapsed;
+    _cameraAnimating = true;
+    try {
+      final update = CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _latLng(driver),
+          zoom: first ? _camera.zoom.clamp(15.0, 17.0) : _camera.zoom,
+          bearing: _camera.bearing,
+        ),
+      );
+      if (reducedMotion) {
+        await _controller!.moveCamera(update);
+      } else {
+        await _controller!.animateCamera(
+          update,
+          duration: first ? AppMotion.long : const Duration(milliseconds: 220),
+        );
+      }
+    } finally {
+      _cameraAnimating = false;
+      if (_current(epoch)) await _applyPadding(epoch);
+    }
+  }
+
   EdgeInsets? _lastPadding;
   bool _selectionGesture = false, _focusSelectionPending = false;
   GeoPoint? _emittedSelection;
@@ -126,12 +188,19 @@ class _NativeVectorMapState extends State<NativeVectorMap>
       _deadline?.cancel();
       _paddingTimer?.cancel();
       _paddingTimer = null;
+      _followTimer?.cancel();
+      _followTimer = null;
     }
   }
 
   @override
   void didUpdateWidget(NativeVectorMap oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.followDriver != widget.followDriver) {
+      _followingDriver = widget.followDriver;
+      _driverFocusPending = true;
+      _lastFollowPoint = null;
+    }
     if (oldWidget.bottomInset != widget.bottomInset) {
       oldWidget.bottomInset?.removeListener(_schedulePadding);
       widget.bottomInset?.addListener(_schedulePadding);
@@ -285,6 +354,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
             }
           }
         }
+        await _followDriver(epoch, disableAnimations);
+        if (widget.followDriver && !_followingDriver) _fitPending = false;
         if (_fitPending && !_picking) {
           _fitPending = false;
           await _fit(epoch);
@@ -427,6 +498,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     _selectionAnchor.dispose();
     _deadline?.cancel();
     _paddingTimer?.cancel();
+    _followTimer?.cancel();
     widget.bottomInset?.removeListener(_schedulePadding);
     WidgetsBinding.instance.removeObserver(this);
     // MapLibreMap owns its platform view and controller disposal.
@@ -456,6 +528,12 @@ class _NativeVectorMapState extends State<NativeVectorMap>
             onPointerCancel: (_) => _pointerStart = null,
             onPointerMove: (event) {
               final start = _pointerStart;
+              if (widget.followDriver &&
+                  _followingDriver &&
+                  start != null &&
+                  (event.localPosition - start).distance > 12) {
+                setState(() => _followingDriver = false);
+              }
               if (_picking &&
                   start != null &&
                   (event.localPosition - start).distance > 12) {
@@ -539,7 +617,13 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               if (_size.height - _inset >= 220)
                 VectorMapControls(
                   bottomInset: _inset,
-                  onLocate: widget.onLocate,
+                  onLocate: widget.followDriver && widget.scene.driver != null
+                      ? _resumeDriver
+                      : widget.onLocate,
+                  followingDriver:
+                      widget.followDriver && widget.scene.driver != null
+                      ? _followingDriver
+                      : null,
                   locating: widget.locating,
                 ),
             ],

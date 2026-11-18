@@ -38,6 +38,7 @@ abstract final class MockTrackingPath {
           ? TrackingRouteLeg.toPickup
           : TrackingRouteLeg.toDestination,
       points: clean,
+      roadAligned: false,
     );
   }
 }

@@ -4291,6 +4291,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'السماح بالموقع'**
   String get mapsAllowLocation;
+
+  /// No description provided for @mapsFollowDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة سيارة الكابتن'**
+  String get mapsFollowDriver;
 }
 
 class _AppLocalizationsDelegate

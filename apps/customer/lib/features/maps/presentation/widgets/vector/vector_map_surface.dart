@@ -21,6 +21,7 @@ class VectorMapSurface extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.followDriver = false,
     this.driverBearing = 0,
     this.selection,
     this.route,
@@ -38,6 +39,7 @@ class VectorMapSurface extends StatefulWidget {
   final ValueChanged<GeoPoint>? onSelected;
   final ValueListenable<double>? bottomInset;
   final VoidCallback? onLocate;
+  final bool followDriver;
   final bool locating;
   final MapCameraFocus? focus;
   final bool compactPreview;
@@ -109,6 +111,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
           }
           return NativeVectorMap(
             style: _style!,
+            followDriver: widget.followDriver,
             compactPreview: widget.compactPreview,
             initialCenter: widget.configuration.initialCenter,
             scene: VectorMapScene(

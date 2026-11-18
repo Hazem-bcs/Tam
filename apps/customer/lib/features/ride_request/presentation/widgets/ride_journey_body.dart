@@ -134,6 +134,10 @@ class RideJourneyBody extends StatelessWidget {
             driver: active?.offline == true || active?.positionStale == true
                 ? null
                 : liveTrip?.live?.position?.point,
+            followDriver:
+                liveTrip?.live?.position != null &&
+                active?.offline != true &&
+                active?.positionStale != true,
             driverBearing: liveTrip?.live?.position?.bearing,
             driverRecordedAt: liveTrip?.live?.position?.recordedAt,
             driverIdentity: (liveTrip?.id, liveTrip?.live?.route?.id),

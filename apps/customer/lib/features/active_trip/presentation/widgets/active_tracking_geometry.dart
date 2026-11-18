@@ -28,5 +28,6 @@ MapRoute? activeTrackingGeometry(Trip trip) {
     distanceMeters: GeoPath(route.points).length.round(),
     durationSeconds: 0,
     provider: 'trip-tracking',
+    roadAligned: route.roadAligned,
   );
 }

@@ -78,10 +78,12 @@ final class TripTrackingRoute extends Equatable {
     required this.id,
     required this.leg,
     required List<GeoPoint> points,
+    this.roadAligned = true,
   }) : points = List.unmodifiable(points);
   final String id;
   final TrackingRouteLeg leg;
+  final bool roadAligned;
   final List<GeoPoint> points;
   @override
-  List<Object?> get props => [id, leg, points];
+  List<Object?> get props => [id, leg, points, roadAligned];
 }

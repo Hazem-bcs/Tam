@@ -22,6 +22,7 @@ class ActiveRouteMap extends StatelessWidget {
           origin: trip.booking.pickup.point,
           destination: trip.booking.destination.point,
           driver: stale ? null : trip.live?.position?.point,
+          followDriver: !stale && trip.live?.position != null,
           driverBearing: trip.live?.position?.bearing,
           driverRecordedAt: trip.live?.position?.recordedAt,
           driverIdentity: (trip.id, trip.live?.route?.id),

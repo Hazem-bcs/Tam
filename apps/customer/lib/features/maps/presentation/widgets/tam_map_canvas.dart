@@ -18,6 +18,7 @@ class TamMapCanvas extends StatelessWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
     this.driverIdentity,
@@ -36,6 +37,7 @@ class TamMapCanvas extends StatelessWidget {
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
   final VoidCallback? onLocate;
+  final bool followDriver;
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
@@ -65,8 +67,9 @@ class TamMapCanvas extends StatelessWidget {
               origin: origin,
               destination: destination,
               driver: point,
+              followDriver: followDriver,
               driverBearing: heading,
-              route: route,
+              route: route?.roadAligned == true ? route : null,
               onSelected: onSelected,
               bottomInset: bottomInset,
               selection: selection,
@@ -81,8 +84,9 @@ class TamMapCanvas extends StatelessWidget {
             origin: origin,
             destination: destination,
             driver: point,
+            followDriver: followDriver,
             driverBearing: heading,
-            route: route,
+            route: route?.roadAligned == true ? route : null,
             onSelected: onSelected,
             bottomInset: bottomInset,
             selection: selection,

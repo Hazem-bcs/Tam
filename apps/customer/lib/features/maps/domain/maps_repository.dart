@@ -10,11 +10,13 @@ final class MapRoute extends Equatable {
     required this.distanceMeters,
     required this.durationSeconds,
     required this.provider,
+    this.roadAligned = true,
   }) : points = List.unmodifiable(points);
   final GeoPoint origin, destination;
   final List<GeoPoint> points;
   final int distanceMeters, durationSeconds;
   final String provider;
+  final bool roadAligned;
   @override
   List<Object?> get props => [
     origin,
@@ -23,6 +25,7 @@ final class MapRoute extends Equatable {
     distanceMeters,
     durationSeconds,
     provider,
+    roadAligned,
   ];
 }
 

@@ -968,5 +968,6 @@
   "mapsNativeUnavailable": "الخريطة المتجهة متاحة على Android وiOS والويب.",
   "mapsMoveToSelect": "حرّك الخريطة لتحديد المكان",
   "mapsTurnOnLocation": "تشغيل الموقع",
-  "mapsAllowLocation": "السماح بالموقع"
+  "mapsAllowLocation": "السماح بالموقع",
+  "mapsFollowDriver": "متابعة سيارة الكابتن"
 }

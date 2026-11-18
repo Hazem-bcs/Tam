@@ -88,7 +88,11 @@ abstract final class TripLiveCodec {
     if (points is! List || points.length < 2 || points.length > 10000) {
       throw const FormatException('Invalid tracking geometry');
     }
+    if (map['road_aligned'] != null && map['road_aligned'] is! bool) {
+      throw const FormatException('Invalid geometry source');
+    }
     return TripTrackingRoute(
+      roadAligned: map['road_aligned'] as bool? ?? true,
       id: text(map, 'id'),
       leg: switch (map['leg']) {
         'to_pickup' => TrackingRouteLeg.toPickup,
@@ -132,6 +136,7 @@ abstract final class TripLiveCodec {
     if (live.route != null)
       'route': {
         'id': live.route!.id,
+        if (!live.route!.roadAligned) 'road_aligned': false,
         'leg': live.route!.leg == TrackingRouteLeg.toPickup
             ? 'to_pickup'
             : 'to_destination',

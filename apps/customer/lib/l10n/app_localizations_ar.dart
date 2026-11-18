@@ -2282,4 +2282,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsAllowLocation => 'السماح بالموقع';
+
+  @override
+  String get mapsFollowDriver => 'متابعة سيارة الكابتن';
 }

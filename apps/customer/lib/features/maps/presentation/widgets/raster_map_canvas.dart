@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
@@ -24,6 +25,7 @@ class RasterMapCanvas extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.followDriver = false,
     this.driverBearing = 0,
     this.route,
     this.onSelected,
@@ -40,6 +42,7 @@ class RasterMapCanvas extends StatefulWidget {
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
   final VoidCallback? onLocate;
+  final bool followDriver;
   final bool locating;
   final MapCameraFocus? focus;
   final double markerIconSize;
@@ -55,8 +58,70 @@ class RasterMapCanvas extends StatefulWidget {
   State<RasterMapCanvas> createState() => _RasterMapCanvasState();
 }
 
-class _RasterMapCanvasState extends State<RasterMapCanvas> {
+class _RasterMapCanvasState extends State<RasterMapCanvas>
+    with SingleTickerProviderStateMixin {
   final _controller = MapController();
+  late bool _followingDriver = widget.followDriver;
+  bool _driverFocusPending = true;
+  GeoPoint? _followStart;
+  late final _followMotion = AnimationController(
+    vsync: this,
+    duration: AppMotion.medium,
+  )..addListener(_followFrame);
+
+  @override
+  void initState() {
+    super.initState();
+    _followMotion.value = 0;
+  }
+
+  void _followFrame() {
+    if (!_ready || !mounted || !_followingDriver || widget.driver == null) {
+      return;
+    }
+    final point = _followStart == null
+        ? widget.driver!
+        : GeoPath.mix(
+            _followStart!,
+            widget.driver!,
+            Curves.easeOutCubic.transform(_followMotion.value),
+          );
+    _controller.move(
+      _latLng(point),
+      _controller.camera.zoom.clamp(15.0, 17.0),
+      offset: Offset(0, -_inset / 2),
+    );
+  }
+
+  void _followDriver() {
+    if (!_ready ||
+        !mounted ||
+        !widget.followDriver ||
+        !_followingDriver ||
+        widget.driver == null) {
+      return;
+    }
+    if (_driverFocusPending && !MediaQuery.disableAnimationsOf(context)) {
+      _driverFocusPending = false;
+      final center = _controller.camera.center;
+      _followStart = GeoPoint(
+        latitude: center.latitude,
+        longitude: center.longitude,
+      );
+      _followMotion.forward(from: 0);
+    } else if (!_followMotion.isAnimating) {
+      _driverFocusPending = false;
+      _followStart = null;
+      _followFrame();
+    }
+  }
+
+  void _resumeDriver() {
+    setState(() => _followingDriver = true);
+    _driverFocusPending = true;
+    _followDriver();
+  }
+
   bool _ready = false, _failed = false, _loaded = false;
   int _generation = 0;
   (GeoPoint?, GeoPoint?)? _retainedViewport;
@@ -107,6 +172,13 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
   @override
   void didUpdateWidget(RasterMapCanvas oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.followDriver != widget.followDriver) {
+      _followingDriver = widget.followDriver;
+      _driverFocusPending = true;
+    }
+    if (widget.followDriver) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _followDriver());
+    }
     if (oldWidget.configuration.tileUrl != widget.configuration.tileUrl) {
       _generation++;
       _failed = _loaded = false;
@@ -127,13 +199,14 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
         oldWidget.destination != widget.destination ||
         oldWidget.route != widget.route) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_retainedViewport == null) _fit();
+        if (_retainedViewport == null && !widget.followDriver) _fit();
       });
     }
   }
 
   @override
   void dispose() {
+    _followMotion.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -188,8 +261,18 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
               onMapReady: () {
                 _ready = true;
                 WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => widget.focus != null ? _focus() : _fit(),
+                  (_) => widget.followDriver
+                      ? _followDriver()
+                      : widget.focus != null
+                      ? _focus()
+                      : _fit(),
                 );
+              },
+              onPositionChanged: (_, hasGesture) {
+                if (hasGesture && widget.followDriver && _followingDriver) {
+                  _followMotion.stop();
+                  setState(() => _followingDriver = false);
+                }
               },
               onTap: widget.onSelected == null
                   ? null
@@ -283,10 +366,17 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
                     right: 0,
                     child: LinearProgressIndicator(),
                   ),
-                if (zoomControls && widget.onLocate != null)
+                if (zoomControls &&
+                    (widget.onLocate != null || widget.followDriver))
                   VectorMapControls(
                     bottomInset: _inset,
-                    onLocate: widget.onLocate,
+                    onLocate: widget.followDriver && widget.driver != null
+                        ? _resumeDriver
+                        : widget.onLocate,
+                    followingDriver:
+                        widget.followDriver && widget.driver != null
+                        ? _followingDriver
+                        : null,
                     locating: widget.locating,
                   ),
                 PositionedDirectional(

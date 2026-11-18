@@ -32,6 +32,7 @@ void main() {
     ValueNotifier<double>? inset,
     ValueChanged<GeoPoint>? select,
     MapCameraFocus? focus,
+    bool followDriver = false,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -44,6 +45,7 @@ void main() {
             style: '{"version":8,"sources":{},"layers":[]}',
             initialCenter: origin,
             scene: scene,
+            followDriver: followDriver,
             markerImageLoader: (_, _) async => Uint8List(8),
             bottomInset: inset,
             onSelected: select,
@@ -123,6 +125,50 @@ void main() {
       expect(probe.cameras.length, greaterThan(cameras));
       await tester.pumpWidget(const SizedBox());
       expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'follows driver automatically, pauses on drag and resumes explicitly',
+    (tester) async {
+      final inset = ValueNotifier<double>(200);
+      addTearDown(inset.dispose);
+      await show(
+        tester,
+        VectorMapScene(
+          origin: origin,
+          destination: destination,
+          driver: origin,
+        ),
+        inset: inset,
+        followDriver: true,
+      );
+      await load(tester);
+      await tester.pumpAndSettle();
+      final initial = platforms.single.cameras.length;
+      expect(initial, greaterThan(0));
+      final surface = find.byType(MapLibreMap);
+      final start = tester.getCenter(surface);
+      await tester.dragFrom(start, const Offset(60, 20));
+      await tester.pump();
+      final paused = platforms.single.cameras.length;
+      await show(
+        tester,
+        VectorMapScene(
+          origin: origin,
+          destination: destination,
+          driver: destination,
+        ),
+        inset: inset,
+        followDriver: true,
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      expect(platforms.single.cameras.length, paused);
+      await tester.tap(find.byKey(const Key('map-follow-driver')));
+      await tester.pumpAndSettle();
+      expect(platforms.single.cameras.length, greaterThan(paused));
+      expect(platforms, hasLength(1));
+      await tester.pumpWidget(const SizedBox());
     },
   );
 

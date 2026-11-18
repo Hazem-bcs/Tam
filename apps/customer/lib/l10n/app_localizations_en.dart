@@ -2326,4 +2326,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsAllowLocation => 'Allow location';
+
+  @override
+  String get mapsFollowDriver => 'Follow the captain’s car';
 }

@@ -14,6 +14,7 @@ class RideJourneyBackdrop extends StatelessWidget {
     this.destination,
     this.selection,
     this.driver,
+    this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
     this.driverIdentity,
@@ -29,6 +30,7 @@ class RideJourneyBackdrop extends StatelessWidget {
   final ValueListenable<double>? bottomInset;
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onLocate;
+  final bool followDriver;
   final bool locating;
   final double? driverBearing;
   final DateTime? driverRecordedAt;
@@ -45,6 +47,7 @@ class RideJourneyBackdrop extends StatelessWidget {
       destination: destination?.point,
       selection: selection,
       driver: driver,
+      followDriver: followDriver,
       driverBearing: driverBearing,
       driverRecordedAt: driverRecordedAt,
       driverIdentity: driverIdentity,

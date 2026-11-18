@@ -9,10 +9,12 @@ class VectorMapControls extends StatelessWidget {
     required this.bottomInset,
     this.onLocate,
     this.locating = false,
+    this.followingDriver,
   });
   final double bottomInset;
   final VoidCallback? onLocate;
   final bool locating;
+  final bool? followingDriver;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,14 @@ class VectorMapControls extends StatelessWidget {
         elevation: AppElevation.raised,
         shape: const CircleBorder(),
         child: IconButton(
-          key: const Key('ride-use-device-location'),
-          tooltip: locating
+          key: Key(
+            followingDriver == null
+                ? 'ride-use-device-location'
+                : 'map-follow-driver',
+          ),
+          tooltip: followingDriver != null
+              ? AppLocalizations.of(context).mapsFollowDriver
+              : locating
               ? AppLocalizations.of(context).mapsLocating
               : AppLocalizations.of(context).mapsUseMyLocation,
           onPressed: locating ? null : onLocate,
@@ -37,7 +45,11 @@ class VectorMapControls extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : Icon(
-                  Icons.my_location_outlined,
+                  followingDriver == null
+                      ? Icons.my_location_outlined
+                      : followingDriver!
+                      ? Icons.gps_fixed_rounded
+                      : Icons.gps_not_fixed_rounded,
                   size: 22,
                   color: colors.onSurfaceVariant,
                 ),
