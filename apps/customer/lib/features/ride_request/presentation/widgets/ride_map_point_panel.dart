@@ -6,7 +6,6 @@ import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
-import 'ride_map_point_role.dart';
 
 /// A real point is usable even when reverse geocoding is unavailable.
 class RideMapPointPanel extends StatefulWidget {
@@ -32,7 +31,6 @@ class RideMapPointPanel extends StatefulWidget {
 
 class _RideMapPointPanelState extends State<RideMapPointPanel> {
   final _description = TextEditingController();
-  late bool _pickup = widget.initialPickup;
   bool _showDescription = false;
 
   TripLocation _location(AppLocalizations t) {
@@ -87,11 +85,6 @@ class _RideMapPointPanelState extends State<RideMapPointPanel> {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            RideMapPointRole(
-              pickup: _pickup,
-              onChanged: (pickup) => setState(() => _pickup = pickup),
-            ),
-            const SizedBox(height: AppSpacing.sm),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: TextButton.icon(
@@ -131,13 +124,15 @@ class _RideMapPointPanelState extends State<RideMapPointPanel> {
             const SizedBox(height: AppSpacing.sm),
             TamButton.primary(
               key: Key(
-                _pickup ? 'ride-map-use-pickup' : 'ride-map-use-destination',
+                widget.initialPickup
+                    ? 'ride-map-use-pickup'
+                    : 'ride-map-use-destination',
               ),
-              label: _pickup
+              label: widget.initialPickup
                   ? t.rideRequestConfirmPickup
                   : t.rideRequestConfirmDestination,
               icon: Icons.check_rounded,
-              onPressed: () => (_pickup
+              onPressed: () => (widget.initialPickup
                   ? widget.onPickup
                   : widget.onDestination)(_location(t)),
             ),

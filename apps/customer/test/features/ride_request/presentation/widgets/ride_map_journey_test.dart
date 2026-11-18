@@ -261,17 +261,17 @@ void main() {
       final pending = Completer<GeoPoint>();
       final gps = LocationProbe()..onLocate = () => pending.future;
       final bloc = await launch(tester, gps);
-      await tester.tapAt(
-        tester.getTopLeft(find.byType(FlutterMap)) + const Offset(200, 260),
-      );
-      await tester.pump(const Duration(milliseconds: 400));
-      final point = tester
-          .widget<RideMapPointPanel>(
-            find.byType(RideMapPointPanel, skipOffstage: false),
-          )
-          .point;
-      await tester.tap(find.byKey(const Key('ride-map-role-pickup')));
-      await tester.pump(const Duration(milliseconds: 350));
+      await tester.tap(find.text('حدد مكان الانطلاق'));
+      await tester.pump(const Duration(milliseconds: 500));
+      tester
+          .widget<RideJourneyBody>(find.byType(RideJourneyBody))
+          .onChooseOnMap!();
+      await tester.pump();
+      tester
+          .widget<RideJourneyBody>(find.byType(RideJourneyBody))
+          .onMapPoint(destination);
+      await tester.pump(const Duration(milliseconds: 500));
+      final point = destination;
       final pickup = find.byKey(const Key('ride-map-use-pickup'));
       await tester.ensureVisible(pickup);
       await tester.tap(pickup);
