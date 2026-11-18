@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 import 'ride_fare_format.dart';
 
@@ -79,7 +80,13 @@ class _RideCouponFieldState extends State<RideCouponField> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.code!, style: theme.textTheme.titleSmall),
+                  Text(
+                    widget.code!,
+                    textDirection: couponCodeIsRtl(widget.code!)
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    style: theme.textTheme.titleSmall,
+                  ),
                   Text(
                     l.rideRequestCouponSaving(
                       rideFareFormat(
@@ -124,7 +131,9 @@ class _RideCouponFieldState extends State<RideCouponField> {
               labelText: l.rideRequestCoupon,
               hintText: l.rideRequestCouponHint,
               enabled: widget.enabled,
-              textDirection: TextDirection.ltr,
+              textDirection: couponCodeIsRtl(_text.text)
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
               textInputAction: TextInputAction.done,
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(AppSpacing.sm),
@@ -143,10 +152,7 @@ class _RideCouponFieldState extends State<RideCouponField> {
                       ),
                       child: apply,
                     ),
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(32),
-                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_-]')),
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(32)],
               onFieldSubmitted: (_) => _apply(),
               onChanged: (_) => setState(() {}),
               errorText: widget.invalid ? l.rideRequestCouponInvalid : null,

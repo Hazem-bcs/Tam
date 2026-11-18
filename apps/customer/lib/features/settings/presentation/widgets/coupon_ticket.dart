@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 import 'coupon_ticket_shape.dart';
@@ -212,7 +213,9 @@ class _CouponInformation extends StatelessWidget {
               Expanded(
                 child: Text(
                   offer.code,
-                  textDirection: TextDirection.ltr,
+                  textDirection: couponCodeIsRtl(offer.code)
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: colors.onSurface,
                     fontWeight: FontWeight.w800,

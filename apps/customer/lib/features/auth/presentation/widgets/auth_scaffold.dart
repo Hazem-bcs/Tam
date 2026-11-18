@@ -35,6 +35,7 @@ class AuthScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.auth(Theme.of(context));
     final colors = theme.colorScheme;
+    final dark = theme.brightness == Brightness.dark;
     final top = Color.alphaBlend(
       colors.primaryContainer.withValues(alpha: .85),
       colors.surface,
@@ -50,11 +51,13 @@ class AuthScaffold extends StatelessWidget {
         child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
             statusBarColor: top,
-            statusBarIconBrightness: Brightness.dark,
-            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+            statusBarBrightness: dark ? Brightness.dark : Brightness.light,
             systemStatusBarContrastEnforced: false,
             systemNavigationBarColor: colors.surface,
-            systemNavigationBarIconBrightness: Brightness.dark,
+            systemNavigationBarIconBrightness: dark
+                ? Brightness.light
+                : Brightness.dark,
           ),
           child: Scaffold(
             backgroundColor: colors.surface,

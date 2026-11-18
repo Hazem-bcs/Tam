@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 
 /// The same sheet is used from Home and from the coupon collection in Account.
@@ -115,13 +115,12 @@ class _CouponEntrySheetState extends State<CouponEntrySheet> {
                 TextField(
                   key: const Key('coupon-code-input'),
                   controller: _controller,
-                  textDirection: TextDirection.ltr,
+                  textDirection: couponCodeIsRtl(_controller.text)
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
                   textCapitalization: TextCapitalization.characters,
                   autocorrect: false,
                   maxLength: 32,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9_-]')),
-                  ],
                   decoration: InputDecoration(
                     labelText: t.settingsCouponsCode,
                     hintText: t.settingsCouponsHint,
@@ -138,7 +137,7 @@ class _CouponEntrySheetState extends State<CouponEntrySheet> {
                     ),
                   ),
                   onChanged: (_) {
-                    if (_error != null) setState(() => _error = null);
+                    setState(() => _error = null);
                   },
                   onSubmitted: (_) => _addCoupon(),
                 ),
@@ -151,22 +150,36 @@ class _CouponEntrySheetState extends State<CouponEntrySheet> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TamButton.primary(
-                        label: t.settingsCouponsConfirm,
-                        onPressed: _addCoupon,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: TamButton.secondary(
-                        label: t.settingsCancel,
-                        onPressed: () => Navigator.pop(context, false),
-                      ),
-                    ),
-                  ],
+                LayoutBuilder(
+                  builder: (context, bounds) {
+                    final confirm = TamButton.primary(
+                      label: t.settingsCouponsConfirm,
+                      onPressed: _addCoupon,
+                    );
+                    final cancel = TamButton.secondary(
+                      label: t.settingsCancel,
+                      onPressed: () => Navigator.pop(context, false),
+                    );
+                    final stack =
+                        bounds.maxWidth < 300 ||
+                        MediaQuery.textScalerOf(context).scale(14) > 21;
+                    return stack
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              confirm,
+                              const SizedBox(height: AppSpacing.sm),
+                              cancel,
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Expanded(child: confirm),
+                              const SizedBox(width: AppSpacing.sm),
+                              Expanded(child: cancel),
+                            ],
+                          );
+                  },
                 ),
               ],
             ),

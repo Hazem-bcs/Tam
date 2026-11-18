@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_pricing.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 
 /// Preview-only coupon data; no API, persistence or payment is involved.
 @immutable
@@ -23,8 +24,7 @@ class DemoCoupon {
 
 enum AddDemoCouponResult { added, duplicate, invalid }
 
-/// A session-scoped mock book. Only TAM10 is accepted because it is the
-/// sole code supported by the existing mock ride-pricing contract.
+/// A session-scoped mock book matching the pricing contract's bilingual codes.
 class MockCouponBook extends ChangeNotifier {
   final List<DemoCoupon> _coupons = [
     DemoCoupon(
@@ -48,21 +48,14 @@ class MockCouponBook extends ChangeNotifier {
   List<DemoCoupon> get coupons => List.unmodifiable(_coupons);
 
   AddDemoCouponResult add(String rawCode) {
-    final code = rawCode.trim().toUpperCase();
-    if (code != MockRidePricing.couponCode) {
+    final code = normalizeCouponCode(rawCode);
+    if (!MockRidePricing.couponCodes.contains(code)) {
       return AddDemoCouponResult.invalid;
     }
     if (_coupons.any((offer) => offer.code == code)) {
       return AddDemoCouponResult.duplicate;
     }
-    _coupons.insert(
-      0,
-      const DemoCoupon(
-        code: MockRidePricing.couponCode,
-        percent: 10,
-        isAvailable: true,
-      ),
-    );
+    _coupons.insert(0, DemoCoupon(code: code, percent: 10, isAvailable: true));
     notifyListeners();
     return AddDemoCouponResult.added;
   }
@@ -70,7 +63,9 @@ class MockCouponBook extends ChangeNotifier {
   /// Clears any locally added code when this app session ends.
   void resetSession() {
     final before = _coupons.length;
-    _coupons.removeWhere((coupon) => coupon.code == MockRidePricing.couponCode);
+    _coupons.removeWhere(
+      (coupon) => MockRidePricing.couponCodes.contains(coupon.code),
+    );
     if (_coupons.length != before) notifyListeners();
   }
 }

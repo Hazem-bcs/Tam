@@ -22,7 +22,7 @@ class SettingsProfileSection extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
     final compactDetails =
-        MediaQuery.sizeOf(context).width < 360 &&
+        MediaQuery.sizeOf(context).width < 360 ||
         MediaQuery.textScalerOf(context).scale(16) > 24;
     final avatar = Container(
       width: 52,
@@ -100,14 +100,12 @@ class SettingsProfileSection extends StatelessWidget {
                     alignment: AlignmentDirectional.centerStart,
                     child: Directionality(
                       textDirection: TextDirection.ltr,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SelectableText(
-                          phoneE164!,
-                          textDirection: TextDirection.ltr,
-                          style:
-                              (compactDetails ? text.bodySmall : text.bodyLarge)
-                                  ?.copyWith(fontWeight: FontWeight.w600),
+                      child: SelectableText(
+                        phoneE164!,
+                        textDirection: TextDirection.ltr,
+                        style: text.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: .3,
                         ),
                       ),
                     ),
