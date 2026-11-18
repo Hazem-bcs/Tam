@@ -13,7 +13,6 @@ class ChatTimeline extends StatelessWidget {
     this.latestMessageKey,
     required this.state,
     required this.now,
-    this.showDemoAvatar = false,
     required this.controller,
     required this.onLoadOlder,
     required this.onRetry,
@@ -21,7 +20,6 @@ class ChatTimeline extends StatelessWidget {
   final Key? latestMessageKey;
   final ChatState state;
   final DateTime Function() now;
-  final bool showDemoAvatar;
   final ScrollController controller;
   final VoidCallback onLoadOlder;
   final ValueChanged<String> onRetry;
@@ -38,7 +36,11 @@ class ChatTimeline extends StatelessWidget {
     return ListView.builder(
       controller: controller,
       reverse: true,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: count + (state.nextBeforeSequence == null ? 0 : 1),
       itemBuilder: (_, index) {
         if (index == count) {
@@ -100,7 +102,6 @@ class ChatTimeline extends StatelessWidget {
             body: message.body,
             sentAt: message.sentAt,
             customer: message.author == ChatAuthor.customer,
-            showDemoAvatar: showDemoAvatar,
             status: chatReceiptLabel(t, message, state.metadata),
             statusIcon:
                 message.sequence <= (state.metadata?.deliveredThrough ?? 0)
@@ -133,34 +134,27 @@ Widget _withDate(
   return Column(
     children: [
       Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
-        child: Row(
-          children: [
-            Expanded(child: Divider(color: colors.outlineVariant)),
-            const SizedBox(width: AppSpacing.md),
-            Flexible(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: colors.primaryContainer,
-                  borderRadius: BorderRadius.circular(AppRadii.sheet),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.sm,
-                  ),
-                  child: Text(
-                    label,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: colors.onPrimaryContainer,
-                    ),
-                  ),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+        child: Center(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: colors.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(AppRadii.sm),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colors.onSurfaceVariant,
                 ),
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(child: Divider(color: colors.outlineVariant)),
-          ],
+          ),
         ),
       ),
       bubble,

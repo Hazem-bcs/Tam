@@ -51,6 +51,15 @@ Future<ChatCubit> pumpChat(
   );
   if (settle) {
     await tester.pumpAndSettle();
+    if (captureChatUi && showDemoAvatar) {
+      await tester.runAsync(
+        () => precacheImage(
+          const AssetImage('assets/images/driver_demo_160.webp'),
+          tester.element(find.byType(ChatPage)),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
   } else {
     await tester.pump();
   }

@@ -125,7 +125,10 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           constraints: BoxConstraints(
                             maxHeight: constraints.maxHeight * .16,
                           ),
-                          child: ChatStatusBanner(state: state),
+                          child: ChatStatusBanner(
+                            state: state,
+                            simulated: widget.showDemoAvatar,
+                          ),
                         ),
                         Expanded(
                           child: ChatTimeline(
@@ -133,7 +136,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             latestMessageKey: _latestMessageKey,
                             state: state,
                             now: cubit.now,
-                            showDemoAvatar: widget.showDemoAvatar,
                             controller: _scroll,
                             onLoadOlder: cubit.loadOlder,
                             onRetry: cubit.retry,

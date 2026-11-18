@@ -18,66 +18,41 @@ class ChatHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(
-        AppSpacing.lg,
-        AppSpacing.sm,
-        AppSpacing.lg,
-        AppSpacing.sm,
-      ),
-      child: Row(
-        children: [
-          _HeaderAction(
-            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            icon: const BackButtonIcon(),
-            onPressed: onBack,
-          ),
-          const SizedBox(width: AppSpacing.md),
-          DriverAvatar(size: 44, showDemoAvatar: showDemoAvatar),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Text(
-              name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
+    return Material(
+      color: theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xs,
+          vertical: AppSpacing.xs,
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              icon: const BackButtonIcon(),
+              onPressed: onBack,
+            ),
+            DriverAvatar(size: 40, showDemoAvatar: showDemoAvatar),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Text(
+                name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          _HeaderAction(
-            key: const Key('chat-refresh'),
-            tooltip: AppLocalizations.of(context).chatRefresh,
-            icon: const Icon(Icons.refresh_rounded),
-            onPressed: onRefresh,
-          ),
-        ],
+            IconButton(
+              key: const Key('chat-refresh'),
+              tooltip: AppLocalizations.of(context).chatRefresh,
+              icon: const Icon(Icons.refresh_rounded),
+              onPressed: onRefresh,
+            ),
+          ],
+        ),
       ),
     );
   }
-}
-
-class _HeaderAction extends StatelessWidget {
-  const _HeaderAction({
-    super.key,
-    required this.tooltip,
-    required this.icon,
-    required this.onPressed,
-  });
-  final String tooltip;
-  final Widget icon;
-  final VoidCallback onPressed;
-  @override
-  Widget build(BuildContext context) => Material(
-    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-    shape: const CircleBorder(),
-    elevation: AppElevation.raised,
-    child: IconButton(
-      tooltip: tooltip,
-      onPressed: onPressed,
-      color: Theme.of(context).colorScheme.primary,
-      icon: icon,
-    ),
-  );
 }

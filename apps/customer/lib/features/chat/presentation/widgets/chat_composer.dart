@@ -26,77 +26,83 @@ class _ChatComposerState extends State<ChatComposer> {
     super.dispose();
   }
 
+  void _send() {
+    if (widget.onSend(_controller.text)) {
+      _controller.clear();
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final length = _controller.text.trim().runes.length;
+    final tooLong = length > widget.maxLength;
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Material(
-        color: colors.surfaceContainerLowest,
-        elevation: AppElevation.raised,
-        borderRadius: BorderRadius.circular(AppRadii.sheet),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.sm),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: widget.maxHeight),
-                  child: SingleChildScrollView(
-                    child: TextField(
-                      key: const Key('chat-input'),
-                      controller: _controller,
-                      enabled: widget.enabled,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        hintText: t.chatMessageHint,
-                        helperText: length > 0
-                            ? t.chatCharacterCount(length, widget.maxLength)
-                            : null,
-                        filled: true,
-                        fillColor: colors.surfaceContainerLow,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.md,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppRadii.sheet),
-                          borderSide: BorderSide.none,
-                        ),
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Material(
+              color: colors.surfaceContainerLowest,
+              elevation: AppElevation.raised,
+              borderRadius: BorderRadius.circular(AppRadii.sheet),
+              clipBehavior: Clip.antiAlias,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: widget.maxHeight),
+                child: SingleChildScrollView(
+                  child: TextField(
+                    key: const Key('chat-input'),
+                    controller: _controller,
+                    enabled: widget.enabled,
+                    minLines: 1,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    textCapitalization: TextCapitalization.sentences,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(
+                      hintText: t.chatMessageHint,
+                      error: tooLong ? Text(t.chatValidation) : null,
+                      isDense: true,
+                      constraints: const BoxConstraints(
+                        minHeight: AppDimensions.minTapTarget,
                       ),
+                      filled: false,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.md,
+                      ),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.sm),
-              IconButton.filled(
-                key: const Key('chat-send'),
-                tooltip: t.chatSend,
-                style: IconButton.styleFrom(
-                  foregroundColor: colors.onPrimary,
-                  disabledForegroundColor: colors.onSurface.withValues(
-                    alpha: .38,
-                  ),
-                ),
-                onPressed:
-                    widget.enabled && length > 0 && length <= widget.maxLength
-                    ? () {
-                        if (widget.onSend(_controller.text)) {
-                          _controller.clear();
-                          setState(() {});
-                        }
-                      }
-                    : null,
-                icon: const Icon(Icons.send_rounded),
-              ),
-            ],
+            ),
           ),
-        ),
+          const SizedBox(width: AppSpacing.sm),
+          IconButton.filled(
+            key: const Key('chat-send'),
+            tooltip: t.chatSend,
+            style: IconButton.styleFrom(
+              minimumSize: const Size.square(AppDimensions.minTapTarget),
+              backgroundColor: colors.primary,
+              foregroundColor: colors.onPrimary,
+              disabledBackgroundColor: colors.onSurface.withValues(alpha: .08),
+              disabledForegroundColor: colors.onSurface.withValues(alpha: .38),
+              shape: const CircleBorder(),
+            ),
+            onPressed: widget.enabled && length > 0 && !tooLong ? _send : null,
+            icon: const Icon(Icons.send_rounded),
+          ),
+        ],
       ),
     );
   }

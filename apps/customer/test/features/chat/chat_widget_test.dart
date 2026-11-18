@@ -10,6 +10,29 @@ import 'chat_widget_support.dart';
 
 void main() {
   setUpAll(loadChatFonts);
+  testWidgets('composer hides the counter and preserves invalid drafts', (
+    tester,
+  ) async {
+    final repo = ControlledChatRepository();
+    addTearDown(repo.events.close);
+    await pumpChat(tester, repository: repo);
+    final longDraft = List.filled(1001, 'a').join();
+    await tester.enterText(find.byKey(const Key('chat-input')), longDraft);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('١٠٠٠'), findsOneWidget);
+    expect(
+      tester.widget<IconButton>(find.byKey(const Key('chat-send'))).onPressed,
+      isNull,
+    );
+    expect(find.text(longDraft), findsOneWidget);
+    await tester.enterText(find.byKey(const Key('chat-input')), 'مرحبا');
+    await tester.pumpAndSettle();
+    expect(find.textContaining('حرف'), findsNothing);
+    expect(
+      tester.widget<IconButton>(find.byKey(const Key('chat-send'))).onPressed,
+      isNotNull,
+    );
+  });
   testWidgets('driver portrait is shown only when explicitly enabled', (
     tester,
   ) async {
@@ -293,7 +316,7 @@ void main() {
       ),
     );
     await pumpChat(tester, repository: repo);
-    expect(find.text('مقروءة'), findsOneWidget);
+    expect(find.bySemanticsLabel('مقروءة'), findsOneWidget);
     await captureChat(tester, 'state-read-receipt');
     await tester.pumpWidget(const SizedBox());
   });

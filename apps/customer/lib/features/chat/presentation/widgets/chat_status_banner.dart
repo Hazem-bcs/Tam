@@ -4,20 +4,31 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import '../bloc/chat_state.dart';
 
 class ChatStatusBanner extends StatelessWidget {
-  const ChatStatusBanner({super.key, required this.state});
+  const ChatStatusBanner({
+    super.key,
+    required this.state,
+    this.simulated = false,
+  });
   final ChatState state;
+  final bool simulated;
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs,
+        ),
         child: Column(
           children: [
-            Text(
-              t.chatSimulation,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
+            if (simulated)
+              Text(
+                t.chatSimulation,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
             if (state.failure != null)
               Text(
                 _failure(t, state.failure!),
