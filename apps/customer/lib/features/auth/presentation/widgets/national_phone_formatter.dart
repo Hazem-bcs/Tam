@@ -20,7 +20,7 @@ final class NationalPhoneFormatter extends TextInputFormatter {
             digits.startsWith('00963') ||
             (digits.startsWith('963') && digits.length == 12));
     final removed = hasCountry ? digits.length - 9 : 0;
-    final local = hasCountry ? international!.substring(4) : digits;
+    final local = hasCountry ? international.substring(4) : digits;
     final text = local.substring(0, local.length.clamp(0, 10));
     int offset(int original) {
       if (original < 0) return text.length;
