@@ -61,6 +61,16 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
     );
   }
 
+  Widget _reveal(BuildContext context, Widget child) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    return AnimatedSize(
+      duration: AppMotion.medium,
+      curve: AppMotion.easeOut,
+      alignment: Alignment.topCenter,
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -127,13 +137,9 @@ class _CompletionRatingFormState extends State<CompletionRatingForm> {
               _SupportAction(onPressed: widget.onSupport),
             ],
           ] else ...[
-            AnimatedSize(
-              duration: MediaQuery.of(context).disableAnimations
-                  ? Duration.zero
-                  : AppMotion.medium,
-              curve: AppMotion.easeOut,
-              alignment: Alignment.topCenter,
-              child: selected == 0
+            _reveal(
+              context,
+              selected == 0
                   ? const SizedBox.shrink()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,8 +243,8 @@ class _RatingActions extends StatelessWidget {
     final support = _SupportAction(onPressed: submitting ? null : onSupport);
     return LayoutBuilder(
       builder: (context, bounds) {
-        if (bounds.maxWidth >= 300 &&
-            MediaQuery.textScalerOf(context).scale(1) < 1.4) {
+        if (bounds.maxWidth >= 440 &&
+            MediaQuery.textScalerOf(context).scale(1) < 1.2) {
           return Row(
             children: [
               Expanded(flex: 2, child: submit),
@@ -273,6 +279,9 @@ class _SupportAction extends StatelessWidget {
       height: 24,
       excludeFromSemantics: true,
     ),
-    label: Text(AppLocalizations.of(context).completionSupportShort),
+    label: Text(
+      AppLocalizations.of(context).completionSupportShort,
+      textAlign: TextAlign.center,
+    ),
   );
 }

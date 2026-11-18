@@ -86,6 +86,59 @@ void main() {
     },
   );
   test(
+    'restart restores multiple reservations beside an immediate ride, with isolated cancellation',
+    () async {
+      final cache = MemorySnapshots();
+      final now = DateTime.utc(2026, 11, 18, 12);
+      MockTripStore store() => MockTripStore(
+        now: () => now,
+        snapshots: MockTripSnapshotStore(cache),
+      );
+      final first = store();
+      await first.openSession('local:one');
+      final input = booking();
+      Trip reserve(String key, int days) => first.create(
+        TripBookingInput(
+          pickup: input.pickup,
+          destination: input.destination,
+          vehicleClassId: input.vehicleClassId,
+          fare: input.fare,
+          scheduledAt: now.add(Duration(days: days)),
+        ),
+        idempotencyKey: key,
+      );
+      final later = reserve('later', 2);
+      final earlier = reserve('earlier', 1);
+      final immediate = first.create(input, idempotencyKey: 'immediate');
+      await first.flush();
+      await first.dispose();
+      final second = store();
+      await second.openSession('local:one');
+      final repository = MockActiveTripRepository(
+        second,
+        now: () => now,
+        autoStart: false,
+      );
+      expect((await repository.current())!.id, immediate.id);
+      expect((await repository.upcoming()).map((t) => t.id), [
+        earlier.id,
+        later.id,
+      ]);
+      await repository.cancel(earlier.id);
+      expect((await repository.upcoming()).single.id, later.id);
+      expect((await repository.fetch(immediate.id))!.status.isActive, isTrue);
+      await repository.dispose();
+      await second.dispose();
+      final third = store();
+      await third.openSession('local:one');
+      expect(third.find(earlier.id)!.status, TripStatus.cancelled);
+      expect(third.find(later.id)!.status, TripStatus.scheduled);
+      await third.openSession('local:two');
+      expect(third.trips, isEmpty);
+      await third.dispose();
+    },
+  );
+  test(
     'logout and account switch cannot expose or resurrect old snapshots',
     () async {
       final cache = MemorySnapshots();

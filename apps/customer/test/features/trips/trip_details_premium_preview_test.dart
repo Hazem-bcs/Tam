@@ -74,7 +74,7 @@ void main() {
       // Ensure the user-supplied bitmap has decoded before capturing a golden.
       await tester.runAsync(() async {
         await precacheImage(
-          const AssetImage('assets/maps/vehicle-sedan-user.png'),
+          const AssetImage('assets/maps/vehicle-sedan-user.webp'),
           tester.element(find.byType(TripDetailsPage)),
         );
       });

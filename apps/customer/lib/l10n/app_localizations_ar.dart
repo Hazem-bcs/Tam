@@ -326,6 +326,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeSelectDefaultAddress => 'حدد عنوانك الافتراضي';
 
   @override
+  String get homeUpcomingTrips => 'رحلاتك القادمة';
+
+  @override
+  String get homeUpcomingLoading => 'جارٍ تحميل الرحلات القادمة';
+
+  @override
+  String get homeUpcomingError =>
+      'تعذر تحديث الرحلات القادمة. قد تكون المعلومات المعروضة قديمة.';
+
+  @override
+  String get homeUpcomingRetry => 'إعادة المحاولة';
+
+  @override
+  String get homeUpcomingOpen => 'عرض الرحلة ومتابعتها';
+
+  @override
+  String homeUpcomingRoute(String pickup, String destination) {
+    return 'من $pickup إلى $destination';
+  }
+
+  @override
   String get rideRequestTitle => 'احجز مشوارك';
 
   @override
@@ -1238,7 +1259,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsMockNotice =>
-      'الحساب والتفضيلات هنا محاكاة للتطوير، وليسا متصلين بخادم. حفظ اللغة يعمل فورًا طوال هذه الجلسة فقط.';
+      'الملف الشخصي وإشعارات الحساب محاكاة للتطوير. تُحفظ اللغة والمظهر وحجم النص على هذا الجهاز.';
 
   @override
   String get settingsLogout => 'تسجيل الخروج';
@@ -1372,7 +1393,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsCouponsCode => 'رمز الكوبون';
 
   @override
-  String get settingsCouponsHint => 'مثال: TAM10';
+  String get settingsCouponsHint => 'مثال: TAM10 أو تم10';
 
   @override
   String get settingsCouponsConfirm => 'إضافة';
@@ -1389,7 +1410,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsCouponsDemoHelp =>
-      'يمكن استخدام TAM10 في شاشة الحجز التجريبية فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.';
+      'يمكن استخدام TAM10 أو تم10 في تسعير الحجز التجريبي فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.';
+
+  @override
+  String get settingsAppearance => 'المظهر';
+
+  @override
+  String get settingsAppearanceSystem => 'حسب إعداد الجهاز';
+
+  @override
+  String get settingsAppearanceLight => 'فاتح';
+
+  @override
+  String get settingsAppearanceDark => 'داكن';
+
+  @override
+  String get settingsFontSize => 'حجم النص';
+
+  @override
+  String get settingsFontSmall => 'صغير';
+
+  @override
+  String get settingsFontStandard => 'افتراضي';
+
+  @override
+  String get settingsFontLarge => 'كبير';
+
+  @override
+  String get settingsFontExtraLarge => 'كبير جدًا';
+
+  @override
+  String get settingsFontSizeHint =>
+      'يُضاف إلى حجم النص في جهازك، مع الحفاظ على تكبير النص لتسهيل القراءة.';
+
+  @override
+  String get settingsPreferenceRestoreError =>
+      'تعذرت استعادة تفضيلات الجهاز. يمكنك استخدام الخيارات الحالية وإعادة المحاولة.';
+
+  @override
+  String get settingsPreferenceSaveError =>
+      'تعذر حفظ التفضيل. أُعيد خيارك السابق.';
 
   @override
   String get addressesTitle => 'عناويني';
@@ -1762,7 +1822,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatSimulation => 'محاكاة تطوير';
 
   @override
-  String get completionTitle => 'ملخص الرحلة والتقييم';
+  String get completionTitle => 'اكتملت الرحلة';
 
   @override
   String get completionLoading => 'جارٍ تحميل ملخص الرحلة';
@@ -1894,6 +1954,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completionSupportShort => 'الدعم';
+
+  @override
+  String get completionDetails => 'تفاصيل الرحلة';
 
   @override
   String get supportTitle => 'المساعدة والدعم';

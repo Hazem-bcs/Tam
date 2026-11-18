@@ -170,10 +170,10 @@ class _VehiclePhoto extends StatelessWidget {
           ? Image.asset(
               switch (kind) {
                 VehicleMarkerKind.motorbike =>
-                  'assets/maps/vehicle-motorbike-user.png',
-                VehicleMarkerKind.van => 'assets/maps/vehicle-van-user.png',
+                  'assets/maps/vehicle-motorbike-user.webp',
+                VehicleMarkerKind.van => 'assets/maps/vehicle-van-user.webp',
                 VehicleMarkerKind.car =>
-                  'assets/images/ahmad_ui/driver_car_demo.png',
+                  'assets/images/ahmad_ui/driver_car_demo.webp',
               },
               fit: BoxFit.contain,
               errorBuilder: (_, _, _) => fallback,

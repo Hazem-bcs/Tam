@@ -62,7 +62,7 @@ class _ServiceTile extends StatelessWidget {
       HomeServiceId.shopping => l.homeShopping,
     };
     final asset = switch (service.id) {
-      HomeServiceId.ride => 'assets/maps/vehicle-comfort-user.png',
+      HomeServiceId.ride => 'assets/maps/vehicle-comfort-user.webp',
       HomeServiceId.food => 'assets/images/food.webp',
       HomeServiceId.shopping => 'assets/images/shopping.webp',
     };

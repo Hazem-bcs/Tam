@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Tam Ride Coupons v1 (proposed)",
+    "name": "Tam Ride Coupons v1.1 (proposed)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -452,6 +452,77 @@
             }
           ],
           "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Try again later.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Activate Arabic coupon",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/coupons/activate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"تم١٠\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "activate_arabic_success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"تم١٠\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"code\": \"تم10\",\n    \"percent\": 10,\n    \"is_available\": true,\n    \"expires_at\": null,\n    \"remaining_trips\": null,\n    \"total_trips\": null\n  }\n}"
         }
       ]
     }

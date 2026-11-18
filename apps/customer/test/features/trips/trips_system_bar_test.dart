@@ -54,4 +54,41 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('dark ambient activity surface uses light system icons', (
+    tester,
+  ) async {
+    final store = MockTripStore(seed: seedMockTrips());
+    addTearDown(store.dispose);
+    final dark = AppTheme.light.copyWith(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xff801234),
+        brightness: Brightness.dark,
+      ),
+    );
+    await tester.pumpWidget(
+      tripsTestApp(
+        Theme(
+          data: dark,
+          child: BlocProvider(
+            create: (_) => TripsListCubit(MockTripsRepository(store)),
+            child: TripsListPage(navigation: TripsNavigationSpy()),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final overlay = tester.widget<AnnotatedRegion<SystemUiOverlayStyle>>(
+      find.descendant(
+        of: find.byType(TripsListPage),
+        matching: find.byType(AnnotatedRegion<SystemUiOverlayStyle>),
+      ),
+    );
+    expect(overlay.value.statusBarColor, dark.colorScheme.surface);
+    expect(overlay.value.statusBarIconBrightness, Brightness.light);
+    expect(overlay.value.statusBarBrightness, Brightness.dark);
+    expect(overlay.value.systemNavigationBarIconBrightness, Brightness.light);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+  });
 }

@@ -28,6 +28,7 @@ void main() {
     await tester.pumpAndSettle();
     final map = tester.state(find.byType(RouteMapView));
     final next = find.byKey(const Key('ride-flow-continue'));
+    await revealPageWidget(tester, next);
     await tester.ensureVisible(next);
     await tester.tap(next);
     await tester.pump(const Duration(milliseconds: 500));

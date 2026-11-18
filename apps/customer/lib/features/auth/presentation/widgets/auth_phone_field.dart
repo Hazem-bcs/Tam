@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/domain/phone_number.dart';
+import 'national_phone_formatter.dart';
 
 /// The country prefix is presentation-only. The existing domain normalizer
 /// continues to receive the full number and retains all of its existing rules.
@@ -72,18 +72,7 @@ class AuthPhoneField extends StatelessWidget {
                         null
                     ? invalidMessage
                     : null,
-                inputFormatters: [
-                  TextInputFormatter.withFunction((_, next) {
-                    final text = nationalPhoneEntry(next.text);
-                    return next.copyWith(
-                      text: text,
-                      selection: text.length == next.text.length
-                          ? next.selection
-                          : TextSelection.collapsed(offset: text.length),
-                      composing: TextRange.empty,
-                    );
-                  }),
-                ],
+                inputFormatters: const [NationalPhoneFormatter()],
                 errorBuilder: (context, error) => Directionality(
                   textDirection: direction,
                   child: Text(

@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
     this.isGuest = false,
     this.notificationsButton,
     this.addressBar,
+    this.upcomingTrips,
   });
 
   final CustomerNavigation navigation;
@@ -32,20 +33,24 @@ class HomePage extends StatelessWidget {
   final bool isAuthenticated;
   final bool isGuest;
   final Widget? notificationsButton;
-  final Widget? addressBar;
+  final Widget? addressBar, upcomingTrips;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
+    final statusBar = Color.alphaBlend(
+      colors.primaryContainer.withValues(alpha: .85),
+      colors.surface,
+    );
+    final statusBarBrightness = ThemeData.estimateBrightnessForColor(statusBar);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        statusBarColor: Color.alphaBlend(
-          colors.primaryContainer.withValues(alpha: .85),
-          colors.surface,
-        ),
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
+        statusBarColor: statusBar,
+        statusBarIconBrightness: statusBarBrightness == Brightness.dark
+            ? Brightness.light
+            : Brightness.dark,
+        statusBarBrightness: statusBarBrightness,
         systemStatusBarContrastEnforced: false,
       ),
       child: Scaffold(
@@ -89,6 +94,7 @@ class HomePage extends StatelessWidget {
                         ),
                         addressBar ??
                             HomeAddressBar(onManage: navigation.openAddresses),
+                        ?upcomingTrips,
                         BlocBuilder<HomeCubit, HomeState>(
                           builder: (context, state) {
                             final ready =

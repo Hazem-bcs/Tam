@@ -6,6 +6,7 @@ import 'package:tam_customer/features/ride_request/domain/repositories/ride_requ
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/features/ride_request/domain/usecases/load_ride_quotes.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_state.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
@@ -99,7 +100,7 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
       }
     });
     on<RideCouponApplied>((event, emit) {
-      final code = event.code.trim().toUpperCase();
+      final code = normalizeCouponCode(event.code);
       if (code != state.couponCode) {
         _edit(state.copyWith(couponCode: code), emit);
       }

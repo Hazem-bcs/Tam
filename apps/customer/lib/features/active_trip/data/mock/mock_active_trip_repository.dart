@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_simulation.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
+import 'package:tam_customer/features/active_trip/domain/upcoming_trips_repository.dart';
 import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -12,7 +13,8 @@ import 'mock_road_routes.dart';
 
 /// Application-owned engine. All trip state, including live metadata, lives in
 /// MockTripStore; this adapter owns only its clock, subscription and timer.
-final class MockActiveTripRepository implements ActiveTripRepository {
+final class MockActiveTripRepository
+    implements ActiveTripRepository, UpcomingTripsRepository {
   MockActiveTripRepository(
     this._store, {
     DateTime Function()? now,
@@ -137,22 +139,33 @@ final class MockActiveTripRepository implements ActiveTripRepository {
   Future<Trip?> current() async {
     await _ready();
     advance();
-    final active = _store.trips.where((trip) => trip.status.isActive).toList()
-      ..sort((a, b) {
-        final aScheduled = a.status == TripStatus.scheduled;
-        final bScheduled = b.status == TripStatus.scheduled;
-        if (aScheduled != bScheduled) return aScheduled ? 1 : -1;
-        if (aScheduled) {
-          final time = a.booking.scheduledAt!.compareTo(b.booking.scheduledAt!);
-          if (time != 0) return time;
-        }
-        final created = b.createdAt.compareTo(a.createdAt);
-        return created == 0 ? a.id.compareTo(b.id) : created;
-      });
+    final active = _store.trips
+        .where(
+          (trip) => trip.status.isActive && trip.status != TripStatus.scheduled,
+        )
+        .toList();
     final trip = active.firstOrNull;
     _checkConnection(trip);
     _checkRouting(trip);
     return trip;
+  }
+
+  @override
+  Future<List<Trip>> upcoming() async {
+    await _ready();
+    advance();
+    final scheduled =
+        _store.trips
+            .where((trip) => trip.status == TripStatus.scheduled)
+            .toList()
+          ..sort((a, b) {
+            final time = a.booking.scheduledAt!.compareTo(
+              b.booking.scheduledAt!,
+            );
+            return time == 0 ? a.id.compareTo(b.id) : time;
+          });
+    _checkConnection(scheduled.firstOrNull);
+    return List.unmodifiable(scheduled);
   }
 
   @override

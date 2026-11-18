@@ -175,7 +175,11 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: math.min(
-                        (_extent.value * _height).clamp(0, _height),
+                        ((keyboardInset > 0
+                                    ? math.max(_extent.value, _preferred)
+                                    : _extent.value) *
+                                _height)
+                            .clamp(0, _height),
                         math.max(
                           0,
                           _height -
@@ -267,7 +271,7 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                     : AppMotion.medium,
                                 curve: AppMotion.easeOut,
                                 child: RideJourneyPanelContent(
-                                  compact: _compact,
+                                  compact: _compact && keyboardInset == 0,
                                   expandedHeight: math.max(
                                     240,
                                     _preferred * _height -

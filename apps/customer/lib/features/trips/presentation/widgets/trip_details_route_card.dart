@@ -62,7 +62,6 @@ class TripDetailsRouteCard extends StatelessWidget {
                     l.tripsRoute,
                     style: type.titleSmall?.copyWith(
                       color: colors.onSurface,
-                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -194,17 +193,13 @@ class _TimelineStop extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: type.bodySmall?.copyWith(
-                  color: colors.onSurfaceVariant,
-                  fontSize: 12,
-                ),
+                style: type.bodySmall?.copyWith(color: colors.onSurfaceVariant),
               ),
               const SizedBox(height: 3),
               Text(
                 address,
                 style: type.bodyMedium?.copyWith(
                   color: colors.onSurface,
-                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   height: 1.35,
                 ),

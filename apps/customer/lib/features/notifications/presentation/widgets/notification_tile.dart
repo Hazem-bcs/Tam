@@ -84,7 +84,7 @@ class NotificationTile extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: Colors.transparent,
+          type: MaterialType.transparency,
           borderRadius: BorderRadius.circular(21),
           clipBehavior: Clip.antiAlias,
           child: InkWell(

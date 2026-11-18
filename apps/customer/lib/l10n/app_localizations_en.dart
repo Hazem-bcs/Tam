@@ -334,6 +334,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSelectDefaultAddress => 'Choose your default address';
 
   @override
+  String get homeUpcomingTrips => 'Upcoming rides';
+
+  @override
+  String get homeUpcomingLoading => 'Loading upcoming rides';
+
+  @override
+  String get homeUpcomingError =>
+      'Upcoming rides could not be refreshed. Displayed information may be out of date.';
+
+  @override
+  String get homeUpcomingRetry => 'Try again';
+
+  @override
+  String get homeUpcomingOpen => 'View and track ride';
+
+  @override
+  String homeUpcomingRoute(String pickup, String destination) {
+    return 'From $pickup to $destination';
+  }
+
+  @override
   String get rideRequestTitle => 'Book a ride';
 
   @override
@@ -1258,7 +1279,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsMockNotice =>
-      'The profile and preferences are simulated for development, not connected to a server. Language changes apply immediately for this session only.';
+      'Profile and account notifications are simulated for development. Language, appearance and text size are saved on this device.';
 
   @override
   String get settingsLogout => 'Log out';
@@ -1392,7 +1413,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCouponsCode => 'Coupon code';
 
   @override
-  String get settingsCouponsHint => 'Example: TAM10';
+  String get settingsCouponsHint => 'Example: TAM10 or تم10';
 
   @override
   String get settingsCouponsConfirm => 'Add';
@@ -1409,7 +1430,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsCouponsDemoHelp =>
-      'TAM10 works only on the demo booking price screen. Adding it here does not apply it to trips automatically.';
+      'TAM10 and تم10 work only with demo booking prices. Adding a code here does not apply it automatically.';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get settingsAppearanceSystem => 'Use device setting';
+
+  @override
+  String get settingsAppearanceLight => 'Light';
+
+  @override
+  String get settingsAppearanceDark => 'Dark';
+
+  @override
+  String get settingsFontSize => 'Text size';
+
+  @override
+  String get settingsFontSmall => 'Small';
+
+  @override
+  String get settingsFontStandard => 'Standard';
+
+  @override
+  String get settingsFontLarge => 'Large';
+
+  @override
+  String get settingsFontExtraLarge => 'Extra large';
+
+  @override
+  String get settingsFontSizeHint =>
+      'Adds to your device text size. Accessibility text scaling stays enabled.';
+
+  @override
+  String get settingsPreferenceRestoreError =>
+      'Could not restore device preferences. Current choices are still available.';
+
+  @override
+  String get settingsPreferenceSaveError =>
+      'Could not save this preference. Your previous choice was restored.';
 
   @override
   String get addressesTitle => 'My addresses';
@@ -1792,7 +1852,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatSimulation => 'Simulation';
 
   @override
-  String get completionTitle => 'Trip summary and rating';
+  String get completionTitle => 'Trip completed';
 
   @override
   String get completionLoading => 'Loading trip summary';
@@ -1926,6 +1986,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completionSupportShort => 'Support';
+
+  @override
+  String get completionDetails => 'Trip details';
 
   @override
   String get supportTitle => 'Help and support';

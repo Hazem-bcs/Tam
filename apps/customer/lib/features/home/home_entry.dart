@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
+import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/features/active_trip/domain/upcoming_trips_repository.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/addresses_cubit.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
@@ -11,9 +13,11 @@ import 'package:tam_customer/features/home/data/unavailable_home_repository.dart
 import 'package:tam_customer/features/home/domain/repositories/home_repository.dart';
 import 'package:tam_customer/features/home/presentation/bloc/home_cubit.dart';
 import 'package:tam_customer/features/home/presentation/bloc/home_unread_count_cubit.dart';
+import 'package:tam_customer/features/home/presentation/bloc/home_upcoming_trips_cubit.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_notifications_button.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_preferred_address_bar.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_upcoming_trips.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
 
 Widget buildHomeFeature(
@@ -25,6 +29,7 @@ Widget buildHomeFeature(
   NotificationsUnreadCountSource? unreadCountSource,
   AddressesRepository? addressesRepository,
   required PreferredAddressSelection preferredAddress,
+  UpcomingTripsRepository? upcomingTrips,
 }) {
   final HomeRepository repository = switch (dataMode) {
     FeatureDataMode.mock => const MockHomeRepository(),
@@ -38,6 +43,16 @@ Widget buildHomeFeature(
     isGuest: status == AuthStatus.guest,
     logout: logout,
     addressBar: addressBar,
+    upcomingTrips: upcomingTrips == null
+        ? null
+        : BlocProvider(
+            key: ValueKey((upcomingTrips, status, phoneE164)),
+            create: (_) => HomeUpcomingTripsCubit(upcomingTrips),
+            child: HomeUpcomingTrips(
+              schedulePolicy: AppConfig.rideSchedulePolicy,
+              onOpen: (id) => navigation.openActiveTrip(id: id),
+            ),
+          ),
     notificationsButton: unreadCountSource == null
         ? null
         : BlocProvider(

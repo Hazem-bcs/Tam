@@ -27,7 +27,7 @@ class RideArtwork extends StatelessWidget {
     };
     if (vehicle != null) {
       return Image.asset(
-        'assets/maps/vehicle-$vehicle-user.png',
+        'assets/maps/vehicle-$vehicle-user.webp',
         width: width,
         height: height,
         fit: BoxFit.contain,

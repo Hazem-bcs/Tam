@@ -370,3 +370,27 @@ AUI-08-RATING-MOTION-20261118: READY → IMPLEMENTING → READY_FOR_REVIEW؛root
 AUI-09-RIDE-JOURNEY-20261118: READY → IMPLEMENTING؛ root، أساس e88e313 على ahmad-ui؛ اختيار ومتابعة على خريطة واحدة، كوبونات واستعادة محلية معزولة. [البطاقة](tasks/AUI-09-RIDE-JOURNEY-20261118.md).
 
 AUI-09-RIDE-JOURNEY-20261118: READY_FOR_REVIEW؛ root،176اختبارًا مستهدفًا و4اختبارات رسم ناجحة،تحليل42ملفًا نظيف،الفحص الشامل865نجاحًا/46إخفاقًا موثقة. حُفظ تقدم ahmad-ui إلىccb7d08؛ لاpushأودمجmain. [التسليم](../ahmad-ui/deliveries/AUI-09-RIDE-JOURNEY-20261118/REPORT.ar.md).
+
+
+## Customer feedback — 2026-11-18
+
+User authorized all sixteen feedback changes, parallel agents, local merge to ahmad-ui and emulator run. No push/main/Actions. Baseline ahmad-ui ea71aae plus preserved plan/references at6eb1e99. Integration codex/customer-feedback-20261118; root is supervisor.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| [CF-THEME](tasks/CF-THEME.md) | READY | theme agent | F07; exclusive theme/app/settings preferences |
+| [CF-BOOKING](tasks/CF-BOOKING.md) | READY | booking agent | F04,F05,F08-search; exclusive trip mock persistence |
+| [CF-TRIPS](tasks/CF-TRIPS.md) | READY | trips agent | F03,F06-completion,F02-trip/chat/support |
+| [CF-ROOT](tasks/CF-ROOT.md) | READY → IMPLEMENTING | root | F01,account/legal,integration,F16 |
+
+Full test/build/visual milestones are batched at integration; independent exact-SHA reviews assigned on submission. No writers share worktrees. Existing untracked trip failure images in target worktree are preserved.
+
+CF-THEME: IMPLEMENTED at2a7ea58b59caf83b09ed231bbdbbf304e9865770; review checkout customer-feedback-review-theme created from exact SHA, reviewer assignment pending available owner. CF-BOOKING/CF-TRIPS: IMPLEMENTING in their isolated named worktrees, branches codex/customer-feedback-{booking,trips}-20261118. CF-ROOT: REVIEW, implementation856b990; reviewer theme assigned in /home/hazem/.codex/worktrees/customer-feedback-review-root/mashwar at856b990, branch codex/customer-feedback-review-root-20261118. Ownership limited to CF-ROOT paths and review report; pricing/draft integration explicitly pending booking delivery. F16 asset compression evaluated separately with exact decoded RGBA checks; no original deletion until savings/identity evidence and path integration.
+
+CF-ROOT approved independently at9709ba64d3e7ad9c7560a3913ad1ed5e28673e9f; merged into integration. CF-TRIPS submitted8e3e398ed24b5033bd7507493752b38c1ca65685, reviewer root assigned in customer-feedback-review-trips from exact SHA; full owned diff, reference/evidence and25 independent focused tests checked. CF-THEME review assigned booking in customer-feedback-review-theme from2a7ea58. CF-BOOKING submitted0a31c58a48af4f4cff844ea243161d4022cec249; review assigned theme in customer-feedback-review-booking from exact SHA. Reviewers own only their reviewed feature fixes/report and freeze final SHAs; no app/emulator use by agents.
+
+## Customer feedback integration milestone — 2026-11-18
+
+CF-ROOT9709ba6 / CF-TRIPSdbdd119 / CF-BOOKING37c491b / CF-THEMEf33b6cd integrated into codex/customer-feedback-20261118. Root recovered pending reviewer hydration fix after agents hit provider quota; actual regression passed. Shared integration wiring/coupon/snapshot/lossless compression ataded26d and contract correctionsda1482b integrated. Product/l10n/dependency source3c98911; test-only lazy-action adaptation3495894. Format586/0, analyzer14info exactly baseline, JSON255+five asset hashes verified. Full baseline929pass/56fail versus integrated982pass/55fail;54same failures, new lazy-action test corrected and its independent rerun passes. Android arm64+x64 release build running; targetahmad-ui merge/device evidence pending. No push/main/Actions; inherited failing tests and physical-device/legal blockers explicitly recorded in final delivery report.
+
+CUSTOMER-FEEDBACK-20261118: build/run complete. Product099d4dc includes native dark contrast/system-nav correction; focused19tests+clean focused analyze; final split release arm64+x64 successful157.2s. Installed final builds onNVIDIA Medium_Phone and user'sUSB SamsungA22/SM_A225F (arm64), Success+MainActivity start, no data deletion. Final APK in Downloads/Tam-Release-20261118. Root final report/apk hashes/native screenshots in deliveries/CUSTOMER-FEEDBACK-20261118; localahmad-ui merge authorized and being finalized.54baseline test failures, legal unpublished and physical before/after profiling remain explicitly documented; no production claim/push/main/Actions.

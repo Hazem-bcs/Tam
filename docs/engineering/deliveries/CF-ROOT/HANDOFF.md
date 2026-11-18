@@ -1,0 +1,11 @@
+# CF-ROOT — implementation handoff (integration pending)
+
+Baseline 1b8890049177b56b3ce8e2c0254b622defa95bbf. Supervisor/developer root.
+
+Implemented local phone digit normalization/filtering/10-digit limit with selection preservation and existing full-country paste support; Auth domain and temporary access unchanged. Coupon fields accept Arabic/Latin text and follow content direction. Canonical identifiers preserve Arabic letters; Arabic/Persian digits normalize and Latin case uppercases. Added deterministic independent `تم10` mock fixture (10%) alongside TAM10, reset with session. Extended transport parsing and proposed coupon v1.1 API/Postman/examples without live endpoints. Pricing/draft wiring awaits CF-BOOKING delivery. Account number uses readable LTR wrapping rather than horizontal scroll; compact identity layout uses large text/phone constraints. Auth status/navigation overlays follow ambient brightness. Legal destinations were already correct; added actual route/back regressions in both locales. Approved legal content remains unavailable and is not fabricated.
+
+Focused milestone: `flutter test --no-pub test/features/customer_feedback test/features/ride_request/data/ride_coupon_contract_test.dart` ran 11 tests. Initial fixtures exposed missing pump after state edits and incorrect imperative-GoRouter URL observation; fixed test assertions. Corrected input/contract subset passed9, and separate `flutter test --no-pub test/features/customer_feedback/legal_navigation_test.dart` passed2. Full combined checks deferred to integration. `dart format` touched files and `git diff --check` passed. Actual emulator review deferred to combined candidate.
+
+F16 audit captured byte/hash inventory and existing x64 release APK size:55,461,462bytes;13,000,285 uncompressed Flutter assets;42,075,464 native library bytes. No docs entries found in APK, so deleting repository documentation cannot reduce it. Existing reference APK source provenance is ea71aae per supplied plan/build history, not re-proven by rebuilding baseline; comparisons must state this limit. No unused package/asset deletion justified yet.
+
+Verdict READY_FOR_REVIEW for this owned implementation; pricing integration and final verification pending. Mock-only behavior; no real booking/payment/activation, no production/performance readiness claim.

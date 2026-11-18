@@ -26,8 +26,21 @@ class CompletionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.completionTitle),
+        toolbarHeight: MediaQuery.textScalerOf(context).scale(kToolbarHeight),
+        title: Text(
+          l.completionTitle,
+          softWrap: true,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         leading: BackButton(onPressed: onBack),
+        actions: [
+          IconButton(
+            key: const Key('completion-home'),
+            tooltip: l.completionHome,
+            onPressed: onHome,
+            icon: const Icon(Icons.home_outlined),
+          ),
+        ],
       ),
       body: SafeArea(
         child: BlocBuilder<CompletionCubit, CompletionState>(
@@ -82,7 +95,14 @@ class CompletionPage extends StatelessWidget {
                         ),
                       if (!state.sessionEnded && state.completion != null) ...[
                         CompletionSummary(completion: state.completion!),
-                        const SizedBox(height: AppSpacing.lg),
+                        const SizedBox(height: AppSpacing.md),
+                        TamButton.secondary(
+                          key: const Key('completion-home-action'),
+                          label: l.completionHome,
+                          icon: Icons.home_outlined,
+                          onPressed: onHome,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
                         CompletionRatingForm(
                           state: state,
                           policy: cubit.policy,
@@ -120,11 +140,12 @@ class CompletionPage extends StatelessWidget {
                               icon: const Icon(Icons.support_agent_outlined),
                               label: Text(l.completionSupport),
                             ),
-                          TextButton.icon(
-                            onPressed: onHome,
-                            icon: const Icon(Icons.home_outlined),
-                            label: Text(l.completionHome),
-                          ),
+                          if (state.sessionEnded || state.completion == null)
+                            TextButton.icon(
+                              onPressed: onHome,
+                              icon: const Icon(Icons.home_outlined),
+                              label: Text(l.completionHome),
+                            ),
                         ],
                       ),
                       const SizedBox(height: AppSpacing.sm),

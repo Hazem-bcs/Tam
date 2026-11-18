@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/data/ride_contract_parser.dart';
@@ -67,6 +68,46 @@ void main() {
   );
 
   test(
+    'upcoming examples match ordered mock reservations and targeted cancellation',
+    () async {
+      final now = DateTime.utc(2026, 11, 9, 12);
+      final store = MockTripStore(now: () => now);
+      final live = MockActiveTripRepository(
+        store,
+        now: () => now,
+        autoStart: false,
+      );
+      addTearDown(() async {
+        await live.dispose();
+        await store.dispose();
+      });
+      final repository = MockRideRequestRepository(
+        trips: store,
+        now: () => now,
+      );
+      for (final day in [9, 10]) {
+        final quote = await repository.requestQuote(
+          pickup: mockRidePlaces[0].location,
+          destination: mockRidePlaces[1].location,
+          vehicleClass: RideVehicleClass.standard,
+          scheduledAt: DateTime.utc(2026, 11, day, 15),
+        );
+        await repository.confirm(quote: quote, idempotencyKey: 'schedule-$day');
+      }
+      expect(await live.current(), isNull);
+      expect(
+        (await live.upcoming()).map(TripWireCodec.toJson).toList(),
+        schedulingExample('trips-upcoming')['data'],
+      );
+      await live.cancel('mock-trip-1');
+      expect(
+        (await live.upcoming()).map(TripWireCodec.toJson).toList(),
+        schedulingExample('trips-upcoming-after-cancel')['data'],
+      );
+    },
+  );
+
+  test(
     'scheduled parsing rejects absent, local, impossible and inconsistent times',
     () {
       for (final value in [
@@ -104,7 +145,11 @@ void main() {
               as Map<String, dynamic>;
       expect(collection['info']['schema'], contains('/v2.1.0/'));
       final items = collection['item'] as List;
-      expect(items, hasLength(5));
+      expect(items, hasLength(6));
+      expect(
+        items.last['request']['url'],
+        '{{base_url}}/trips?filter=scheduled&sort=scheduled_at_asc&limit=20',
+      );
       expect(collection['auth']['type'], 'bearer');
       final confirm = items[1]['request'];
       expect(

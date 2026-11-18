@@ -8,6 +8,7 @@ import '../widgets/chat_composer.dart';
 import '../widgets/chat_header.dart';
 import '../widgets/chat_status_banner.dart';
 import '../widgets/chat_timeline.dart';
+import '../widgets/chat_viewport.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({
@@ -58,13 +59,25 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       final last = cubit.state.messages.lastOrNull;
       final messageBox = _latestMessageKey.currentContext?.findRenderObject();
       final viewport = _timelineKey.currentContext?.findRenderObject();
+      final media = MediaQuery.of(context);
+      final visibleScreen = Rect.fromLTRB(
+        0,
+        media.padding.top,
+        media.size.width,
+        media.size.height - media.viewInsets.bottom - media.padding.bottom,
+      );
       if (last != null &&
           messageBox is RenderBox &&
           viewport is RenderBox &&
           messageBox.hasSize &&
           viewport.hasSize &&
+          (viewport.localToGlobal(Offset.zero) & viewport.size).overlaps(
+            visibleScreen,
+          ) &&
           (messageBox.localToGlobal(Offset.zero) & messageBox.size).overlaps(
-            viewport.localToGlobal(Offset.zero) & viewport.size,
+            (viewport.localToGlobal(Offset.zero) & viewport.size).intersect(
+              visibleScreen,
+            ),
           )) {
         cubit.displayedThrough(last.sequence);
       }
@@ -111,38 +124,30 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 800),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => Column(
-                      children: [
-                        ChatHeader(
-                          name: name ?? t.chatTitle,
-                          showDemoAvatar:
-                              widget.showDemoAvatar && metadata != null,
-                          onBack: widget.onBack,
-                        ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: constraints.maxHeight * .16,
-                          ),
-                          child: ChatStatusBanner(
-                            state: state,
-                            simulated: widget.showDemoAvatar,
-                            onRetry: cubit.refresh,
-                          ),
-                        ),
-                        Expanded(
-                          child: ChatTimeline(
-                            key: _timelineKey,
-                            latestMessageKey: _latestMessageKey,
-                            state: state,
-                            now: cubit.now,
-                            controller: _scroll,
-                            onLoadOlder: cubit.loadOlder,
-                            onRetry: cubit.retry,
-                          ),
-                        ),
-                        if (!_atNewest)
-                          TextButton.icon(
+                  child: ChatViewport(
+                    onViewportChanged: _scheduleRead,
+                    header: ChatHeader(
+                      name: name ?? t.chatTitle,
+                      showDemoAvatar: widget.showDemoAvatar && metadata != null,
+                      onBack: widget.onBack,
+                    ),
+                    status: ChatStatusBanner(
+                      state: state,
+                      simulated: widget.showDemoAvatar,
+                      onRetry: cubit.refresh,
+                    ),
+                    timeline: ChatTimeline(
+                      key: _timelineKey,
+                      latestMessageKey: _latestMessageKey,
+                      state: state,
+                      now: cubit.now,
+                      controller: _scroll,
+                      onLoadOlder: cubit.loadOlder,
+                      onRetry: cubit.retry,
+                    ),
+                    newest: _atNewest
+                        ? null
+                        : TextButton.icon(
                             key: const Key('chat-newest'),
                             onPressed: () {
                               _scroll.jumpTo(0);
@@ -151,19 +156,14 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             icon: const Icon(Icons.arrow_downward),
                             label: Text(t.chatNewest),
                           ),
-                        ChatComposer(
-                          enabled: state.canSend,
-                          maxLength: cubit.policy.maxBodyCodePoints,
-                          maxHeight: (constraints.maxHeight * .28).clamp(
-                            40,
-                            180,
-                          ),
-                          onSend: (body) =>
-                              _resumed &&
-                              ModalRoute.of(context)?.isCurrent != false &&
-                              cubit.send(body),
-                        ),
-                      ],
+                    composer: (height) => ChatComposer(
+                      enabled: state.canSend,
+                      maxLength: cubit.policy.maxBodyCodePoints,
+                      maxHeight: height,
+                      onSend: (body) =>
+                          _resumed &&
+                          ModalRoute.of(context)?.isCurrent != false &&
+                          cubit.send(body),
                     ),
                   ),
                 ),

@@ -82,10 +82,7 @@ void main() {
       await enterCustomerSession(tester, phone: null);
       router.go(AppRoutes.support);
       await tester.pumpAndSettle();
-      expect(
-        router.routeInformationProvider.value.uri.path,
-        AppRoutes.support,
-      );
+      expect(router.routeInformationProvider.value.uri.path, AppRoutes.support);
       expect(find.byType(SupportEditorPage), findsOneWidget);
       expect(
         tester

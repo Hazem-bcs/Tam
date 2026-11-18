@@ -23,7 +23,7 @@ The default public provider is OpenFreeMap. MapLibre is the renderer and
 OpenStreetMap is the underlying map data. Source credits remain accessible from
 the map's attribution information button.
 
-The active vehicle selector uses the user's `vehicle-*-user.png` artwork,
+The active vehicle selector uses the user's `vehicle-*-user.webp` artwork,
 supplied from Downloads on 2026-11-16: White Toyota Sedan with Burgundy Arabic
 Livery (standard), Premium Comfort Sedan with Maroon Accents (comfort), Polished
 Hyundai H-1 with Maroon Decals (van), and Glossy Maroon-Accented Delivery Scooter.
@@ -40,3 +40,5 @@ Legacy raster deployments must explicitly set `MAP_VECTOR_STYLE_ASSET` to an
 empty string and supply `MAP_TILES_URL_TEMPLATE`. A native map failure never
 silently switches providers. Search and routing still use the existing
 independently configured Maps repository and API contract.
+
+2026-11-18: user vehicle bitmaps re-encoded as lossless WebP, exact decoded RGBA/alpha preserved; source PNG hashes, sizes, comparison hashes and encoder source in docs/engineering/deliveries/CF-ROOT/asset-audit/. Original PNGs remain recoverable in Git history.

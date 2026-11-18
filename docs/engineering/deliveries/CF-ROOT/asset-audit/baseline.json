@@ -1,0 +1,362 @@
+[
+  {
+    "path": "apps/customer/assets/animations/tam_mascot_auth.riv",
+    "bytes": 1854700,
+    "sha256": "47af1098b9837f110aad537cd38b1ee31eb56bebee14a46da68fe0d2378d2802"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-motorbike-user.png",
+    "bytes": 1835615,
+    "sha256": "b941c60b4a3de0680d4b13a45d21780498de33579f34b5582192efb46545b88b"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-van-user.png",
+    "bytes": 1795317,
+    "sha256": "590d9a592d208e2162e7f3401d0b4068eaa9612d53f242299aaa77cd3f54a245"
+  },
+  {
+    "path": "apps/customer/assets/images/ahmad_ui/driver_car_demo.png",
+    "bytes": 1692210,
+    "sha256": "3867ad92333a9d33c4ae9cfb783c35d71e276c297e2934ef0f8f99babc5c8642"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-sedan-user.png",
+    "bytes": 1445975,
+    "sha256": "6bfdb3700dc30902bbf9413123448f646b60e220f06fbcf914d0cfb7ec7f2846"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-comfort-user.png",
+    "bytes": 1407915,
+    "sha256": "b6d149c507f6fa148d27bacb0c56190cfce61bacad33d385c8a4178e89645196"
+  },
+  {
+    "path": "apps/customer/assets/fonts/NotoSans-Bold.ttf",
+    "bytes": 515752,
+    "sha256": "e83493c945848ecd4a9ad0f6d19164541a0d3e23a9c952304a00a46e00272ac5"
+  },
+  {
+    "path": "apps/customer/assets/fonts/NotoSans-Regular.ttf",
+    "bytes": 512672,
+    "sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+  },
+  {
+    "path": "apps/customer/assets/images/brand/logo_en.png",
+    "bytes": 317825,
+    "sha256": "e8881277f23e27a21017bfe1caf675cb3f6c350a9ca14e355fd3be80ba08258b"
+  },
+  {
+    "path": "apps/customer/assets/fonts/NotoSansArabic-Bold.ttf",
+    "bytes": 252940,
+    "sha256": "ded6fc7359ca36d15d7aab9ef0c066e21ce48b26a069994d6602fa2cb9a1b952"
+  },
+  {
+    "path": "apps/customer/assets/fonts/NotoSansArabic-Regular.ttf",
+    "bytes": 244072,
+    "sha256": "504d7407d86875acf7d04dfaa0fd7524d0b8797723bc4aa18022f29db25b0b6e"
+  },
+  {
+    "path": "apps/customer/assets/images/tam_account_mascot.webp",
+    "bytes": 239268,
+    "sha256": "d9cdd45c7a8fd8e44afcd1a6c1a0448ed5efb958a74bff4d190be822342a687c"
+  },
+  {
+    "path": "apps/customer/assets/images/brand/logo_ar.png",
+    "bytes": 225358,
+    "sha256": "eea3e6909320de0405ec46eba5ecd6454d666ef238f09a5d194e02c2ba53d0a3"
+  },
+  {
+    "path": "apps/customer/assets/images/ahmad_ui/home_hero.webp",
+    "bytes": 114156,
+    "sha256": "6e375ec4da7132f382f5a04ad935afe7deae9654aead3be5edb3bd859292449f"
+  },
+  {
+    "path": "apps/customer/assets/maps/liberty.json",
+    "bytes": 43311,
+    "sha256": "408245464e76791801a64393c403433d09e8110eb9516040f8dc2b62584eee2a"
+  },
+  {
+    "path": "apps/customer/assets/images/ahmad_ui/auth_otp.webp",
+    "bytes": 25816,
+    "sha256": "52dba8c51847bff800f3a878d44a464e3eecfd2b090abc4a1ca85f2e00573cbd"
+  },
+  {
+    "path": "apps/customer/assets/images/hero_aleppo.webp",
+    "bytes": 14002,
+    "sha256": "ed3f2b0081179289ab319682b4cd0fa4ed7ebae43ae3102f32e2bf8a044ff15d"
+  },
+  {
+    "path": "apps/customer/assets/images/ahmad_ui/auth_route.webp",
+    "bytes": 13852,
+    "sha256": "e248b8d514390046a5c786d38fd6fb1ae3b348dff4d36fa1173ea16f7461f57f"
+  },
+  {
+    "path": "apps/customer/assets/notifications/notification_bell.webp",
+    "bytes": 9562,
+    "sha256": "25a66c954013c8ffaf6ad6fc03b128621f8962b75fc8dce2f0d26f846ac3eb87"
+  },
+  {
+    "path": "apps/customer/assets/notifications/ride_scheduled.webp",
+    "bytes": 9134,
+    "sha256": "6a7a24c10fc39f2b8ba988cd80368babb048b97f422d20ed891ac708297f13aa"
+  },
+  {
+    "path": "apps/customer/assets/notifications/announcement.webp",
+    "bytes": 8758,
+    "sha256": "fe42072bffc396dda41e4fd0a93f816ef783e2b0baaeeab320793c041b6469c9"
+  },
+  {
+    "path": "apps/customer/assets/notifications/gift.webp",
+    "bytes": 8748,
+    "sha256": "b20c3409476d3d8bef8be15ecd592b1a225e3bf85a6099a0a8d94c391322e083"
+  },
+  {
+    "path": "apps/customer/assets/notifications/food.webp",
+    "bytes": 8728,
+    "sha256": "a18fc0211950bebfbef7be303b639a79b98eb8c40ecb83ed0ffce569868c5220"
+  },
+  {
+    "path": "apps/customer/assets/notifications/ride_repeat.webp",
+    "bytes": 8554,
+    "sha256": "abb4c3ab9fb0d1173dcb0ab9903a7f5337cc718878f3673fc09ba9ae7d573817"
+  },
+  {
+    "path": "apps/customer/assets/notifications/driver_arrived.webp",
+    "bytes": 8380,
+    "sha256": "69bb2cf785f1b3ec296bdd50a34859b40d2adbdca26c2fb8afc67a2444ce515e"
+  },
+  {
+    "path": "apps/customer/assets/notifications/delivery.webp",
+    "bytes": 8100,
+    "sha256": "11a57d1a0e114094edcf3463753b52078994dd20ac814d5f0f73ea1ecc5df4ff"
+  },
+  {
+    "path": "apps/customer/assets/notifications/support.webp",
+    "bytes": 8096,
+    "sha256": "f223976383205632defe392ecc173916c1d4a78cf4fed4933d750f8435833ebc"
+  },
+  {
+    "path": "apps/customer/assets/notifications/security.webp",
+    "bytes": 7886,
+    "sha256": "374ff91654368d43f84b8490471dd4b259508bb5436eb24a3127a60b98ca97e3"
+  },
+  {
+    "path": "apps/customer/assets/notifications/ride_rating.webp",
+    "bytes": 7874,
+    "sha256": "2688f84c3aa1fe3e260810ce0e6f7e45dfc6e2690b1f8c85260374fbc3becc8a"
+  },
+  {
+    "path": "apps/customer/assets/notifications/ride_cancelled.webp",
+    "bytes": 7620,
+    "sha256": "3dc3bdc562034f3f990194ec4b6f920ff89f7760be5ef8f5946fdd4bb9a6b961"
+  },
+  {
+    "path": "apps/customer/assets/notifications/account.webp",
+    "bytes": 7552,
+    "sha256": "7082ecaab70152776fee2716a8bee5c08e6e3ba94bca5e654c6a36071ed80730"
+  },
+  {
+    "path": "apps/customer/assets/notifications/ride_completed.webp",
+    "bytes": 7484,
+    "sha256": "c6922905528dcb6ea5a1906f7790345d4ee5d39fafec739548b166c4f233bf24"
+  },
+  {
+    "path": "apps/customer/assets/notifications/discount_offer.webp",
+    "bytes": 7328,
+    "sha256": "71dfddc8821cdd6bd0b70310761552ecc8bcb3311208a75b379e17e3c00afeb1"
+  },
+  {
+    "path": "apps/customer/assets/notifications/information.webp",
+    "bytes": 7296,
+    "sha256": "e6b5d0e429290a379884752aa68a4c8d50abc5c204b1f6045d4a60ffdd11297c"
+  },
+  {
+    "path": "apps/customer/assets/notifications/wallet.webp",
+    "bytes": 7170,
+    "sha256": "854de28a0e897a9309c7a0d51430b95e0ea83aa0f46d82a33d8fd767364e33a2"
+  },
+  {
+    "path": "apps/customer/assets/notifications/parcel.webp",
+    "bytes": 7062,
+    "sha256": "9099afd43a2904ecb329d937897df744fb7cd7999c0dc3e5ed53f7b0c20de5e3"
+  },
+  {
+    "path": "apps/customer/assets/notifications/warning.webp",
+    "bytes": 6990,
+    "sha256": "e281d6499044df0679af71c298be9c0ea7cfdb8e620dcb2a9abac1e5cabeb20b"
+  },
+  {
+    "path": "apps/customer/assets/notifications/shopping.webp",
+    "bytes": 6946,
+    "sha256": "6beaa706f8405d37c96670e31981e0db95775f9f154782f2291ca1a69331919a"
+  },
+  {
+    "path": "apps/customer/assets/notifications/rating.webp",
+    "bytes": 6702,
+    "sha256": "279e91f6b488fdd395c8b166df9b3473000e938f78df751c07f7883832a9be77"
+  },
+  {
+    "path": "apps/customer/assets/notifications/payment.webp",
+    "bytes": 6404,
+    "sha256": "8351bf5061ad97d3e8e3b590f45f08aae2d6098bb85b3ef3a23f0198e680d1c3"
+  },
+  {
+    "path": "apps/customer/assets/notifications/inbox.webp",
+    "bytes": 6050,
+    "sha256": "1054f3ca233ec2f1e6bb4aad74d2f76445f2f49d67cf8248f20d33d41a60599f"
+  },
+  {
+    "path": "apps/customer/assets/notifications/message.webp",
+    "bytes": 5686,
+    "sha256": "b0b953cd761da0e1a2fac21fa8d427def358f2c0b1a7693a83d46117b23230dc"
+  },
+  {
+    "path": "apps/customer/assets/fonts/NOTO-LICENSE.txt",
+    "bytes": 5208,
+    "sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125"
+  },
+  {
+    "path": "apps/customer/assets/images/address_study.webp",
+    "bytes": 4556,
+    "sha256": "c86f69a919d58662b79f0b04764f72db6a3e0c8d592be2590a20690af2e5f636"
+  },
+  {
+    "path": "apps/customer/assets/images/address_home.webp",
+    "bytes": 4366,
+    "sha256": "c7920b5b75b8a970bb9db30759787ceda92f61dbf3aed7f7467e5f8a86fd7cdb"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-comfort.svg",
+    "bytes": 4294,
+    "sha256": "3077c7782faad3981e54e75a640092eb6b300a6bb09d8929f9d817c69dc7b538"
+  },
+  {
+    "path": "apps/customer/assets/images/address_pin.webp",
+    "bytes": 4282,
+    "sha256": "dacffd99d5efa697adff36d649de874a21e92a674cf6a7a9518cd0b86f0d7499"
+  },
+  {
+    "path": "apps/customer/assets/images/ride_car.webp",
+    "bytes": 4258,
+    "sha256": "49d3700a4959a56817ab8a47ae291c6719031a3313cd8a07418694f1d1615c32"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-sedan.svg",
+    "bytes": 4250,
+    "sha256": "926fd21fe9f0eae4063eccbe4bf278a075751d9ff6eacb17af1b617c0e61989a"
+  },
+  {
+    "path": "apps/customer/assets/maps/OPENFREEMAP-LICENSE.md",
+    "bytes": 4118,
+    "sha256": "d1754e5d291e4e8b9b0047ddba0a6ec75e1046ccd61a02c2cea3dac58f3fe355"
+  },
+  {
+    "path": "apps/customer/assets/images/address_gym.webp",
+    "bytes": 4052,
+    "sha256": "dc2424c8f3b2a7890a33f3eda3cc70088bf0633f95d2cb943df950fa07b80280"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-motorbike.svg",
+    "bytes": 4001,
+    "sha256": "90b6d2f69c4dc5d9f0b43155a9f67428c4e20c3b171ee43f52aa7472b96ef168"
+  },
+  {
+    "path": "apps/customer/assets/images/food.webp",
+    "bytes": 3968,
+    "sha256": "977fb9bb9eedd468aa32176ba26d2cd6cc0ac63bbddcaa1948ed637a582b26dd"
+  },
+  {
+    "path": "apps/customer/assets/maps/vehicle-van.svg",
+    "bytes": 3959,
+    "sha256": "53938708e7e6ca4fe14a20db52d3557ef4e273ba7e13d996950e0937f298826b"
+  },
+  {
+    "path": "apps/customer/assets/images/address_work.webp",
+    "bytes": 3590,
+    "sha256": "c85e56a9e2c6257a1308991e5f0522f363259b298bcb7f9ba50110d376f40d13"
+  },
+  {
+    "path": "apps/customer/assets/maps/LIBERTY-LICENSE.md",
+    "bytes": 3223,
+    "sha256": "932694202d771c52089e87f13105e02f2b68341f584b0f3d8adc557c9d7cefa3"
+  },
+  {
+    "path": "apps/customer/assets/images/completion_clipboard.svg",
+    "bytes": 3008,
+    "sha256": "7bf9f98a1d9426c2d77e4dddc449f45a17036deef26ef65c4ef6688b76b5a62c"
+  },
+  {
+    "path": "apps/customer/assets/animations/driver_search_lottie.json",
+    "bytes": 2935,
+    "sha256": "7338475755f7c8bdd5002db74387a1a5ac17fed44e2cd91df577d0e5c3759d4b"
+  },
+  {
+    "path": "apps/customer/assets/maps/README.md",
+    "bytes": 2570,
+    "sha256": "8be35c89e6be70dd05ded0811694ba6f0e121a5f54bc11f92595bb0705d5a692"
+  },
+  {
+    "path": "apps/customer/assets/maps/motorbike-top.svg",
+    "bytes": 2408,
+    "sha256": "cd96dfe216762a54bd2597af471f7d715678a349bac205aef3e76d21ea0d776a"
+  },
+  {
+    "path": "apps/customer/assets/images/address_other.webp",
+    "bytes": 2408,
+    "sha256": "7edcf622f6f3b61df08f2a68682fbbf84ffcf4d1ab2ef75c3bf5f8306d756a53"
+  },
+  {
+    "path": "apps/customer/assets/images/shopping.webp",
+    "bytes": 2334,
+    "sha256": "190a168ee222ff256c669ecdc688c77dad3eae3e4cb6395f82e44869add6d4dc"
+  },
+  {
+    "path": "apps/customer/assets/images/completion_wallet.svg",
+    "bytes": 2200,
+    "sha256": "d6a0207abcdb3c6c86ba45930d59482ca24d9c7ba06eac24d4c40c9d1b87854b"
+  },
+  {
+    "path": "apps/customer/assets/maps/car-top.svg",
+    "bytes": 2063,
+    "sha256": "523821f60198f7a06b5513d1799990863287d4fb0d408645bb6bb9beecfe03af"
+  },
+  {
+    "path": "apps/customer/assets/maps/van-top.svg",
+    "bytes": 2016,
+    "sha256": "6ac1e3bb9c4cf25b3ff6f807ca7d88dd262ed40b9963677dcbac915d99748cf8"
+  },
+  {
+    "path": "apps/customer/assets/animations/LOTTIE-SEARCH-LICENSE.txt",
+    "bytes": 1842,
+    "sha256": "1cb4072185bfb1661a2ec6d5742e4cdfb655d30f81acd46987eea77740db2ce1"
+  },
+  {
+    "path": "apps/customer/assets/images/driver_demo_160.webp",
+    "bytes": 1776,
+    "sha256": "56055c246da2bfb2ddcd054a510f3902a168c28d98c633932721e9adf2aa6e4d"
+  },
+  {
+    "path": "apps/customer/assets/images/completion_star_gold.svg",
+    "bytes": 1306,
+    "sha256": "9221d5c80b4a6b9acec7c9cc62c29bc0456450ffe36c7880fd0b1d87ebe25024"
+  },
+  {
+    "path": "apps/customer/assets/maps/map-select.svg",
+    "bytes": 603,
+    "sha256": "afdfd489a35a99a59d0d166f351290cd5dd934c6622fadbfc2d547370ce0c221"
+  },
+  {
+    "path": "apps/customer/assets/images/completion_star_outline.svg",
+    "bytes": 427,
+    "sha256": "dabf80a4dcdc74c9454aacefd2d21ec8014d01aebbc8efef94b7ac526c843107"
+  },
+  {
+    "path": "apps/customer/assets/maps/place-pin.svg",
+    "bytes": 425,
+    "sha256": "4c50fbc0fcd03233118b57ecbc6c186b19148723a63ae37f9dcda22e27ccd0f3"
+  },
+  {
+    "path": "apps/customer/assets/maps/destination.svg",
+    "bytes": 389,
+    "sha256": "85d0077d88b0c55be5457dbd03c290d89c75c576e966b5b68af17671de0fbbdd"
+  }
+]
