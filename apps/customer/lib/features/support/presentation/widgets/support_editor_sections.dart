@@ -41,25 +41,28 @@ class SupportEditorHero extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
-        ExcludeSemantics(
-          child: Container(
-            width: mascotSize,
-            height: mascotSize,
-            decoration: BoxDecoration(
-              color: colors.primaryContainer.withValues(alpha: 0.48),
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              'assets/images/tam_account_mascot.webp',
+        if (MediaQuery.sizeOf(context).width >= 400 &&
+            MediaQuery.textScalerOf(context).scale(1) <= 1.4) ...[
+          const SizedBox(width: AppSpacing.md),
+          ExcludeSemantics(
+            child: Container(
               width: mascotSize,
               height: mascotSize,
-              cacheWidth: 256,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.medium,
+              decoration: BoxDecoration(
+                color: colors.primaryContainer.withValues(alpha: 0.48),
+                shape: BoxShape.circle,
+              ),
+              child: Image.asset(
+                'assets/images/tam_account_mascot.webp',
+                width: mascotSize,
+                height: mascotSize,
+                cacheWidth: 256,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.medium,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -193,58 +196,43 @@ class SupportEditorDetailsField extends StatelessWidget {
       borderSide: BorderSide.none,
     );
 
-    return Stack(
-      children: [
-        TextFormField(
-          key: const Key('support-body'),
-          controller: controller,
-          enabled: enabled,
-          minLines: 5,
-          maxLines: 6,
-          keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.newline,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: theme.textTheme.bodyMedium?.copyWith(
-              color: colors.onSurfaceVariant.withValues(alpha: 0.76),
-            ),
-            filled: true,
-            fillColor: colors.surfaceContainerLow,
-            contentPadding: const EdgeInsetsDirectional.fromSTEB(
-              AppSpacing.lg,
-              AppSpacing.lg,
-              AppSpacing.lg,
-              46,
-            ),
-            border: plainBorder,
-            enabledBorder: plainBorder,
-            disabledBorder: plainBorder,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: radius,
-              borderSide: BorderSide(
-                color: colors.primary.withValues(alpha: 0.50),
-                width: 1.1,
-              ),
+    return TextFormField(
+      key: const Key('support-body'),
+      controller: controller,
+      enabled: enabled,
+      minLines: 5,
+      maxLines: 6,
+      keyboardType: TextInputType.multiline,
+      textInputAction: TextInputAction.newline,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: theme.textTheme.bodyMedium?.copyWith(
+          color: colors.onSurfaceVariant.withValues(alpha: 0.76),
+        ),
+        counter: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Text(
+            '$length / $maxLength',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colors.onSurfaceVariant,
             ),
           ),
         ),
-        PositionedDirectional(
-          end: AppSpacing.lg,
-          bottom: AppSpacing.md,
-          child: IgnorePointer(
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: Text(
-                '$length / $maxLength',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-              ),
-            ),
+        filled: true,
+        fillColor: colors.surfaceContainerLow,
+        contentPadding: const EdgeInsets.all(AppSpacing.lg),
+        border: plainBorder,
+        enabledBorder: plainBorder,
+        disabledBorder: plainBorder,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: radius,
+          borderSide: BorderSide(
+            color: colors.primary.withValues(alpha: 0.50),
+            width: 1.1,
           ),
         ),
-      ],
+      ),
     );
   }
 }

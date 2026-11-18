@@ -7,7 +7,10 @@ import 'package:tam_customer/shared/domain/trip_live_details.dart';
 /// with an invented road line in production.
 MapRoute? activeTrackingGeometry(Trip trip) {
   final route = trip.live?.route;
-  if (route == null || route.points.length < 2 || !trip.status.isActive) {
+  if (route == null ||
+      !route.roadAligned ||
+      route.points.length < 2 ||
+      !trip.status.isActive) {
     return null;
   }
   final toDestination = trip.status == TripStatus.inProgress;

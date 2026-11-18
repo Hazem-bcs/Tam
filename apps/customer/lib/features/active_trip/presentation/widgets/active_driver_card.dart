@@ -42,7 +42,7 @@ class ActiveDriverCard extends StatelessWidget {
             showDemoAvatar: showDemoAvatar,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: Row(
               children: [
                 DriverAvatar(showDemoAvatar: showDemoAvatar),
@@ -109,7 +109,7 @@ class ActiveDriverContactBar extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final stacked =
-            constraints.maxWidth < 320 ||
+            constraints.maxWidth < 400 ||
             MediaQuery.textScalerOf(context).scale(1) > 1.5;
         final gap = onCall == null ? 0.0 : AppSpacing.sm;
         final width = stacked || onCall == null
@@ -125,7 +125,7 @@ class ActiveDriverContactBar extends StatelessWidget {
                 key: const Key('active-chat'),
                 onPressed: onChat,
                 icon: const Icon(Icons.chat_bubble_outline_rounded),
-                label: Text(l.activeTripChat),
+                label: Text(l.activeTripChat, textAlign: TextAlign.center),
               ),
             ),
             if (onCall != null)
@@ -135,7 +135,10 @@ class ActiveDriverContactBar extends StatelessWidget {
                   key: const Key('active-call-driver'),
                   onPressed: onCall,
                   icon: const Icon(Icons.phone_outlined),
-                  label: Text(l.driverContactTitle),
+                  label: Text(
+                    l.driverContactTitle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
           ],

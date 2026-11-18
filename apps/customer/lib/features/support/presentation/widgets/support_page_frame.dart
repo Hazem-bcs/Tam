@@ -22,7 +22,11 @@ class SupportPageFrame extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
-          child: ListView(padding: AppSpacing.pagePadding, children: children),
+          child: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            padding: AppSpacing.pagePadding,
+            children: children,
+          ),
         ),
       ),
     ),

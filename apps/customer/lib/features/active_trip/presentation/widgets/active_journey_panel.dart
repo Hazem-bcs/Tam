@@ -100,7 +100,7 @@ class ActiveJourneyPanel extends StatelessWidget {
                         searching
                             ? l.rideRequestProgressMatching
                             : tripStatusLabel(l, trip.status),
-                        style: theme.textTheme.titleLarge,
+                        style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: AppSpacing.xs),
                       Text(
