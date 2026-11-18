@@ -28,13 +28,6 @@ class RideVehiclePicker extends StatefulWidget {
         RideVehicleClass.van => l.rideRequestVan,
         RideVehicleClass.motorbike => l.rideRequestMotorbike,
       };
-  static String descriptionFor(AppLocalizations l, RideVehicleClass vehicle) =>
-      switch (vehicle) {
-        RideVehicleClass.standard => l.rideRequestStandardDescription,
-        RideVehicleClass.comfort => l.rideRequestComfortDescription,
-        RideVehicleClass.van => l.rideRequestVanDescription,
-        RideVehicleClass.motorbike => l.rideRequestMotorbikeDescription,
-      };
   @override
   State<RideVehiclePicker> createState() => _RideVehiclePickerState();
 }
@@ -128,19 +121,6 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
             ),
           ),
         ),
-        if (widget.selected == RideVehicleClass.motorbike)
-          const SizedBox(height: AppSpacing.xs),
-        if (widget.selected == RideVehicleClass.motorbike)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            child: Text(
-              RideVehiclePicker.descriptionFor(l, widget.selected),
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
       ],
     );
   }
