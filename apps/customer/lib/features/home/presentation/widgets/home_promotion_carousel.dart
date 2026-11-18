@@ -223,6 +223,21 @@ class _PromotionSlide extends StatelessWidget {
                   excludeFromSemantics: true,
                 ),
               ),
+            if (!remote && theme.brightness == Brightness.dark)
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: AlignmentDirectional.centerStart,
+                    end: AlignmentDirectional.centerEnd,
+                    colors: [
+                      colors.surface,
+                      colors.surface.withValues(alpha: .96),
+                      colors.surface.withValues(alpha: 0),
+                    ],
+                    stops: const [0, .52, .82],
+                  ),
+                ),
+              ),
             if (remote)
               DecoratedBox(
                 decoration: BoxDecoration(

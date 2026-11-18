@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'main_navigation_bar.dart';
 
@@ -16,16 +17,25 @@ class MainShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => PopScope(
-    canPop: navigationShell.currentIndex == 0,
-    onPopInvokedWithResult: (didPop, _) {
-      if (!didPop) _select(0);
-    },
-    child: Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: MainNavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onSelected: _select,
+  Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
+    value: SystemUiOverlayStyle(
+      systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+      systemNavigationBarIconBrightness:
+          Theme.of(context).brightness == Brightness.dark
+          ? Brightness.light
+          : Brightness.dark,
+    ),
+    child: PopScope(
+      canPop: navigationShell.currentIndex == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _select(0);
+      },
+      child: Scaffold(
+        body: navigationShell,
+        bottomNavigationBar: MainNavigationBar(
+          selectedIndex: navigationShell.currentIndex,
+          onSelected: _select,
+        ),
       ),
     ),
   );
