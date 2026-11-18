@@ -60,7 +60,6 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context), theme = Theme.of(context);
-    final rtl = Directionality.of(context) == TextDirection.rtl;
     final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,12 +81,12 @@ class _RideVehiclePickerState extends State<RideVehiclePicker> {
               IconButton(
                 onPressed: () => _move(-180),
                 tooltip: l.rideRequestPreviousVehicles,
-                icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left),
+                icon: const Icon(Icons.chevron_left),
               ),
               IconButton(
                 onPressed: () => _move(180),
                 tooltip: l.rideRequestNextVehicles,
-                icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right),
+                icon: const Icon(Icons.chevron_right),
               ),
             ],
           ),
