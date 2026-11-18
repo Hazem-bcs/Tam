@@ -3,6 +3,7 @@
   "addressesTitle": "عناويني",
   "addressesDescription": "احفظ أماكنك للوصول إليها أسرع",
   "addressesAdd": "إضافة موقع",
+  "addressesSetDefault": "تعيين كموقع افتراضي",
   "addressesEdit": "تعديل الموقع",
   "addressesDelete": "حذف الموقع",
   "addressesDeleteTitle": "حذف هذا الموقع؟",

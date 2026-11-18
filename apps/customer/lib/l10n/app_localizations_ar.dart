@@ -1374,6 +1374,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addressesAdd => 'إضافة موقع';
 
   @override
+  String get addressesSetDefault => 'تعيين كموقع افتراضي';
+
+  @override
   String get addressesEdit => 'تعديل الموقع';
 
   @override

@@ -7,13 +7,15 @@ import 'address_visual_icon.dart';
 
 enum _AddressAction { edit, delete }
 
-/// Tapping selects a saved location; only the menu's edit action navigates.
+/// Tapping previews selection; a separate footer action confirms the default.
+/// Only the contextual edit action navigates to the address editor.
 class AddressTile extends StatelessWidget {
   const AddressTile({
     super.key,
     required this.address,
     required this.enabled,
     required this.selected,
+    required this.confirmed,
     required this.onSelect,
     required this.onEdit,
     required this.onDelete,
@@ -22,6 +24,7 @@ class AddressTile extends StatelessWidget {
   final SavedAddress address;
   final bool enabled;
   final bool selected;
+  final bool confirmed;
   final VoidCallback onSelect;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -88,7 +91,7 @@ class AddressTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (selected) ...[
+                          if (confirmed) ...[
                             const SizedBox(width: AppSpacing.xs),
                             Icon(
                               Icons.check_circle_rounded,
