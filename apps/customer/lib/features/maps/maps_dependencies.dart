@@ -8,6 +8,7 @@ import 'data/device_location_adapter.dart';
 import 'data/device_location_settings_adapter.dart';
 import 'data/maps_attribution_adapter.dart';
 import 'data/osm_tile_provider.dart';
+import 'data/osrm_maps_repository.dart';
 import 'data/private_tile_provider.dart';
 import 'domain/foreground_location.dart';
 import 'domain/maps_repository.dart';
@@ -20,6 +21,7 @@ final class MapsDependencies {
     this.locationSettings = const DeviceLocationSettingsAdapter(),
     this.attribution = const MapsAttributionAdapter(),
     this.client,
+    this.osrm,
     this.currentLocation,
     this.tileProviderFactory,
   });
@@ -30,6 +32,7 @@ final class MapsDependencies {
   final DeviceLocationSettings locationSettings;
   final MapAttribution attribution;
   final Dio? client;
+  final OsrmMapsRepository? osrm;
   final TileProvider Function(String)? tileProviderFactory;
   factory MapsDependencies.configured(MapConfiguration configuration) {
     final dio = configuration.hasServices
@@ -45,15 +48,36 @@ final class MapsDependencies {
             ),
           )
         : null;
+    final places = dio == null
+        ? const UnconfiguredMapsRepository()
+        : ApiMapsRepository(dio);
+    final osrm = configuration.hasOsrm
+        ? OsrmMapsRepository(
+            Dio(
+              BaseOptions(
+                baseUrl:
+                    '${configuration.osrmBaseUrl.replaceFirst(RegExp(r'/+$'), '')}/',
+                connectTimeout: const Duration(seconds: 8),
+                receiveTimeout: const Duration(seconds: 12),
+                sendTimeout: const Duration(seconds: 12),
+                followRedirects: false,
+                headers: {
+                  'Accept': 'application/json',
+                  'User-Agent': 'Tam-Development/1.0',
+                },
+              ),
+            ),
+            places: places,
+          )
+        : null;
     final location = ForegroundLocation(
       sensor: DeviceLocationAdapter(policy: AppConfig.locationPolicy),
       policy: AppConfig.locationPolicy,
     );
     return MapsDependencies(
       configuration: configuration,
-      repository: dio == null
-          ? const UnconfiguredMapsRepository()
-          : ApiMapsRepository(dio),
+      repository: osrm ?? places,
+      osrm: osrm,
       deviceLocation: location,
       currentLocation: location,
       client: dio,
@@ -62,7 +86,10 @@ final class MapsDependencies {
           : PrivateTileProvider.new,
     );
   }
+  void clearRoutingSession() => osrm?.clearSession();
+
   void dispose() {
+    osrm?.dispose();
     currentLocation?.dispose();
     client?.close(force: true);
   }

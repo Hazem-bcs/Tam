@@ -15,6 +15,7 @@ String activeTripDescription(AppLocalizations l, TripStatus status) =>
     };
 
 String activeTripError(AppLocalizations l, String? code) => switch (code) {
+  'ROUTING_UNAVAILABLE' => l.mapsRouteFailed,
   'TRIP_NOT_CANCELLABLE' => l.activeTripCannotCancel,
   'TRIP_NOT_FOUND' => l.activeTripNotFound,
   'INVALID_RESPONSE' => l.activeTripInvalidResponse,

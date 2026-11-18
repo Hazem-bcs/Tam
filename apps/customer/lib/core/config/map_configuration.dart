@@ -8,11 +8,13 @@ final class MapConfiguration {
   const MapConfiguration({
     this.tileUrl = '',
     this.apiBaseUrl = '',
+    this.osrmBaseUrl = '',
     this.vectorStyleAsset = '',
   });
   final String vectorStyleAsset;
   bool get hasVectorStyle => vectorStyleAsset.isNotEmpty;
-  final String tileUrl, apiBaseUrl;
+  final String tileUrl, apiBaseUrl, osrmBaseUrl;
+  bool get hasOsrm => osrmBaseUrl.isNotEmpty;
   bool get hasTiles => tileUrl.isNotEmpty;
   bool get hasServices => apiBaseUrl.isNotEmpty;
   bool get usesOsmCommunityTiles => tileUrl == osmCommunityTiles;
@@ -22,6 +24,7 @@ final class MapConfiguration {
     required String tileUrl,
     required String apiBaseUrl,
     String vectorStyleAsset = '',
+    String osrmBaseUrl = '',
     bool allowLocalHttp = false,
   }) {
     void validate(String value, {bool tile = false}) {
@@ -57,9 +60,11 @@ final class MapConfiguration {
     }
     validate(tileUrl, tile: true);
     validate(apiBaseUrl);
+    validate(osrmBaseUrl);
     return MapConfiguration(
       tileUrl: tileUrl,
       apiBaseUrl: apiBaseUrl,
+      osrmBaseUrl: osrmBaseUrl,
       vectorStyleAsset: vectorStyleAsset,
     );
   }

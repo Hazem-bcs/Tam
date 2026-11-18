@@ -64,7 +64,7 @@ class ActiveTripOverview extends StatelessWidget {
           Text(rideTimeLabel(context, trip.booking.scheduledAt!)),
         ],
         const SizedBox(height: AppSpacing.lg),
-        if (state.offline) ...[
+        if (state.failure != null || state.offline) ...[
           TamCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,11 +73,18 @@ class ActiveTripOverview extends StatelessWidget {
                   children: [
                     const Icon(Icons.cloud_off_outlined),
                     const SizedBox(width: AppSpacing.sm),
-                    Expanded(child: Text(activeTripError(l, state.failure))),
+                    Expanded(
+                      child: Text(
+                        state.failure == 'ROUTING_UNAVAILABLE'
+                            ? l.mapsRouteFailed
+                            : activeTripError(l, state.failure),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.xs),
-                Text(l.activeTripCached, style: text.bodySmall),
+                if (state.offline)
+                  Text(l.activeTripCached, style: text.bodySmall),
                 TextButton.icon(
                   onPressed: state.refreshing ? null : () => _refresh(context),
                   icon: const Icon(Icons.refresh_rounded),

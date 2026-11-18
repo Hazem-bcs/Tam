@@ -4,6 +4,7 @@ import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
 
+import 'mock_road_routes.dart';
 import 'mock_tracking_path.dart';
 
 /// Pure deterministic driver-side simulation. The customer never issues these
@@ -13,7 +14,12 @@ final class ActiveTripSimulation {
   final ActiveTripTimings timings;
   final ActiveTripScenario scenario;
 
-  Trip? next(Trip trip, DateTime timestamp) {
+  Trip? next(
+    Trip trip,
+    DateTime timestamp, {
+    MockRoadRoutePair? roads,
+    bool requireRoads = false,
+  }) {
     if (!trip.status.isActive) return null;
     final live = trip.live;
     // A clock correction between booking and the first engine tick must not
@@ -23,13 +29,17 @@ final class ActiveTripSimulation {
     final changedAt = live?.statusChangedAt ?? trip.createdAt;
     var nextStatus = trip.status;
     var phaseTime = changedAt;
+    final approach =
+        roads?.travelTime(roads.approach, timings.approach) ?? timings.approach;
+    final journey =
+        roads?.travelTime(roads.journey, timings.journey) ?? timings.journey;
     final due = switch (trip.status) {
       TripStatus.scheduled => trip.booking.scheduledAt!,
       TripStatus.requested => changedAt.add(timings.search),
       TripStatus.confirmed => changedAt.add(timings.assignment),
-      TripStatus.driverEnRoute => changedAt.add(timings.approach),
+      TripStatus.driverEnRoute => changedAt.add(approach),
       TripStatus.driverArrived => changedAt.add(timings.waiting),
-      TripStatus.inProgress => changedAt.add(timings.journey),
+      TripStatus.inProgress => changedAt.add(journey),
       _ => now,
     };
     if (!now.isBefore(due)) {
@@ -46,6 +56,24 @@ final class ActiveTripSimulation {
         _ => trip.status,
       };
       phaseTime = due;
+    }
+    if (requireRoads &&
+        roads?.readyAt == null &&
+        {
+          TripStatus.driverEnRoute,
+          TripStatus.driverArrived,
+          TripStatus.inProgress,
+        }.contains(nextStatus)) {
+      return null;
+    }
+    // Slow route preparation delays the simulated departure, rather than
+    // jumping the vehicle forward by the time spent waiting for the network.
+    if (nextStatus != trip.status &&
+        (nextStatus == TripStatus.driverEnRoute ||
+            nextStatus == TripStatus.inProgress) &&
+        roads?.readyAt != null &&
+        roads!.readyAt!.isAfter(phaseTime)) {
+      phaseTime = roads.readyAt!;
     }
     final assigned = {
       TripStatus.confirmed,
@@ -66,9 +94,7 @@ final class ActiveTripSimulation {
     int? eta;
     TripTrackingRoute? route;
     if (tracking) {
-      final duration = nextStatus == TripStatus.inProgress
-          ? timings.journey
-          : timings.approach;
+      final duration = nextStatus == TripStatus.inProgress ? journey : approach;
       final elapsed = now.difference(phaseTime);
       final fraction = (elapsed.inMilliseconds / duration.inMilliseconds).clamp(
         0.0,
@@ -76,11 +102,15 @@ final class ActiveTripSimulation {
       );
       final pickup = trip.booking.pickup.point;
       final destination = trip.booking.destination.point;
-      route = MockTrackingPath.route(
-        pickup,
-        destination,
-        approaching: nextStatus != TripStatus.inProgress,
-      );
+      route =
+          (nextStatus == TripStatus.inProgress
+              ? roads?.journey
+              : roads?.approach) ??
+          MockTrackingPath.route(
+            pickup,
+            destination,
+            approaching: nextStatus != TripStatus.inProgress,
+          );
       final path = GeoPath(route.points);
       final distance = nextStatus == TripStatus.driverArrived
           ? path.length

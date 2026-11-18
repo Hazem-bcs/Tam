@@ -150,7 +150,9 @@ class ActiveJourneyPanel extends StatelessWidget {
             ),
           ],
           const SizedBox(height: AppSpacing.md),
-          if (state.offline || state.positionStale) ...[
+          if (state.failure != null ||
+              state.offline ||
+              state.positionStale) ...[
             Row(
               children: [
                 Icon(
@@ -161,7 +163,9 @@ class ActiveJourneyPanel extends StatelessWidget {
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
-                    state.offline
+                    state.failure == 'ROUTING_UNAVAILABLE'
+                        ? l.mapsRouteFailed
+                        : state.offline
                         ? l.activeTripCached
                         : l.activeTripPositionStale,
                     style: theme.textTheme.bodySmall,

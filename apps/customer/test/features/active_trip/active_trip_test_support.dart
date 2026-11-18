@@ -1,5 +1,6 @@
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
+import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -8,6 +9,7 @@ final class ActiveTripFixture {
   ActiveTripFixture({
     ActiveTripScenario scenario = ActiveTripScenario.success,
     ActiveTripTimings? durations,
+    MapsRepository? routing,
   }) {
     store = MockTripStore(now: () => now);
     repository = MockActiveTripRepository(
@@ -16,6 +18,7 @@ final class ActiveTripFixture {
       scenario: scenario,
       timings: durations ?? timings,
       autoStart: false,
+      routing: routing,
     );
   }
   DateTime now = DateTime.utc(2026, 11, 9, 12);

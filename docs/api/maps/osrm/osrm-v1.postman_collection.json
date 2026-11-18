@@ -1,0 +1,112 @@
+{
+  "info": {
+    "name": "Tam — OSRM Route v1 (development)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Arabic contract and demo limitations: README.ar.md. No auth, bookings or payments. Max one request/second."
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "osrm_base_url",
+      "value": "https://router.project-osrm.org"
+    },
+    {
+      "key": "origin_lng",
+      "value": "36.2765"
+    },
+    {
+      "key": "origin_lat",
+      "value": "33.5138"
+    },
+    {
+      "key": "destination_lng",
+      "value": "36.288"
+    },
+    {
+      "key": "destination_lat",
+      "value": "33.516"
+    }
+  ],
+  "item": [
+    {
+      "name": "Driving route",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{osrm_base_url}}/route/v1/driving/{{origin_lng}},{{origin_lat}};{{destination_lng}},{{destination_lat}}?overview=full&geometries=geojson&steps=false&alternatives=false&generate_hints=false&radiuses=100;100"
+      },
+      "response": [
+        {
+          "name": "Damascus actual street route",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": "{{osrm_base_url}}/route/v1/driving/{{origin_lng}},{{origin_lat}};{{destination_lng}},{{destination_lat}}?overview=full&geometries=geojson&steps=false&alternatives=false&generate_hints=false&radiuses=100;100"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"code\": \"Ok\",\n  \"routes\": [\n    {\n      \"legs\": [\n        {\n          \"steps\": [],\n          \"weight\": 392.3,\n          \"summary\": \"\",\n          \"duration\": 392.3,\n          \"distance\": 4511.9\n        }\n      ],\n      \"weight_name\": \"routability\",\n      \"geometry\": {\n        \"coordinates\": [\n          [\n            36.276511,\n            33.513844\n          ],\n          [\n            36.275756,\n            33.513973\n          ],\n          [\n            36.274507,\n            33.514234\n          ],\n          [\n            36.274097,\n            33.514364\n          ],\n          [\n            36.273312,\n            33.51452\n          ],\n          [\n            36.272261,\n            33.514726\n          ],\n          [\n            36.271478,\n            33.514887\n          ],\n          [\n            36.271345,\n            33.514903\n          ],\n          [\n            36.271297,\n            33.514909\n          ],\n          [\n            36.271124,\n            33.514931\n          ],\n          [\n            36.268946,\n            33.5152\n          ],\n          [\n            36.268824,\n            33.515213\n          ],\n          [\n            36.268746,\n            33.515222\n          ],\n          [\n            36.268574,\n            33.515242\n          ],\n          [\n            36.267283,\n            33.515388\n          ],\n          [\n            36.266564,\n            33.515474\n          ],\n          [\n            36.265566,\n            33.515593\n          ],\n          [\n            36.264922,\n            33.515683\n          ],\n          [\n            36.264677,\n            33.515809\n          ],\n          [\n            36.264497,\n            33.515962\n          ],\n          [\n            36.264366,\n            33.516151\n          ],\n          [\n            36.264297,\n            33.516356\n          ],\n          [\n            36.264273,\n            33.516574\n          ],\n          [\n            36.264251,\n            33.517445\n          ],\n          [\n            36.264275,\n            33.517641\n          ],\n          [\n            36.26432,\n            33.517824\n          ],\n          [\n            36.264391,\n            33.517972\n          ],\n          [\n            36.264499,\n            33.518127\n          ],\n          [\n            36.26462,\n            33.51825\n          ],\n          [\n            36.264823,\n            33.518443\n          ],\n          [\n            36.265489,\n            33.51888\n          ],\n          [\n            36.265905,\n            33.519149\n          ],\n          [\n            36.265977,\n            33.519179\n          ],\n          [\n            36.266135,\n            33.519245\n          ],\n          [\n            36.267093,\n            33.519647\n          ],\n          [\n            36.267541,\n            33.519826\n          ],\n          [\n            36.267564,\n            33.519828\n          ],\n          [\n            36.26763,\n            33.519842\n          ],\n          [\n            36.267709,\n            33.51988\n          ],\n          [\n            36.267772,\n            33.519935\n          ],\n          [\n            36.267813,\n            33.520003\n          ],\n          [\n            36.267827,\n            33.520068\n          ],\n          [\n            36.267821,\n            33.520133\n          ],\n          [\n            36.267916,\n            33.520226\n          ],\n          [\n            36.268027,\n            33.520294\n          ],\n          [\n            36.268138,\n            33.520345\n          ],\n          [\n            36.268775,\n            33.520581\n          ],\n          [\n            36.269766,\n            33.520788\n          ],\n          [\n            36.270198,\n            33.520856\n          ],\n          [\n            36.270559,\n            33.520856\n          ],\n          [\n            36.271186,\n            33.52076\n          ],\n          [\n            36.271565,\n            33.520703\n          ],\n          [\n            36.271655,\n            33.520701\n          ],\n          [\n            36.271858,\n            33.520695\n          ],\n          [\n            36.272347,\n            33.520745\n          ],\n          [\n            36.272377,\n            33.520728\n          ],\n          [\n            36.272412,\n            33.52072\n          ],\n          [\n            36.272448,\n            33.520722\n          ],\n          [\n            36.272482,\n            33.520734\n          ],\n          [\n            36.272509,\n            33.520755\n          ],\n          [\n            36.272834,\n            33.520784\n          ],\n          [\n            36.273038,\n            33.5208\n          ],\n          [\n            36.273479,\n            33.520712\n          ],\n          [\n            36.274121,\n            33.520584\n          ],\n          [\n            36.274766,\n            33.520456\n          ],\n          [\n            36.275939,\n            33.520222\n          ],\n          [\n            36.278109,\n            33.519791\n          ],\n          [\n            36.278106,\n            33.51973\n          ],\n          [\n            36.278124,\n            33.51967\n          ],\n          [\n            36.278161,\n            33.519618\n          ],\n          [\n            36.278215,\n            33.519577\n          ],\n          [\n            36.278271,\n            33.519554\n          ],\n          [\n            36.278332,\n            33.519542\n          ],\n          [\n            36.278394,\n            33.519544\n          ],\n          [\n            36.278469,\n            33.519565\n          ],\n          [\n            36.278533,\n            33.519604\n          ],\n          [\n            36.278579,\n            33.519658\n          ],\n          [\n            36.278603,\n            33.519721\n          ],\n          [\n            36.2786,\n            33.519793\n          ],\n          [\n            36.278568,\n            33.519859\n          ],\n          [\n            36.278512,\n            33.519913\n          ],\n          [\n            36.278568,\n            33.520089\n          ],\n          [\n            36.279945,\n            33.520648\n          ],\n          [\n            36.281655,\n            33.521356\n          ],\n          [\n            36.282651,\n            33.521191\n          ],\n          [\n            36.282629,\n            33.521141\n          ],\n          [\n            36.282625,\n            33.521088\n          ],\n          [\n            36.282639,\n            33.521036\n          ],\n          [\n            36.282673,\n            33.520987\n          ],\n          [\n            36.282723,\n            33.520949\n          ],\n          [\n            36.282785,\n            33.520926\n          ],\n          [\n            36.282852,\n            33.520919\n          ],\n          [\n            36.282893,\n            33.520924\n          ],\n          [\n            36.282931,\n            33.520934\n          ],\n          [\n            36.284172,\n            33.519435\n          ],\n          [\n            36.284259,\n            33.519331\n          ],\n          [\n            36.284911,\n            33.518651\n          ],\n          [\n            36.285449,\n            33.518113\n          ],\n          [\n            36.285572,\n            33.51799\n          ],\n          [\n            36.286812,\n            33.516628\n          ],\n          [\n            36.287668,\n            33.515674\n          ],\n          [\n            36.287847,\n            33.515482\n          ],\n          [\n            36.287912,\n            33.515415\n          ],\n          [\n            36.28815,\n            33.51516\n          ],\n          [\n            36.288214,\n            33.515092\n          ],\n          [\n            36.288477,\n            33.514772\n          ],\n          [\n            36.288573,\n            33.514771\n          ],\n          [\n            36.289031,\n            33.514766\n          ],\n          [\n            36.289112,\n            33.514765\n          ],\n          [\n            36.289136,\n            33.514784\n          ],\n          [\n            36.289156,\n            33.514806\n          ],\n          [\n            36.289173,\n            33.51483\n          ],\n          [\n            36.289186,\n            33.514855\n          ],\n          [\n            36.289193,\n            33.51489\n          ],\n          [\n            36.289277,\n            33.515675\n          ],\n          [\n            36.289239,\n            33.515683\n          ],\n          [\n            36.289204,\n            33.515698\n          ],\n          [\n            36.289172,\n            33.515718\n          ],\n          [\n            36.289149,\n            33.515741\n          ],\n          [\n            36.289126,\n            33.515772\n          ],\n          [\n            36.289111,\n            33.515804\n          ],\n          [\n            36.289105,\n            33.515837\n          ],\n          [\n            36.289105,\n            33.515861\n          ],\n          [\n            36.287994,\n            33.515935\n          ]\n        ],\n        \"type\": \"LineString\"\n      },\n      \"weight\": 392.3,\n      \"duration\": 392.3,\n      \"distance\": 4511.9\n    }\n  ],\n  \"waypoints\": [\n    {\n      \"hint\": \"qdAjgP___38bAAAAYwAAAAAAAAChAAAARWfaQWkpj0IAAAAAE08gQxsAAABjAAAAAAAAAKEAAADCHgAAH4kpAnRh_wEUiSkCSGH_AQAAnxEAAAAA\",\n      \"location\": [\n        36.276511,\n        33.513844\n      ],\n      \"name\": \"\",\n      \"distance\": 4.986042872\n    },\n    {\n      \"hint\": \"hpexiP___3-VAAAA1QAAAAAAAAAAAAAA8xDPQtNUMEIAAAAAAAAAAJUAAADVAAAAAAAAAAAAAADCHgAA-rUpAp9p_wEAtikC4Gn_AQAALxEAAAAA\",\n      \"location\": [\n        36.287994,\n        33.515935\n      ],\n      \"name\": \"\",\n      \"distance\": 7.230913201\n    }\n  ]\n}"
+        },
+        {
+          "name": "no-route",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": "{{osrm_base_url}}/route/v1/driving/{{origin_lng}},{{origin_lat}};{{destination_lng}},{{destination_lat}}?overview=full&geometries=geojson&steps=false&alternatives=false&generate_hints=false&radiuses=100;100"
+          },
+          "status": "Error",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"code\": \"NoRoute\",\n  \"message\": \"Impossible route between points\"\n}"
+        },
+        {
+          "name": "no-segment",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": "{{osrm_base_url}}/route/v1/driving/{{origin_lng}},{{origin_lat}};{{destination_lng}},{{destination_lat}}?overview=full&geometries=geojson&steps=false&alternatives=false&generate_hints=false&radiuses=100;100"
+          },
+          "status": "Error",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"code\": \"NoSegment\",\n  \"message\": \"Could not find a matching segment for coordinate 0\"\n}"
+        },
+        {
+          "name": "rate-limited",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": "{{osrm_base_url}}/route/v1/driving/{{origin_lng}},{{origin_lat}};{{destination_lng}},{{destination_lat}}?overview=full&geometries=geojson&steps=false&alternatives=false&generate_hints=false&radiuses=100;100"
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"message\": \"Too many requests\"\n}"
+        }
+      ]
+    }
+  ]
+}

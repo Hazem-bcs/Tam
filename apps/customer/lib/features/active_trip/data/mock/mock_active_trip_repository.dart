@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_simulation.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
+import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+
+import 'mock_road_routes.dart';
 
 /// Application-owned engine. All trip state, including live metadata, lives in
 /// MockTripStore; this adapter owns only its clock, subscription and timer.
@@ -16,9 +19,22 @@ final class MockActiveTripRepository implements ActiveTripRepository {
     this.scenario = ActiveTripScenario.success,
     ActiveTripTimings timings = const ActiveTripTimings(),
     bool autoStart = true,
+    MapsRepository? routing,
   }) : _now = now ?? DateTime.now,
        _simulation = ActiveTripSimulation(timings, scenario) {
+    _roads = routing == null
+        ? null
+        : MockRoadRoutes(
+            routing,
+            now: _now,
+            onChanged: () {
+              if (_disposed) return;
+              advance();
+              _changes.add(null);
+            },
+          );
     _subscription = _store.changes.listen((_) {
+      if (!_disposed) _changes.add(null);
       if (!_advancing && !_disposed) scheduleMicrotask(advance);
     });
     if (autoStart) {
@@ -31,6 +47,8 @@ final class MockActiveTripRepository implements ActiveTripRepository {
   final ActiveTripSimulation _simulation;
   late final StreamSubscription<List<Trip>> _subscription;
   Timer? _timer;
+  MockRoadRoutes? _roads;
+  final _changes = StreamController<void>.broadcast();
   bool _disposed = false, _advancing = false;
   bool failNextFetch = false, loseNextCancelResponse = false;
 
@@ -40,10 +58,24 @@ final class MockActiveTripRepository implements ActiveTripRepository {
     _advancing = true;
     try {
       final now = _now().toUtc();
+      _roads?.retain(
+        _store.trips.where((t) => t.status.isActive).map((t) => t.id),
+      );
       for (final initial in _store.trips) {
+        final roads =
+            initial.status.isActive &&
+                initial.status != TripStatus.scheduled &&
+                scenario != ActiveTripScenario.noDriver
+            ? _roads?.prepare(initial)
+            : null;
         var trip = initial;
         for (var step = 0; step < 8; step++) {
-          final next = _simulation.next(trip, now);
+          final next = _simulation.next(
+            trip,
+            now,
+            roads: roads,
+            requireRoads: _roads != null,
+          );
           if (next == null) break;
           final changed = next.status != trip.status;
           trip = _store.updateLive(
@@ -55,6 +87,18 @@ final class MockActiveTripRepository implements ActiveTripRepository {
       }
     } finally {
       _advancing = false;
+    }
+  }
+
+  void _checkRouting(Trip? trip) {
+    if (trip == null ||
+        !trip.status.isActive ||
+        trip.status == TripStatus.requested ||
+        trip.status == TripStatus.scheduled) {
+      return;
+    }
+    if (_roads?.prepare(trip).failed == true) {
+      throw const ActiveTripFailure('ROUTING_UNAVAILABLE');
     }
   }
 
@@ -76,6 +120,7 @@ final class MockActiveTripRepository implements ActiveTripRepository {
     advance();
     final trip = _store.find(tripId);
     _checkConnection(trip);
+    _checkRouting(trip);
     if (trip == null || trip.live != null) return trip;
     // Historic terminal records remain viewable without inventing an assignment.
     return trip.withLive(
@@ -106,6 +151,7 @@ final class MockActiveTripRepository implements ActiveTripRepository {
       });
     final trip = active.firstOrNull;
     _checkConnection(trip);
+    _checkRouting(trip);
     return trip;
   }
 
@@ -137,15 +183,18 @@ final class MockActiveTripRepository implements ActiveTripRepository {
   }
 
   @override
-  Stream<void> get changes => _store.changes.map((_) {});
+  Stream<void> get changes => _changes.stream;
   void resetSession() {
+    _roads?.clear();
     failNextFetch = false;
     loseNextCancelResponse = false;
   }
 
   Future<void> dispose() async {
     _disposed = true;
+    _roads?.clear();
     _timer?.cancel();
     await _subscription.cancel();
+    await _changes.close();
   }
 }

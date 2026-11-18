@@ -155,7 +155,7 @@ final class ActiveTripCubit extends Cubit<ActiveTripState> {
             ? ActiveTripPhase.failed
             : ActiveTripPhase.ready,
         refreshing: false,
-        offline: true,
+        offline: code != 'ROUTING_UNAVAILABLE',
         failure: code,
       ),
     );

@@ -128,6 +128,10 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         ? (_mockActiveTrips = MockActiveTripRepository(
             _mockTrips,
             now: widget.clock,
+            routing:
+                _maps.configuration.hasOsrm || _maps.configuration.hasServices
+                ? _maps.repository
+                : null,
             scenario: ActiveTripScenario.parse(
               AppConfig.activeTripMockScenario,
             ),
@@ -236,6 +240,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
         _maps.currentLocation?.setSession(false);
+        _maps.clearRoutingSession();
         _mockTrips.resetSession();
         _mockActiveTrips?.resetSession();
         _mockChat?.resetSession();

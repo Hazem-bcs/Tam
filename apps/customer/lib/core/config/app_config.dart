@@ -22,6 +22,17 @@ abstract final class AppConfig {
       defaultValue: '',
     ),
     apiBaseUrl: const String.fromEnvironment('MAP_API_BASE_URL'),
+    // User-authorized development demo. Release/backend configurations opt in
+    // explicitly to their own OSRM host; there is no fallback on API errors.
+    osrmBaseUrl: const String.fromEnvironment(
+      'MAP_OSRM_BASE_URL',
+      defaultValue:
+          !bool.fromEnvironment('dart.vm.product') &&
+              !bool.fromEnvironment('dart.vm.profile') &&
+              String.fromEnvironment('MAP_API_BASE_URL') == ''
+          ? 'https://router.project-osrm.org'
+          : '',
+    ),
     allowLocalHttp: const bool.fromEnvironment('MAP_ALLOW_LOCAL_HTTP'),
   );
   static const rideSchedulePolicy = RideSchedulePolicy();
