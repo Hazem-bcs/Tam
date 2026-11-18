@@ -1,0 +1,11 @@
+{
+  "source": "91482ab338ab3dd9f40a9eccece523786e8f1f71",
+  "mode": "release",
+  "abi": "arm64-v8a",
+  "bytes": 49192898,
+  "sha256": "80dcd6e93a139db50610254e8d4ce897be510267f719e7c9d44d4f7a717809c3",
+  "device": "Samsung SM_A225F",
+  "install": "Success",
+  "launch": "MainActivity start success",
+  "file": "/home/hazem/Downloads/Tam-Release-20261118/tam-customer-arm64-release-map-opening.apk"
+}

@@ -1,0 +1,18 @@
+Analyzing customer...                                           
+
+   info • Sort directive sections alphabetically • lib/features/active_trip/active_trip_entry.dart:7:1 • directives_ordering
+   info • Invalid use of a private type in a public API • lib/features/ride_request/presentation/widgets/ride_panel_size_observer.dart:21:15 • library_private_types_in_public_api
+   info • Sort directive sections alphabetically • test/features/ride_request/presentation/widgets/ride_request_page_test.dart:18:1 • directives_ordering
+   info • Sort directive sections alphabetically • test/features/ride_request/presentation/widgets/ride_request_page_test.dart:19:1 • directives_ordering
+   info • Sort directive sections alphabetically • test/features/ride_request/presentation/widgets/ride_request_page_test.dart:20:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:2:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:3:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:4:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports • test/features/trips/trip_completion_layout_test.dart:10:1 • directives_ordering
+
+14 issues found. (ran in 16.9s)

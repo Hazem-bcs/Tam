@@ -1,0 +1,225 @@
+{
+  "counts": {
+    "success": 987,
+    "error": 54
+  },
+  "failures": [
+    {
+      "file": "app/scheduled_booking_integration_test.dart",
+      "name": "schedule with saved addresses, list, cancel, rebook and logout"
+    },
+    {
+      "file": "app/addresses_integration_test.dart",
+      "name": "CRUD integrates with saved pickup/destination and resets on logout"
+    },
+    {
+      "file": "app/customer_session_integration_test.dart",
+      "name": "Home logout resets account data before entry 0941234567"
+    },
+    {
+      "file": "app/customer_session_integration_test.dart",
+      "name": "Home logout resets account data before entry 0951234567"
+    },
+    {
+      "file": "app/main_shell_integration_test.dart",
+      "name": "one shell retains tab state without pushing duplicate pages"
+    },
+    {
+      "file": "app/customer_session_integration_test.dart",
+      "name": "Home logout resets account data before entry null"
+    },
+    {
+      "file": "app/router/app_router_test.dart",
+      "name": "production router blocks bare OTP and ignores an external return URL"
+    },
+    {
+      "file": "app/account_management_integration_test.dart",
+      "name": "contact from assigned trip simulates without dialing fixture"
+    },
+    {
+      "file": "app/after_trip_journey_test.dart",
+      "name": "completed booking can be rated and reported using the same trip"
+    },
+    {
+      "file": "app/chat_integration_test.dart",
+      "name": "driver chat survives navigation and clears on session exit"
+    },
+    {
+      "file": "app/feature_foundation_test.dart",
+      "name": "changing app locale preserves the route and local phone state"
+    },
+    {
+      "file": "app/addresses_picker_layout_test.dart",
+      "name": "integrated saved-place picker remains usable at Size(320.0, 780.0) with keyboard and 2x text"
+    },
+    {
+      "file": "app/addresses_picker_layout_test.dart",
+      "name": "integrated saved-place picker remains usable at Size(800.0, 360.0) with keyboard and 2x text"
+    },
+    {
+      "file": "app/addresses_management_navigation_test.dart",
+      "name": "managing addresses from booking returns to the live picker"
+    },
+    {
+      "file": "app/customer_booking_integration_test.dart",
+      "name": "book, list, cancel and rebook use one shared trip source"
+    },
+    {
+      "file": "app/after_trip_access_test.dart",
+      "name": "authenticated API repositories fail explicitly without mock success"
+    },
+    {
+      "file": "widget_test.dart",
+      "name": "Arabic app shell launches without backend"
+    },
+    {
+      "file": "app/active_trip_integration_test.dart",
+      "name": "booking opens tracking, Home restores it, history cancellation stays in sync"
+    },
+    {
+      "file": "features/notifications/notifications_widget_test.dart",
+      "name": "notification header and filter strip adapt to RTL"
+    },
+    {
+      "file": "app/customer_help_integration_test.dart",
+      "name": "legacy completed trip ratings are cleared when the session ends"
+    },
+    {
+      "file": "app/maps_integration_test.dart",
+      "name": "logout disposes pending GPS and a new session starts without its point"
+    },
+    {
+      "file": "app/maps_integration_test.dart",
+      "name": "manual map pin reaches booking draft without a backend or public tiles"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 0"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 1"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 2"
+    },
+    {
+      "file": "features/auth/auth_shared_idle_test.dart",
+      "name": "shared idle loops around its anchor and resumes after an event"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 3"
+    },
+    {
+      "file": "app/maps_integration_test.dart",
+      "name": "a map pin returns to saved address editor and persists exact point"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 4"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / ar / layout 5"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 0"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 1"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 2"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 3"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 4"
+    },
+    {
+      "file": "features/auth/auth_mascot_clearance_test.dart",
+      "name": "both gloves clear the card / en / layout 5"
+    },
+    {
+      "file": "features/auth/auth_rive_mascot_test.dart",
+      "name": "only the winning expression reaches Rive; OTP stays context"
+    },
+    {
+      "file": "features/auth/auth_rive_mascot_test.dart",
+      "name": "reduced motion settles new poses and gaze without a ticker"
+    },
+    {
+      "file": "features/auth/auth_rive_mascot_test.dart",
+      "name": "hidden routes and background stop playback and safely resume"
+    },
+    {
+      "file": "features/auth/auth_rive_mascot_test.dart",
+      "name": "unmounting during native loading has no late callback errors"
+    },
+    {
+      "file": "features/auth/auth_rive_mascot_test.dart",
+      "name": "motion preference toggles keep the rig and pending gaze"
+    },
+    {
+      "file": "features/home/home_coupon_entry_test.dart",
+      "name": "home opens the existing coupon entry and shares it with Account"
+    },
+    {
+      "file": "features/home/home_visual_test.dart",
+      "name": "visual layout 390 en x1.0"
+    },
+    {
+      "file": "features/home/home_entry_integration_test.dart",
+      "name": "real Home entry opens registered routes and retains local Auth"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "map confirmation updates the existing journey without an intermediate empty point"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "GPS pickup, folding without resetting the map, and naming a tapped destination"
+    },
+    {
+      "file": "features/trips/trips_widget_test.dart",
+      "name": "completed detail rebook passes only locations, no new booking"
+    },
+    {
+      "file": "features/trips/trips_activity_visual_test.dart",
+      "name": "activity visual: Arabic phone, active plus history"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "back from the combined sheet returns to route planning"
+    },
+    {
+      "file": "features/trips/trips_activity_visual_test.dart",
+      "name": "activity visual: Arabic history in the real navigation dock"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "back can leave an already confirmed draft without changing its trip"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "GPS failure before confirmation stays visible and never books"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "movement before confirmation updates pickup and requires another review"
+    },
+    {
+      "file": "features/ride_request/presentation/widgets/ride_map_journey_test.dart",
+      "name": "320dp and large text keep the entry action reachable by scrolling"
+    }
+  ],
+  "new_failures": []
+}

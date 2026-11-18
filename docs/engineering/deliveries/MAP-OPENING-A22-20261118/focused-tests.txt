@@ -1,0 +1,15 @@
+00:00 +0: loading /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/vector_map_entrance_test.dart
+00:00 +0: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/vector_map_entrance_test.dart: surface waits for entrance and survives covering route
+00:01 +1: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: vehicle sprite changes without recreating the map or resetting its camera
+00:01 +2: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: vehicle sprite changes without recreating the map or resetting its camera
+00:01 +3: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: vehicle sprite changes without recreating the map or resetting its camera
+00:01 +4: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: vehicle sprite changes without recreating the map or resetting its camera
+00:01 +5: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: confirming a selected endpoint preserves viewport through route updates
+00:01 +6: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: follows driver automatically, pauses on drag and resumes explicitly
+00:02 +7: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: selection and driver updates preserve map, sprites and camera
+00:02 +8: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: panning a selected point updates once at idle and never recenters the next scene
+00:02 +9: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: tap and card folding keep the building and clicked point stationary
+00:02 +10: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: drag reads the geographic point under the tapped pin at Android density 3
+00:02 +11: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: My Location centers the same fix again without changing route endpoints
+00:02 +12: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/native_vector_map_test.dart: native failure is visible and retry recreates the failed view
+00:02 +13: All tests passed!
