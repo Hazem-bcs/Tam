@@ -60,11 +60,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     widget.navigation.openHome();
                   }
                 },
-                icon: Icon(
-                  Directionality.of(context) == TextDirection.rtl
-                      ? Icons.arrow_forward_ios_rounded
-                      : Icons.arrow_back_ios_new_rounded,
-                  size: 20,
+                icon: const IconTheme(
+                  data: IconThemeData(size: 20),
+                  child: BackButtonIcon(),
                 ),
                 style: IconButton.styleFrom(
                   foregroundColor: colors.onSurface,

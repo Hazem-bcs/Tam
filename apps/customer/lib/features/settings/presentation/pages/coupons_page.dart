@@ -61,16 +61,13 @@ class CouponsPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(AppRadii.md),
                   ),
                 ),
-                icon: SizedBox(
+                icon: const SizedBox(
+                  key: Key('coupons-ios-chevron'),
                   width: 19,
                   height: 24,
-                  child: CustomPaint(
-                    key: const Key('coupons-ios-chevron'),
-                    painter: _IosChevronPainter(
-                      color: colors.primary,
-                      pointsRight:
-                          Directionality.of(context) == TextDirection.rtl,
-                    ),
+                  child: IconTheme(
+                    data: IconThemeData(size: 20),
+                    child: BackButtonIcon(),
                   ),
                 ),
                 onPressed: () => Navigator.pop(context),
@@ -184,36 +181,4 @@ class CouponsPage extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Cupertino-style back stroke without an icon-font dependency.
-class _IosChevronPainter extends CustomPainter {
-  const _IosChevronPainter({required this.color, required this.pointsRight});
-
-  final Color color;
-  final bool pointsRight;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final outerX = pointsRight ? 3.5 : size.width - 3.5;
-    final pointX = pointsRight ? size.width - 3.5 : 3.5;
-    final path = Path()
-      ..moveTo(outerX, 3)
-      ..lineTo(pointX, size.height / 2)
-      ..lineTo(outerX, size.height - 3);
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = color
-        ..strokeWidth = 2.4
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round
-        ..style = PaintingStyle.stroke
-        ..isAntiAlias = true,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _IosChevronPainter old) =>
-      old.color != color || old.pointsRight != pointsRight;
 }

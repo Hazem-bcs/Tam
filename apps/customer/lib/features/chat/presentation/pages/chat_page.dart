@@ -119,7 +119,6 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           showDemoAvatar:
                               widget.showDemoAvatar && metadata != null,
                           onBack: widget.onBack,
-                          onRefresh: cubit.refresh,
                         ),
                         ConstrainedBox(
                           constraints: BoxConstraints(
@@ -128,6 +127,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                           child: ChatStatusBanner(
                             state: state,
                             simulated: widget.showDemoAvatar,
+                            onRetry: cubit.refresh,
                           ),
                         ),
                         Expanded(

@@ -7,9 +7,11 @@ class ChatStatusBanner extends StatelessWidget {
   const ChatStatusBanner({
     super.key,
     required this.state,
+    required this.onRetry,
     this.simulated = false,
   });
   final ChatState state;
+  final VoidCallback onRetry;
   final bool simulated;
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,13 @@ class ChatStatusBanner extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.error,
                 ),
+              ),
+            if (state.failure == 'NETWORK_ERROR' ||
+                state.failure == 'INVALID_RESPONSE')
+              TextButton(
+                key: const Key('chat-retry-connection'),
+                onPressed: onRetry,
+                child: Text(t.chatRefresh),
               ),
             if (state.metadata?.canSend == false) Text(t.chatReadOnly),
           ],

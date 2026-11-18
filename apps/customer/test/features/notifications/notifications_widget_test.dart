@@ -315,7 +315,13 @@ void main() {
       await repository.dispose();
     });
 
-    expect(find.byIcon(Icons.arrow_forward_ios_rounded), findsOneWidget);
+    final backIcon = find.byIcon(Icons.arrow_back_ios_new_rounded);
+    expect(backIcon, findsOneWidget);
+    final mirror = find.descendant(
+      of: backIcon,
+      matching: find.byType(Transform),
+    );
+    expect(tester.widget<Transform>(mirror).transform.entry(0, 0), -1);
     final filterStrip = find.byKey(const Key('notifications-filter-list'));
     expect(filterStrip, findsOneWidget);
     final stripRect = tester.getRect(filterStrip);

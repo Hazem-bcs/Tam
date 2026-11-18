@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 
 class ChatHeader extends StatelessWidget {
@@ -8,11 +7,10 @@ class ChatHeader extends StatelessWidget {
     super.key,
     required this.name,
     required this.onBack,
-    required this.onRefresh,
     this.showDemoAvatar = false,
   });
   final String name;
-  final VoidCallback onBack, onRefresh;
+  final VoidCallback onBack;
   final bool showDemoAvatar;
 
   @override
@@ -43,12 +41,6 @@ class ChatHeader extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            IconButton(
-              key: const Key('chat-refresh'),
-              tooltip: AppLocalizations.of(context).chatRefresh,
-              icon: const Icon(Icons.refresh_rounded),
-              onPressed: onRefresh,
             ),
           ],
         ),

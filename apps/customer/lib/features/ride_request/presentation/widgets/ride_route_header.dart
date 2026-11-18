@@ -72,9 +72,9 @@ class RideRouteHeader extends StatelessWidget {
                 tooltip: backToHome
                     ? l.activeTripHome
                     : MaterialLocalizations.of(context).backButtonTooltip,
-                icon: Icon(
-                  backToHome ? Icons.home_outlined : Icons.arrow_back_rounded,
-                ),
+                icon: backToHome
+                    ? const Icon(Icons.home_outlined)
+                    : const BackButtonIcon(),
               ),
               if (onSwap != null)
                 IconButton(

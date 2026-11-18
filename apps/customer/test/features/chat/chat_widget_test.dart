@@ -10,6 +10,31 @@ import 'chat_widget_support.dart';
 
 void main() {
   setUpAll(loadChatFonts);
+  testWidgets('connection error offers retry without a header refresh button', (
+    tester,
+  ) async {
+    final repo = ControlledChatRepository();
+    addTearDown(repo.events.close);
+    var offline = true;
+    repo.onFetch = (_) => offline
+        ? Future.error(const ChatFailure('NETWORK_ERROR'))
+        : Future.value(
+            ChatMessagePage(
+              metadata: chatMetadata(),
+              messages: [chatMessage(1)],
+            ),
+          );
+    await pumpChat(tester, repository: repo);
+    expect(find.byKey(const Key('chat-refresh')), findsNothing);
+    final retry = find.byKey(const Key('chat-retry-connection'));
+    expect(retry, findsOneWidget);
+    offline = false;
+    await tester.ensureVisible(retry);
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+    expect(retry, findsNothing);
+    expect(find.text('message 1'), findsOneWidget);
+  });
   testWidgets('composer hides the counter and preserves invalid drafts', (
     tester,
   ) async {

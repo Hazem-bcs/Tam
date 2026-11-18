@@ -10,13 +10,13 @@ class RideJourneyHeader extends StatelessWidget {
     required this.label,
     required this.onBack,
     this.backLabel,
-    this.backIcon = Icons.arrow_back_ios_new_rounded,
+    this.backIcon,
   });
   final int step;
   final String label;
   final VoidCallback? onBack;
   final String? backLabel;
-  final IconData backIcon;
+  final IconData? backIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,12 @@ class RideJourneyHeader extends StatelessWidget {
             tooltip:
                 backLabel ??
                 MaterialLocalizations.of(context).backButtonTooltip,
-            icon: Icon(backIcon, color: c.primary, size: 20),
+            icon: backIcon == null
+                ? IconTheme(
+                    data: IconThemeData(color: c.primary, size: 20),
+                    child: const BackButtonIcon(),
+                  )
+                : Icon(backIcon, color: c.primary, size: 20),
           ),
         ),
         const SizedBox(width: AppSpacing.md),
