@@ -1,6 +1,6 @@
-import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/data/trip_live_codec.dart';
 import 'package:tam_customer/shared/data/utc_timestamp.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
