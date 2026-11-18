@@ -4,11 +4,33 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/chat/data/mock/chat_mock_scenario.dart';
 import 'package:tam_customer/features/chat/data/mock/mock_chat_repository.dart';
 import 'package:tam_customer/features/chat/domain/chat_repository.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 import 'chat_test_support.dart';
 import 'chat_widget_support.dart';
 
 void main() {
   setUpAll(loadChatFonts);
+  testWidgets('driver portrait is shown only when explicitly enabled', (
+    tester,
+  ) async {
+    final repo = ControlledChatRepository();
+    addTearDown(repo.events.close);
+    await pumpChat(tester, repository: repo);
+    expect(
+      tester
+          .widgetList<DriverAvatar>(find.byType(DriverAvatar))
+          .every((avatar) => !avatar.showDemoAvatar),
+      isTrue,
+    );
+    await tester.pumpWidget(const SizedBox());
+    await pumpChat(tester, repository: repo, showDemoAvatar: true);
+    expect(
+      tester
+          .widgetList<DriverAvatar>(find.byType(DriverAvatar))
+          .every((avatar) => avatar.showDemoAvatar),
+      isTrue,
+    );
+  });
   testWidgets('groups current messages under the local day', (tester) async {
     final repo = ControlledChatRepository();
     addTearDown(repo.events.close);
@@ -165,6 +187,7 @@ void main() {
           repository: repo,
           locale: locale,
           scale: target.$3,
+          showDemoAvatar: true,
         );
         expect(tester.takeException(), isNull);
         await captureChat(

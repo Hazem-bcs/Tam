@@ -10,8 +10,13 @@ import '../widgets/chat_status_banner.dart';
 import '../widgets/chat_timeline.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key, required this.onBack});
+  const ChatPage({
+    super.key,
+    required this.onBack,
+    this.showDemoAvatar = false,
+  });
   final VoidCallback onBack;
+  final bool showDemoAvatar;
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -111,6 +116,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                       children: [
                         ChatHeader(
                           name: name ?? t.chatTitle,
+                          showDemoAvatar:
+                              widget.showDemoAvatar && metadata != null,
                           onBack: widget.onBack,
                           onRefresh: cubit.refresh,
                         ),
@@ -126,6 +133,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                             latestMessageKey: _latestMessageKey,
                             state: state,
                             now: cubit.now,
+                            showDemoAvatar: widget.showDemoAvatar,
                             controller: _scroll,
                             onLoadOlder: cubit.loadOlder,
                             onRetry: cubit.retry,

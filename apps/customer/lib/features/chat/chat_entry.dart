@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tam_customer/app/di/service_locator.dart';
+import 'data/mock/mock_chat_repository.dart';
 import 'domain/chat_repository.dart';
 import 'presentation/bloc/chat_cubit.dart';
 import 'presentation/pages/chat_page.dart';
@@ -37,5 +38,8 @@ Widget buildChatFeature({
           param2: (tripId: tripId, policy: policy, now: now),
         )
       : ChatCubit(repository, tripId: tripId, policy: policy, now: now),
-  child: ChatPage(onBack: onBack),
+  child: ChatPage(
+    onBack: onBack,
+    showDemoAvatar: repository is MockChatRepository,
+  ),
 );

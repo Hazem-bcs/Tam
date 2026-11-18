@@ -17,6 +17,7 @@ Future<ChatCubit> pumpChat(
   String locale = 'ar',
   bool settle = true,
   double scale = 1,
+  bool showDemoAvatar = false,
   GlobalKey<NavigatorState>? navigator,
 }) async {
   late ChatCubit cubit;
@@ -43,7 +44,7 @@ Future<ChatCubit> pumpChat(
             policy: const ChatPolicy(),
             now: () => chatNow,
           ),
-          child: ChatPage(onBack: () {}),
+          child: ChatPage(onBack: () {}, showDemoAvatar: showDemoAvatar),
         ),
       ),
     ),

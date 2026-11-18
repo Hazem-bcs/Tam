@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 
 class ChatHeader extends StatelessWidget {
   const ChatHeader({
@@ -8,14 +9,15 @@ class ChatHeader extends StatelessWidget {
     required this.name,
     required this.onBack,
     required this.onRefresh,
+    this.showDemoAvatar = false,
   });
   final String name;
   final VoidCallback onBack, onRefresh;
+  final bool showDemoAvatar;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = theme.colorScheme;
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(
         AppSpacing.lg,
@@ -31,11 +33,7 @@ class ChatHeader extends StatelessWidget {
             onPressed: onBack,
           ),
           const SizedBox(width: AppSpacing.md),
-          CircleAvatar(
-            backgroundColor: colors.primaryContainer,
-            foregroundColor: colors.primary,
-            child: const Icon(Icons.person_rounded),
-          ),
+          DriverAvatar(size: 44, showDemoAvatar: showDemoAvatar),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(

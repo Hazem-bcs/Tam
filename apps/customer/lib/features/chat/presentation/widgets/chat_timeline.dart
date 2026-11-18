@@ -13,6 +13,7 @@ class ChatTimeline extends StatelessWidget {
     this.latestMessageKey,
     required this.state,
     required this.now,
+    this.showDemoAvatar = false,
     required this.controller,
     required this.onLoadOlder,
     required this.onRetry,
@@ -20,6 +21,7 @@ class ChatTimeline extends StatelessWidget {
   final Key? latestMessageKey;
   final ChatState state;
   final DateTime Function() now;
+  final bool showDemoAvatar;
   final ScrollController controller;
   final VoidCallback onLoadOlder;
   final ValueChanged<String> onRetry;
@@ -98,6 +100,7 @@ class ChatTimeline extends StatelessWidget {
             body: message.body,
             sentAt: message.sentAt,
             customer: message.author == ChatAuthor.customer,
+            showDemoAvatar: showDemoAvatar,
             status: chatReceiptLabel(t, message, state.metadata),
             statusIcon:
                 message.sequence <= (state.metadata?.deliveredThrough ?? 0)

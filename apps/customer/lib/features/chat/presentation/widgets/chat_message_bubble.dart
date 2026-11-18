@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 import '../../domain/chat_repository.dart';
 
 class ChatMessageBubble extends StatelessWidget {
@@ -12,10 +13,12 @@ class ChatMessageBubble extends StatelessWidget {
     required this.status,
     this.onRetry,
     this.statusIcon = Icons.done,
+    this.showDemoAvatar = false,
   });
   final String body, status;
   final DateTime sentAt;
   final bool customer;
+  final bool showDemoAvatar;
   final VoidCallback? onRetry;
   final IconData statusIcon;
   @override
@@ -35,12 +38,7 @@ class ChatMessageBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!customer) ...[
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: colors.primaryContainer,
-              foregroundColor: colors.primary,
-              child: const Icon(Icons.person_rounded, size: 22),
-            ),
+            DriverAvatar(size: 36, showDemoAvatar: showDemoAvatar),
             const SizedBox(width: AppSpacing.sm),
           ],
           Flexible(
