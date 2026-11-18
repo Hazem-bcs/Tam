@@ -1394,6 +1394,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addressesAdd => 'Add a place';
 
   @override
+  String get addressesSetDefault => 'Set as default location';
+
+  @override
   String get addressesEdit => 'Edit place';
 
   @override
