@@ -10,9 +10,11 @@ final class TripDriver extends Equatable {
     required this.vehicleEn,
     required this.plate,
     required this.rating,
+    this.vehicleImageUrl,
   });
   final String id, name, nameEn, vehicle, vehicleEn, plate;
   final double rating;
+  final String? vehicleImageUrl;
   @override
   List<Object?> get props => [
     id,
@@ -22,6 +24,7 @@ final class TripDriver extends Equatable {
     vehicleEn,
     plate,
     rating,
+    vehicleImageUrl,
   ];
 }
 

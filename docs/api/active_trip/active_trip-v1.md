@@ -73,6 +73,8 @@ driver غير null إلزامي لـconfirmed/driver_en_route/driver_arrived/in_
 
 driver: جميع الحقول مطلوبة غير nullable: id، name (عربي)، name_en، vehicle
 (وصف المركبة/اللون)، vehicle_en، plate (معرف لوحة للعرض)، rating:number finite0..5.
+
+اقتراح تكاملي اختياري للواجهة: `vehicle_image_url` رابط HTTP(S) لصورة المركبة أو null؛ عند غيابه أو تعذّر تحميله تظهر أيقونة المركبة. الحقل مقترح يحتاج اتفاق الباك إند وليس تأكيدًا لتوفره حاليًا.
 لا صور وهمية أو أرقام هاتف شخصية أو روابط مكالمات/دردشة في هذا الإصدار.
 position:latitude/longitude finite ضمن[-90,90]/[-180,180]، وrecorded_at UTC Z
 <=updated_at، ولا position دون driver. إحداثيات الأمثلة اصطناعية وليست GPS.

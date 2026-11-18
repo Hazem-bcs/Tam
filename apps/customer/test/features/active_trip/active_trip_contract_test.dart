@@ -139,6 +139,29 @@ void main() {
       );
     },
   );
+  test('vehicle photo URL is optional and survives the driver codec', () {
+    final source = {
+      ...mockDriverJson,
+      'vehicle_image_url': 'https://example.com/car.png',
+    };
+    final driver = TripLiveCodec.driverFromJson(source);
+    expect(driver.vehicleImageUrl, 'https://example.com/car.png');
+    expect(
+      TripLiveCodec.driverJson(driver)['vehicle_image_url'],
+      driver.vehicleImageUrl,
+    );
+    expect(
+      TripLiveCodec.driverFromJson(mockDriverJson).vehicleImageUrl,
+      isNull,
+    );
+    expect(
+      TripLiveCodec.driverFromJson({
+        ...mockDriverJson,
+        'vehicle_image_url': 'not a url',
+      }).vehicleImageUrl,
+      isNull,
+    );
+  });
   test(
     'Postman operations, saved states and bilingual errors match examples',
     () {

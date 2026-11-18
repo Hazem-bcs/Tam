@@ -118,7 +118,10 @@ class _DriverDetails extends StatelessWidget {
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Row(
               children: [
-                const TamVehicleIcon(size: 56),
+                _VehiclePhoto(
+                  imageUrl: driver.vehicleImageUrl,
+                  showDemo: showDemoAvatar,
+                ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -161,6 +164,36 @@ class _DriverDetails extends StatelessWidget {
           child: Text(l.activeTripClose),
         ),
       ],
+    );
+  }
+}
+
+/// A driver-provided photo takes precedence; demo artwork is mock-only.
+class _VehiclePhoto extends StatelessWidget {
+  const _VehiclePhoto({this.imageUrl, required this.showDemo});
+  final String? imageUrl;
+  final bool showDemo;
+
+  @override
+  Widget build(BuildContext context) {
+    const fallback = TamVehicleIcon(size: 56);
+    final url = imageUrl?.trim();
+    return SizedBox(
+      width: 84,
+      height: 64,
+      child: url != null && url.isNotEmpty
+          ? Image.network(
+              url,
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => fallback,
+            )
+          : showDemo
+          ? Image.asset(
+              'assets/images/ahmad_ui/driver_car_demo.png',
+              fit: BoxFit.contain,
+              errorBuilder: (_, _, _) => fallback,
+            )
+          : fallback,
     );
   }
 }

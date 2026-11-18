@@ -52,6 +52,7 @@ abstract final class TripLiveCodec {
       vehicleEn: text(map, 'vehicle_en'),
       plate: text(map, 'plate'),
       rating: rating.toDouble(),
+      vehicleImageUrl: _vehicleImageUrl(map['vehicle_image_url']),
     );
   }
 
@@ -93,7 +94,21 @@ abstract final class TripLiveCodec {
     'vehicle_en': driver.vehicleEn,
     'plate': driver.plate,
     'rating': driver.rating,
+    if (driver.vehicleImageUrl != null)
+      'vehicle_image_url': driver.vehicleImageUrl,
   };
+  static String? _vehicleImageUrl(Object? value) {
+    if (value is! String) return null;
+    final url = value.trim();
+    final uri = Uri.tryParse(url);
+    if (uri == null ||
+        !uri.hasAuthority ||
+        (uri.scheme != 'https' && uri.scheme != 'http')) {
+      return null;
+    }
+    return url;
+  }
+
   static Map<String, dynamic> object(Object? value) {
     if (value is Map<String, dynamic>) return value;
     throw const FormatException('Expected object');
