@@ -22,16 +22,20 @@ Widget buildAddressesFeature(
   required VoidCallback onAdd,
   required ValueChanged<String> onEdit,
   required VoidCallback onBack,
+  PreferredAddressSelection? preferredAddress,
 }) => MultiBlocProvider(
   providers: [
     BlocProvider(create: (_) => _listCubit(repository)..load()),
-    _selectionProvider(),
+    _selectionProvider(preferredAddress),
   ],
   child: AddressesPage(onAdd: onAdd, onEdit: onEdit, onBack: onBack),
 );
 
-BlocProvider<PreferredAddressSelection> _selectionProvider() =>
-    locator.isRegistered<PreferredAddressSelection>()
+BlocProvider<PreferredAddressSelection> _selectionProvider(
+  PreferredAddressSelection? selection,
+) => selection != null
+    ? BlocProvider.value(value: selection)
+    : locator.isRegistered<PreferredAddressSelection>()
     ? BlocProvider.value(value: locator<PreferredAddressSelection>())
     : BlocProvider(create: (_) => PreferredAddressSelection());
 
@@ -59,10 +63,11 @@ Widget buildSavedAddressPicker({
   required ValueChanged<TripLocation> onSelected,
   required VoidCallback onManage,
   bool compact = false,
+  PreferredAddressSelection? preferredAddress,
 }) => MultiBlocProvider(
   providers: [
     BlocProvider(create: (_) => _listCubit(repository)..load()),
-    _selectionProvider(),
+    _selectionProvider(preferredAddress),
   ],
   child: SavedAddressPicker(
     onSelected: onSelected,

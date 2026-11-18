@@ -16,6 +16,7 @@ import 'package:tam_customer/features/account_management/domain/account_manageme
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
+import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/pages/auth_status_page.dart';
 import 'package:tam_customer/features/auth/presentation/pages/otp_auth_page.dart';
@@ -40,6 +41,7 @@ GoRouter createAppRouter(
   Listenable refresh, {
   required NotificationsRepository notifications,
   required AddressesRepository addresses,
+  required PreferredAddressSelection preferredAddress,
   required ActiveTripRepository activeTrips,
   required ChatRepository chat,
   required CompletionRepository completion,
@@ -75,6 +77,7 @@ GoRouter createAppRouter(
           logout: auth.logout,
           unreadCountSource: notifications,
           addressesRepository: addresses,
+          preferredAddress: preferredAddress,
         ),
         activity: (context) => buildTripsFeature(
           context,
@@ -139,6 +142,7 @@ GoRouter createAppRouter(
               dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
               mockTrips: trips,
               addresses: addresses,
+              preferredAddress: preferredAddress,
               activeTrips: activeTrips,
               simulatedTracking:
                   dataModes.forFeature(CustomerFeature.activeTrip) ==
@@ -162,6 +166,7 @@ GoRouter createAppRouter(
             dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
             mockTrips: trips,
             addresses: addresses,
+            preferredAddress: preferredAddress,
             activeTrips: activeTrips,
             simulatedTracking:
                 dataModes.forFeature(CustomerFeature.activeTrip) ==
@@ -197,6 +202,7 @@ GoRouter createAppRouter(
         builder: (context, state) => buildAddressesFeature(
           context,
           repository: addresses,
+          preferredAddress: preferredAddress,
           onAdd: () =>
               unawaited(GoRouter.of(context).push(AppRoutes.addAddress)),
           onEdit: (id) => unawaited(

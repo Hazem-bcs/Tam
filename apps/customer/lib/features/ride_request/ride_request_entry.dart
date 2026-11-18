@@ -8,6 +8,7 @@ import 'package:tam_customer/features/active_trip/domain/active_trip_repository.
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
+import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/data/repositories/unavailable_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
@@ -24,6 +25,7 @@ Widget buildRideRequestFeature(
   required FeatureDataMode dataMode,
   required MockTripStore mockTrips,
   AddressesRepository? addresses,
+  PreferredAddressSelection? preferredAddress,
   ActiveTripRepository? activeTrips,
   String? tripId,
   DateTime Function()? now,
@@ -80,6 +82,7 @@ Widget buildRideRequestFeature(
                 onSelected: onSelected,
                 onManage: navigation.openAddresses,
                 compact: true,
+                preferredAddress: preferredAddress,
               ),
       ),
     ),

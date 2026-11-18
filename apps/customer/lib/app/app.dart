@@ -17,11 +17,11 @@ import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario
 import 'package:tam_customer/features/active_trip/data/mock/mock_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
-import 'package:tam_customer/features/addresses/addresses_dependencies.dart';
 import 'package:tam_customer/features/addresses/data/mock/mock_addresses_repository.dart';
 import 'package:tam_customer/features/addresses/data/ride_address_place_search.dart';
 import 'package:tam_customer/features/addresses/data/unavailable_addresses_repository.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
+import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
 import 'package:tam_customer/features/auth/auth_dependencies.dart';
 import 'package:tam_customer/features/auth/domain/auth_repository.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
@@ -86,6 +86,8 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   final MockCouponBook _couponBook = MockCouponBook();
   late final MockNotificationsRepository _mockNotifications;
   late final MockAddressesRepository _mockAddresses;
+  late final PreferredAddressSelection _preferredAddress;
+  late final bool _ownsPreferredAddress;
   MockActiveTripRepository? _mockActiveTrips;
   MockChatRepository? _mockChat;
   MockCompletionRepository? _mockCompletion;
@@ -109,6 +111,10 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
           presentation.temporaryPhoneEntryEnabled,
     );
     _refresh = AuthRouterRefresh(_auth);
+    _ownsPreferredAddress = !locator.isRegistered<PreferredAddressSelection>();
+    _preferredAddress = _ownsPreferredAddress
+        ? PreferredAddressSelection()
+        : locator<PreferredAddressSelection>();
     _locale = AppLocaleController(widget.locale);
     _maps = locator.isRegistered<MapsDependencies>()
         ? locator<MapsDependencies>()
@@ -210,6 +216,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
       dataModes: modes,
       notifications: notifications,
       addresses: addresses,
+      preferredAddress: _preferredAddress,
       activeTrips: activeTrips,
       chat: chat,
       completion: completion,
@@ -250,7 +257,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         _mockContacts?.resetSession();
         _mockNotifications.resetSession();
         _mockAddresses.resetSession();
-        resetPreferredAddressSession(locator);
+        _preferredAddress.reset();
         resetSettingsFeatureSession(_locale);
         _couponBook.resetSession();
         sessionEntered = false;
@@ -297,6 +304,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     unawaited(_mockTrips.dispose());
     unawaited(_mockNotifications.dispose());
     unawaited(_mockAddresses.dispose());
+    if (_ownsPreferredAddress) unawaited(_preferredAddress.close());
     resetSettingsFeatureSession(_locale);
     _couponBook.dispose();
     _locale.dispose();

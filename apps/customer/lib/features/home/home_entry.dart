@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
-import 'package:tam_customer/features/addresses/domain/saved_address.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/addresses_cubit.dart';
-import 'package:tam_customer/features/addresses/presentation/bloc/addresses_state.dart';
+import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/home/data/mock/mock_home_repository.dart';
 import 'package:tam_customer/features/home/data/unavailable_home_repository.dart';
@@ -13,8 +12,8 @@ import 'package:tam_customer/features/home/domain/repositories/home_repository.d
 import 'package:tam_customer/features/home/presentation/bloc/home_cubit.dart';
 import 'package:tam_customer/features/home/presentation/bloc/home_unread_count_cubit.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
-import 'package:tam_customer/features/home/presentation/widgets/home_address_bar.dart';
 import 'package:tam_customer/features/home/presentation/widgets/home_notifications_button.dart';
+import 'package:tam_customer/features/home/presentation/widgets/home_preferred_address_bar.dart';
 import 'package:tam_customer/features/notifications/domain/notifications_repository.dart';
 
 Widget buildHomeFeature(
@@ -25,6 +24,7 @@ Widget buildHomeFeature(
   String? phoneE164,
   NotificationsUnreadCountSource? unreadCountSource,
   AddressesRepository? addressesRepository,
+  required PreferredAddressSelection preferredAddress,
 }) {
   final HomeRepository repository = switch (dataMode) {
     FeatureDataMode.mock => const MockHomeRepository(),
@@ -51,24 +51,18 @@ Widget buildHomeFeature(
     create: (_) => HomeCubit(repository)..load(),
     child: addressesRepository == null
         ? page()
-        : BlocProvider(
+        : MultiBlocProvider(
             key: ValueKey((addressesRepository, status, phoneE164)),
-            create: (_) => AddressesCubit(addressesRepository)..load(),
-            child: BlocBuilder<AddressesCubit, AddressesState>(
-              builder: (context, state) {
-                final address =
-                    state.items
-                        .where((item) => item.input.icon == AddressIcon.home)
-                        .firstOrNull ??
-                    state.items.firstOrNull;
-                return page(
-                  addressBar: HomeAddressBar(
-                    label: address?.input.location.label,
-                    loading: state.status == AddressesStatus.loading,
-                    onManage: navigation.openAddresses,
-                  ),
-                );
-              },
+            providers: [
+              BlocProvider(
+                create: (_) => AddressesCubit(addressesRepository)..load(),
+              ),
+              BlocProvider.value(value: preferredAddress),
+            ],
+            child: page(
+              addressBar: HomePreferredAddressBar(
+                onManage: navigation.openAddresses,
+              ),
             ),
           ),
   );
