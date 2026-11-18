@@ -131,7 +131,10 @@ class RideJourneyBody extends StatelessWidget {
                 ? null
                 : liveTrip?.live?.position?.point,
             bottomInset: inset,
-            onSelected: tracking || draft.confirmationPending
+            onSelected:
+                tracking ||
+                    draft.confirmationPending ||
+                    step != RideJourneyStep.places
                 ? null
                 : onMapPoint,
             onLocate: tracking || draft.confirmationPending ? null : onLocate,

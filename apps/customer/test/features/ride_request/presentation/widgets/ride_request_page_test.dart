@@ -17,6 +17,7 @@ import 'package:tam_customer/features/ride_request/presentation/pages/ride_reque
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_suggestion_tile.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -149,6 +150,12 @@ void main() {
     final (_, bloc, _) = await pumpRide(tester, locale: const Locale('ar'));
     expect(find.byType(RideJourneyEntry), findsNothing);
     expect(find.byType(RidePlacePicker), findsNothing);
+    expect(
+      tester
+          .widget<RideJourneyBackdrop>(find.byType(RideJourneyBackdrop))
+          .onSelected,
+      isNull,
+    );
     await tester.tap(find.text('إلى أين تريد الذهاب؟'));
     await tester.pumpAndSettle();
     expect(
@@ -156,6 +163,12 @@ void main() {
       isFalse,
     );
     expect(find.byType(TextFormField), findsOneWidget);
+    expect(
+      tester
+          .widget<RideJourneyBackdrop>(find.byType(RideJourneyBackdrop))
+          .onSelected,
+      isNotNull,
+    );
     await tester.pumpWidget(const SizedBox());
     await tester.runAsync(bloc.close);
   });
