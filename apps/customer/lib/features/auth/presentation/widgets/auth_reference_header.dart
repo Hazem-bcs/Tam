@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_artwork.dart';
-import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/tam_brand_logo.dart';
 
 /// Existing code-native route/message artwork, with the TAM brand throughout.
 class AuthReferenceHeader extends StatelessWidget {
@@ -24,17 +24,7 @@ class AuthReferenceHeader extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                AppLocalizations.of(context).appName,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displayLarge?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
+            TamBrandLogo(width: 140, height: compact ? 50 : 64),
             if (onBack != null)
               Align(
                 alignment: AlignmentDirectional.centerStart,

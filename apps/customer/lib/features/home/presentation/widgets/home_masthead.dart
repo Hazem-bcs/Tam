@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/tam_brand_logo.dart';
 
 /// Compact identity; phone details belong in Account, not the action-first home.
 class HomeMasthead extends StatelessWidget {
@@ -27,14 +28,7 @@ class HomeMasthead extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            t.appName,
-            style: type.headlineLarge?.copyWith(
-              color: colors.primary,
-              fontWeight: FontWeight.w900,
-              height: 1,
-            ),
-          ),
+          const TamBrandLogo(width: 54, height: 38),
           const SizedBox(width: AppSpacing.md),
           Container(width: 1, height: 32, color: colors.outlineVariant),
           const SizedBox(width: AppSpacing.md),

@@ -39,6 +39,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/images/brand/
     - assets/images/ahmad_ui/
     - assets/animations/
     - assets/maps/

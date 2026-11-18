@@ -5,6 +5,7 @@ import 'package:tam_customer/app/app.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/auth/presentation/bloc/auth_cubit.dart';
 import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.dart';
+import 'package:tam_customer/shared/widgets/tam_brand_logo.dart';
 
 import '../../support/fake_auth_repository.dart';
 
@@ -28,7 +29,8 @@ void main() {
     expect(find.byKey(const Key('auth-brand-scene')), findsOneWidget);
     expect(find.byKey(const Key('auth-reference-artwork')), findsOneWidget);
     expect(find.byKey(const Key('auth-form-surface')), findsOneWidget);
-    expect(find.text('تم'), findsWidgets);
+    expect(find.byType(TamBrandLogo), findsOneWidget);
+    expect(find.bySemanticsLabel('تم'), findsOneWidget);
     expect(find.text('مشوار'), findsNothing);
 
     final illustration = tester.getSize(
