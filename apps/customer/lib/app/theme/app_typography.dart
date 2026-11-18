@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Native platform fonts/fallbacks shape Arabic and Latin without a font package.
 /// No tracking is added to Arabic, and the user's text scale is never capped.
 abstract final class AppTypography {
-  /// Bundled, OFL-licensed Arabic sans. This does not affect other pages.
+  /// Bundled, OFL-licensed Arabic sans shared by feature entry points.
   static TextTheme home(TextTheme ambient) {
     final text = ambient.apply(
       fontFamily: 'TamSansArabic',
@@ -16,110 +16,14 @@ abstract final class AppTypography {
     );
   }
 
-  /// A focused, readable type hierarchy for the account centre only.
-  ///
-  /// Uses the bundled brand font already used by Home; it does not replace the
-  /// typography of unrelated feature screens. Both scripts retain zero tracking.
-  static TextTheme account(TextTheme ambient) {
-    final text = home(ambient);
-    return text.copyWith(
-      headlineSmall: text.headlineSmall?.copyWith(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        height: 1.35,
-      ),
-      titleLarge: text.titleLarge?.copyWith(
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        height: 1.35,
-      ),
-      titleMedium: text.titleMedium?.copyWith(
-        fontSize: 17,
-        fontWeight: FontWeight.w700,
-        height: 1.35,
-      ),
-      titleSmall: text.titleSmall?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        height: 1.4,
-      ),
-      bodyLarge: text.bodyLarge?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        height: 1.45,
-      ),
-      bodyMedium: text.bodyMedium?.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-      ),
-      bodySmall: text.bodySmall?.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-      ),
-      labelLarge: text.labelLarge?.copyWith(
-        fontSize: 15,
-        fontWeight: FontWeight.w700,
-        height: 1.4,
-      ),
-      labelMedium: text.labelMedium?.copyWith(
-        fontSize: 13,
-        fontWeight: FontWeight.w700,
-        height: 1.4,
-      ),
-    );
-  }
+  /// All feature entry points consume one semantic type hierarchy.
+  static TextTheme account(TextTheme ambient) => home(ambient);
 
-  /// A quieter, denser scale for the five-stage ride journey.
-  static TextTheme rideJourney(TextTheme ambient) {
-    final text = home(ambient);
-    return text.copyWith(
-      headlineLarge: text.headlineLarge?.copyWith(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-      ),
-      headlineMedium: text.headlineMedium?.copyWith(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-      headlineSmall: text.headlineSmall?.copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-      ),
-      titleLarge: text.titleLarge?.copyWith(
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-      ),
-      titleMedium: text.titleMedium?.copyWith(
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-      ),
-      titleSmall: text.titleSmall?.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-      ),
-      bodyLarge: text.bodyLarge?.copyWith(fontSize: 16),
-      bodyMedium: text.bodyMedium?.copyWith(fontSize: 14),
-      bodySmall: text.bodySmall?.copyWith(fontSize: 12),
-      labelLarge: text.labelLarge?.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-      ),
-      labelMedium: text.labelMedium?.copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-      ),
-      labelSmall: text.labelSmall?.copyWith(
-        fontSize: 11,
-        fontWeight: FontWeight.w400,
-      ),
-    );
-  }
+  static TextTheme rideJourney(TextTheme ambient) => home(ambient);
 
   static const textTheme = TextTheme(
     displayLarge: TextStyle(
-      fontSize: 40,
+      fontSize: 36,
       fontWeight: FontWeight.w700,
       height: 1.3,
       letterSpacing: 0,
@@ -131,55 +35,55 @@ abstract final class AppTypography {
       letterSpacing: 0,
     ),
     displaySmall: TextStyle(
-      fontSize: 32,
+      fontSize: 30,
       fontWeight: FontWeight.w700,
       height: 1.3,
       letterSpacing: 0,
     ),
     headlineLarge: TextStyle(
-      fontSize: 28,
+      fontSize: 26,
       fontWeight: FontWeight.w700,
       height: 1.4,
       letterSpacing: 0,
     ),
     headlineMedium: TextStyle(
-      fontSize: 24,
+      fontSize: 23,
       fontWeight: FontWeight.w700,
       height: 1.4,
       letterSpacing: 0,
     ),
     headlineSmall: TextStyle(
-      fontSize: 22,
+      fontSize: 21,
       fontWeight: FontWeight.w600,
       height: 1.4,
       letterSpacing: 0,
     ),
     titleLarge: TextStyle(
-      fontSize: 20,
+      fontSize: 19,
       fontWeight: FontWeight.w700,
       height: 1.4,
       letterSpacing: 0,
     ),
     titleMedium: TextStyle(
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: FontWeight.w600,
       height: 1.4,
       letterSpacing: 0,
     ),
     titleSmall: TextStyle(
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: FontWeight.w600,
       height: 1.4,
       letterSpacing: 0,
     ),
     bodyLarge: TextStyle(
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: FontWeight.w400,
       height: 1.5,
       letterSpacing: 0,
     ),
     bodyMedium: TextStyle(
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: FontWeight.w400,
       height: 1.5,
       letterSpacing: 0,
@@ -191,7 +95,7 @@ abstract final class AppTypography {
       letterSpacing: 0,
     ),
     labelLarge: TextStyle(
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: FontWeight.w600,
       height: 1.4,
       letterSpacing: 0,

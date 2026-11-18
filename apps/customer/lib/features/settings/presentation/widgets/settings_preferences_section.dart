@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tam_customer/app/preferences/app_preferences_cubit.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/presentation/bloc/settings_state.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_action_tile.dart';
+import 'package:tam_customer/features/settings/presentation/widgets/settings_appearance_preferences.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/settings_group.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
@@ -12,8 +14,10 @@ class SettingsPreferencesSection extends StatelessWidget {
     required this.languageCode,
     required this.onNotificationsChanged,
     required this.onLanguageTap,
+    this.preferences,
   });
 
+  final AppPreferencesCubit? preferences;
   final SettingsState state;
   final String languageCode;
   final ValueChanged<bool> onNotificationsChanged;
@@ -72,6 +76,8 @@ class SettingsPreferencesSection extends StatelessWidget {
             ],
           ),
         ),
+        if (preferences != null)
+          SettingsAppearancePreferences(controller: preferences!),
         SettingsActionTile(
           key: const Key('settings-language-tile'),
           icon: Icons.language_rounded,
