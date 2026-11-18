@@ -134,7 +134,9 @@ class _AddressesPageState extends State<AddressesPage> {
                                     AddressTile(
                                       address: item,
                                       enabled: !state.busy,
-                                      selected: (_pendingId ?? preferredId) == item.id,
+                                      selected:
+                                          (_pendingId ?? preferredId) ==
+                                          item.id,
                                       confirmed: preferredId == item.id,
                                       onSelect: () => setState(() {
                                         _pendingId = item.id == preferredId
@@ -162,11 +164,13 @@ class _AddressesPageState extends State<AddressesPage> {
                       ),
                       child: BlocBuilder<PreferredAddressSelection, String?>(
                         builder: (context, preferredId) {
-                          final pending = _pendingId != null &&
+                          final pending =
+                              _pendingId != null &&
                               _pendingId != preferredId &&
                               state.items.any((item) => item.id == _pendingId);
                           final canAct =
-                              state.status == AddressesStatus.ready && !state.busy;
+                              state.status == AddressesStatus.ready &&
+                              !state.busy;
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
