@@ -48,106 +48,122 @@ class _AddressEditorSheetState extends State<AddressEditorSheet> {
     final t = AppLocalizations.of(context);
     final editor = context.read<AddressEditorCubit>();
     final state = widget.state;
+    final keyboardInset = MediaQuery.viewInsetsOf(context).bottom;
     final canSave =
         state.valid && !state.locked && (editor.id == null || state.dirty);
 
     return LayoutBuilder(
-      builder: (context, size) => Align(
-        alignment: Alignment.bottomCenter,
-        child: AnimatedSize(
+      builder: (context, size) => Padding(
+        padding: EdgeInsets.only(bottom: keyboardInset),
+        child: Align(
           alignment: Alignment.bottomCenter,
-          curve: AppMotion.easeOut,
-          duration: MediaQuery.disableAnimationsOf(context)
-              ? Duration.zero
-              : AppMotion.medium,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              // Only limit overflow on small screens / with the keyboard.
-              // Normal phones automatically shrink to the form's content.
-              maxHeight: (size.maxHeight - 116).clamp(100.0, size.maxHeight),
-            ),
-            child: Material(
-              key: const Key('address-sheet-surface'),
-              elevation: AppElevation.raised,
-              color: colors.surface,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(AppRadii.sheet),
-                ),
+          child: AnimatedSize(
+            alignment: Alignment.bottomCenter,
+            curve: AppMotion.easeOut,
+            duration: MediaQuery.disableAnimationsOf(context)
+                ? Duration.zero
+                : AppMotion.medium,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                // Only limit overflow on small screens / with the keyboard.
+                // Normal phones automatically shrink to the form's content.
+                maxHeight:
+                    (size.maxHeight -
+                            keyboardInset -
+                            (keyboardInset > 0 ? 0 : 116))
+                        .clamp(
+                          0.0,
+                          (size.maxHeight - keyboardInset).clamp(
+                            0.0,
+                            size.maxHeight,
+                          ),
+                        ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                key: const Key('address-editor-sheet'),
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    key: const Key('address-sheet-toggle'),
-                    behavior: HitTestBehavior.opaque,
-                    onTap: _toggle,
-                    onVerticalDragStart: (_) => _dragDistance = 0,
-                    onVerticalDragUpdate: (details) =>
-                        _dragDistance += details.primaryDelta ?? 0,
-                    onVerticalDragEnd: _dragEnded,
-                    child: Semantics(
-                      button: true,
-                      label: _collapsed
-                          ? t.addressesManage
-                          : MaterialLocalizations.of(
-                              context,
-                            ).closeButtonTooltip,
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: AppDimensions.minTapTarget,
-                        child: Center(
-                          child: DecoratedBox(
-                            key: const Key('address-sheet-handle'),
-                            decoration: BoxDecoration(
-                              color: colors.outlineVariant,
-                              borderRadius: BorderRadius.circular(AppRadii.sm),
+              child: Material(
+                key: const Key('address-sheet-surface'),
+                elevation: AppElevation.raised,
+                color: colors.surface,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppRadii.sheet),
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  key: const Key('address-editor-sheet'),
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      key: const Key('address-sheet-toggle'),
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _toggle,
+                      onVerticalDragStart: (_) => _dragDistance = 0,
+                      onVerticalDragUpdate: (details) =>
+                          _dragDistance += details.primaryDelta ?? 0,
+                      onVerticalDragEnd: _dragEnded,
+                      child: Semantics(
+                        button: true,
+                        label: _collapsed
+                            ? t.addressesManage
+                            : MaterialLocalizations.of(
+                                context,
+                              ).closeButtonTooltip,
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: AppDimensions.minTapTarget,
+                          child: Center(
+                            child: DecoratedBox(
+                              key: const Key('address-sheet-handle'),
+                              decoration: BoxDecoration(
+                                color: colors.outlineVariant,
+                                borderRadius: BorderRadius.circular(
+                                  AppRadii.sm,
+                                ),
+                              ),
+                              child: const SizedBox(width: 40, height: 4),
                             ),
-                            child: const SizedBox(width: 40, height: 4),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  if (!_collapsed)
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: SingleChildScrollView(
-                        key: const Key('address-editor-scroll'),
-                        keyboardDismissBehavior:
-                            ScrollViewKeyboardDismissBehavior.onDrag,
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                          AppSpacing.xl,
-                          0,
-                          AppSpacing.xl,
-                          AppSpacing.lg,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AddressEditorForm(
-                              state: state,
-                              nameController: widget.nameController,
-                            ),
-                            const SizedBox(height: AppSpacing.lg),
-                            TamButton.primary(
-                              key: const Key('address-save'),
-                              label: state.retryPending
-                                  ? t.addressesRetry
-                                  : t.addressesSave,
-                              loadingLabel: t.addressesSaving,
-                              isLoading:
-                                  state.phase == AddressEditorPhase.saving,
-                              onPressed: canSave ? editor.save : null,
-                            ),
-                          ],
+                    if (!_collapsed)
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: SingleChildScrollView(
+                          key: const Key('address-editor-scroll'),
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            AppSpacing.xl,
+                            0,
+                            AppSpacing.xl,
+                            AppSpacing.lg,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AddressEditorForm(
+                                state: state,
+                                nameController: widget.nameController,
+                              ),
+                              const SizedBox(height: AppSpacing.lg),
+                              TamButton.primary(
+                                key: const Key('address-save'),
+                                label: state.retryPending
+                                    ? t.addressesRetry
+                                    : t.addressesSave,
+                                loadingLabel: t.addressesSaving,
+                                isLoading:
+                                    state.phase == AddressEditorPhase.saving,
+                                onPressed: canSave ? editor.save : null,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

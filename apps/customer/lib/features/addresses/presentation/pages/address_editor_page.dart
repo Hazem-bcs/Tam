@@ -109,6 +109,8 @@ class _AddressEditorPageState extends State<AddressEditorPage> {
           if (!didPop) _back();
         },
         child: Scaffold(
+          // Keep the map viewport stable while the keyboard moves the sheet.
+          resizeToAvoidBottomInset: false,
           appBar:
               state.phase == AddressEditorPhase.loading ||
                   state.phase == AddressEditorPhase.error ||
