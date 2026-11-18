@@ -52,21 +52,12 @@ class _ActiveMatchingPulseState extends State<ActiveMatchingPulse>
                 ),
               ),
             ),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: colors.primaryContainer,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: colors.primary.withValues(alpha: .18),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Icon(
-                  Icons.search_rounded,
-                  size: 32,
-                  color: colors.onPrimaryContainer,
-                ),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                Icons.search_rounded,
+                size: 32,
+                color: colors.primary,
               ),
             ),
           ),

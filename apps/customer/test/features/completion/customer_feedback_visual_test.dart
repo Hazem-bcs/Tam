@@ -202,6 +202,27 @@ void main() {
       size: const Size(320, 740),
       scale: 2,
     );
+    await tester.runAsync(
+      () => precacheImage(
+        ResizeImage(
+          const AssetImage('assets/images/tam_account_mascot.webp'),
+          width: 256,
+        ),
+        tester.element(find.byType(SupportEditorHero)),
+      ),
+    );
+    await tester.pump();
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is ResizeImage &&
+            ((widget.image as ResizeImage).imageProvider as AssetImage)
+                    .assetName ==
+                'assets/images/tam_account_mascot.webp',
+      ),
+      findsOneWidget,
+    );
     await tester.ensureVisible(find.text('11 / 2000'));
     await _save(tester, 'support-ar-320-x2');
     await tester.pumpWidget(const SizedBox());

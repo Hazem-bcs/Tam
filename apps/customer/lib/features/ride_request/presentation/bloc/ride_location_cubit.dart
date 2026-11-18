@@ -164,7 +164,11 @@ final class RideLocationCubit extends Cubit<RideLocationState> {
     if (isClosed) return;
     _returningFromSettings = true;
     try {
-      final opened = (failure ?? state.failure) == 'LOCATION_DENIED_FOREVER'
+      final opened =
+          const {
+            'LOCATION_DENIED_FOREVER',
+            'LOCATION_PRECISE_REQUIRED',
+          }.contains(failure ?? state.failure)
           ? await settings.openAppSettings()
           : await settings.openLocationSettings();
       if (!opened && !isClosed) {

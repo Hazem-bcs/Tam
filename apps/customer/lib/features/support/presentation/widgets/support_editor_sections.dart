@@ -15,55 +15,67 @@ class SupportEditorHero extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final mascotSize = MediaQuery.sizeOf(context).width < 360 ? 88.0 : 110.0;
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final text = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: colors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                subtitle,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-              ),
-            ],
+        Text(
+          title,
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: colors.primary,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        if (MediaQuery.sizeOf(context).width >= 400 &&
-            MediaQuery.textScalerOf(context).scale(1) <= 1.4) ...[
-          const SizedBox(width: AppSpacing.md),
-          ExcludeSemantics(
-            child: Container(
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          subtitle,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: colors.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+    return LayoutBuilder(
+      builder: (context, bounds) {
+        final stacked =
+            bounds.maxWidth < 280 ||
+            MediaQuery.textScalerOf(context).scale(1) > 1.4;
+        final mascotSize = bounds.maxWidth < 360 || stacked ? 88.0 : 110.0;
+        final mascot = ExcludeSemantics(
+          child: Container(
+            width: mascotSize,
+            height: mascotSize,
+            decoration: BoxDecoration(
+              color: colors.primaryContainer.withValues(alpha: .48),
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              'assets/images/tam_account_mascot.webp',
               width: mascotSize,
               height: mascotSize,
-              decoration: BoxDecoration(
-                color: colors.primaryContainer.withValues(alpha: 0.48),
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset(
-                'assets/images/tam_account_mascot.webp',
-                width: mascotSize,
-                height: mascotSize,
-                cacheWidth: 256,
-                fit: BoxFit.contain,
-                filterQuality: FilterQuality.medium,
-              ),
+              cacheWidth: 256,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.medium,
             ),
           ),
-        ],
-      ],
+        );
+        if (stacked) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(alignment: AlignmentDirectional.centerEnd, child: mascot),
+              const SizedBox(height: AppSpacing.sm),
+              text,
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(child: text),
+            const SizedBox(width: AppSpacing.md),
+            mascot,
+          ],
+        );
+      },
     );
   }
 }

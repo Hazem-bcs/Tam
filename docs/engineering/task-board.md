@@ -400,3 +400,5 @@ CUSTOMER-FEEDBACK-20261118: INTEGRATED إلىahmad-ui محليًا عند65d355e
 MAP-OPENING-A22-20261118: READY → IMPLEMENTING; root, baseline72bd142; [card](tasks/MAP-OPENING-A22-20261118.md). Isolate native initialization from entrance animation; native improvement pending measurement.
 
 MAP-OPENING-A22-20261118: verification complete at91482ab; code REVIEW_ONLY independent,13focused pass,full987pass/54inheritedfail,new0,analyze14inheritedinfo,format587/0. ARM64Release248.8s installed/started onSamsungA22. Supervisor accepts current lifecycle change for localahmad-ui integration; physical before/after smoothness pending user comparison.
+
+LOCATION-A22-20261118: READY → IMPLEMENTING; root; baseline392f63a; [card](tasks/LOCATION-A22-20261118.md). User requests focused checks/build/install only for speed.

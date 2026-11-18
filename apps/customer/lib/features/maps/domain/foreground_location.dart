@@ -29,7 +29,7 @@ final class ForegroundLocation implements DeviceLocation {
   LocationFix? _fix;
   Duration? _received;
   DateTime? _lastObservedAt;
-  int _epoch = 0;
+  int _epoch = 0, _sessionGeneration = 0;
   bool _session = false, _foreground = true, _disposed = false;
   bool get _active => _session && _foreground && !_disposed;
 
@@ -50,6 +50,7 @@ final class ForegroundLocation implements DeviceLocation {
   void setSession(bool entered) {
     if (_session == entered || _disposed) return;
     _session = entered;
+    _sessionGeneration++;
     _invalidate();
     if (_active) _warm(requestPermission: true);
   }
@@ -71,16 +72,29 @@ final class ForegroundLocation implements DeviceLocation {
 
   @override
   Future<GeoPoint> locate({bool requireFresh = false}) async {
-    if (requireFresh && _pending != null) {
-      final epoch = _epoch;
-      try {
-        await _pending;
-      } catch (_) {
-        /* Fresh acquisition still follows. */
+    final session = _sessionGeneration;
+    try {
+      if (requireFresh && _pending != null) {
+        final epoch = _epoch;
+        try {
+          await _pending;
+        } catch (_) {
+          /* Fresh acquisition still follows. */
+        }
+        _check(epoch);
       }
-      _check(epoch);
+      return await _locate(requestPermission: true, requireFresh: requireFresh);
+    } on MapsFailure catch (error) {
+      // Android's permission dialog can pause/resume the activity while the
+      // request is pending. Rejoin the resumed owner once, without reprompting
+      // or carrying a result across logout/account changes.
+      if (error.code == 'LOCATION_ACCESS_INTERRUPTED' &&
+          _active &&
+          session == _sessionGeneration) {
+        return _locate(requestPermission: false, requireFresh: requireFresh);
+      }
+      rethrow;
     }
-    return _locate(requestPermission: true, requireFresh: requireFresh);
   }
 
   Future<GeoPoint> _locate({
@@ -120,10 +134,17 @@ final class ForegroundLocation implements DeviceLocation {
     bool requestPermission,
     bool requireFresh,
   ) async {
+    final session = _sessionGeneration;
     try {
       await _stopping;
       _check(epoch);
       await sensor.checkAccess(requestPermission: requestPermission);
+      if (requestPermission &&
+          _active &&
+          epoch != _epoch &&
+          session == _sessionGeneration) {
+        throw const MapsFailure('LOCATION_ACCESS_INTERRUPTED');
+      }
       _check(epoch);
       _watch(epoch);
       final fix = _fix;
@@ -139,7 +160,10 @@ final class ForegroundLocation implements DeviceLocation {
       _fix = null;
       _received = null;
       if (_lastObservedAt?.isAfter(_now()) ?? false) _lastObservedAt = null;
-      final observation = await sensor.read().timeout(policy.fixTimeout);
+      // Leave room for bounded platform diagnostics after its GPS deadline.
+      final observation = await sensor.read().timeout(
+        policy.fixTimeout + const Duration(seconds: 2),
+      );
       _check(epoch);
       _accept(observation);
       final latest = _fix;
@@ -157,6 +181,7 @@ final class ForegroundLocation implements DeviceLocation {
               'LOCATION_DISABLED',
               'LOCATION_DENIED',
               'LOCATION_DENIED_FOREVER',
+              'LOCATION_PRECISE_REQUIRED',
             ].contains(error.code)) {
           _stopPositions();
         }

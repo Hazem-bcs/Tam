@@ -84,6 +84,7 @@ class RideLocationStatus extends StatelessWidget {
                   {
                     'LOCATION_DISABLED',
                     'LOCATION_DENIED_FOREVER',
+                    'LOCATION_PRECISE_REQUIRED',
                   }.contains(failure)
                   ? onSettings
                   : onRetry,
@@ -91,6 +92,7 @@ class RideLocationStatus extends StatelessWidget {
                 {
                       'LOCATION_DISABLED',
                       'LOCATION_DENIED_FOREVER',
+                      'LOCATION_PRECISE_REQUIRED',
                     }.contains(failure)
                     ? t.mapsOpenSettings
                     : t.mapsRetry,
@@ -100,4 +102,27 @@ class RideLocationStatus extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<bool> showRideVpnLocationNotice(BuildContext context) async {
+  final t = AppLocalizations.of(context);
+  return await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(Icons.vpn_key_outlined),
+          title: Text(t.mapsVpnActive),
+          content: Text(t.mapsVpnLocationNotice),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(t.mapsPickLocation),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(t.mapsRetry),
+            ),
+          ],
+        ),
+      ) ??
+      false;
 }

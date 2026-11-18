@@ -4403,7 +4403,7 @@ abstract class AppLocalizations {
   /// No description provided for @mapsLocationInaccurate.
   ///
   /// In ar, this message translates to:
-  /// **'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.'**
+  /// **'لم تصل قراءة حديثة بدقة كافية بعد. انتقل إلى مكان مكشوف وحاول مجددًا، أو اختر نقطة الانطلاق يدويًا.'**
   String get mapsLocationInaccurate;
 
   /// No description provided for @mapsNativeUnavailable.
@@ -4435,6 +4435,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'متابعة سيارة الكابتن'**
   String get mapsFollowDriver;
+
+  /// No description provided for @mapsPreciseRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'صلاحية الموقع التقريبي مفعّلة فقط. افتح إعدادات التطبيق وفعّل «الموقع الدقيق»، أو اختر نقطة يدويًا.'**
+  String get mapsPreciseRequired;
+
+  /// No description provided for @mapsLocationTimeout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر الحصول على قراءة للموقع خلال المهلة. جرّب من مكان مكشوف أو اختر نقطة يدويًا.'**
+  String get mapsLocationTimeout;
+
+  /// No description provided for @mapsVpnActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال VPN نشط'**
+  String get mapsVpnActive;
+
+  /// No description provided for @mapsVpnLocationNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر الحصول على موقع دقيق، ويوجد اتصال VPN نشط. قد يؤثر في اتصال خدمات الموقع والخرائط، لكنه ليس بالضرورة سبب ضعف GPS. يمكنك تجربة إيقافه مؤقتًا ثم إعادة المحاولة، أو اختيار نقطة يدويًا.'**
+  String get mapsVpnLocationNotice;
 }
 
 class _AppLocalizationsDelegate

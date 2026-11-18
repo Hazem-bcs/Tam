@@ -12,10 +12,12 @@ class _Sensor implements LocationSensor {
   int checks = 0, reads = 0;
   final permissionRequests = <bool>[];
   String? failure;
+  Future<void> Function()? onCheck;
   late Future<LocationFix> Function() sample;
   @override
   Future<void> checkAccess({required bool requestPermission}) async {
     checks++;
+    await onCheck?.call();
     permissionRequests.add(requestPermission);
     if (failure != null) throw MapsFailure(failure!);
   }
@@ -307,4 +309,37 @@ void main() {
     expect(sensor.service.hasListener, isFalse);
     await expectLater(location.locate(), throwsA(isA<MapsFailure>()));
   });
+  test(
+    'permission dialog resume rejoins acquisition without another prompt',
+    () async {
+      final permission = Completer<void>();
+      sensor.onCheck = () => permission.future;
+      location.setSession(true);
+      final result = location.locate();
+      await flush();
+      location.setForeground(false);
+      location.setForeground(true);
+      permission.complete();
+      expect(await result, origin);
+      expect(
+        sensor.permissionRequests.where((request) => request),
+        hasLength(1),
+      );
+    },
+  );
+  test(
+    'permission completion cannot rejoin a different account session',
+    () async {
+      final permission = Completer<void>();
+      sensor.onCheck = () => permission.future;
+      location.setSession(true);
+      final result = location.locate();
+      final rejected = expectLater(result, throwsA(isA<MapsFailure>()));
+      await flush();
+      location.setSession(false);
+      location.setSession(true);
+      permission.complete();
+      await rejected;
+    },
+  );
 }

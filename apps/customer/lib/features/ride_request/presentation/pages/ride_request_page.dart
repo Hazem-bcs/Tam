@@ -48,6 +48,8 @@ class _RideRequestPageState extends State<RideRequestPage>
       _settingsPromptOpen = false,
       _initialLocationRequested = false;
 
+  bool _vpnNoticeShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -255,8 +257,12 @@ class _RideRequestPageState extends State<RideRequestPage>
       }
     }
     if (state.failure == 'LOCATION_DISABLED' ||
-        state.failure == 'LOCATION_DENIED_FOREVER') {
+        state.failure == 'LOCATION_DENIED_FOREVER' ||
+        state.failure == 'LOCATION_PRECISE_REQUIRED') {
       unawaited(_promptSettings(context, state.failure!));
+    } else if (state.failure == 'LOCATION_VPN_NOTICE' && !_vpnNoticeShown) {
+      _vpnNoticeShown = true;
+      unawaited(_promptVpn(context));
     } else if (state.failure != null) {
       final t = AppLocalizations.of(context);
       TamSnackBar.show(
@@ -271,6 +277,13 @@ class _RideRequestPageState extends State<RideRequestPage>
               _location?.locate(requireFresh: true, focusMap: true),
         ),
       );
+    }
+  }
+
+  Future<void> _promptVpn(BuildContext context) async {
+    final retry = await showRideVpnLocationNotice(context);
+    if (mounted && retry) {
+      await _location?.locate(requireFresh: true, focusMap: true);
     }
   }
 

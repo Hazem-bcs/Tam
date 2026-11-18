@@ -72,12 +72,8 @@ class ActiveSearchJourney extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: AppSpacing.xl),
-                  Container(
+                  Padding(
                     padding: const EdgeInsets.all(AppSpacing.lg),
-                    decoration: BoxDecoration(
-                      color: colors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(AppRadii.sheet),
-                    ),
                     child: Column(
                       children: [
                         const ActiveMatchingPulse(),

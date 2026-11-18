@@ -2387,7 +2387,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsLocationInaccurate =>
-      'The location is too imprecise or outdated. Enable precise location and retry, or choose the pickup on the map.';
+      'A sufficiently accurate, recent location has not arrived yet. Move to an open area and retry, or select the pickup manually.';
 
   @override
   String get mapsNativeUnavailable =>
@@ -2404,4 +2404,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mapsFollowDriver => 'Follow the captain’s car';
+
+  @override
+  String get mapsPreciseRequired =>
+      'Only approximate location is allowed. Open app settings and enable precise location, or select a point manually.';
+
+  @override
+  String get mapsLocationTimeout =>
+      'No location fix arrived within the time limit. Try in an open area or select a point manually.';
+
+  @override
+  String get mapsVpnActive => 'VPN connection active';
+
+  @override
+  String get mapsVpnLocationNotice =>
+      'An accurate location could not be obtained and a VPN connection is active. It may affect connections to location and map services, but is not necessarily the cause of poor GPS accuracy. You can try turning it off temporarily and retry, or select a point manually.';
 }

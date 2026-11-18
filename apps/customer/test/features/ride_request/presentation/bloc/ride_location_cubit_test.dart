@@ -225,4 +225,12 @@ void main() {
     expect(cubit.state.fix, isNull);
     expect(cubit.state.address, isNull);
   });
+  test('approximate permission opens app permission settings', () async {
+    gps.onLocate = () async =>
+        throw const MapsFailure('LOCATION_PRECISE_REQUIRED');
+    await cubit.locate();
+    await cubit.openSettings();
+    expect(settings.app, 1);
+    expect(settings.location, 0);
+  });
 }

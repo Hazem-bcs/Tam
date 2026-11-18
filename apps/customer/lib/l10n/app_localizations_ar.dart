@@ -2343,7 +2343,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsLocationInaccurate =>
-      'الموقع غير دقيق بما يكفي أو قراءته قديمة. فعّل الموقع الدقيق وحاول مجددًا، أو اختر الانطلاق على الخريطة.';
+      'لم تصل قراءة حديثة بدقة كافية بعد. انتقل إلى مكان مكشوف وحاول مجددًا، أو اختر نقطة الانطلاق يدويًا.';
 
   @override
   String get mapsNativeUnavailable =>
@@ -2360,4 +2360,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mapsFollowDriver => 'متابعة سيارة الكابتن';
+
+  @override
+  String get mapsPreciseRequired =>
+      'صلاحية الموقع التقريبي مفعّلة فقط. افتح إعدادات التطبيق وفعّل «الموقع الدقيق»، أو اختر نقطة يدويًا.';
+
+  @override
+  String get mapsLocationTimeout =>
+      'تعذّر الحصول على قراءة للموقع خلال المهلة. جرّب من مكان مكشوف أو اختر نقطة يدويًا.';
+
+  @override
+  String get mapsVpnActive => 'اتصال VPN نشط';
+
+  @override
+  String get mapsVpnLocationNotice =>
+      'تعذّر الحصول على موقع دقيق، ويوجد اتصال VPN نشط. قد يؤثر في اتصال خدمات الموقع والخرائط، لكنه ليس بالضرورة سبب ضعف GPS. يمكنك تجربة إيقافه مؤقتًا ثم إعادة المحاولة، أو اختيار نقطة يدويًا.';
 }
