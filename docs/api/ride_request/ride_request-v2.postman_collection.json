@@ -49,7 +49,7 @@
             }
           }
         },
-        "url": "{{base_url}}/v1/ride-quotes"
+        "url": "{{base_url}}/ride-quotes"
       },
       "response": [
         {
@@ -129,7 +129,7 @@
             }
           }
         },
-        "url": "{{base_url}}/v1/trips"
+        "url": "{{base_url}}/trips"
       },
       "response": [
         {
@@ -169,7 +169,7 @@
             }
           }
         },
-        "url": "{{base_url}}/v1/ride-quotes"
+        "url": "{{base_url}}/ride-quotes"
       },
       "response": [
         {
@@ -204,7 +204,7 @@
                 }
               }
             },
-            "url": "{{base_url}}/v1/ride-quotes"
+            "url": "{{base_url}}/ride-quotes"
           }
         },
         {
@@ -239,7 +239,7 @@
                 }
               }
             },
-            "url": "{{base_url}}/v1/ride-quotes"
+            "url": "{{base_url}}/ride-quotes"
           }
         },
         {
@@ -274,7 +274,7 @@
                 }
               }
             },
-            "url": "{{base_url}}/v1/ride-quotes"
+            "url": "{{base_url}}/ride-quotes"
           }
         },
         {
@@ -309,7 +309,7 @@
                 }
               }
             },
-            "url": "{{base_url}}/v1/ride-quotes"
+            "url": "{{base_url}}/ride-quotes"
           }
         }
       ]
