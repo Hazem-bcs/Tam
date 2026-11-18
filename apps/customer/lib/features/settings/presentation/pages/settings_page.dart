@@ -145,9 +145,16 @@ class _SettingsPageState extends State<SettingsPage> {
       isScrollControlled: true,
       builder: (sheetContext) => SettingsLanguageSheet(
         languageCode: widget.locale.value.languageCode,
-        onSelected: (code) {
-          widget.locale.setLocale(Locale(code));
-          Navigator.pop(sheetContext);
+        onSelected: (code) async {
+          final saved = await widget.locale.setLocale(Locale(code));
+          if (sheetContext.mounted) Navigator.pop(sheetContext);
+          if (!saved && mounted) {
+            TamSnackBar.show(
+              context,
+              message: AppLocalizations.of(context).settingsPreferenceSaveError,
+              tone: TamSnackBarTone.error,
+            );
+          }
         },
       ),
     );
@@ -312,6 +319,7 @@ class _SettingsPageState extends State<SettingsPage> {
         const SizedBox(height: AppSpacing.lg),
         SettingsPreferencesSection(
           state: state,
+          preferences: widget.locale.preferences,
           languageCode: widget.locale.value.languageCode,
           onNotificationsChanged: _updateNotifications,
           onLanguageTap: _pickLanguage,

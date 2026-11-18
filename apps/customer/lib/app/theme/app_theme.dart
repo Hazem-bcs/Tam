@@ -7,13 +7,15 @@ import 'package:tam_customer/app/theme/app_typography.dart';
 abstract final class AppTheme {
   static final ThemeData light = _build(AppColors.light, AppColors.lightStatus);
 
+  static final ThemeData dark = _build(AppColors.dark, AppColors.darkStatus);
+
   /// Opt-in brand typography without rebuilding the ambient color system.
   static ThemeData activity(ThemeData ambient) =>
       ambient.copyWith(textTheme: AppTypography.home(ambient.textTheme));
 
   /// Central, route-local opt-in; pushed pages keep their ambient app theme.
   static ThemeData home(ThemeData ambient) => _build(
-    AppColors.home,
+    ambient.brightness == Brightness.dark ? AppColors.homeDark : AppColors.home,
     ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
     textTheme: AppTypography.home(ambient.textTheme),
   );
@@ -30,12 +32,12 @@ abstract final class AppTheme {
   );
 
   static ThemeData rideJourney(ThemeData ambient) => _build(
-    AppColors.light,
+    ambient.colorScheme,
     ambient.extension<AppStatusColors>() ?? AppColors.lightStatus,
     compactControls: true,
     textTheme: AppTypography.rideJourney(ambient.textTheme).apply(
-      bodyColor: AppColors.light.onSurface,
-      displayColor: AppColors.light.onSurface,
+      bodyColor: ambient.colorScheme.onSurface,
+      displayColor: ambient.colorScheme.onSurface,
     ),
   );
 
@@ -46,7 +48,7 @@ abstract final class AppTheme {
     textTheme: AppTypography.home(ambient.textTheme),
   );
 
-  // A future dark palette can use the same component and typography rules.
+  // Both palettes share the same component and accessibility rules.
   static ThemeData _build(
     ColorScheme colors,
     AppStatusColors status, {

@@ -6,6 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
+import 'package:tam_customer/app/preferences/app_preferences.dart';
+import 'package:tam_customer/app/preferences/app_preferences_cubit.dart';
+import 'package:tam_customer/app/preferences/app_text_scaler.dart';
 import 'package:tam_customer/app/router/app_router.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/core/cache/local_cache_store.dart';
@@ -62,6 +65,7 @@ class TamApp extends StatefulWidget {
     this.temporaryPhoneEntryEnabled,
     this.dataModes,
     this.clock,
+    this.preferencesRepository,
     this.locale = const Locale('ar'),
   }) : assert((authRepository == null) == (sessionStore == null));
 
@@ -71,6 +75,7 @@ class TamApp extends StatefulWidget {
   final FeatureDataModes? dataModes;
   final DateTime Function()? clock;
   final Locale locale;
+  final AppPreferencesRepository? preferencesRepository;
 
   @override
   State<TamApp> createState() => _TamAppState();
@@ -81,6 +86,7 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
   late final AuthRouterRefresh _refresh;
   late final GoRouter _router;
   late final AppLocaleController _locale;
+  late final AppPreferencesCubit _preferences;
   late final MapsDependencies _maps;
   late final MockTripStore _mockTrips;
   final MockCouponBook _couponBook = MockCouponBook();
@@ -115,7 +121,17 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _preferredAddress = _ownsPreferredAddress
         ? PreferredAddressSelection()
         : locator<PreferredAddressSelection>();
-    _locale = AppLocaleController(widget.locale);
+    _preferences = AppPreferencesCubit(
+      repository:
+          widget.preferencesRepository ??
+          (widget.authRepository == null &&
+                  locator.isRegistered<AppPreferencesRepository>()
+              ? locator<AppPreferencesRepository>()
+              : null),
+      initial: AppPreferences(languageCode: widget.locale.languageCode),
+    );
+    _locale = AppLocaleController(widget.locale, _preferences);
+    unawaited(_preferences.restore());
     _maps = locator.isRegistered<MapsDependencies>()
         ? locator<MapsDependencies>()
         : MapsDependencies.configured(AppConfig.maps);
@@ -308,34 +324,52 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     resetSettingsFeatureSession(_locale);
     _couponBook.dispose();
     _locale.dispose();
+    unawaited(_preferences.close());
     unawaited(_auth.close());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CouponBookScope(
-      book: _couponBook,
-      child: BlocProvider.value(
-        value: _auth,
-        child: MapsScope(
-          dependencies: _maps,
-          child: ValueListenableBuilder<Locale>(
-            valueListenable: _locale,
-            builder: (context, locale, child) => MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              onGenerateTitle: (context) =>
-                  AppLocalizations.of(context).appName,
-              routerConfig: _router,
-              theme: AppTheme.light,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
-              locale: locale,
+    return BlocProvider.value(
+      value: _preferences,
+      child: CouponBookScope(
+        book: _couponBook,
+        child: BlocProvider.value(
+          value: _auth,
+          child: MapsScope(
+            dependencies: _maps,
+            child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
+              builder: (context, state) => MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                onGenerateTitle: (context) =>
+                    AppLocalizations.of(context).appName,
+                routerConfig: _router,
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                themeMode: switch (state.preferences.appearance) {
+                  AppAppearance.system => ThemeMode.system,
+                  AppAppearance.light => ThemeMode.light,
+                  AppAppearance.dark => ThemeMode.dark,
+                },
+                builder: (context, child) => MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    textScaler: AppTextScaler(
+                      MediaQuery.textScalerOf(context),
+                      state.preferences.fontSize.factor,
+                    ),
+                  ),
+                  child: child!,
+                ),
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: AppLocalizations.supportedLocales,
+                locale: Locale(state.preferences.languageCode),
+              ),
             ),
           ),
         ),

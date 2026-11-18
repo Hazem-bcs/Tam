@@ -208,7 +208,7 @@ void main() {
     final title = tester.widget<Text>(find.text('اللغة'));
     final detail = tester.widget<Text>(find.text('العربية'));
     expect(header.style?.fontSize, type.titleSmall?.fontSize);
-    expect(title.style?.fontSize, 16);
+    expect(title.style?.fontSize, type.titleSmall?.fontSize);
     expect(detail.style?.fontSize, 14);
     expect(header.style?.fontWeight, FontWeight.w700);
     expect(title.style?.fontWeight, FontWeight.w700);
