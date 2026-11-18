@@ -16,16 +16,8 @@ Page<void> rideJourneyPage(
     child: child,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       final eased = animation.drive(CurveTween(curve: AppMotion.easeOut));
-      return FadeTransition(
-        opacity: eased,
-        child: SlideTransition(
-          position: Tween(
-            begin: const Offset(0, .025),
-            end: Offset.zero,
-          ).animate(eased),
-          child: child,
-        ),
-      );
+      // The map remains spatially stable; journey panels own their local motion.
+      return FadeTransition(opacity: eased, child: child);
     },
   );
 }

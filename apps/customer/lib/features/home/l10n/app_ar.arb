@@ -40,5 +40,21 @@
   "homeCouponHint": "وفّر على مشوارك القادم مع تم",
   "homeCouponDetails": "إضافة",
   "homeCouponInstructions": "اختر مشوارك، ثم أضف الكوبون في خانة كوبون الحسم قبل تأكيد الرحلة. ستظهر قيمة الحسم والسعر الجديد إذا كان الكوبون صالحًا.",
-  "homeSelectDefaultAddress": "حدد عنوانك الافتراضي"
+  "homeSelectDefaultAddress": "حدد عنوانك الافتراضي",
+  "homeUpcomingTrips": "رحلاتك القادمة",
+  "homeUpcomingLoading": "جارٍ تحميل الرحلات القادمة",
+  "homeUpcomingError": "تعذر تحديث الرحلات القادمة. قد تكون المعلومات المعروضة قديمة.",
+  "homeUpcomingRetry": "إعادة المحاولة",
+  "homeUpcomingOpen": "عرض الرحلة ومتابعتها",
+  "homeUpcomingRoute": "من {pickup} إلى {destination}",
+  "@homeUpcomingRoute": {
+    "placeholders": {
+      "pickup": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  }
 }

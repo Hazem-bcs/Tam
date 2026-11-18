@@ -40,5 +40,21 @@
   "homeCouponHint": "Save on your next ride with TAM",
   "homeCouponDetails": "Add",
   "homeCouponInstructions": "Choose your ride, then enter your promo code before confirming. When the code is valid, your discount and updated fare will appear.",
-  "homeSelectDefaultAddress": "Choose your default address"
+  "homeSelectDefaultAddress": "Choose your default address",
+  "homeUpcomingTrips": "Upcoming rides",
+  "homeUpcomingLoading": "Loading upcoming rides",
+  "homeUpcomingError": "Upcoming rides could not be refreshed. Displayed information may be out of date.",
+  "homeUpcomingRetry": "Try again",
+  "homeUpcomingOpen": "View and track ride",
+  "homeUpcomingRoute": "From {pickup} to {destination}",
+  "@homeUpcomingRoute": {
+    "placeholders": {
+      "pickup": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  }
 }

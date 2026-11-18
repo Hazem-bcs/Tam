@@ -357,10 +357,16 @@ class _RideRequestPageState extends State<RideRequestPage>
         if (!didPop) _back();
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-          statusBarColor: Theme.of(context).colorScheme.surface,
-          systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-        ),
+        value:
+            (Theme.of(context).brightness == Brightness.dark
+                    ? SystemUiOverlayStyle.light
+                    : SystemUiOverlayStyle.dark)
+                .copyWith(
+                  statusBarColor: Theme.of(context).colorScheme.surface,
+                  systemNavigationBarColor: Theme.of(
+                    context,
+                  ).colorScheme.surface,
+                ),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: SafeArea(

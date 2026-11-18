@@ -11,6 +11,8 @@ import 'package:tam_customer/features/ride_request/presentation/widgets/ride_jou
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 
+import 'active_matching_pulse.dart';
+
 /// Matching reflects ActiveTripState; this page never schedules driver success.
 class ActiveSearchJourney extends StatelessWidget {
   const ActiveSearchJourney({
@@ -78,19 +80,7 @@ class ActiveSearchJourney extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        SizedBox.square(
-                          dimension: 36,
-                          child: MediaQuery.disableAnimationsOf(context)
-                              ? Icon(
-                                  Icons.radar_rounded,
-                                  color: colors.primary,
-                                  size: 32,
-                                )
-                              : CircularProgressIndicator(
-                                  strokeWidth: AppDimensions.progressStroke,
-                                  semanticsLabel: t.activeTripSearchingHint,
-                                ),
-                        ),
+                        const ActiveMatchingPulse(),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
                           t.rideRequestSimulationNotice,

@@ -41,7 +41,11 @@ class RideJourneySheet extends StatelessWidget {
         ),
         child: LayoutBuilder(
           builder: (context, bounds) {
-            final pinAction = bounds.maxHeight >= 320;
+            final actionHeight =
+                MediaQuery.textScalerOf(context).scale(16) * 3 + AppSpacing.xl;
+            final pinAction =
+                MediaQuery.viewInsetsOf(context).bottom == 0 &&
+                bounds.maxHeight >= 320 + actionHeight;
             final action = Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
               child: TamButton.primary(

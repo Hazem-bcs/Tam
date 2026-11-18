@@ -15,7 +15,9 @@ final class ActiveTripPolicy {
 }
 
 abstract interface class ActiveTripRepository {
-  /// Null means no visible active trip, not a network failure.
+  /// The immediate/dispatched journey. Future scheduled reservations are listed
+  /// separately by UpcomingTripsRepository and remain reachable through fetch.
+  /// Null means no immediate active trip, not a network failure.
   Future<Trip?> current();
   Future<Trip?> fetch(String tripId);
 
