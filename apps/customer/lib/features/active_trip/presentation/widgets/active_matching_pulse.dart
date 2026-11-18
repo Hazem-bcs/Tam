@@ -1,8 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:tam_customer/app/theme/app_tokens.dart';
-import 'package:tam_customer/features/ride_request/presentation/widgets/ride_artwork.dart';
+import 'package:lottie/lottie.dart';
 
 /// Quiet continuous search feedback; only this small illustration repaints.
 class ActiveMatchingPulse extends StatefulWidget {
@@ -45,20 +44,26 @@ class _ActiveMatchingPulseState extends State<ActiveMatchingPulse>
             Theme.of(context).colorScheme.primary,
             _motion.value,
           ),
-          child: Center(child: child),
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(AppRadii.sheet),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(AppSpacing.md),
-            child: RideArtwork(
-              type: RideArtworkType.comfort,
-              width: 78,
-              height: 44,
+          child: Center(
+            child: Transform.translate(
+              offset: Offset(math.sin(_motion.value * 2 * math.pi) * 22, 0),
+              child: child,
             ),
+          ),
+        ),
+        child: ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            Theme.of(context).colorScheme.primary,
+            BlendMode.srcIn,
+          ),
+          child: Lottie.asset(
+            'assets/animations/driver_search_lottie.json',
+            key: const Key('driver-search-animation'),
+            width: 72,
+            height: 72,
+            animate: !MediaQuery.disableAnimationsOf(context),
+            repeat: true,
+            fit: BoxFit.contain,
           ),
         ),
       ),

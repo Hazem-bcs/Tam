@@ -28,6 +28,7 @@ dependencies:
   http: ^1.6.0
   rive: ^0.14.11
   image_picker: ^1.2.4
+  lottie: ^3.7.0
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,7 @@ flutter:
     - assets/fonts/NOTO-LICENSE.txt
     - assets/maps/OPENFREEMAP-LICENSE.md
     - assets/maps/LIBERTY-LICENSE.md
+    - assets/animations/LOTTIE-SEARCH-LICENSE.txt
   fonts:
     - family: TamSansArabic
       fonts:
