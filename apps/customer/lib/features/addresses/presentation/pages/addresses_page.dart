@@ -9,11 +9,12 @@ import '../bloc/addresses_cubit.dart';
 import '../bloc/addresses_state.dart';
 import '../bloc/preferred_address_selection.dart';
 import '../widgets/address_display.dart';
+import '../widgets/address_delete_dialog.dart';
 import '../widgets/address_tile.dart';
 import '../widgets/addresses_empty_state.dart';
 
 /// Saved, empty and error states use the same identity and bottom action.
-class AddressesPage extends StatelessWidget {
+class AddressesPage extends StatefulWidget {
   const AddressesPage({
     super.key,
     required this.onAdd,
@@ -24,32 +25,34 @@ class AddressesPage extends StatelessWidget {
   final VoidCallback onAdd, onBack;
   final ValueChanged<String> onEdit;
 
+  @override
+  State<AddressesPage> createState() => _AddressesPageState();
+}
+
+class _AddressesPageState extends State<AddressesPage> {
+  String? _pendingId;
+
+  void _confirmDefault(BuildContext context) {
+    final id = _pendingId;
+    if (id == null) return;
+    context.read<PreferredAddressSelection>().choose(id);
+    setState(() => _pendingId = null);
+  }
+
   Future<void> _delete(BuildContext context, String id) async {
-    final t = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        icon: Icon(Icons.delete_outline, color: colors.error),
-        title: Text(t.addressesDeleteTitle),
-        content: Text(t.addressesDeleteBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(t.addressesCancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(
-              t.addressesConfirmDelete,
-              style: TextStyle(color: colors.error),
-            ),
-          ),
-        ],
-      ),
+      builder: (_) => const AddressDeleteDialog(),
     );
-    if (confirmed == true && context.mounted) {
-      await context.read<AddressesCubit>().delete(id);
+    if (confirmed != true || !mounted || !context.mounted) return;
+
+    final cubit = context.read<AddressesCubit>();
+    await cubit.delete(id);
+    if (!mounted || !context.mounted) return;
+    final ids = cubit.state.items.map((item) => item.id).toSet();
+    context.read<PreferredAddressSelection>().clearIfMissing(ids);
+    if (_pendingId != null && !ids.contains(_pendingId)) {
+      setState(() => _pendingId = null);
     }
   }
 
@@ -72,7 +75,7 @@ class AddressesPage extends StatelessWidget {
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).canPop()
               ? Navigator.pop(context)
-              : onBack(),
+              : widget.onBack(),
         ),
       ),
       body: SafeArea(
@@ -131,11 +134,14 @@ class AddressesPage extends StatelessWidget {
                                     AddressTile(
                                       address: item,
                                       enabled: !state.busy,
-                                      selected: preferredId == item.id,
-                                      onSelect: () => context
-                                          .read<PreferredAddressSelection>()
-                                          .choose(item.id),
-                                      onEdit: () => onEdit(item.id),
+                                      selected: (_pendingId ?? preferredId) == item.id,
+                                      confirmed: preferredId == item.id,
+                                      onSelect: () => setState(() {
+                                        _pendingId = item.id == preferredId
+                                            ? null
+                                            : item.id;
+                                      }),
+                                      onEdit: () => widget.onEdit(item.id),
                                       onDelete: () => _delete(context, item.id),
                                     ),
                                     const SizedBox(height: AppSpacing.md),
@@ -154,14 +160,43 @@ class AddressesPage extends StatelessWidget {
                         AppSpacing.xl,
                         AppSpacing.lg,
                       ),
-                      child: TamButton.primary(
-                        key: const Key('addresses-add-button'),
-                        label: t.addressesAdd,
-                        icon: Icons.add_rounded,
-                        onPressed:
-                            state.status == AddressesStatus.ready && !state.busy
-                            ? onAdd
-                            : null,
+                      child: BlocBuilder<PreferredAddressSelection, String?>(
+                        builder: (context, preferredId) {
+                          final pending = _pendingId != null &&
+                              _pendingId != preferredId &&
+                              state.items.any((item) => item.id == _pendingId);
+                          final canAct =
+                              state.status == AddressesStatus.ready && !state.busy;
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (pending) ...[
+                                TamButton.primary(
+                                  key: const Key('addresses-confirm-default'),
+                                  label: t.addressesSetDefault,
+                                  icon: Icons.check_rounded,
+                                  onPressed: canAct
+                                      ? () => _confirmDefault(context)
+                                      : null,
+                                ),
+                                const SizedBox(height: AppSpacing.sm),
+                              ],
+                              pending
+                                  ? TamButton.secondary(
+                                      key: const Key('addresses-add-button'),
+                                      label: t.addressesAdd,
+                                      icon: Icons.add_rounded,
+                                      onPressed: canAct ? widget.onAdd : null,
+                                    )
+                                  : TamButton.primary(
+                                      key: const Key('addresses-add-button'),
+                                      label: t.addressesAdd,
+                                      icon: Icons.add_rounded,
+                                      onPressed: canAct ? widget.onAdd : null,
+                                    ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
