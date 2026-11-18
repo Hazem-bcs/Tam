@@ -77,6 +77,12 @@ class _ChatComposerState extends State<ChatComposer> {
               IconButton.filled(
                 key: const Key('chat-send'),
                 tooltip: t.chatSend,
+                style: IconButton.styleFrom(
+                  foregroundColor: colors.onPrimary,
+                  disabledForegroundColor: colors.onSurface.withValues(
+                    alpha: .38,
+                  ),
+                ),
                 onPressed:
                     widget.enabled && length > 0 && length <= widget.maxLength
                     ? () {
