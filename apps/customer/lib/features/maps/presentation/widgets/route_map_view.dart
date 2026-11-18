@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import '../../domain/maps_repository.dart';
 import '../bloc/map_route_cubit.dart';
@@ -20,6 +21,7 @@ class RouteMapView extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
@@ -37,6 +39,7 @@ class RouteMapView extends StatefulWidget {
   });
   final GeoPoint? origin, destination, driver;
   final double height;
+  final VehicleMarkerKind driverVehicle;
   final double? driverBearing;
   final DateTime? driverRecordedAt;
   final Object? driverIdentity;
@@ -109,6 +112,7 @@ class _RouteMapViewState extends State<RouteMapView> {
           origin: widget.origin,
           destination: widget.destination,
           driver: widget.driver,
+          driverVehicle: widget.driverVehicle,
           followDriver: widget.followDriver,
           driverBearing: widget.driverBearing,
           driverRecordedAt: widget.driverRecordedAt,
@@ -141,6 +145,7 @@ class _RouteMapViewState extends State<RouteMapView> {
                   origin: widget.origin,
                   destination: widget.destination,
                   driver: widget.driver,
+                  driverVehicle: widget.driverVehicle,
                   followDriver: widget.followDriver,
                   driverBearing: widget.driverBearing,
                   driverRecordedAt: widget.driverRecordedAt,

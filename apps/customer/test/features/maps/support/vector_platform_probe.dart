@@ -15,6 +15,8 @@ class VectorPlatformProbe extends MapLibrePlatform {
   final insets = <EdgeInsets>[];
   final cameras = <CameraUpdate>[];
   int images = 0, disposed = 0;
+  final imageNames = <String>[];
+  final symbolLayers = <String, Map<String, dynamic>>{};
   final animations = <Duration?>[];
   Future<bool?> Function()? onAnimate;
   bool _created = false;
@@ -46,6 +48,7 @@ class VectorPlatformProbe extends MapLibrePlatform {
     bool sdf = false,
   ]) async {
     images++;
+    imageNames.add(name);
   }
 
   @override
@@ -96,6 +99,7 @@ class VectorPlatformProbe extends MapLibrePlatform {
     dynamic filter,
     required bool enableInteraction,
   }) async {
+    symbolLayers[layerId] = properties;
     if (layerId == 'tam-driver' && !installed.isCompleted) installed.complete();
   }
 

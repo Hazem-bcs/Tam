@@ -1,16 +1,19 @@
 import 'dart:math';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
-import 'package:tam_customer/features/maps/presentation/widgets/vector/native_vector_map.dart';
 import 'package:tam_customer/features/maps/domain/maps_repository.dart'
     as domain;
 import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/vector/native_vector_map.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/vector/vector_map_scene.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
+
 import 'maps_test_support.dart';
 import 'support/vector_platform_probe.dart';
 
@@ -67,6 +70,60 @@ void main() {
     tester.widget<MapLibreMap>(find.byType(MapLibreMap)).onMapIdle!();
     await tester.pump();
   }
+
+  testWidgets(
+    'vehicle sprite changes without recreating the map or resetting its camera',
+    (tester) async {
+      await show(
+        tester,
+        VectorMapScene(
+          origin: origin,
+          driver: origin,
+          driverVehicle: VehicleMarkerKind.motorbike,
+        ),
+      );
+      await load(tester);
+      await tester.pumpAndSettle();
+      final map = tester.element(find.byType(MapLibreMap));
+      final probe = platforms.single;
+      final cameraCount = probe.cameras.length;
+      expect(probe.imageNames.toSet(), {
+        'tam-car',
+        'tam-van',
+        'tam-motorbike',
+        'tam-pin',
+      });
+      expect(probe.symbolLayers['tam-driver']!['icon-image'], [
+        'get',
+        'vehicle_icon',
+      ]);
+      for (final kind in [
+        VehicleMarkerKind.van,
+        VehicleMarkerKind.car,
+        VehicleMarkerKind.motorbike,
+      ]) {
+        await show(
+          tester,
+          VectorMapScene(
+            origin: origin,
+            driver: origin,
+            driverBearing: 135,
+            driverVehicle: kind,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          identical(map, tester.element(find.byType(MapLibreMap))),
+          isTrue,
+        );
+        final driver = (probe.scenes.last['features'] as List).single;
+        expect(driver['properties']['vehicle_icon'], kind.spriteId);
+        expect(driver['properties']['bearing'], 135);
+        expect(probe.images, 4);
+        expect(probe.cameras.length, cameraCount);
+      }
+    },
+  );
 
   testWidgets(
     'confirming a selected endpoint preserves viewport through route updates',
@@ -209,7 +266,7 @@ void main() {
       isTrue,
     );
     expect(platforms, hasLength(1));
-    expect(platforms.single.images, 2);
+    expect(platforms.single.images, 4);
     expect(platforms.single.cameras.length, cameraCalls);
     expect((platforms.single.scenes.last['features'] as List).length, 1);
     expect(

@@ -3053,7 +3053,7 @@ abstract class AppLocalizations {
   /// No description provided for @activeTripPlate.
   ///
   /// In ar, this message translates to:
-  /// **'رقم السيارة: {plate}'**
+  /// **'رقم المركبة: {plate}'**
   String activeTripPlate(String plate);
 
   /// No description provided for @activeTripRating.
@@ -3065,7 +3065,7 @@ abstract class AppLocalizations {
   /// No description provided for @activeTripDriverDetails.
   ///
   /// In ar, this message translates to:
-  /// **'عرض بيانات السائق والسيارة'**
+  /// **'عرض بيانات السائق والمركبة'**
   String get activeTripDriverDetails;
 
   /// No description provided for @activeTripContactPending.

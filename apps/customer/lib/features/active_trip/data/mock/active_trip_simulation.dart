@@ -1,11 +1,11 @@
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
-import 'package:tam_customer/shared/data/trip_live_codec.dart';
 import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
 
 import 'mock_road_routes.dart';
 import 'mock_tracking_path.dart';
+import 'mock_vehicle_driver.dart';
 
 /// Pure deterministic driver-side simulation. The customer never issues these
 /// transitions; the data adapter commits them to the shared store atomically.
@@ -83,7 +83,7 @@ final class ActiveTripSimulation {
       TripStatus.completed,
     }.contains(nextStatus);
     final driver = assigned
-        ? live?.driver ?? TripLiveCodec.driverFromJson(mockDriverJson)
+        ? mockVehicleDriver(trip.booking.vehicleClassId, existing: live?.driver)
         : null;
     final tracking = {
       TripStatus.driverEnRoute,

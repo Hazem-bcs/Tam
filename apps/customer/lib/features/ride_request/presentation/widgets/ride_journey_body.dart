@@ -11,6 +11,7 @@ import 'package:tam_customer/features/ride_request/presentation/bloc/ride_locati
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import 'ride_journey_backdrop.dart';
 import 'ride_journey_shell.dart';
@@ -138,6 +139,9 @@ class RideJourneyBody extends StatelessWidget {
                 liveTrip?.live?.position != null &&
                 active?.offline != true &&
                 active?.positionStale != true,
+            driverVehicle: VehicleMarkerKind.fromClassId(
+              liveTrip?.booking.vehicleClassId,
+            ),
             driverBearing: liveTrip?.live?.position?.bearing,
             driverRecordedAt: liveTrip?.live?.position?.recordedAt,
             driverIdentity: (liveTrip?.id, liveTrip?.live?.route?.id),

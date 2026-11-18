@@ -4,6 +4,7 @@ import 'package:tam_customer/app/theme/app_map_colors.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import '../../../domain/maps_repository.dart';
 import '../map_camera_focus.dart';
@@ -21,6 +22,7 @@ class VectorMapSurface extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.followDriver = false,
     this.driverBearing = 0,
     this.selection,
@@ -35,6 +37,7 @@ class VectorMapSurface extends StatefulWidget {
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver, selection;
   final MapRoute? route;
+  final VehicleMarkerKind driverVehicle;
   final double driverBearing;
   final ValueChanged<GeoPoint>? onSelected;
   final ValueListenable<double>? bottomInset;
@@ -118,6 +121,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
               origin: widget.origin,
               destination: widget.destination,
               driver: widget.driver,
+              driverVehicle: widget.driverVehicle,
               driverBearing: widget.driverBearing,
               selection: widget.selection,
               route: widget.route,

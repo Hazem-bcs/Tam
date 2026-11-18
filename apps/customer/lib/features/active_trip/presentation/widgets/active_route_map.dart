@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import 'active_tracking_geometry.dart';
 
@@ -23,6 +24,9 @@ class ActiveRouteMap extends StatelessWidget {
           destination: trip.booking.destination.point,
           driver: stale ? null : trip.live?.position?.point,
           followDriver: !stale && trip.live?.position != null,
+          driverVehicle: VehicleMarkerKind.fromClassId(
+            trip.booking.vehicleClassId,
+          ),
           driverBearing: trip.live?.position?.bearing,
           driverRecordedAt: trip.live?.position?.recordedAt,
           driverIdentity: (trip.id, trip.live?.route?.id),

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="160" viewBox="0 0 96 160">
+<defs>
+ <linearGradient id="body" x1="0" x2="1"><stop stop-color="currentColor"/><stop offset=".48" stop-color="#fff" stop-opacity=".62"/><stop offset="1" stop-color="currentColor"/></linearGradient>
+ <linearGradient id="seat" x1="0" x2="1"><stop stop-color="#202c35"/><stop offset=".5" stop-color="#53616a"/><stop offset="1" stop-color="#202c35"/></linearGradient>
+ <linearGradient id="metal" x1="0" x2="1"><stop stop-color="#84929c"/><stop offset=".5" stop-color="#f4f7f8"/><stop offset="1" stop-color="#84929c"/></linearGradient>
+</defs>
+<!-- Front wheel points north, like the other map vehicles. -->
+<ellipse cx="48" cy="87" rx="28" ry="67" fill="#18232c" opacity=".12"/>
+<rect x="41" y="6" width="14" height="38" rx="6" fill="#20282e"/>
+<rect x="44" y="9" width="3" height="26" rx="1.5" fill="#82939e" opacity=".7"/>
+<rect x="39" y="119" width="18" height="35" rx="7" fill="#20282e"/>
+<rect x="44" y="134" width="3" height="16" rx="1.5" fill="#82939e" opacity=".6"/>
+<path d="M37 31Q48 26 59 31L61 54H35Z" fill="currentColor"/>
+<path d="M40 34Q48 31 56 34L57 44H39Z" fill="#fff2c9" stroke="#b2bec4" stroke-width="1.5"/>
+<path d="M42 45L37 62M54 45L59 62" stroke="url(#metal)" stroke-width="5" stroke-linecap="round"/>
+<path d="M17 46L29 42 40 48H56L67 42 79 46" fill="none" stroke="#24313a" stroke-width="5" stroke-linecap="round"/>
+<path d="M23 44L18 32M73 44L78 32" stroke="url(#metal)" stroke-width="3"/>
+<ellipse cx="15" cy="29" rx="8" ry="5" fill="#344b59" stroke="#d6e0e4" stroke-width="2"/>
+<ellipse cx="81" cy="29" rx="8" ry="5" fill="#344b59" stroke="#d6e0e4" stroke-width="2"/>
+<path d="M35 57Q48 48 61 57L65 83 59 119Q48 129 37 119L31 83Z" fill="currentColor"/>
+<path d="M37 59Q48 52 59 59L61 81 55 98H41L35 81Z" fill="url(#body)"/>
+<circle cx="48" cy="66" r="4" fill="url(#metal)"/>
+<path d="M37 88Q48 82 59 88L57 115Q48 122 39 115Z" fill="url(#seat)" stroke="#c7d1d7" stroke-width="1.5"/>
+<path d="M29 104H35M61 104H67" stroke="url(#metal)" stroke-width="5" stroke-linecap="round"/>
+<path d="M62 111L66 136" stroke="url(#metal)" stroke-width="7" stroke-linecap="round"/>
+<path d="M38 122Q48 126 58 122L57 137Q48 141 39 137Z" fill="currentColor"/>
+<path d="M40 130H56" stroke="#ef6977" stroke-width="5" stroke-linecap="round"/>
+<rect x="42" y="140" width="12" height="6" rx="1.5" fill="#f5f7f8"/>
+</svg>

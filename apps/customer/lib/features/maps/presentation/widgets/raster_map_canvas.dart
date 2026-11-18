@@ -9,6 +9,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
 import '../../domain/maps_repository.dart';
@@ -25,6 +26,7 @@ class RasterMapCanvas extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.followDriver = false,
     this.driverBearing = 0,
     this.route,
@@ -50,6 +52,7 @@ class RasterMapCanvas extends StatefulWidget {
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
   final MapRoute? route;
+  final VehicleMarkerKind driverVehicle;
   final double driverBearing;
   final ValueChanged<GeoPoint>? onSelected;
   final TileProvider Function(String)? tileProviderFactory;
@@ -235,7 +238,10 @@ class _RasterMapCanvasState extends State<RasterMapCanvas>
           child: icon == Icons.local_taxi
               ? Transform.rotate(
                   angle: widget.driverBearing * math.pi / 180,
-                  child: TamVehicleIcon(size: widget.markerIconSize),
+                  child: TamVehicleIcon(
+                    size: widget.markerIconSize,
+                    kind: widget.driverVehicle,
+                  ),
                 )
               : Icon(icon, size: widget.markerIconSize, color: colors.primary),
         ),

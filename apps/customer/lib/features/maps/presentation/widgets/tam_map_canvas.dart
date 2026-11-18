@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import '../../domain/maps_repository.dart';
 import 'driver_map_motion.dart';
@@ -18,6 +19,7 @@ class TamMapCanvas extends StatelessWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
@@ -44,6 +46,7 @@ class TamMapCanvas extends StatelessWidget {
   final bool compactPreview;
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
+  final VehicleMarkerKind driverVehicle;
   final double? driverBearing;
   final DateTime? driverRecordedAt;
   final Object? driverIdentity;
@@ -67,6 +70,7 @@ class TamMapCanvas extends StatelessWidget {
               origin: origin,
               destination: destination,
               driver: point,
+              driverVehicle: driverVehicle,
               followDriver: followDriver,
               driverBearing: heading,
               route: route?.roadAligned == true ? route : null,
@@ -84,6 +88,7 @@ class TamMapCanvas extends StatelessWidget {
             origin: origin,
             destination: destination,
             driver: point,
+            driverVehicle: driverVehicle,
             followDriver: followDriver,
             driverBearing: heading,
             route: route?.roadAligned == true ? route : null,

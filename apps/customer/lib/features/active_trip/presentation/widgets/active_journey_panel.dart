@@ -9,6 +9,7 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
@@ -16,6 +17,7 @@ import 'active_driver_card.dart';
 import 'active_matching_pulse.dart';
 import 'active_trip_actions.dart';
 import 'active_trip_display.dart';
+import 'active_vehicle_badge.dart';
 
 /// All live phases share this sheet and the already-mounted map behind it.
 class ActiveJourneyPanel extends StatelessWidget {
@@ -114,11 +116,11 @@ class ActiveJourneyPanel extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.only(
                     start: AppSpacing.sm,
                   ),
-                  child: Image.asset(
-                    'assets/notifications/${_art(trip.status)}.webp',
-                    width: 48,
-                    height: 48,
-                    excludeFromSemantics: true,
+                  child: ActiveVehicleBadge(
+                    status: trip.status,
+                    kind: VehicleMarkerKind.fromClassId(
+                      trip.booking.vehicleClassId,
+                    ),
                   ),
                 ),
             ],
@@ -181,7 +183,13 @@ class ActiveJourneyPanel extends StatelessWidget {
             ),
           ],
           if (driver != null) ...[
-            ActiveDriverCard(driver: driver, showDemoAvatar: showDemoAvatar),
+            ActiveDriverCard(
+              driver: driver,
+              showDemoAvatar: showDemoAvatar,
+              vehicleKind: VehicleMarkerKind.fromClassId(
+                trip.booking.vehicleClassId,
+              ),
+            ),
             ActiveDriverContactBar(
               onChat: () => navigation.openChat(trip.id),
               onCall: canContact
@@ -243,11 +251,4 @@ class ActiveJourneyPanel extends StatelessWidget {
       ),
     );
   }
-
-  String _art(TripStatus status) => switch (status) {
-    TripStatus.scheduled => 'ride_scheduled',
-    TripStatus.completed => 'ride_completed',
-    TripStatus.cancelled || TripStatus.noDriver => 'ride_cancelled',
-    _ => 'driver_arrived',
-  };
 }

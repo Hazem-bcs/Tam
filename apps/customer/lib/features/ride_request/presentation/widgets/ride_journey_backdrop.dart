@@ -5,6 +5,7 @@ import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus
 import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 /// One live map, with controls kept above the movable journey panel.
 class RideJourneyBackdrop extends StatelessWidget {
@@ -14,6 +15,7 @@ class RideJourneyBackdrop extends StatelessWidget {
     this.destination,
     this.selection,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.followDriver = false,
     this.driverBearing,
     this.driverRecordedAt,
@@ -32,6 +34,7 @@ class RideJourneyBackdrop extends StatelessWidget {
   final VoidCallback? onLocate;
   final bool followDriver;
   final bool locating;
+  final VehicleMarkerKind driverVehicle;
   final double? driverBearing;
   final DateTime? driverRecordedAt;
   final Object? driverIdentity;
@@ -47,6 +50,7 @@ class RideJourneyBackdrop extends StatelessWidget {
       destination: destination?.point,
       selection: selection,
       driver: driver,
+      driverVehicle: driverVehicle,
       followDriver: followDriver,
       driverBearing: driverBearing,
       driverRecordedAt: driverRecordedAt,

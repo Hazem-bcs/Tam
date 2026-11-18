@@ -4,11 +4,13 @@ import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_journey_panel.dart';
+import 'package:tam_customer/features/active_trip/presentation/widgets/active_tracking_geometry.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_shell.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_route_header.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 /// Deep-linked live trips use the same map-led surface as inline bookings.
 class ActiveTripPage extends StatefulWidget {
@@ -67,6 +69,19 @@ class _ActiveTripPageState extends State<ActiveTripPage>
                 pickup: trip?.booking.pickup,
                 destination: trip?.booking.destination,
                 bottomInset: inset,
+                driverVehicle: VehicleMarkerKind.fromClassId(
+                  trip?.booking.vehicleClassId,
+                ),
+                driverBearing: trip?.live?.position?.bearing,
+                driverRecordedAt: trip?.live?.position?.recordedAt,
+                driverIdentity: (trip?.id, trip?.live?.route?.id),
+                trackingRoute: trip == null
+                    ? null
+                    : activeTrackingGeometry(trip),
+                followDriver:
+                    !state.offline &&
+                    !state.positionStale &&
+                    trip?.live?.position != null,
                 driver: state.offline || state.positionStale
                     ? null
                     : trip?.live?.position?.point,

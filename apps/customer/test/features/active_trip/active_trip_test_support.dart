@@ -32,16 +32,17 @@ final class ActiveTripFixture {
   late final MockTripStore store;
   late final MockActiveTripRepository repository;
   int _key = 0;
-  Trip book({DateTime? scheduledAt}) => store.create(
-    TripBookingInput(
-      pickup: mockRidePlaces[0].location,
-      destination: mockRidePlaces[1].location,
-      vehicleClassId: 'standard',
-      fare: Money(amountMinor: 27000),
-      scheduledAt: scheduledAt,
-    ),
-    idempotencyKey: 'trip-${++_key}',
-  );
+  Trip book({DateTime? scheduledAt, String vehicleClassId = 'standard'}) =>
+      store.create(
+        TripBookingInput(
+          pickup: mockRidePlaces[0].location,
+          destination: mockRidePlaces[1].location,
+          vehicleClassId: vehicleClassId,
+          fare: Money(amountMinor: 27000),
+          scheduledAt: scheduledAt,
+        ),
+        idempotencyKey: 'trip-${++_key}',
+      );
   void advance(int seconds) {
     now = now.add(Duration(seconds: seconds));
     repository.advance();

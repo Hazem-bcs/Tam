@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
@@ -10,6 +11,7 @@ Future<void> showActiveDriverDetailsSheet(
   BuildContext context, {
   required TripDriver driver,
   bool showDemoAvatar = false,
+  VehicleMarkerKind vehicleKind = VehicleMarkerKind.car,
 }) {
   final colors = Theme.of(context).colorScheme;
   return showModalBottomSheet<void>(
@@ -32,16 +34,25 @@ Future<void> showActiveDriverDetailsSheet(
           AppSpacing.xl,
           AppSpacing.xl,
         ),
-        child: _DriverDetails(driver: driver, showDemoAvatar: showDemoAvatar),
+        child: _DriverDetails(
+          driver: driver,
+          showDemoAvatar: showDemoAvatar,
+          vehicleKind: vehicleKind,
+        ),
       ),
     ),
   );
 }
 
 class _DriverDetails extends StatelessWidget {
-  const _DriverDetails({required this.driver, required this.showDemoAvatar});
+  const _DriverDetails({
+    required this.driver,
+    required this.showDemoAvatar,
+    required this.vehicleKind,
+  });
 
   final TripDriver driver;
+  final VehicleMarkerKind vehicleKind;
   final bool showDemoAvatar;
 
   @override
@@ -99,6 +110,7 @@ class _DriverDetails extends StatelessWidget {
                 _VehiclePhoto(
                   imageUrl: driver.vehicleImageUrl,
                   showDemo: showDemoAvatar,
+                  kind: vehicleKind,
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
@@ -132,13 +144,18 @@ class _DriverDetails extends StatelessWidget {
 
 /// A driver-provided photo takes precedence; demo artwork is mock-only.
 class _VehiclePhoto extends StatelessWidget {
-  const _VehiclePhoto({this.imageUrl, required this.showDemo});
+  const _VehiclePhoto({
+    this.imageUrl,
+    required this.showDemo,
+    required this.kind,
+  });
   final String? imageUrl;
   final bool showDemo;
+  final VehicleMarkerKind kind;
 
   @override
   Widget build(BuildContext context) {
-    const fallback = TamVehicleIcon(size: 56);
+    final fallback = TamVehicleIcon(size: 56, kind: kind);
     final url = imageUrl?.trim();
     return SizedBox(
       width: 84,
@@ -151,7 +168,13 @@ class _VehiclePhoto extends StatelessWidget {
             )
           : showDemo
           ? Image.asset(
-              'assets/images/ahmad_ui/driver_car_demo.png',
+              switch (kind) {
+                VehicleMarkerKind.motorbike =>
+                  'assets/maps/vehicle-motorbike-user.png',
+                VehicleMarkerKind.van => 'assets/maps/vehicle-van-user.png',
+                VehicleMarkerKind.car =>
+                  'assets/images/ahmad_ui/driver_car_demo.png',
+              },
               fit: BoxFit.contain,
               errorBuilder: (_, _, _) => fallback,
             )

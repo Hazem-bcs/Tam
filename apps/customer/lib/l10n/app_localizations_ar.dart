@@ -1583,7 +1583,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String activeTripPlate(String plate) {
-    return 'رقم السيارة: $plate';
+    return 'رقم المركبة: $plate';
   }
 
   @override
@@ -1592,7 +1592,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get activeTripDriverDetails => 'عرض بيانات السائق والسيارة';
+  String get activeTripDriverDetails => 'عرض بيانات السائق والمركبة';
 
   @override
   String get activeTripContactPending => 'المكالمات غير مربوطة حاليًا.';

@@ -11,6 +11,7 @@ import 'package:tam_customer/features/driver_contact/domain/driver_contact_repos
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
 import 'package:tam_customer/shared/widgets/trip_route.dart';
 
@@ -156,7 +157,13 @@ class ActiveTripOverview extends StatelessWidget {
         ),
         if (driver != null) ...[
           const SizedBox(height: AppSpacing.md),
-          ActiveDriverCard(driver: driver, showDemoAvatar: showDemoAvatar),
+          ActiveDriverCard(
+            driver: driver,
+            showDemoAvatar: showDemoAvatar,
+            vehicleKind: VehicleMarkerKind.fromClassId(
+              trip.booking.vehicleClassId,
+            ),
+          ),
           const SizedBox(height: AppSpacing.sm),
           ActiveDriverContactBar(onChat: onChat!, onCall: onCall),
         ],

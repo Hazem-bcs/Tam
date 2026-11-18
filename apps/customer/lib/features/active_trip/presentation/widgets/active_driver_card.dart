@@ -3,6 +3,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_details_sheet.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/driver_avatar.dart';
 
 class ActiveDriverCard extends StatelessWidget {
@@ -10,9 +11,11 @@ class ActiveDriverCard extends StatelessWidget {
     super.key,
     required this.driver,
     this.showDemoAvatar = false,
+    this.vehicleKind = VehicleMarkerKind.car,
   });
 
   final TripDriver driver;
+  final VehicleMarkerKind vehicleKind;
   final bool showDemoAvatar;
 
   @override
@@ -35,6 +38,7 @@ class ActiveDriverCard extends StatelessWidget {
           onTap: () => showActiveDriverDetailsSheet(
             context,
             driver: driver,
+            vehicleKind: vehicleKind,
             showDemoAvatar: showDemoAvatar,
           ),
           child: Padding(

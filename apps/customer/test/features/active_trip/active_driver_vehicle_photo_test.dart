@@ -3,12 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_driver_details_sheet.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 
 void main() {
   Future<void> openSheet(
     WidgetTester tester, {
     bool demo = false,
+    VehicleMarkerKind kind = VehicleMarkerKind.car,
     String? url,
   }) async {
     final driver = TripDriver(
@@ -32,6 +34,7 @@ void main() {
               onPressed: () => showActiveDriverDetailsSheet(
                 context,
                 driver: driver,
+                vehicleKind: kind,
                 showDemoAvatar: demo,
               ),
               child: const Text('Open'),
@@ -69,5 +72,29 @@ void main() {
     await openSheet(tester, url: 'https://example.invalid/car.png');
     await tester.pumpAndSettle();
     expect(find.byType(TamVehicleIcon), findsOneWidget);
+  });
+  testWidgets('non-car bookings use their own fallback and demo photo', (
+    tester,
+  ) async {
+    for (final kind in [VehicleMarkerKind.motorbike, VehicleMarkerKind.van]) {
+      await tester.pumpWidget(const SizedBox.shrink());
+      await openSheet(tester, kind: kind);
+      expect(
+        tester.widget<TamVehicleIcon>(find.byType(TamVehicleIcon)).kind,
+        kind,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await openSheet(tester, kind: kind, demo: true);
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Image &&
+              widget.image is AssetImage &&
+              (widget.image as AssetImage).assetName ==
+                  'assets/maps/vehicle-${kind.name}-user.png',
+        ),
+        findsOneWidget,
+      );
+    }
   });
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import '../../../domain/maps_repository.dart';
 
@@ -10,6 +11,7 @@ final class VectorMapScene extends Equatable {
     this.destination,
     this.selection,
     this.driver,
+    this.driverVehicle = VehicleMarkerKind.car,
     this.driverBearing = 0,
     this.deviceLocation,
     this.route,
@@ -20,10 +22,12 @@ final class VectorMapScene extends Equatable {
     destination: destination,
     selection: selection,
     driver: driver,
+    driverVehicle: driverVehicle,
     driverBearing: driverBearing,
     route: route,
     deviceLocation: point,
   );
+  final VehicleMarkerKind driverVehicle;
   final MapRoute? route;
   final double driverBearing;
 
@@ -53,7 +57,10 @@ final class VectorMapScene extends Equatable {
             'type': 'Feature',
             'properties': {
               'kind': entry.$1,
-              if (entry.$1 == 'driver') 'bearing': driverBearing,
+              if (entry.$1 == 'driver') ...{
+                'bearing': driverBearing,
+                'vehicle_icon': driverVehicle.spriteId,
+              },
             },
             'geometry': {'type': 'Point', 'coordinates': coordinate(entry.$2!)},
           },
@@ -72,6 +79,7 @@ final class VectorMapScene extends Equatable {
     selection,
     driver,
     driverBearing,
+    driverVehicle,
     route,
     deviceLocation,
   ];

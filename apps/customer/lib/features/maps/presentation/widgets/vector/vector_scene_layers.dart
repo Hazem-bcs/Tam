@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:tam_customer/shared/presentation/vehicle_marker_kind.dart';
 
 import 'vector_map_scene.dart';
 import 'vector_map_style.dart';
@@ -26,13 +27,17 @@ final class VectorSceneLayers {
   VectorMapScene? _driver;
 
   Future<bool> install() async {
-    final car = await loadMarker(VectorMarkerImages.car, primary);
-    if (!isCurrent()) return false;
+    final vehicles = <VehicleMarkerKind, Uint8List>{};
+    for (final kind in VehicleMarkerKind.values) {
+      vehicles[kind] = await loadMarker(kind.asset, primary);
+      if (!isCurrent()) return false;
+    }
     final pin = await loadMarker(VectorMarkerImages.destination, primary);
     final ink = VectorMapStyle.color(primary);
     final paper = VectorMapStyle.color(surface);
     final steps = <Future<void> Function()>[
-      () => controller.addImage('tam-car', car),
+      for (final entry in vehicles.entries)
+        () => controller.addImage(entry.key.spriteId, entry.value),
       () => controller.addImage('tam-pin', pin),
       () => controller.addGeoJsonSource(
         source,
@@ -121,7 +126,7 @@ final class VectorSceneLayers {
         driverSource,
         'tam-driver',
         const SymbolLayerProperties(
-          iconImage: 'tam-car',
+          iconImage: ['get', 'vehicle_icon'],
           iconSize: .4,
           iconAnchor: 'center',
           iconAllowOverlap: true,
@@ -155,6 +160,7 @@ final class VectorSceneLayers {
     }
     final driver = VectorMapScene(
       driver: scene.driver,
+      driverVehicle: scene.driverVehicle,
       driverBearing: scene.driverBearing,
     );
     if (_driver != driver) {
