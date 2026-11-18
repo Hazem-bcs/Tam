@@ -1,0 +1,52 @@
+[
+  {
+    "source": "apps/customer/assets/maps/vehicle-sedan-user.png",
+    "output": "apps/customer/assets/maps/vehicle-sedan-user.webp",
+    "width": 1671,
+    "height": 941,
+    "before_bytes": 1445975,
+    "after_bytes": 862234,
+    "rgba_sha256": "1cd6ce3574b757d7f9761213d835696e668dff7b1c6bfc697d573357fffeb1c8",
+    "rgba_exact": true
+  },
+  {
+    "source": "apps/customer/assets/maps/vehicle-van-user.png",
+    "output": "apps/customer/assets/maps/vehicle-van-user.webp",
+    "width": 1672,
+    "height": 941,
+    "before_bytes": 1795317,
+    "after_bytes": 1077014,
+    "rgba_sha256": "96b1f81caf49f70c298f15df3a1ea59ecc1aba95dc56a95cdbedba7f4a1b6194",
+    "rgba_exact": true
+  },
+  {
+    "source": "apps/customer/assets/maps/vehicle-comfort-user.png",
+    "output": "apps/customer/assets/maps/vehicle-comfort-user.webp",
+    "width": 1671,
+    "height": 941,
+    "before_bytes": 1407915,
+    "after_bytes": 871290,
+    "rgba_sha256": "7526fe22cf4fb9bf3035db7c6d8a96048cc3a897f358d1c383e8a658d126f217",
+    "rgba_exact": true
+  },
+  {
+    "source": "apps/customer/assets/maps/vehicle-motorbike-user.png",
+    "output": "apps/customer/assets/maps/vehicle-motorbike-user.webp",
+    "width": 1536,
+    "height": 1024,
+    "before_bytes": 1835615,
+    "after_bytes": 1108620,
+    "rgba_sha256": "16568e0f6ed01944dde07d1b968e59e00ba2b2bcf9653a4f72e2d4bdcc95ae13",
+    "rgba_exact": true
+  },
+  {
+    "source": "apps/customer/assets/images/ahmad_ui/driver_car_demo.png",
+    "output": "apps/customer/assets/images/ahmad_ui/driver_car_demo.webp",
+    "width": 1774,
+    "height": 887,
+    "before_bytes": 1692210,
+    "after_bytes": 974474,
+    "rgba_sha256": "6b68c16fed378070ab7cbdc7b1cd5f0e4b8222ab9ed76f929ad62cc7d4a410d1",
+    "rgba_exact": true
+  }
+]

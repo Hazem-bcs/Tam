@@ -103,7 +103,7 @@ class NotificationsFilterBar extends StatelessWidget {
             button: true,
             selected: isSelected,
             child: Material(
-              color: Colors.transparent,
+              type: MaterialType.transparency,
               child: InkWell(
                 key: Key('notifications-filter-${entry.$1.name}'),
                 onTap: () => onChanged(entry.$1),

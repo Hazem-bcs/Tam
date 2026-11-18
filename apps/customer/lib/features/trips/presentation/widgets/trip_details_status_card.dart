@@ -50,7 +50,7 @@ class TripDetailsStatusCard extends StatelessWidget {
             children: [
               if (vehicle != null)
                 Image.asset(
-                  'assets/maps/vehicle-$vehicle-user.png',
+                  'assets/maps/vehicle-$vehicle-user.webp',
                   width: 76,
                   height: 46,
                   excludeFromSemantics: true,

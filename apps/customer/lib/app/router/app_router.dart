@@ -14,6 +14,7 @@ import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/account_management/domain/account_management_repository.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
+import 'package:tam_customer/features/active_trip/domain/upcoming_trips_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
 import 'package:tam_customer/features/addresses/presentation/bloc/preferred_address_selection.dart';
@@ -78,6 +79,9 @@ GoRouter createAppRouter(
           unreadCountSource: notifications,
           addressesRepository: addresses,
           preferredAddress: preferredAddress,
+          upcomingTrips: activeTrips is UpcomingTripsRepository
+              ? activeTrips as UpcomingTripsRepository
+              : null,
         ),
         activity: (context) => buildTripsFeature(
           context,

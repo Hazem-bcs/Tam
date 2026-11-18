@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tam_customer/app/preferences/app_preferences.dart';
+import 'package:tam_customer/app/preferences/cached_app_preferences_repository.dart';
 import 'package:tam_customer/core/cache/local_cache_store.dart';
 import 'package:tam_customer/core/cache/sqlite_cache_store.dart';
 import 'package:tam_customer/core/config/app_config.dart';
@@ -31,6 +33,9 @@ void configureDependencies() {
     () => buildApiClient(AppConfig.apiBaseUrl),
   );
   locator.registerLazySingleton<LocalCacheStore>(SqliteCacheStore.new);
+  locator.registerLazySingleton<AppPreferencesRepository>(
+    () => CachedAppPreferencesRepository(locator<LocalCacheStore>()),
+  );
   registerAuthDependencies(locator);
   registerRideRequestDependencies(locator);
   registerAddressesDependencies(locator);

@@ -152,7 +152,7 @@ class _JourneyLine extends CustomPainter {
       Offset(size.width * .92, size.height * .12),
     ]) {
       canvas.drawCircle(dot, 9, Paint()..color = color);
-      canvas.drawCircle(dot, 3.7, Paint()..color = const Color(0xFFFFFFFF));
+      canvas.drawCircle(dot, 3.7, Paint()..color = centerColor);
     }
   }
 

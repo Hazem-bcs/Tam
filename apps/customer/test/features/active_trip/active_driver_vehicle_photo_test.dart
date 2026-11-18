@@ -57,7 +57,7 @@ void main() {
             w is Image &&
             w.image is AssetImage &&
             (w.image as AssetImage).assetName ==
-                'assets/images/ahmad_ui/driver_car_demo.png',
+                'assets/images/ahmad_ui/driver_car_demo.webp',
       ),
       findsOneWidget,
     );
@@ -91,7 +91,7 @@ void main() {
               widget is Image &&
               widget.image is AssetImage &&
               (widget.image as AssetImage).assetName ==
-                  'assets/maps/vehicle-${kind.name}-user.png',
+                  'assets/maps/vehicle-${kind.name}-user.webp',
         ),
         findsOneWidget,
       );

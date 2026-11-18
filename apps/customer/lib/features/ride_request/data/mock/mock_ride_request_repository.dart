@@ -4,6 +4,7 @@ import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.da
 import 'package:tam_customer/features/ride_request/domain/repositories/ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_models.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
+import 'package:tam_customer/shared/domain/coupon_code.dart';
 import 'package:tam_customer/shared/domain/ride_schedule_policy.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
@@ -73,8 +74,10 @@ final class MockRideRequestRepository implements RideRequestRepository {
       RideVehicleClass.van => 35000,
       RideVehicleClass.motorbike => 5000,
     };
-    final code = couponCode?.trim().toUpperCase();
-    if (code != null && code != MockRidePricing.couponCode) {
+    final code = couponCode == null ? null : normalizeCouponCode(couponCode);
+    if (code != null &&
+        (!isCanonicalCouponCode(code) ||
+            !MockRidePricing.couponCodes.contains(code))) {
       throw const RideRequestFailure('COUPON_INVALID');
     }
     final gross = base + kilometers * 2000;
