@@ -30,6 +30,7 @@ class TripDetailsActions extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        scrollable: true,
         title: Text(l.tripsCancelTitle),
         content: Text(l.tripsCancelPrompt),
         actions: [

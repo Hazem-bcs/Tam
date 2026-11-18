@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "completionTitle": "Trip summary and rating",
+  "completionTitle": "Trip completed",
   "completionLoading": "Loading trip summary",
   "completionSessionEnded": "Your session ended. Return home to continue.",
   "completionThankYou": "Thank you for riding with Tam",
@@ -66,5 +66,6 @@
   "completionTagServiceIssue": "Uncomfortable trip",
   "completionQuickFeedbackCritical": "What could we improve?",
   "completionFeedbackOptional": "Optional",
-  "completionSupportShort": "Support"
+  "completionSupportShort": "Support",
+  "completionDetails": "Trip details"
 }

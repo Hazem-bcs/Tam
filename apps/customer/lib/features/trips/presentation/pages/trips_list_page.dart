@@ -17,17 +17,20 @@ class TripsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.activity(Theme.of(context));
     final colors = theme.colorScheme;
+    final systemIcons = colors.brightness == Brightness.dark
+        ? Brightness.light
+        : Brightness.dark;
 
     return Theme(
       data: theme,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: colors.surface,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: systemIcons,
+          statusBarBrightness: colors.brightness,
           systemStatusBarContrastEnforced: false,
           systemNavigationBarColor: colors.surface,
-          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: systemIcons,
         ),
         child: Scaffold(
           backgroundColor: colors.surface,
