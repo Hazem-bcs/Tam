@@ -28,9 +28,9 @@ Future<void> loadPreviewFonts({required bool enabled}) async {
       throw StateError('Missing bundled preview font: ${font.key}');
     }
     final file = File(candidates.first);
-    await (FontLoader(font.key)
-          ..addFont(file.readAsBytes().then(ByteData.sublistView)))
-        .load();
+    await (FontLoader(
+      font.key,
+    )..addFont(file.readAsBytes().then(ByteData.sublistView))).load();
   }
 }
 

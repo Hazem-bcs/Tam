@@ -692,6 +692,42 @@ abstract class AppLocalizations {
   /// **'حدد عنوانك الافتراضي'**
   String get homeSelectDefaultAddress;
 
+  /// No description provided for @homeUpcomingTrips.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلاتك القادمة'**
+  String get homeUpcomingTrips;
+
+  /// No description provided for @homeUpcomingLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحميل الرحلات القادمة'**
+  String get homeUpcomingLoading;
+
+  /// No description provided for @homeUpcomingError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحديث الرحلات القادمة. قد تكون المعلومات المعروضة قديمة.'**
+  String get homeUpcomingError;
+
+  /// No description provided for @homeUpcomingRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get homeUpcomingRetry;
+
+  /// No description provided for @homeUpcomingOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الرحلة ومتابعتها'**
+  String get homeUpcomingOpen;
+
+  /// No description provided for @homeUpcomingRoute.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {pickup} إلى {destination}'**
+  String homeUpcomingRoute(String pickup, String destination);
+
   /// No description provided for @rideRequestTitle.
   ///
   /// In ar, this message translates to:
@@ -2411,7 +2447,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsMockNotice.
   ///
   /// In ar, this message translates to:
-  /// **'الحساب والتفضيلات هنا محاكاة للتطوير، وليسا متصلين بخادم. حفظ اللغة يعمل فورًا طوال هذه الجلسة فقط.'**
+  /// **'الملف الشخصي وإشعارات الحساب محاكاة للتطوير. تُحفظ اللغة والمظهر وحجم النص على هذا الجهاز.'**
   String get settingsMockNotice;
 
   /// No description provided for @settingsLogout.
@@ -2657,7 +2693,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsCouponsHint.
   ///
   /// In ar, this message translates to:
-  /// **'مثال: TAM10'**
+  /// **'مثال: TAM10 أو تم10'**
   String get settingsCouponsHint;
 
   /// No description provided for @settingsCouponsConfirm.
@@ -2687,8 +2723,80 @@ abstract class AppLocalizations {
   /// No description provided for @settingsCouponsDemoHelp.
   ///
   /// In ar, this message translates to:
-  /// **'يمكن استخدام TAM10 في شاشة الحجز التجريبية فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.'**
+  /// **'يمكن استخدام TAM10 أو تم10 في تسعير الحجز التجريبي فقط. الإضافة هنا لا تطبقه على طلباتك تلقائياً.'**
   String get settingsCouponsDemoHelp;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsAppearanceSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب إعداد الجهاز'**
+  String get settingsAppearanceSystem;
+
+  /// No description provided for @settingsAppearanceLight.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتح'**
+  String get settingsAppearanceLight;
+
+  /// No description provided for @settingsAppearanceDark.
+  ///
+  /// In ar, this message translates to:
+  /// **'داكن'**
+  String get settingsAppearanceDark;
+
+  /// No description provided for @settingsFontSize.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم النص'**
+  String get settingsFontSize;
+
+  /// No description provided for @settingsFontSmall.
+  ///
+  /// In ar, this message translates to:
+  /// **'صغير'**
+  String get settingsFontSmall;
+
+  /// No description provided for @settingsFontStandard.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتراضي'**
+  String get settingsFontStandard;
+
+  /// No description provided for @settingsFontLarge.
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير'**
+  String get settingsFontLarge;
+
+  /// No description provided for @settingsFontExtraLarge.
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير جدًا'**
+  String get settingsFontExtraLarge;
+
+  /// No description provided for @settingsFontSizeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُضاف إلى حجم النص في جهازك، مع الحفاظ على تكبير النص لتسهيل القراءة.'**
+  String get settingsFontSizeHint;
+
+  /// No description provided for @settingsPreferenceRestoreError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذرت استعادة تفضيلات الجهاز. يمكنك استخدام الخيارات الحالية وإعادة المحاولة.'**
+  String get settingsPreferenceRestoreError;
+
+  /// No description provided for @settingsPreferenceSaveError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر حفظ التفضيل. أُعيد خيارك السابق.'**
+  String get settingsPreferenceSaveError;
 
   /// No description provided for @addressesTitle.
   ///
@@ -3377,7 +3485,7 @@ abstract class AppLocalizations {
   /// No description provided for @completionTitle.
   ///
   /// In ar, this message translates to:
-  /// **'ملخص الرحلة والتقييم'**
+  /// **'اكتملت الرحلة'**
   String get completionTitle;
 
   /// No description provided for @completionLoading.
@@ -3607,6 +3715,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الدعم'**
   String get completionSupportShort;
+
+  /// No description provided for @completionDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الرحلة'**
+  String get completionDetails;
 
   /// No description provided for @supportTitle.
   ///
