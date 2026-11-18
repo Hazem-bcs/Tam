@@ -25,13 +25,69 @@ void main() {
     await tester.tap(tile);
     await tester.pumpAndSettle();
     expect(edited, isNull);
+    expect(find.byKey(const Key('address-preferred-check')), findsNothing);
+    final confirm = find.byKey(const Key('addresses-confirm-default'));
+    expect(confirm, findsOneWidget);
+
+    await tester.tap(confirm);
+    await tester.pumpAndSettle();
     expect(find.byKey(const Key('address-preferred-check')), findsOneWidget);
+    expect(confirm, findsNothing);
 
     await tester.tap(find.byKey(const Key('address-menu-address-home-001')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('address-edit-address-home-001')));
     await tester.pumpAndSettle();
     expect(edited, 'address-home-001');
+    await tester.pumpWidget(const SizedBox.shrink());
+    await repository.dispose();
+  });
+
+  testWidgets('default only changes after confirmation, not when previewed', (
+    tester,
+  ) async {
+    final repository = MockAddressesRepository();
+    await pumpAddresses(tester, repository);
+
+    await tester.tap(find.byKey(const Key('address-select-address-home-001')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('addresses-confirm-default')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('address-select-address-work-001')));
+    await tester.pumpAndSettle();
+    final home = find.byKey(const Key('address-item-address-home-001'));
+    final work = find.byKey(const Key('address-item-address-work-001'));
+    expect(
+      find.descendant(
+        of: home,
+        matching: find.byKey(const Key('address-preferred-check')),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: work,
+        matching: find.byKey(const Key('address-preferred-check')),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.byKey(const Key('addresses-confirm-default')));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: home,
+        matching: find.byKey(const Key('address-preferred-check')),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: work,
+        matching: find.byKey(const Key('address-preferred-check')),
+      ),
+      findsOneWidget,
+    );
     await tester.pumpWidget(const SizedBox.shrink());
     await repository.dispose();
   });
@@ -71,7 +127,10 @@ void main() {
         find.byKey(const Key('address-delete-address-home-001')),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('إلغاء'));
+      expect(find.byKey(const Key('address-delete-dialog')), findsOneWidget);
+      expect(find.byKey(const Key('address-delete-cancel')), findsOneWidget);
+      expect(find.byKey(const Key('address-delete-confirm')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('address-delete-cancel')));
       await tester.pumpAndSettle();
       expect(cubit.state.items, hasLength(2));
       repository.failOnce(AddressOperation.delete);
@@ -82,7 +141,7 @@ void main() {
         find.byKey(const Key('address-delete-address-home-001')),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('حذف'));
+      await tester.tap(find.byKey(const Key('address-delete-confirm')));
       await tester.pumpAndSettle();
       expect(
         find.byKey(const Key('address-item-address-home-001')),

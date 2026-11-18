@@ -2690,6 +2690,12 @@ abstract class AppLocalizations {
   /// **'إضافة موقع'**
   String get addressesAdd;
 
+  /// No description provided for @addressesSetDefault.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعيين كموقع افتراضي'**
+  String get addressesSetDefault;
+
   /// No description provided for @addressesEdit.
   ///
   /// In ar, this message translates to:

@@ -595,6 +595,7 @@
   "addressesTitle": "My addresses",
   "addressesDescription": "Save places for faster booking",
   "addressesAdd": "Add a place",
+  "addressesSetDefault": "Set as default location",
   "addressesEdit": "Edit place",
   "addressesDelete": "Delete place",
   "addressesDeleteTitle": "Delete this place?",
