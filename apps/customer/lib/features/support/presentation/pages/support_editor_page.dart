@@ -4,6 +4,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 import '../bloc/support_editor_cubit.dart';
 import '../widgets/support_editor_category_picker.dart';
@@ -46,9 +47,11 @@ class _SupportEditorPageState extends State<SupportEditorPage> {
         if (state.ended) _body.clear();
         final accepted = state.accepted;
         if (accepted != null) {
-          ScaffoldMessenger.of(
+          TamSnackBar.show(
             context,
-          ).showSnackBar(SnackBar(content: Text(t.supportCreated)));
+            message: t.supportCreated,
+            tone: TamSnackBarTone.success,
+          );
           widget.onCreated(accepted.id);
         }
       },

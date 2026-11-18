@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 class MapAttributionLink extends StatefulWidget {
   const MapAttributionLink({super.key, this.onOpen, this.permanent = false});
@@ -45,12 +46,10 @@ class _MapAttributionLinkState extends State<MapAttributionLink> {
       await widget.onOpen!();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context).mapsAttributionUnavailable,
-            ),
-          ),
+        TamSnackBar.show(
+          context,
+          message: AppLocalizations.of(context).mapsAttributionUnavailable,
+          tone: TamSnackBarTone.error,
         );
       }
     }

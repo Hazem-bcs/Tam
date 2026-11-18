@@ -275,12 +275,26 @@ abstract final class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: colors.inverseSurface,
-        contentTextStyle: text.bodyMedium?.copyWith(
-          color: colors.onInverseSurface,
+        backgroundColor: Color.alphaBlend(
+          colors.primary.withValues(alpha: .025),
+          colors.surfaceContainerLowest,
         ),
-        actionTextColor: colors.inversePrimary,
-        shape: controlShape,
+        contentTextStyle: text.bodySmall?.copyWith(
+          color: colors.onSurface,
+          fontWeight: FontWeight.w500,
+        ),
+        actionTextColor: colors.primary,
+        elevation: AppElevation.raised,
+        insetPadding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.sm,
+          AppSpacing.lg,
+          AppSpacing.lg,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadii.lg),
+          side: BorderSide(color: colors.outlineVariant),
+        ),
       ),
     );
   }

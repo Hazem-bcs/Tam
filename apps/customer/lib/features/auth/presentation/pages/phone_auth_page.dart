@@ -10,6 +10,7 @@ import 'package:tam_customer/features/auth/presentation/widgets/auth_scaffold.da
 import 'package:tam_customer/features/auth/presentation/widgets/auth_widgets.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   const PhoneAuthPage({super.key});
@@ -64,10 +65,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     if (_localInvalid) setState(() => _localInvalid = false);
     FocusScope.of(context).unfocus();
     if (_registration) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).authRegisterPreview),
-        ),
+      TamSnackBar.show(
+        context,
+        message: AppLocalizations.of(context).authRegisterPreview,
       );
       return;
     }

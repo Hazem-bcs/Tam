@@ -39,6 +39,7 @@ abstract final class AppMotion {
   static const short = Duration(milliseconds: 180);
   static const medium = Duration(milliseconds: 300);
   static const long = Duration(milliseconds: 450);
+  static const snackBar = Duration(seconds: 4);
   static const easeOut = Curves.easeOutCubic;
   static const easeIn = Curves.easeInCubic;
 }

@@ -18,6 +18,7 @@ import 'package:tam_customer/features/settings/presentation/widgets/settings_wal
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -129,8 +130,10 @@ class _SettingsPageState extends State<SettingsPage> {
         .read<SettingsCubit>()
         .updateNotificationsImmediately(enabled);
     if (!changed && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).settingsSaveError)),
+      TamSnackBar.show(
+        context,
+        message: AppLocalizations.of(context).settingsSaveError,
+        tone: TamSnackBarTone.error,
       );
     }
   }
@@ -181,10 +184,10 @@ class _SettingsPageState extends State<SettingsPage> {
       await widget.logout();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).settingsLogoutError),
-          ),
+        TamSnackBar.show(
+          context,
+          message: AppLocalizations.of(context).settingsLogoutError,
+          tone: TamSnackBarTone.error,
         );
       }
     } finally {
@@ -198,9 +201,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return BlocConsumer<SettingsCubit, SettingsState>(
       listener: (context, state) {
         if (state.successAction == 'name') {
-          ScaffoldMessenger.of(
+          TamSnackBar.show(
             context,
-          ).showSnackBar(SnackBar(content: Text(t.settingsSaved)));
+            message: t.settingsSaved,
+            tone: TamSnackBarTone.success,
+          );
         }
       },
       listenWhen: (previous, current) =>

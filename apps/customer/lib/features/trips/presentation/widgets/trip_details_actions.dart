@@ -7,6 +7,7 @@ import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 /// One strong action. Rating and help stay easy to reach but visually quiet.
 class TripDetailsActions extends StatelessWidget {
@@ -46,9 +47,11 @@ class TripDetailsActions extends StatelessWidget {
     if (confirmed != true || !context.mounted) return;
     final success = await context.read<TripDetailsCubit>().cancel();
     if (success && context.mounted) {
-      ScaffoldMessenger.of(
+      TamSnackBar.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(l.tripsCancelledSuccess)));
+        message: l.tripsCancelledSuccess,
+        tone: TamSnackBarTone.success,
+      );
     }
   }
 

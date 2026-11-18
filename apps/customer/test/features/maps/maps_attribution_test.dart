@@ -54,7 +54,8 @@ void main() {
     final link = find.byKey(const Key('map-attribution'));
     expect(tester.getSize(link).height, greaterThanOrEqualTo(48));
     await tester.tap(link);
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
     expect(calls, 1);
     expect(
       find.text('Could not open map license information. Please try again.'),

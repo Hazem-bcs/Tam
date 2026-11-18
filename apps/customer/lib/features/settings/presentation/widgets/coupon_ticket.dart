@@ -4,6 +4,8 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
+
 import 'coupon_ticket_shape.dart';
 
 /// Restrained ticket artwork, using TAM's semantic colors instead of a new palette.
@@ -245,8 +247,10 @@ class _CouponInformation extends StatelessWidget {
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: offer.code));
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(t.settingsCouponsCopied)),
+                    TamSnackBar.show(
+                      context,
+                      message: t.settingsCouponsCopied,
+                      tone: TamSnackBarTone.success,
                     );
                   }
                 },

@@ -1,0 +1,7 @@
+# AUI-14 — إشعارات Snackbar حديثة مع عد تنازلي
+
+root SUPERVISOR/DEVELOPER، READY بطلب المستخدم: تحسين Snackbar الداكن الظاهر بعد إنشاء طلب دعم، بألوان أجمل ودائرة تبين موعد الاختفاء. Baseline593e873 على ahmad-ui، /home/hazem/projects/tam-ahmad-ui، مع حفظ العمل المتزامن في back-icon/theme/chat/notifications/coupons.
+الملكية: مكون Snackbar وعداد العرض المشترك، shared theme/tokens داخل نطاق الرسائل، ترحيل call sites الحالية دون تعديل سلوك الميزات، الاختبارات والتسليم. المراجع: AGENTS.md، portable task protocol، ADR/design system/navigation/development phases المقروءة؛ صورةac7892ae؛ مصدر Flutter المحلي للـSnackBar/ScaffoldMessenger الخاص بالنسخة المثبتة للتحقق من clock/queue/persist.
+القبول: رسالة خفيفة عائمة من الثيم، ألوان حالات واضحة، دائرة وقت متبقي مرتبطة ببدء العرض الفعلي، close48dp، الحفاظ على الانتقال/queue/swipe والإجراءات، دعم RTL/LTR والنص الكبير والتابلت والكيبورد وتقليل الحركة وقارئ الشاشة. لا خادم/حقول API أو auth جديدة، ولا موارد صور مطلوبة.
+التحقق: اختبارات lifecycle والانتظار والانتقال وإغلاق/إجراء/persist، layout بأحجام ولغات واتجاهات مختلفة، معاينة رسائل مرسومة فعلًا وتشغيل Android. الفحص العام السابق له أخطاء موثقة؛ لا claim زوالها دون تحقق. لا main/push/CI.
+الحالة READY_FOR_REVIEW؛ المدخلات والأدوات متاحة. التسليم في docs/ahmad-ui/deliveries/AUI-14-SNACKBAR-20261118/REPORT.ar.md. اعتمدت أحجام المستخدم المدمجة،42 اختبارًا مركزًا ناجحًا وبناء محاكي ناجح. الفحص العام له إخفاقات موثقة. الشاشة الحالية مع mock محلي، دون إنشاء طلب دعم حقيقي.

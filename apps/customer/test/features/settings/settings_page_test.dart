@@ -400,7 +400,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('settings-notifications-switch')));
-    await tester.pumpAndSettle();
+    // Inspect feedback while its countdown is active; settling consumes it.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(
       (await repository.loadPreferences()).accountNotificationsEnabled,

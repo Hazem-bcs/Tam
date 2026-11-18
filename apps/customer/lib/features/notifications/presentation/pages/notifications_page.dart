@@ -7,6 +7,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
 import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 import '../../domain/customer_notification.dart';
 import '../../domain/notifications_repository.dart';
@@ -327,12 +328,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
     if (!context.mounted) return;
     final target = notification.target;
     if (!target.canOpen) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context).notificationsUnavailableTarget,
-          ),
-        ),
+      TamSnackBar.show(
+        context,
+        message: AppLocalizations.of(context).notificationsUnavailableTarget,
       );
       return;
     }

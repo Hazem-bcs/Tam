@@ -4,6 +4,7 @@ import 'package:tam_customer/features/settings/data/mock/mock_coupon_book.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/coupon_entry_sheet.dart';
 import 'package:tam_customer/features/settings/presentation/widgets/coupon_ticket.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 /// Coupon previews are strictly local to this session and are not backend offers.
 class CouponsPage extends StatelessWidget {
@@ -14,10 +15,10 @@ class CouponsPage extends StatelessWidget {
   Future<void> _openAddSheet(BuildContext context) async {
     final added = await showCouponEntrySheet(context, book: book);
     if (added && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).settingsCouponsAdded),
-        ),
+      TamSnackBar.show(
+        context,
+        message: AppLocalizations.of(context).settingsCouponsAdded,
+        tone: TamSnackBarTone.success,
       );
     }
   }

@@ -16,6 +16,7 @@ import 'package:tam_customer/features/ride_request/presentation/widgets/ride_jou
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_location_access_prompt.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/widgets/tam_snack_bar.dart';
 
 class RideRequestPage extends StatefulWidget {
   const RideRequestPage({
@@ -225,10 +226,9 @@ class _RideRequestPageState extends State<RideRequestPage>
         ),
       );
       setState(() => _step = RideJourneyStep.vehicle);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context).rideRequestPickupMoved),
-        ),
+      TamSnackBar.show(
+        context,
+        message: AppLocalizations.of(context).rideRequestPickupMoved,
       );
       return;
     }
@@ -259,16 +259,16 @@ class _RideRequestPageState extends State<RideRequestPage>
       unawaited(_promptSettings(context, state.failure!));
     } else if (state.failure != null) {
       final t = AppLocalizations.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(mapFailureText(t, state.failure)),
-          action: SnackBarAction(
-            label: state.failure == 'LOCATION_DENIED'
-                ? t.mapsAllowLocation
-                : t.mapsRetry,
-            onPressed: () =>
-                _location?.locate(requireFresh: true, focusMap: true),
-          ),
+      TamSnackBar.show(
+        context,
+        message: mapFailureText(t, state.failure),
+        tone: TamSnackBarTone.error,
+        action: SnackBarAction(
+          label: state.failure == 'LOCATION_DENIED'
+              ? t.mapsAllowLocation
+              : t.mapsRetry,
+          onPressed: () =>
+              _location?.locate(requireFresh: true, focusMap: true),
         ),
       );
     }
