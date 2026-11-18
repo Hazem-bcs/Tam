@@ -7,7 +7,9 @@
     "before_bytes": 1445975,
     "after_bytes": 862234,
     "rgba_sha256": "1cd6ce3574b757d7f9761213d835696e668dff7b1c6bfc697d573357fffeb1c8",
-    "rgba_exact": true
+    "rgba_exact": true,
+    "source_sha256": "6bfdb3700dc30902bbf9413123448f646b60e220f06fbcf914d0cfb7ec7f2846",
+    "output_sha256": "7d43e8078fba2e381c0831ec260a4650757b6eccfbb2a0646b2bc52d318bd5fc"
   },
   {
     "source": "apps/customer/assets/maps/vehicle-van-user.png",
@@ -17,7 +19,9 @@
     "before_bytes": 1795317,
     "after_bytes": 1077014,
     "rgba_sha256": "96b1f81caf49f70c298f15df3a1ea59ecc1aba95dc56a95cdbedba7f4a1b6194",
-    "rgba_exact": true
+    "rgba_exact": true,
+    "source_sha256": "590d9a592d208e2162e7f3401d0b4068eaa9612d53f242299aaa77cd3f54a245",
+    "output_sha256": "c8b5f195a9e969e232cb6c58c22cd77bf798cec22c7882d5053d4bab1f8cb729"
   },
   {
     "source": "apps/customer/assets/maps/vehicle-comfort-user.png",
@@ -27,7 +31,9 @@
     "before_bytes": 1407915,
     "after_bytes": 871290,
     "rgba_sha256": "7526fe22cf4fb9bf3035db7c6d8a96048cc3a897f358d1c383e8a658d126f217",
-    "rgba_exact": true
+    "rgba_exact": true,
+    "source_sha256": "b6d149c507f6fa148d27bacb0c56190cfce61bacad33d385c8a4178e89645196",
+    "output_sha256": "e72bf012e0e5b5b9afe9ba37bd81415934c369dd69cab6a5f69fe4aac14ba494"
   },
   {
     "source": "apps/customer/assets/maps/vehicle-motorbike-user.png",
@@ -37,7 +43,9 @@
     "before_bytes": 1835615,
     "after_bytes": 1108620,
     "rgba_sha256": "16568e0f6ed01944dde07d1b968e59e00ba2b2bcf9653a4f72e2d4bdcc95ae13",
-    "rgba_exact": true
+    "rgba_exact": true,
+    "source_sha256": "b941c60b4a3de0680d4b13a45d21780498de33579f34b5582192efb46545b88b",
+    "output_sha256": "df29479082d500462d8532a8f406dd4e5f950d01903b2cfa9feabfde5332b4ad"
   },
   {
     "source": "apps/customer/assets/images/ahmad_ui/driver_car_demo.png",
@@ -47,6 +55,8 @@
     "before_bytes": 1692210,
     "after_bytes": 974474,
     "rgba_sha256": "6b68c16fed378070ab7cbdc7b1cd5f0e4b8222ab9ed76f929ad62cc7d4a410d1",
-    "rgba_exact": true
+    "rgba_exact": true,
+    "source_sha256": "3867ad92333a9d33c4ae9cfb783c35d71e276c297e2934ef0f8f99babc5c8642",
+    "output_sha256": "67654f1fc3770271e5a05f362187a8da72b631592721e3b2f5ac0c31083406df"
   }
 ]
