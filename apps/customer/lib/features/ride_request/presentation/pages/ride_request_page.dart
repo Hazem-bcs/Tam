@@ -41,6 +41,7 @@ class _RideRequestPageState extends State<RideRequestPage>
   late RideJourneyStep _step;
   RideLocationCubit? _location;
   bool _pickingPickup = false,
+      _choosingOnMap = false,
       _selectionPending = false,
       _mapSelectionPending = false,
       _settingsPromptOpen = false,
@@ -52,7 +53,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     WidgetsBinding.instance.addObserver(this);
     _step = context.read<RideDraftBloc>().state.hasRoute
         ? RideJourneyStep.vehicle
-        : RideJourneyStep.entry;
+        : RideJourneyStep.places;
   }
 
   @override
@@ -113,12 +114,13 @@ class _RideRequestPageState extends State<RideRequestPage>
     FocusScope.of(context).unfocus();
     if (_location?.state.point != null) {
       _location?.clearPoint();
-    } else if (_step == RideJourneyStep.entry) {
+    } else if (_step == RideJourneyStep.places ||
+        _step == RideJourneyStep.entry) {
       Navigator.of(context).maybePop();
     } else {
       setState(() {
         _pickingPickup = false;
-        _step = RideJourneyStep.entry;
+        _step = RideJourneyStep.places;
       });
     }
   }
@@ -128,6 +130,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     _location?.clearPoint();
     setState(() {
       _pickingPickup = pickup;
+      _choosingOnMap = false;
       _step = RideJourneyStep.places;
     });
   }
@@ -155,7 +158,7 @@ class _RideRequestPageState extends State<RideRequestPage>
           _step = RideJourneyStep.vehicle;
         } else {
           _pickingPickup = bloc.state.pickup == null;
-          _step = RideJourneyStep.entry;
+          _step = RideJourneyStep.places;
         }
       });
     }
@@ -178,7 +181,8 @@ class _RideRequestPageState extends State<RideRequestPage>
     _mapSelectionPending = false;
     setState(() {
       final draft = context.read<RideDraftBloc>().state;
-      _step = draft.hasRoute ? RideJourneyStep.vehicle : RideJourneyStep.entry;
+      _step = draft.hasRoute ? RideJourneyStep.vehicle : RideJourneyStep.places;
+      _choosingOnMap = false;
       _pickingPickup = draft.pickup == null;
     });
     // Keep the selected pin until the draft contains its endpoint. The map and
@@ -238,6 +242,7 @@ class _RideRequestPageState extends State<RideRequestPage>
         state.failure == null &&
         !bloc.state.confirmationPending) {
       if (bloc.state.pickup == null) {
+        if (bloc.state.destination != null) _selectionPending = true;
         bloc.add(
           PickupSelected(
             TripLocation(
@@ -309,7 +314,7 @@ class _RideRequestPageState extends State<RideRequestPage>
                 _step = RideJourneyStep.vehicle;
               } else {
                 _pickingPickup = state.pickup == null;
-                _step = RideJourneyStep.entry;
+                _step = RideJourneyStep.places;
               }
             });
           }
@@ -343,7 +348,9 @@ class _RideRequestPageState extends State<RideRequestPage>
     };
     return PopScope(
       canPop:
-          (_step == RideJourneyStep.entry || active?.trip != null) &&
+          ((_step == RideJourneyStep.entry ||
+                  _step == RideJourneyStep.places) ||
+              active?.trip != null) &&
           location.point == null &&
           !state.confirmationPending,
       onPopInvokedWithResult: (didPop, _) {
@@ -368,6 +375,8 @@ class _RideRequestPageState extends State<RideRequestPage>
               draft: state,
               location: location,
               pickingPickup: _pickingPickup,
+              choosingOnMap: _choosingOnMap,
+              onChooseOnMap: () => setState(() => _choosingOnMap = true),
               onBack: _back,
               onPickup: () => _pick(true),
               onDestination: () => _pick(false),

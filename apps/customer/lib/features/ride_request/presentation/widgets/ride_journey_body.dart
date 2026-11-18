@@ -27,6 +27,8 @@ class RideJourneyBody extends StatelessWidget {
     required this.draft,
     required this.location,
     required this.pickingPickup,
+    this.choosingOnMap = false,
+    this.onChooseOnMap,
     required this.onBack,
     required this.onPickup,
     required this.onDestination,
@@ -49,7 +51,8 @@ class RideJourneyBody extends StatelessWidget {
   final RideJourneyStep step;
   final RideDraftState draft;
   final RideLocationState location;
-  final bool pickingPickup;
+  final bool pickingPickup, choosingOnMap;
+  final VoidCallback? onChooseOnMap;
   final VoidCallback onBack, onPickup, onDestination, onClearPoint;
   final VoidCallback? onContinue, onLocate, onSettings;
   final ValueChanged<TripLocation> onSelected, onMapPickup, onMapDestination;
@@ -131,10 +134,7 @@ class RideJourneyBody extends StatelessWidget {
                 ? null
                 : liveTrip?.live?.position?.point,
             bottomInset: inset,
-            onSelected:
-                tracking ||
-                    draft.confirmationPending ||
-                    step != RideJourneyStep.places
+            onSelected: tracking || draft.confirmationPending || !choosingOnMap
                 ? null
                 : onMapPoint,
             onLocate: tracking || draft.confirmationPending ? null : onLocate,
@@ -173,7 +173,10 @@ class RideJourneyBody extends StatelessWidget {
                   onPickup: onPickup,
                   onDestination: onDestination,
                   onSelected: onSelected,
-                  onPickOnMap: collapse,
+                  onPickOnMap: () {
+                    onChooseOnMap?.call();
+                    collapse();
+                  },
                   onContinue: onContinue,
                   locationStatus: location.locating || location.failure != null
                       ? RideLocationStatus(

@@ -145,19 +145,19 @@ void main() {
     });
   }
 
-  testWidgets('shows only map until an endpoint is edited', (tester) async {
+  testWidgets('opens destination picker and allows editing pickup', (
+    tester,
+  ) async {
     setSize(tester, 390, 844);
     final (_, bloc, _) = await pumpRide(tester, locale: const Locale('ar'));
     expect(find.byType(RideJourneyEntry), findsNothing);
-    expect(find.byType(RidePlacePicker), findsNothing);
+    expect(find.byType(RidePlacePicker), findsOneWidget);
     expect(
       tester
           .widget<RideJourneyBackdrop>(find.byType(RideJourneyBackdrop))
           .onSelected,
       isNull,
     );
-    await tester.tap(find.text('إلى أين تريد الذهاب؟'));
-    await tester.pumpAndSettle();
     expect(
       tester.widget<RidePlacePicker>(find.byType(RidePlacePicker)).pickup,
       isFalse,
@@ -167,7 +167,13 @@ void main() {
       tester
           .widget<RideJourneyBackdrop>(find.byType(RideJourneyBackdrop))
           .onSelected,
-      isNotNull,
+      isNull,
+    );
+    await tester.tap(find.text('حدد مكان الانطلاق'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<RidePlacePicker>(find.byType(RidePlacePicker)).pickup,
+      isTrue,
     );
     await tester.pumpWidget(const SizedBox());
     await tester.runAsync(bloc.close);
