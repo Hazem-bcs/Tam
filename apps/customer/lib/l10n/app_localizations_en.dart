@@ -477,6 +477,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rideRequestScheduled => 'Scheduled';
 
   @override
+  String get rideRequestScheduleToday => 'Today';
+
+  @override
+  String get rideRequestScheduleTomorrow => 'Tomorrow';
+
+  @override
+  String get rideRequestScheduleSummary => 'Your trip time';
+
+  @override
   String get rideRequestScheduleTitle => 'Choose your trip time';
 
   @override

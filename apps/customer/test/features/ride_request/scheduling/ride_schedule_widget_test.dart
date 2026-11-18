@@ -59,6 +59,19 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('tomorrow shortcut updates the saved service date', (
+    tester,
+  ) async {
+    final bloc = await pumpSchedule(tester);
+    await open(tester);
+    await tester.tap(find.byKey(const Key('schedule-tomorrow')));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('schedule-confirm')));
+    await tester.tap(find.byKey(const Key('schedule-confirm')));
+    await tester.pumpAndSettle();
+    expect(bloc.state.scheduledAt, DateTime.utc(2026, 11, 10, 12, 31));
+  });
+
   testWidgets(
     'time text input with keyboard keeps the schedule action reachable',
     (tester) async {
@@ -69,6 +82,8 @@ void main() {
       addTearDown(tester.view.resetViewInsets);
       await pumpSchedule(tester, scale: 2);
       await open(tester);
+      await tester.ensureVisible(find.byKey(const Key('schedule-time')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('schedule-time')));
       await tester.pumpAndSettle();
       tester.view.viewInsets = const FakeViewPadding(bottom: 200);

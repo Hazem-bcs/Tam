@@ -466,6 +466,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rideRequestScheduled => 'مجدولة';
 
   @override
+  String get rideRequestScheduleToday => 'اليوم';
+
+  @override
+  String get rideRequestScheduleTomorrow => 'غدًا';
+
+  @override
+  String get rideRequestScheduleSummary => 'موعد رحلتك';
+
+  @override
   String get rideRequestScheduleTitle => 'حدد موعد الرحلة';
 
   @override

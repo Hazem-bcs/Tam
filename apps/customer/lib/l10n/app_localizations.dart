@@ -962,6 +962,24 @@ abstract class AppLocalizations {
   /// **'مجدولة'**
   String get rideRequestScheduled;
 
+  /// No description provided for @rideRequestScheduleToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get rideRequestScheduleToday;
+
+  /// No description provided for @rideRequestScheduleTomorrow.
+  ///
+  /// In ar, this message translates to:
+  /// **'غدًا'**
+  String get rideRequestScheduleTomorrow;
+
+  /// No description provided for @rideRequestScheduleSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد رحلتك'**
+  String get rideRequestScheduleSummary;
+
   /// No description provided for @rideRequestScheduleTitle.
   ///
   /// In ar, this message translates to:

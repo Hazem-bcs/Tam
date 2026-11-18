@@ -98,77 +98,242 @@ class _RideScheduleDialogState extends State<RideScheduleDialog> {
     Navigator.of(context).pop(instant);
   }
 
+  void _selectDay(DateTime day) {
+    setState(() {
+      _wall = DateTime.utc(
+        day.year,
+        day.month,
+        day.day,
+        _wall.hour,
+        _wall.minute,
+      );
+      _invalid = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
-    return Dialog(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 480),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                l.rideRequestScheduleTitle,
-                style: theme.textTheme.titleLarge,
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              OutlinedButton.icon(
-                key: const Key('schedule-date'),
-                onPressed: _pickDate,
-                icon: const Icon(Icons.calendar_month),
-                label: Text(
-                  '${l.rideRequestScheduleDate}: ${DateFormat.yMMMd(locale).format(_wall)}',
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              OutlinedButton.icon(
-                key: const Key('schedule-time'),
-                onPressed: _pickTime,
-                icon: const Icon(Icons.access_time),
-                label: Text(
-                  '${l.rideRequestScheduleTime}: ${TimeOfDay(hour: _wall.hour, minute: _wall.minute).format(context)}',
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                l.rideRequestScheduleTimezone(widget.policy.offsetLabel),
-                style: theme.textTheme.bodySmall,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                l.rideRequestScheduleRange(
-                  widget.policy.minimumLeadTime.inMinutes,
-                  widget.policy.maximumAdvance.inDays,
-                ),
-              ),
-              if (_invalid) ...[
-                const SizedBox(height: AppSpacing.md),
-                Semantics(
-                  liveRegion: true,
-                  child: Text(
-                    l.rideRequestScheduleInvalid,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.error,
+    final colors = theme.colorScheme;
+    final today = widget.policy.wallTime(widget.now());
+    final tomorrow = today.add(const Duration(days: 1));
+    final first = widget.policy.wallTime(
+      widget.now().add(widget.policy.minimumLeadTime),
+    );
+    final last = widget.policy.wallTime(
+      widget.now().add(widget.policy.maximumAdvance),
+    );
+    bool sameDay(DateTime a, DateTime b) =>
+        a.year == b.year && a.month == b.month && a.day == b.day;
+    bool available(DateTime day) {
+      final date = DateUtils.dateOnly(day);
+      return !date.isBefore(DateUtils.dateOnly(first)) &&
+          !date.isAfter(DateUtils.dateOnly(last));
+    }
+
+    final date = DateFormat.yMMMMEEEEd(locale).format(_wall);
+    final time = TimeOfDay(
+      hour: _wall.hour,
+      minute: _wall.minute,
+    ).format(context);
+    return SafeArea(
+      top: false,
+      child: Center(
+        heightFactor: 1,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: 560,
+            maxHeight: MediaQuery.sizeOf(context).height * .9,
+          ),
+          child: SingleChildScrollView(
+            padding: AppSpacing.pagePadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: colors.outlineVariant,
+                      borderRadius: BorderRadius.circular(AppRadii.sm),
                     ),
                   ),
                 ),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  l.rideRequestScheduleTitle,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  l.rideRequestScheduleRange(
+                    widget.policy.minimumLeadTime.inMinutes,
+                    widget.policy.maximumAdvance.inDays,
+                  ),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    ChoiceChip(
+                      key: const Key('schedule-today'),
+                      label: Text(l.rideRequestScheduleToday),
+                      selected: sameDay(today, _wall),
+                      onSelected: available(today)
+                          ? (_) => _selectDay(today)
+                          : null,
+                    ),
+                    ChoiceChip(
+                      key: const Key('schedule-tomorrow'),
+                      label: Text(l.rideRequestScheduleTomorrow),
+                      selected: sameDay(tomorrow, _wall),
+                      onSelected: available(tomorrow)
+                          ? (_) => _selectDay(tomorrow)
+                          : null,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                _ScheduleOption(
+                  key: const Key('schedule-date'),
+                  icon: Icons.calendar_month_outlined,
+                  label: l.rideRequestScheduleDate,
+                  value: date,
+                  onTap: _pickDate,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _ScheduleOption(
+                  key: const Key('schedule-time'),
+                  icon: Icons.access_time_rounded,
+                  label: l.rideRequestScheduleTime,
+                  value: time,
+                  onTap: _pickTime,
+                ),
+                const SizedBox(height: AppSpacing.md),
+                Container(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(
+                    color: colors.primaryContainer,
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.rideRequestScheduleSummary,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: colors.onPrimaryContainer,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        '$date • $time',
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: colors.onPrimaryContainer,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
+                      Text(
+                        l.rideRequestScheduleTimezone(
+                          widget.policy.offsetLabel,
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colors.onPrimaryContainer,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_invalid) ...[
+                  const SizedBox(height: AppSpacing.md),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      l.rideRequestScheduleInvalid,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colors.error,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: AppSpacing.lg),
+                TamButton.primary(
+                  key: const Key('schedule-confirm'),
+                  label: l.rideRequestScheduleSave,
+                  onPressed: _confirm,
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l.rideRequestScheduleCancel),
+                ),
               ],
-              const SizedBox(height: AppSpacing.lg),
-              TamButton.primary(
-                key: const Key('schedule-confirm'),
-                label: l.rideRequestScheduleSave,
-                onPressed: _confirm,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ScheduleOption extends StatelessWidget {
+  const _ScheduleOption({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String label, value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    return Material(
+      color: colors.surfaceContainerLow,
+      borderRadius: BorderRadius.circular(AppRadii.md),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadii.md),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            children: [
+              Icon(icon, color: colors.primary),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                    Text(
+                      value,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: AppSpacing.sm),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l.rideRequestScheduleCancel),
-              ),
+              Icon(Icons.edit_outlined, size: 20, color: colors.primary),
             ],
           ),
         ),

@@ -24,8 +24,17 @@ class RideSchedulePicker extends StatelessWidget {
   final ValueChanged<DateTime?> onChanged;
 
   Future<void> _pick(BuildContext context) async {
-    final result = await showDialog<DateTime>(
+    final result = await showModalBottomSheet<DateTime>(
       context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: false,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppRadii.sheet),
+        ),
+      ),
       builder: (_) => RideScheduleDialog(
         policy: policy,
         now: now,
