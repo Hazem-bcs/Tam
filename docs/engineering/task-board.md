@@ -370,3 +370,17 @@ AUI-08-RATING-MOTION-20261118: READY → IMPLEMENTING → READY_FOR_REVIEW؛root
 AUI-09-RIDE-JOURNEY-20261118: READY → IMPLEMENTING؛ root، أساس e88e313 على ahmad-ui؛ اختيار ومتابعة على خريطة واحدة، كوبونات واستعادة محلية معزولة. [البطاقة](tasks/AUI-09-RIDE-JOURNEY-20261118.md).
 
 AUI-09-RIDE-JOURNEY-20261118: READY_FOR_REVIEW؛ root،176اختبارًا مستهدفًا و4اختبارات رسم ناجحة،تحليل42ملفًا نظيف،الفحص الشامل865نجاحًا/46إخفاقًا موثقة. حُفظ تقدم ahmad-ui إلىccb7d08؛ لاpushأودمجmain. [التسليم](../ahmad-ui/deliveries/AUI-09-RIDE-JOURNEY-20261118/REPORT.ar.md).
+
+
+## Customer feedback — 2026-11-18
+
+User authorized all sixteen feedback changes, parallel agents, local merge to ahmad-ui and emulator run. No push/main/Actions. Baseline ahmad-ui ea71aae plus preserved plan/references at6eb1e99. Integration codex/customer-feedback-20261118; root is supervisor.
+
+| Task | Status | Owner | Scope |
+|---|---|---|---|
+| [CF-THEME](tasks/CF-THEME.md) | READY | theme agent | F07; exclusive theme/app/settings preferences |
+| [CF-BOOKING](tasks/CF-BOOKING.md) | READY | booking agent | F04,F05,F08-search; exclusive trip mock persistence |
+| [CF-TRIPS](tasks/CF-TRIPS.md) | READY | trips agent | F03,F06-completion,F02-trip/chat/support |
+| [CF-ROOT](tasks/CF-ROOT.md) | READY → IMPLEMENTING | root | F01,account/legal,integration,F16 |
+
+Full test/build/visual milestones are batched at integration; independent exact-SHA reviews assigned on submission. No writers share worktrees. Existing untracked trip failure images in target worktree are preserved.
