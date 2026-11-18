@@ -1,0 +1,56 @@
+00:00 +0: loading /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart
+00:00 +0: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: only an explicit call asks permission and obtains a single foreground fix
+00:00 +1: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: disabled never reads a position
+00:00 +2: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: denied never reads a position
+00:00 +3: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: permanent never reads a position
+00:00 +4: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: granted permission is reused without another prompt
+00:00 +5: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: approximate permission is distinct from denied or disabled
+00:00 +6: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +7: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +8: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +9: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +10: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +11: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +12: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +13: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +14: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +15: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +16: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +17: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +18: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +19: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +20: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +21: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +22: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +23: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +24: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +25: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +26: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +27: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +28: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +29: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +30: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +31: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +32: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +33: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +34: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +35: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +36: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +37: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +38: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +39: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +40: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +41: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +42: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +43: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +44: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +45: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +46: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +47: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +48: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:00 +49: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/maps/device_location_test.dart: first coarse or stale fix is retried until a precise fresh fix
+00:01 +50: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/active_trip/active_matching_pulse_test.dart: search animation moves and respects reduced motion
+00:01 +51: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/active_trip/active_matching_pulse_test.dart: search animation moves and respects reduced motion
+00:01 +52: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/active_trip/active_matching_pulse_test.dart: search animation moves and respects reduced motion
+00:01 +53: /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/active_trip/active_matching_pulse_test.dart: search animation moves and respects reduced motion
+00:01 +54: All tests passed!

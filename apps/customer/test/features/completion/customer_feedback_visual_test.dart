@@ -204,8 +204,8 @@ void main() {
     );
     await tester.runAsync(
       () => precacheImage(
-        ResizeImage(
-          const AssetImage('assets/images/tam_account_mascot.webp'),
+        const ResizeImage(
+          AssetImage('assets/images/tam_account_mascot.webp'),
           width: 256,
         ),
         tester.element(find.byType(SupportEditorHero)),

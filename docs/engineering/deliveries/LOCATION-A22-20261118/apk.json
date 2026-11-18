@@ -1,0 +1,11 @@
+{
+  "source": "18e0cca36b2d0c94b52e0a429a19d8789ea21095",
+  "build": "flutter build apk --release --split-per-abi --target-platform android-arm64 --no-pub --dart-define=MAP_OSRM_BASE_URL=https://router.project-osrm.org",
+  "bytes": 49389626,
+  "sha256": "7f0945a50551a06fe61e8653c5dc36f94d381e2041b323648945d1d48d528625",
+  "osrm_demo_host_in_compiled_binary": true,
+  "file": "/home/hazem/Downloads/Tam-Release-20261118/tam-customer-arm64-release-location-osrm.apk",
+  "install": "adb install -r Success",
+  "launch": "MainActivity start success",
+  "device": "Samsung SM_A225F"
+}

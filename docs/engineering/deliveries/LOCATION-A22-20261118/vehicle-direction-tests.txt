@@ -1,0 +1,4 @@
+00:00 +0: loading /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/ride_request/presentation/widgets/ride_vehicle_direction_test.dart
+00:00 +0: vehicle arrows follow visible scroll direction in ar
+00:01 +1: vehicle arrows follow visible scroll direction in en
+00:01 +2: All tests passed!

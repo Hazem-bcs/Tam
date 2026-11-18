@@ -1,0 +1,5 @@
+00:00 +0: loading /home/hazem/.codex/worktrees/customer-feedback-integration/mashwar/apps/customer/test/features/completion/customer_feedback_visual_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: support counter and hero at 320 x2
+00:02 +1: (tearDownAll)
+00:02 +1: All tests passed!

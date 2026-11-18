@@ -402,3 +402,5 @@ MAP-OPENING-A22-20261118: READY → IMPLEMENTING; root, baseline72bd142; [card](
 MAP-OPENING-A22-20261118: verification complete at91482ab; code REVIEW_ONLY independent,13focused pass,full987pass/54inheritedfail,new0,analyze14inheritedinfo,format587/0. ARM64Release248.8s installed/started onSamsungA22. Supervisor accepts current lifecycle change for localahmad-ui integration; physical before/after smoothness pending user comparison.
 
 LOCATION-A22-20261118: READY → IMPLEMENTING; root; baseline392f63a; [card](tasks/LOCATION-A22-20261118.md). User requests focused checks/build/install only for speed.
+
+LOCATION-A22-20261118: verified source18e0cca (GPS/UIecf5afb read-only reviewed),57focused tests pass,changed-file analyze clean;7inherited journey failures documented,fullsuite deferred byuser. Support320dp/2xrender reviewed. OSRMliveprobeOk/162points;explicitdemoReleasebuilt103.3s,49.4MB,installed/startedSamsungA22. VehicleRTLdoublemirrorcorrectedandtestedAR/EN. Localahmad-ui integration authorized; realGPS/phone-route interaction pendinguser.
