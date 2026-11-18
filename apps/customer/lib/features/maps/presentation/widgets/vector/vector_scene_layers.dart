@@ -1,6 +1,8 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+
 import 'vector_map_scene.dart';
 import 'vector_map_style.dart';
 import 'vector_marker_images.dart';
@@ -19,6 +21,9 @@ final class VectorSceneLayers {
   final Color primary, surface;
   final Future<Uint8List> Function(String, Color) loadMarker;
   static const source = 'tam-customer-scene';
+  static const driverSource = 'tam-driver-position';
+  VectorMapScene? _geometry;
+  VectorMapScene? _driver;
 
   Future<bool> install() async {
     final car = await loadMarker(VectorMarkerImages.car, primary);
@@ -31,6 +36,10 @@ final class VectorSceneLayers {
       () => controller.addImage('tam-pin', pin),
       () => controller.addGeoJsonSource(
         source,
+        const VectorMapScene().toGeoJson(),
+      ),
+      () => controller.addGeoJsonSource(
+        driverSource,
         const VectorMapScene().toGeoJson(),
       ),
       () => controller.addLineLayer(
@@ -109,7 +118,7 @@ final class VectorSceneLayers {
         enableInteraction: false,
       ),
       () => controller.addSymbolLayer(
-        source,
+        driverSource,
         'tam-driver',
         const SymbolLayerProperties(
           iconImage: 'tam-car',
@@ -118,6 +127,7 @@ final class VectorSceneLayers {
           iconAllowOverlap: true,
           iconIgnorePlacement: true,
           iconRotationAlignment: 'map',
+          iconRotate: ['get', 'bearing'],
         ),
         filter: _kind('driver'),
         enableInteraction: false,
@@ -130,8 +140,28 @@ final class VectorSceneLayers {
     return isCurrent();
   }
 
-  Future<void> update(VectorMapScene scene) =>
-      controller.setGeoJsonSource(source, scene.toGeoJson());
+  Future<void> update(VectorMapScene scene) async {
+    final geometry = VectorMapScene(
+      origin: scene.origin,
+      destination: scene.destination,
+      selection: scene.selection,
+      deviceLocation: scene.deviceLocation,
+      route: scene.route,
+    );
+    if (_geometry != geometry) {
+      await controller.setGeoJsonSource(source, geometry.toGeoJson());
+      if (!isCurrent()) return;
+      _geometry = geometry;
+    }
+    final driver = VectorMapScene(
+      driver: scene.driver,
+      driverBearing: scene.driverBearing,
+    );
+    if (_driver != driver) {
+      await controller.setGeoJsonSource(driverSource, driver.toGeoJson());
+      if (isCurrent()) _driver = driver;
+    }
+  }
 
   static List<Object> _kind(String value) => [
     '==',

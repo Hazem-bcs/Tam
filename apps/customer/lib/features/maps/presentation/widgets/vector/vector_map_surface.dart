@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
-import '../map_camera_focus.dart';
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_map_colors.dart';
 import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+
 import '../../../domain/maps_repository.dart';
+import '../map_camera_focus.dart';
 import '../map_feedback.dart';
 import 'native_vector_map.dart';
 import 'vector_map_scene.dart';
@@ -20,6 +21,7 @@ class VectorMapSurface extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverBearing = 0,
     this.selection,
     this.route,
     this.onSelected,
@@ -32,6 +34,7 @@ class VectorMapSurface extends StatefulWidget {
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver, selection;
   final MapRoute? route;
+  final double driverBearing;
   final ValueChanged<GeoPoint>? onSelected;
   final ValueListenable<double>? bottomInset;
   final VoidCallback? onLocate;
@@ -112,6 +115,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
               origin: widget.origin,
               destination: widget.destination,
               driver: widget.driver,
+              driverBearing: widget.driverBearing,
               selection: widget.selection,
               route: widget.route,
             ),

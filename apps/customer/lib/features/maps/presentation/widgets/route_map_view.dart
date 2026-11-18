@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'map_camera_focus.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +7,10 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
+import '../../domain/maps_repository.dart';
 import '../bloc/map_route_cubit.dart';
 import '../maps_scope.dart';
+import 'map_camera_focus.dart';
 import 'map_feedback.dart';
 import 'tam_map_canvas.dart';
 
@@ -18,6 +20,10 @@ class RouteMapView extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverBearing,
+    this.driverRecordedAt,
+    this.driverIdentity,
+    this.trackingRoute,
     this.height = 260,
     this.bottomInset,
     this.selection,
@@ -30,6 +36,10 @@ class RouteMapView extends StatefulWidget {
   });
   final GeoPoint? origin, destination, driver;
   final double height;
+  final double? driverBearing;
+  final DateTime? driverRecordedAt;
+  final Object? driverIdentity;
+  final MapRoute? trackingRoute;
   final ValueListenable<double>? bottomInset;
   final GeoPoint? selection;
   final ValueChanged<GeoPoint>? onSelected;
@@ -60,13 +70,14 @@ class _RouteMapViewState extends State<RouteMapView> {
   void didUpdateWidget(RouteMapView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.origin != widget.origin ||
-        oldWidget.destination != widget.destination) {
+        oldWidget.destination != widget.destination ||
+        oldWidget.trackingRoute != widget.trackingRoute) {
       _load();
     }
   }
 
   void _load() {
-    if (_routes != null) {
+    if (_routes != null && widget.trackingRoute == null) {
       unawaited(_routes!.load(widget.origin, widget.destination));
     }
   }
@@ -96,6 +107,10 @@ class _RouteMapViewState extends State<RouteMapView> {
           origin: widget.origin,
           destination: widget.destination,
           driver: widget.driver,
+          driverBearing: widget.driverBearing,
+          driverRecordedAt: widget.driverRecordedAt,
+          driverIdentity: widget.driverIdentity,
+          route: widget.trackingRoute,
         ),
       );
     }
@@ -123,11 +138,16 @@ class _RouteMapViewState extends State<RouteMapView> {
                   origin: widget.origin,
                   destination: widget.destination,
                   driver: widget.driver,
-                  route: state.route,
+                  driverBearing: widget.driverBearing,
+                  driverRecordedAt: widget.driverRecordedAt,
+                  driverIdentity: widget.driverIdentity,
+                  route: widget.trackingRoute ?? state.route,
                 ),
               ),
-              if (state.busy) const LinearProgressIndicator(),
-              if (state.failure != null &&
+              if (widget.trackingRoute == null && state.busy)
+                const LinearProgressIndicator(),
+              if (widget.trackingRoute == null &&
+                  state.failure != null &&
                   state.failure != 'MAP_NOT_CONFIGURED')
                 MapFeedback(
                   text: AppLocalizations.of(context).mapsRouteFailed,

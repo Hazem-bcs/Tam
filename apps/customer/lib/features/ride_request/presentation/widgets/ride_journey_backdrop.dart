@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tam_customer/features/maps/domain/maps_repository.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
@@ -13,6 +14,10 @@ class RideJourneyBackdrop extends StatelessWidget {
     this.destination,
     this.selection,
     this.driver,
+    this.driverBearing,
+    this.driverRecordedAt,
+    this.driverIdentity,
+    this.trackingRoute,
     this.bottomInset,
     this.onSelected,
     this.onLocate,
@@ -25,6 +30,10 @@ class RideJourneyBackdrop extends StatelessWidget {
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onLocate;
   final bool locating;
+  final double? driverBearing;
+  final DateTime? driverRecordedAt;
+  final Object? driverIdentity;
+  final MapRoute? trackingRoute;
   final MapCameraFocus? focus;
 
   @override
@@ -36,6 +45,10 @@ class RideJourneyBackdrop extends StatelessWidget {
       destination: destination?.point,
       selection: selection,
       driver: driver,
+      driverBearing: driverBearing,
+      driverRecordedAt: driverRecordedAt,
+      driverIdentity: driverIdentity,
+      trackingRoute: trackingRoute,
       bottomInset: bottomInset,
       onSelected: onSelected,
       onLocate: onLocate,

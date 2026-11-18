@@ -35,6 +35,7 @@ abstract final class TripLiveCodec {
       driver: driver,
       position: position,
       etaSeconds: eta as int?,
+      route: map['route'] == null ? null : routeFromJson(map['route']),
     );
   }
 
@@ -63,13 +64,54 @@ abstract final class TripLiveCodec {
       throw const FormatException('Invalid coordinates');
     }
     try {
+      final bearing = map['bearing'];
+      if (bearing != null &&
+          (bearing is! num ||
+              !bearing.isFinite ||
+              bearing < 0 ||
+              bearing >= 360)) {
+        throw const FormatException('Invalid bearing');
+      }
       return DriverPosition(
         point: GeoPoint(latitude: lat.toDouble(), longitude: lng.toDouble()),
         recordedAt: UtcTimestamp.parse(map['recorded_at']),
+        bearing: (bearing as num?)?.toDouble(),
       );
     } on ArgumentError {
       throw const FormatException('Invalid coordinates');
     }
+  }
+
+  static TripTrackingRoute routeFromJson(Object? raw) {
+    final map = object(raw);
+    final points = map['coordinates'];
+    if (points is! List || points.length < 2 || points.length > 10000) {
+      throw const FormatException('Invalid tracking geometry');
+    }
+    return TripTrackingRoute(
+      id: text(map, 'id'),
+      leg: switch (map['leg']) {
+        'to_pickup' => TrackingRouteLeg.toPickup,
+        'to_destination' => TrackingRouteLeg.toDestination,
+        _ => throw const FormatException('Invalid route leg'),
+      },
+      points: points.map((value) {
+        if (value is! List ||
+            value.length != 2 ||
+            value[0] is! num ||
+            value[1] is! num) {
+          throw const FormatException('Invalid route coordinate');
+        }
+        try {
+          return GeoPoint(
+            latitude: (value[1] as num).toDouble(),
+            longitude: (value[0] as num).toDouble(),
+          );
+        } on ArgumentError {
+          throw const FormatException('Invalid route coordinate');
+        }
+      }).toList(),
+    );
   }
 
   static Map<String, dynamic> encode(TripLiveDetails live) => {
@@ -83,8 +125,20 @@ abstract final class TripLiveCodec {
             'latitude': live.position!.point.latitude,
             'longitude': live.position!.point.longitude,
             'recorded_at': live.position!.recordedAt.toUtc().toIso8601String(),
+            if (live.position!.bearing != null)
+              'bearing': live.position!.bearing,
           },
     'eta_seconds': live.etaSeconds,
+    if (live.route != null)
+      'route': {
+        'id': live.route!.id,
+        'leg': live.route!.leg == TrackingRouteLeg.toPickup
+            ? 'to_pickup'
+            : 'to_destination',
+        'coordinates': live.route!.points
+            .map((p) => [p.longitude, p.latitude])
+            .toList(),
+      },
   };
   static Map<String, dynamic> driverJson(TripDriver driver) => {
     'id': driver.id,

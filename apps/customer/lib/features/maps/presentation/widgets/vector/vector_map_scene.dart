@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
+
 import '../../../domain/maps_repository.dart';
 
 /// Renderer-only GeoJSON mapping. The domain remains independent of MapLibre.
@@ -9,6 +10,7 @@ final class VectorMapScene extends Equatable {
     this.destination,
     this.selection,
     this.driver,
+    this.driverBearing = 0,
     this.deviceLocation,
     this.route,
   });
@@ -18,10 +20,12 @@ final class VectorMapScene extends Equatable {
     destination: destination,
     selection: selection,
     driver: driver,
+    driverBearing: driverBearing,
     route: route,
     deviceLocation: point,
   );
   final MapRoute? route;
+  final double driverBearing;
 
   List<GeoPoint> get bounds => [?origin, ?destination, ...?route?.points];
 
@@ -47,7 +51,10 @@ final class VectorMapScene extends Equatable {
         if (entry.$2 != null)
           {
             'type': 'Feature',
-            'properties': {'kind': entry.$1},
+            'properties': {
+              'kind': entry.$1,
+              if (entry.$1 == 'driver') 'bearing': driverBearing,
+            },
             'geometry': {'type': 'Point', 'coordinates': coordinate(entry.$2!)},
           },
     ],
@@ -64,6 +71,7 @@ final class VectorMapScene extends Equatable {
     destination,
     selection,
     driver,
+    driverBearing,
     route,
     deviceLocation,
   ];

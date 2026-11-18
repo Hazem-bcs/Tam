@@ -3,6 +3,8 @@ import 'package:tam_customer/features/maps/presentation/widgets/route_map_view.d
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 
+import 'active_tracking_geometry.dart';
+
 class ActiveRouteMap extends StatelessWidget {
   const ActiveRouteMap({super.key, required this.trip, required this.stale});
   final Trip trip;
@@ -20,6 +22,10 @@ class ActiveRouteMap extends StatelessWidget {
           origin: trip.booking.pickup.point,
           destination: trip.booking.destination.point,
           driver: stale ? null : trip.live?.position?.point,
+          driverBearing: trip.live?.position?.bearing,
+          driverRecordedAt: trip.live?.position?.recordedAt,
+          driverIdentity: (trip.id, trip.live?.route?.id),
+          trackingRoute: activeTrackingGeometry(trip),
         ),
         if (stale)
           Text(

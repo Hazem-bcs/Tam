@@ -149,7 +149,12 @@ void main() {
     final cameraCalls = platforms.single.cameras.length;
     await show(
       tester,
-      VectorMapScene(origin: origin, destination: destination, driver: origin),
+      VectorMapScene(
+        origin: origin,
+        destination: destination,
+        driver: origin,
+        driverBearing: 90,
+      ),
       inset: inset,
     );
     await tester.pump();
@@ -160,7 +165,12 @@ void main() {
     expect(platforms, hasLength(1));
     expect(platforms.single.images, 2);
     expect(platforms.single.cameras.length, cameraCalls);
-    expect((platforms.single.scenes.last['features'] as List).length, 3);
+    expect((platforms.single.scenes.last['features'] as List).length, 1);
+    expect(
+      (platforms.single.scenes.last['features'] as List)
+          .single['properties']['bearing'],
+      90,
+    );
     final paddingCalls = platforms.single.insets.length;
     for (var i = 0; i < 30; i++) {
       inset.value = 200 + i.toDouble();

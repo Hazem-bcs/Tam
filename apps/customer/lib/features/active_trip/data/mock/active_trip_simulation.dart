@@ -1,8 +1,10 @@
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/shared/data/trip_live_codec.dart';
-import 'package:tam_customer/shared/domain/geo_point.dart';
+import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+
+import 'mock_tracking_path.dart';
 
 /// Pure deterministic driver-side simulation. The customer never issues these
 /// transitions; the data adapter commits them to the shared store atomically.
@@ -62,6 +64,7 @@ final class ActiveTripSimulation {
     }.contains(nextStatus);
     DriverPosition? position;
     int? eta;
+    TripTrackingRoute? route;
     if (tracking) {
       final duration = nextStatus == TripStatus.inProgress
           ? timings.journey
@@ -73,28 +76,20 @@ final class ActiveTripSimulation {
       );
       final pickup = trip.booking.pickup.point;
       final destination = trip.booking.destination.point;
-      final origin = nextStatus == TripStatus.inProgress
-          ? pickup
-          : GeoPoint(
-              latitude:
-                  pickup.latitude +
-                  (destination.latitude - pickup.latitude) * 0.5,
-              longitude:
-                  pickup.longitude +
-                  (destination.longitude - pickup.longitude) * 0.5,
-            );
-      final target = nextStatus == TripStatus.inProgress ? destination : pickup;
-      final point = nextStatus == TripStatus.driverArrived
-          ? pickup
-          : GeoPoint(
-              latitude:
-                  origin.latitude +
-                  (target.latitude - origin.latitude) * fraction,
-              longitude:
-                  origin.longitude +
-                  (target.longitude - origin.longitude) * fraction,
-            );
-      position = DriverPosition(point: point, recordedAt: now);
+      route = MockTrackingPath.route(
+        pickup,
+        destination,
+        approaching: nextStatus != TripStatus.inProgress,
+      );
+      final path = GeoPath(route.points);
+      final distance = nextStatus == TripStatus.driverArrived
+          ? path.length
+          : path.length * fraction;
+      position = DriverPosition(
+        point: path.at(distance),
+        recordedAt: now,
+        bearing: path.headingAt(distance),
+      );
       eta = nextStatus == TripStatus.driverArrived
           ? 0
           : ((duration - elapsed).inSeconds).clamp(0, duration.inSeconds);
@@ -114,6 +109,7 @@ final class ActiveTripSimulation {
         driver: driver ?? live?.driver,
         position: position,
         etaSeconds: eta,
+        route: route,
       ),
     );
   }

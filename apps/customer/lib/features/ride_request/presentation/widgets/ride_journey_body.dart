@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_state.dart';
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_journey_panel.dart';
+import 'package:tam_customer/features/active_trip/presentation/widgets/active_tracking_geometry.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/ride_request/domain/ride_coupon_offer.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
@@ -133,6 +134,12 @@ class RideJourneyBody extends StatelessWidget {
             driver: active?.offline == true || active?.positionStale == true
                 ? null
                 : liveTrip?.live?.position?.point,
+            driverBearing: liveTrip?.live?.position?.bearing,
+            driverRecordedAt: liveTrip?.live?.position?.recordedAt,
+            driverIdentity: (liveTrip?.id, liveTrip?.live?.route?.id),
+            trackingRoute: liveTrip == null
+                ? null
+                : activeTrackingGeometry(liveTrip),
             bottomInset: inset,
             onSelected: tracking || draft.confirmationPending || !choosingOnMap
                 ? null

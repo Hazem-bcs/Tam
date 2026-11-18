@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -7,6 +9,7 @@ import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
+
 import '../../domain/maps_repository.dart';
 import 'map_attribution_link.dart';
 import 'map_camera_focus.dart';
@@ -21,6 +24,7 @@ class RasterMapCanvas extends StatefulWidget {
     this.origin,
     this.destination,
     this.driver,
+    this.driverBearing = 0,
     this.route,
     this.onSelected,
     this.tileProviderFactory,
@@ -43,6 +47,7 @@ class RasterMapCanvas extends StatefulWidget {
   final MapConfiguration configuration;
   final GeoPoint? origin, destination, driver;
   final MapRoute? route;
+  final double driverBearing;
   final ValueChanged<GeoPoint>? onSelected;
   final TileProvider Function(String)? tileProviderFactory;
   final Future<void> Function()? onAttribution;
@@ -155,7 +160,10 @@ class _RasterMapCanvasState extends State<RasterMapCanvas> {
         child: Semantics(
           label: label,
           child: icon == Icons.local_taxi
-              ? TamVehicleIcon(size: widget.markerIconSize)
+              ? Transform.rotate(
+                  angle: widget.driverBearing * math.pi / 180,
+                  child: TamVehicleIcon(size: widget.markerIconSize),
+                )
               : Icon(icon, size: widget.markerIconSize, color: colors.primary),
         ),
       ),

@@ -1,7 +1,9 @@
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/shared/data/trip_live_codec.dart';
 import 'package:tam_customer/shared/data/trip_wire_codec.dart';
+import 'package:tam_customer/shared/domain/geo_path.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+import 'package:tam_customer/shared/domain/trip_live_details.dart';
 
 abstract final class ActiveTripCodec {
   static Trip? response(Map<String, dynamic> json, {bool allowEmpty = false}) {
@@ -40,6 +42,25 @@ abstract final class ActiveTripCodec {
     if (!trip.status.isActive &&
         (live.position != null || live.etaSeconds != null)) {
       throw const FormatException('Terminal trip cannot have live tracking');
+    }
+    final route = live.route;
+    if (route != null) {
+      final going = trip.status == TripStatus.inProgress;
+      final validPhase =
+          trip.status == TripStatus.driverEnRoute ||
+          trip.status == TripStatus.driverArrived ||
+          going;
+      final target = going
+          ? trip.booking.destination.point
+          : trip.booking.pickup.point;
+      if (!validPhase ||
+          route.leg !=
+              (going
+                  ? TrackingRouteLeg.toDestination
+                  : TrackingRouteLeg.toPickup) ||
+          GeoPath.meters(route.points.last, target) > 100) {
+        throw const FormatException('Tracking route does not match phase');
+      }
     }
     return trip;
   }
