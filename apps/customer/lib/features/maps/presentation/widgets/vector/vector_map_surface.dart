@@ -55,15 +55,52 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
   Future<String>? _template;
   String? _raw, _style, _language;
   AppMapColors? _palette;
+  Animation<double>? _entrance;
+  ModalRoute<dynamic>? _route;
+  bool _ready = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    if (!_ready) {
+      _entrance?.removeStatusListener(_onEntranceStatus);
+      _route = ModalRoute.of(context);
+      _entrance = _route?.animation;
+      // Flutter temporarily reports a completed proxy while measuring a new
+      // route offstage. That is not the end of its entrance animation.
+      _ready =
+          _entrance == null || (!_route!.offstage && _entrance!.isCompleted);
+      if (!_ready) {
+        _entrance!.addStatusListener(_onEntranceStatus);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _onEntranceStatus(_entrance!.status);
+        });
+      }
+    }
     final bundle = DefaultAssetBundle.of(context);
     if (_bundle != bundle) {
       _bundle = bundle;
       _load();
     }
+  }
+
+  void _onEntranceStatus(AnimationStatus status) {
+    if (status != AnimationStatus.completed ||
+        !mounted ||
+        _ready ||
+        (_route?.offstage ?? false)) {
+      return;
+    }
+    _entrance?.removeStatusListener(_onEntranceStatus);
+    // Native surface creation competes with the route's entrance frames. Once
+    // created, retain it through subsequent route transitions and back gestures.
+    setState(() => _ready = true);
+  }
+
+  @override
+  void dispose() {
+    _entrance?.removeStatusListener(_onEntranceStatus);
+    super.dispose();
   }
 
   @override
@@ -94,6 +131,7 @@ class _VectorMapSurfaceState extends State<VectorMapSurface> {
         child: Text(l.mapsNativeUnavailable, textAlign: TextAlign.center),
       );
     }
+    if (!_ready) return const Center(child: CircularProgressIndicator());
     return FutureBuilder<String>(
       future: _template,
       builder: (context, snapshot) {
