@@ -12,9 +12,13 @@ final class MemoryStore implements LocalCacheStore {
   bool failRead = false;
   bool failWrite = false;
   Completer<void>? nextWrite;
+  Completer<void>? nextRead;
 
   @override
   Future<CachedPayload?> read(String key) async {
+    final gate = nextRead;
+    nextRead = null;
+    if (gate != null) await gate.future;
     if (failRead) throw StateError('read unavailable');
     return values[key];
   }
@@ -134,6 +138,36 @@ void main() {
       );
     },
   );
+
+  test('failed restoration cannot overwrite unseen stored preferences', () async {
+    await store.write(
+      CachedAppPreferencesRepository.storageKey,
+      '{"version":2,"languageCode":"en","appearance":"light","fontSize":"large","extra":"keep"}',
+      DateTime.now(),
+    );
+    store.failRead = true;
+    expect(await cubit.restore(), false);
+    expect(await cubit.setAppearance(AppAppearance.dark), false);
+    final unchanged =
+        jsonDecode(
+              store.values[CachedAppPreferencesRepository.storageKey]!.value,
+            )
+            as Map;
+    expect(unchanged['appearance'], 'light');
+    expect(cubit.state.error, AppPreferencesError.restore);
+    store.failRead = false;
+    expect(await cubit.setAppearance(AppAppearance.dark), true);
+    final restored = await CachedAppPreferencesRepository(store).load();
+    expect(restored.languageCode, 'en');
+    expect(restored.fontSize, AppFontSize.large);
+    expect(restored.appearance, AppAppearance.dark);
+    expect(
+      jsonDecode(
+        store.values[CachedAppPreferencesRepository.storageKey]!.value,
+      )['extra'],
+      'keep',
+    );
+  });
 
   test(
     'rapid choices serialize behind pending save without overwriting fields',

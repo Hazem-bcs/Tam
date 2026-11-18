@@ -1,0 +1,7 @@
+# CF-THEME review and recovered finalization
+
+Independent reviewer booking inspected original2a7ea58 in this isolated checkout, verified supplied dark Arabic320@2× and English800 screenshots, and found one blocking persistence hazard: after failed initial read, a preference update could overwrite unseen stored choices. Reviewer implemented hydration-before-write and its regression, then provider quota interrupted finalization. Supervisor root inspected/recovered the exact pending patch without restarting feature work.
+
+Fix: every update requires successful first load; read failures retain stored bytes and report restore error; recovery merges the chosen field into restored language/font/metadata. `flutter test --no-pub test/app/preferences` under recovered source passed12 tests, plus one explicitly deferred speculative disposal test (removed from final submission; no product tests were removed). The remaining suite covers normal rapid-save serialization, read/write failure, migration, dark semantics/system brightness, nonlinear scaler and layout. Full combined milestone remains supervisor responsibility. No device/profile or legal-publication claim. DI registration already prepared in integration.
+
+APPROVED_AT_SHA: commit containing this review and hydration fix; original F07 independently inspected, recovered fix verified by root. Pending-save process termination cannot guarantee disk flush; ordinary app lifetime choices retain existing serialized behavior. No new packages or Auth changes.
