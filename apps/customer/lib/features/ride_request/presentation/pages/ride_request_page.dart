@@ -40,7 +40,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     with WidgetsBindingObserver {
   late RideJourneyStep _step;
   RideLocationCubit? _location;
-  bool _pickingPickup = true,
+  bool _pickingPickup = false,
       _selectionPending = false,
       _mapSelectionPending = false,
       _settingsPromptOpen = false,
@@ -52,7 +52,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     WidgetsBinding.instance.addObserver(this);
     _step = context.read<RideDraftBloc>().state.hasRoute
         ? RideJourneyStep.vehicle
-        : RideJourneyStep.entry;
+        : RideJourneyStep.places;
   }
 
   @override
@@ -113,10 +113,13 @@ class _RideRequestPageState extends State<RideRequestPage>
     FocusScope.of(context).unfocus();
     if (_location?.state.point != null) {
       _location?.clearPoint();
-    } else if (_step == RideJourneyStep.entry) {
+    } else if (_step == RideJourneyStep.places) {
       Navigator.of(context).maybePop();
     } else {
-      setState(() => _step = RideJourneyStep.entry);
+      setState(() {
+        _pickingPickup = false;
+        _step = RideJourneyStep.places;
+      });
     }
   }
 
@@ -172,7 +175,11 @@ class _RideRequestPageState extends State<RideRequestPage>
 
   void _finishMapSelection() {
     _mapSelectionPending = false;
-    setState(() => _step = RideJourneyStep.entry);
+    setState(() {
+      final draft = context.read<RideDraftBloc>().state;
+      _step = draft.hasRoute ? RideJourneyStep.vehicle : RideJourneyStep.places;
+      _pickingPickup = draft.pickup == null;
+    });
     // Keep the selected pin until the draft contains its endpoint. The map and
     // panel then see one committed change, never an empty intermediate scene.
     _location?.clearPoint();
@@ -334,7 +341,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     };
     return PopScope(
       canPop:
-          (_step == RideJourneyStep.entry || active?.trip != null) &&
+          (_step == RideJourneyStep.places || active?.trip != null) &&
           location.point == null &&
           !state.confirmationPending,
       onPopInvokedWithResult: (didPop, _) {

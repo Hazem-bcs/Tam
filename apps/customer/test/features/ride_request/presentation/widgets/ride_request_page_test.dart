@@ -15,6 +15,8 @@ import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_r
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_suggestion_tile.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_picker.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -141,6 +143,21 @@ void main() {
       await File(path).writeAsBytes(bytes!.buffer.asUint8List(), flush: true);
     });
   }
+
+  testWidgets('opens destination selection without an introductory step', (
+    tester,
+  ) async {
+    setSize(tester, 390, 844);
+    final (_, bloc, _) = await pumpRide(tester, locale: const Locale('ar'));
+    expect(find.byType(RideJourneyEntry), findsNothing);
+    expect(
+      tester.widget<RidePlacePicker>(find.byType(RidePlacePicker)).pickup,
+      isFalse,
+    );
+    expect(find.byType(TextFormField), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+    await tester.runAsync(bloc.close);
+  });
 
   testWidgets('Arabic 390: pick both places, show quote and open saved trip', (
     tester,
