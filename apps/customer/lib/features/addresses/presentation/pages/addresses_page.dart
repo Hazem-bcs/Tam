@@ -174,30 +174,37 @@ class _AddressesPageState extends State<AddressesPage> {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (pending) ...[
-                                TamButton.primary(
-                                  key: const Key('addresses-confirm-default'),
-                                  label: t.addressesSetDefault,
-                                  icon: Icons.check_rounded,
-                                  onPressed: canAct
-                                      ? () => _confirmDefault(context)
-                                      : null,
-                                ),
-                                const SizedBox(height: AppSpacing.sm),
-                              ],
-                              pending
-                                  ? TamButton.secondary(
-                                      key: const Key('addresses-add-button'),
-                                      label: t.addressesAdd,
-                                      icon: Icons.add_rounded,
-                                      onPressed: canAct ? widget.onAdd : null,
-                                    )
-                                  : TamButton.primary(
-                                      key: const Key('addresses-add-button'),
-                                      label: t.addressesAdd,
-                                      icon: Icons.add_rounded,
-                                      onPressed: canAct ? widget.onAdd : null,
-                                    ),
+                              AnimatedSize(
+                                duration:
+                                    MediaQuery.disableAnimationsOf(context)
+                                    ? Duration.zero
+                                    : AppMotion.medium,
+                                curve: AppMotion.easeOut,
+                                alignment: Alignment.bottomCenter,
+                                child: pending
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: AppSpacing.sm,
+                                        ),
+                                        child: TamButton.secondary(
+                                          key: const Key(
+                                            'addresses-confirm-default',
+                                          ),
+                                          label: t.addressesSetDefault,
+                                          icon: Icons.check_rounded,
+                                          onPressed: canAct
+                                              ? () => _confirmDefault(context)
+                                              : null,
+                                        ),
+                                      )
+                                    : const SizedBox(width: double.infinity),
+                              ),
+                              TamButton.primary(
+                                key: const Key('addresses-add-button'),
+                                label: t.addressesAdd,
+                                icon: Icons.add_rounded,
+                                onPressed: canAct ? widget.onAdd : null,
+                              ),
                             ],
                           );
                         },
