@@ -9,8 +9,6 @@ import 'package:tam_customer/shared/widgets/tam_vehicle_icon.dart';
 Future<void> showActiveDriverDetailsSheet(
   BuildContext context, {
   required TripDriver driver,
-  required VoidCallback onChat,
-  VoidCallback? onCall,
   bool showDemoAvatar = false,
 }) {
   final colors = Theme.of(context).colorScheme;
@@ -34,37 +32,17 @@ Future<void> showActiveDriverDetailsSheet(
           AppSpacing.xl,
           AppSpacing.xl,
         ),
-        child: _DriverDetails(
-          driver: driver,
-          showDemoAvatar: showDemoAvatar,
-          onChat: () {
-            Navigator.of(sheetContext).pop();
-            onChat();
-          },
-          onCall: onCall == null
-              ? null
-              : () {
-                  Navigator.of(sheetContext).pop();
-                  onCall();
-                },
-        ),
+        child: _DriverDetails(driver: driver, showDemoAvatar: showDemoAvatar),
       ),
     ),
   );
 }
 
 class _DriverDetails extends StatelessWidget {
-  const _DriverDetails({
-    required this.driver,
-    required this.showDemoAvatar,
-    required this.onChat,
-    this.onCall,
-  });
+  const _DriverDetails({required this.driver, required this.showDemoAvatar});
 
   final TripDriver driver;
   final bool showDemoAvatar;
-  final VoidCallback onChat;
-  final VoidCallback? onCall;
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +62,8 @@ class _DriverDetails extends StatelessWidget {
           textAlign: TextAlign.center,
           style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
-        const SizedBox(height: AppSpacing.lg),
-        Align(child: DriverAvatar(size: 86, showDemoAvatar: showDemoAvatar)),
+        const SizedBox(height: AppSpacing.md),
+        Align(child: DriverAvatar(size: 72, showDemoAvatar: showDemoAvatar)),
         const SizedBox(height: AppSpacing.md),
         Text(
           name,
@@ -108,14 +86,14 @@ class _DriverDetails extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.lg),
         DecoratedBox(
           decoration: BoxDecoration(
             color: colors.surfaceContainerLow,
             borderRadius: BorderRadius.circular(AppRadii.lg),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: Row(
               children: [
                 _VehiclePhoto(
@@ -142,22 +120,6 @@ class _DriverDetails extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: AppSpacing.lg),
-        FilledButton.icon(
-          key: const Key('active-sheet-chat'),
-          onPressed: onChat,
-          icon: const Icon(Icons.chat_bubble_outline_rounded),
-          label: Text(l.activeTripChat),
-        ),
-        if (onCall != null) ...[
-          const SizedBox(height: AppSpacing.sm),
-          OutlinedButton.icon(
-            key: const Key('active-sheet-call'),
-            onPressed: onCall,
-            icon: const Icon(Icons.phone_outlined),
-            label: Text(l.driverContactTitle),
-          ),
-        ],
         const SizedBox(height: AppSpacing.sm),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),

@@ -177,14 +177,7 @@ class ActiveJourneyPanel extends StatelessWidget {
             ),
           ],
           if (driver != null) ...[
-            ActiveDriverCard(
-              driver: driver,
-              showDemoAvatar: showDemoAvatar,
-              onChat: () => navigation.openChat(trip.id),
-              onCall: canContact
-                  ? () => navigation.openDriverContact(trip.id, driver.id)
-                  : null,
-            ),
+            ActiveDriverCard(driver: driver, showDemoAvatar: showDemoAvatar),
             ActiveDriverContactBar(
               onChat: () => navigation.openChat(trip.id),
               onCall: canContact

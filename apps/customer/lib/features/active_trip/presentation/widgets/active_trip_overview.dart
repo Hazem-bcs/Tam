@@ -9,7 +9,6 @@ import 'package:tam_customer/features/active_trip/presentation/widgets/active_tr
 import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_display.dart';
 import 'package:tam_customer/features/driver_contact/domain/driver_contact_repository.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/formatters/ride_time_label.dart';
 import 'package:tam_customer/shared/presentation/trip_display.dart';
 import 'package:tam_customer/shared/widgets/tam_card.dart';
@@ -150,12 +149,7 @@ class ActiveTripOverview extends StatelessWidget {
         ),
         if (driver != null) ...[
           const SizedBox(height: AppSpacing.md),
-          ActiveDriverCard(
-            driver: driver,
-            showDemoAvatar: showDemoAvatar,
-            onChat: onChat!,
-            onCall: onCall,
-          ),
+          ActiveDriverCard(driver: driver, showDemoAvatar: showDemoAvatar),
           const SizedBox(height: AppSpacing.sm),
           ActiveDriverContactBar(onChat: onChat!, onCall: onCall),
         ],
@@ -165,7 +159,11 @@ class ActiveTripOverview extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.info_outline_rounded, size: 18, color: colors.onSurfaceVariant),
+            Icon(
+              Icons.info_outline_rounded,
+              size: 18,
+              color: colors.onSurfaceVariant,
+            ),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(

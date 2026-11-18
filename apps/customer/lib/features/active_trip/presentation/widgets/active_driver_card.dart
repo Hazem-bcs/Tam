@@ -9,14 +9,10 @@ class ActiveDriverCard extends StatelessWidget {
   const ActiveDriverCard({
     super.key,
     required this.driver,
-    required this.onChat,
-    this.onCall,
     this.showDemoAvatar = false,
   });
 
   final TripDriver driver;
-  final VoidCallback onChat;
-  final VoidCallback? onCall;
   final bool showDemoAvatar;
 
   @override
@@ -39,8 +35,6 @@ class ActiveDriverCard extends StatelessWidget {
           onTap: () => showActiveDriverDetailsSheet(
             context,
             driver: driver,
-            onChat: onChat,
-            onCall: onCall,
             showDemoAvatar: showDemoAvatar,
           ),
           child: Padding(

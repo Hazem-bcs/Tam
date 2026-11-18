@@ -33,7 +33,6 @@ void main() {
                 context,
                 driver: driver,
                 showDemoAvatar: demo,
-                onChat: () {},
               ),
               child: const Text('Open'),
             ),
