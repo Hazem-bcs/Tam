@@ -8,8 +8,8 @@ import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 import '../bloc/addresses_cubit.dart';
 import '../bloc/addresses_state.dart';
 import '../bloc/preferred_address_selection.dart';
-import '../widgets/address_display.dart';
 import '../widgets/address_delete_dialog.dart';
+import '../widgets/address_display.dart';
 import '../widgets/address_tile.dart';
 import '../widgets/addresses_empty_state.dart';
 
