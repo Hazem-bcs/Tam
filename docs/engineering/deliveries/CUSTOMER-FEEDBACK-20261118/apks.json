@@ -1,0 +1,18 @@
+[
+  {
+    "path": "apps/customer/build/app/outputs/flutter-apk/app-arm64-v8a-release.apk",
+    "product_source_sha": "099d4dc",
+    "bytes": 49192898,
+    "sha256": "cad60c183d8f9e598a081eec920484a999be2cae73051a3a5c705cc6a97b5f81",
+    "assets_uncompressed": 9717754,
+    "native_uncompressed": 39086088
+  },
+  {
+    "path": "apps/customer/build/app/outputs/flutter-apk/app-x86_64-release.apk",
+    "product_source_sha": "099d4dc",
+    "bytes": 51457587,
+    "sha256": "962346605f91944fc68bbe8b49a8378b1fcc2c50cfb53ac6a09d1dcb20d9c619",
+    "assets_uncompressed": 9717754,
+    "native_uncompressed": 41354568
+  }
+]
