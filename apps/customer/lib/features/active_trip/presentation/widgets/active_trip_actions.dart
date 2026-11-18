@@ -103,55 +103,21 @@ class ActiveTripActions extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
         ],
         if (compact)
-          LayoutBuilder(
-            builder: (context, bounds) {
-              final narrow =
-                  bounds.maxWidth < 280 ||
-                  MediaQuery.textScalerOf(context).scale(1) > 1.5;
-              Widget action(
-                String key,
-                String label,
-                String image,
-                VoidCallback callback,
-              ) => OutlinedButton.icon(
-                key: Key(key),
-                onPressed: busy ? null : callback,
-                icon: Image.asset(
-                  'assets/notifications/$image.webp',
-                  width: 24,
-                  height: 24,
-                  excludeFromSemantics: true,
-                ),
-                label: Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              );
-              final support = action(
-                'active-support',
-                l.activeTripSupportShort,
-                'support',
-                () => navigation.openSupport(tripId: trip.id),
-              );
-              final details = action(
-                'active-details',
-                l.activeTripDetailsShort,
-                'ride_completed',
-                () => navigation.openTrip(trip.id),
-              );
-              return narrow
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [support, details],
-                    )
-                  : Row(
-                      children: [
-                        Expanded(child: support),
-                        const SizedBox(width: AppSpacing.sm),
-                        Expanded(child: details),
-                      ],
-                    );
-            },
+          OutlinedButton.icon(
+            key: const Key('active-support'),
+            onPressed: busy
+                ? null
+                : () => navigation.openSupport(tripId: trip.id),
+            icon: Image.asset(
+              'assets/notifications/support.webp',
+              width: 24,
+              height: 24,
+              excludeFromSemantics: true,
+            ),
+            label: Text(
+              l.activeTripSupport,
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
           )
         else
           DecoratedBox(
@@ -159,32 +125,17 @@ class ActiveTripActions extends StatelessWidget {
               color: colors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(AppRadii.lg),
             ),
-            child: Column(
-              children: [
-                ListTile(
-                  key: const Key('active-support'),
-                  contentPadding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: AppSpacing.lg,
-                  ),
-                  leading: const Icon(Icons.support_agent_outlined),
-                  title: Text(l.activeTripSupport),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: busy
-                      ? null
-                      : () => navigation.openSupport(tripId: trip.id),
-                ),
-                Divider(height: 1, color: colors.outlineVariant),
-                ListTile(
-                  key: const Key('active-details'),
-                  contentPadding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: AppSpacing.lg,
-                  ),
-                  leading: const Icon(Icons.receipt_long_outlined),
-                  title: Text(l.activeTripDetails),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: busy ? null : () => navigation.openTrip(trip.id),
-                ),
-              ],
+            child: ListTile(
+              key: const Key('active-support'),
+              contentPadding: const EdgeInsetsDirectional.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(Icons.support_agent_outlined),
+              title: Text(l.activeTripSupport),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              onTap: busy
+                  ? null
+                  : () => navigation.openSupport(tripId: trip.id),
             ),
           ),
         if (state.canCancel && !state.cancelUncertain) ...[
