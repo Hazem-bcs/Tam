@@ -100,6 +100,27 @@ void main() {
       expect(await b, origin);
     },
   );
+  test('silent GPS reuse exposes a fresh fix and foreground updates', () async {
+    final updates = <GeoPoint>[];
+    final subscription = location.positionUpdates.listen(updates.add);
+    location.setSession(true);
+    await flush();
+
+    expect(location.cachedPoint, origin);
+    expect(await location.locateWithoutPrompt(), origin);
+    expect(sensor.permissionRequests.last, isFalse);
+    expect(sensor.reads, 1);
+
+    advance(const Duration(seconds: 5));
+    sensor.positions.add(fix(point: destination));
+    expect(location.cachedPoint, destination);
+    expect(updates.last, destination);
+
+    advance(const Duration(seconds: 21));
+    expect(location.cachedPoint, isNull);
+    await subscription.cancel();
+  });
+
   test('movement on another screen updates the cache', () async {
     location.setSession(true);
     await flush();

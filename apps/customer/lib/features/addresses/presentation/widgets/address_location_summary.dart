@@ -2,35 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
-/// Information only. The actual map behind the sheet owns location input.
+/// Minimal selection feedback. Exact GPS coordinates remain in the domain,
+/// never printed in the form or mistaken for a human-readable street address.
 class AddressLocationSummary extends StatelessWidget {
-  const AddressLocationSummary({super.key, required this.locationLabel});
+  const AddressLocationSummary({super.key, required this.hasLocation});
 
-  final String? locationLabel;
+  final bool hasLocation;
 
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final selected = locationLabel?.trim().isNotEmpty ?? false;
+    final colors = Theme.of(context).colorScheme;
 
     return Semantics(
       key: const Key('address-choose-location'),
       liveRegion: true,
       child: Padding(
-        padding: const EdgeInsetsDirectional.symmetric(vertical: AppSpacing.sm),
+        padding: const EdgeInsetsDirectional.only(bottom: AppSpacing.sm),
         child: Row(
           children: [
-            Icon(Icons.place_outlined, color: colors.primary, size: 20),
-            const SizedBox(width: AppSpacing.sm),
+            Icon(
+              hasLocation ? Icons.check_circle_outline : Icons.place_outlined,
+              color: hasLocation ? colors.primary : colors.onSurfaceVariant,
+              size: 17,
+            ),
+            const SizedBox(width: AppSpacing.xs),
             Expanded(
               child: Text(
-                selected ? locationLabel! : t.addressesChooseLocation,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: selected ? colors.onSurfaceVariant : colors.primary,
+                hasLocation ? t.mapsSelectedPoint : t.addressesChooseLocation,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: colors.onSurfaceVariant,
                 ),
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
+import 'package:tam_customer/features/maps/presentation/widgets/map_camera_focus.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/tam_map_canvas.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
@@ -15,6 +16,7 @@ class AddressMapPreview extends StatelessWidget {
     required this.onSelected,
     required this.onBack,
     required this.onLocate,
+    this.focus,
     this.locating = false,
   });
 
@@ -22,6 +24,7 @@ class AddressMapPreview extends StatelessWidget {
   final ValueChanged<GeoPoint>? onSelected;
   final VoidCallback? onBack;
   final VoidCallback? onLocate;
+  final MapCameraFocus? focus;
   final bool locating;
 
   @override
@@ -47,6 +50,7 @@ class AddressMapPreview extends StatelessWidget {
             tileProviderFactory: dependencies.tileProviderFactory,
             onAttribution: dependencies.attribution.open,
             selection: location?.point,
+            focus: focus,
             onSelected: onSelected,
           ),
         PositionedDirectional(

@@ -6,6 +6,7 @@ import 'package:tam_customer/shared/domain/trip.dart';
 import 'domain/addresses_repository.dart';
 import 'presentation/bloc/address_editor_cubit.dart';
 import 'presentation/bloc/addresses_cubit.dart';
+import 'presentation/bloc/preferred_address_selection.dart';
 import 'presentation/pages/address_editor_page.dart';
 import 'presentation/pages/addresses_page.dart';
 import 'presentation/widgets/saved_address_picker.dart';
@@ -21,10 +22,18 @@ Widget buildAddressesFeature(
   required VoidCallback onAdd,
   required ValueChanged<String> onEdit,
   required VoidCallback onBack,
-}) => BlocProvider(
-  create: (_) => _listCubit(repository)..load(),
+}) => MultiBlocProvider(
+  providers: [
+    BlocProvider(create: (_) => _listCubit(repository)..load()),
+    _selectionProvider(),
+  ],
   child: AddressesPage(onAdd: onAdd, onEdit: onEdit, onBack: onBack),
 );
+
+BlocProvider<PreferredAddressSelection> _selectionProvider() =>
+    locator.isRegistered<PreferredAddressSelection>()
+    ? BlocProvider.value(value: locator<PreferredAddressSelection>())
+    : BlocProvider(create: (_) => PreferredAddressSelection());
 
 Widget buildAddressEditorFeature(
   BuildContext context, {
@@ -50,8 +59,11 @@ Widget buildSavedAddressPicker({
   required ValueChanged<TripLocation> onSelected,
   required VoidCallback onManage,
   bool compact = false,
-}) => BlocProvider(
-  create: (_) => _listCubit(repository)..load(),
+}) => MultiBlocProvider(
+  providers: [
+    BlocProvider(create: (_) => _listCubit(repository)..load()),
+    _selectionProvider(),
+  ],
   child: SavedAddressPicker(
     onSelected: onSelected,
     onManage: onManage,

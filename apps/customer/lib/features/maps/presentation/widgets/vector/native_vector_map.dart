@@ -1,5 +1,4 @@
 import 'dart:async';
-import '../map_camera_focus.dart';
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +8,7 @@ import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/geo_point.dart';
 
+import '../map_camera_focus.dart';
 import '../map_feedback.dart';
 import '../map_selection_cursor.dart';
 import '../map_selection_hint.dart';
@@ -89,7 +89,11 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   void initState() {
     super.initState();
     final center =
-        widget.scene.origin ?? widget.scene.destination ?? widget.initialCenter;
+        widget.focus?.point ??
+        widget.scene.selection ??
+        widget.scene.origin ??
+        widget.scene.destination ??
+        widget.initialCenter;
     _camera = CameraPosition(target: _latLng(center), zoom: 15);
     WidgetsBinding.instance.addObserver(this);
     widget.bottomInset?.addListener(_schedulePadding);
@@ -222,6 +226,8 @@ class _NativeVectorMapState extends State<NativeVectorMap>
   Future<void> _synchronize() async {
     _syncing = true;
     final epoch = _epoch;
+    final disableAnimations =
+        mounted && MediaQuery.disableAnimationsOf(context);
     try {
       while (_dirty && _current(epoch) && _installed && _foreground) {
         _dirty = false;
@@ -240,7 +246,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
               _latLng(widget.focus!.point),
               15,
             );
-            if (MediaQuery.disableAnimationsOf(context)) {
+            if (disableAnimations) {
               await _controller!.moveCamera(update);
             } else {
               await _controller!.animateCamera(
@@ -263,7 +269,7 @@ class _NativeVectorMapState extends State<NativeVectorMap>
           _cameraAnimating = true;
           _moving.value = true;
           try {
-            if (MediaQuery.disableAnimationsOf(context)) {
+            if (disableAnimations) {
               await _controller!.moveCamera(update);
             } else {
               await _controller!.animateCamera(
@@ -322,8 +328,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
         _size.isEmpty ||
         _cameraAnimating ||
         _retainedViewport != null ||
-        (_picking && !force))
+        (_picking && !force)) {
       return;
+    }
     try {
       final bottom = _inset.clamp(0.0, math.max(0.0, _size.height - 160));
       final padding = EdgeInsets.fromLTRB(
@@ -359,8 +366,9 @@ class _NativeVectorMapState extends State<NativeVectorMap>
     if (!_current(epoch) ||
         !_installed ||
         selected == null ||
-        _selectionGesture)
+        _selectionGesture) {
       return;
+    }
     try {
       final screen = await _controller!.toScreenLocation(_latLng(selected));
       if (_current(epoch) &&

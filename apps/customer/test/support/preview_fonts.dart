@@ -5,15 +5,31 @@ import 'package:tam_customer/app/theme/app_theme.dart';
 
 Future<void> loadPreviewFonts({required bool enabled}) async {
   if (!enabled) return;
-  for (final font in {
-    'TamPreviewArabic':
-        '/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf',
-    'TamPreviewLatin': '/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf',
-    'MaterialIcons':
-        '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
-  }.entries) {
+  final flutterRoot = Platform.environment['FLUTTER_ROOT'];
+  final fonts = <String, List<String>>{
+    'TamPreviewArabic': [
+      'assets/fonts/NotoSansArabic-Regular.ttf',
+      '/usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf',
+    ],
+    'TamPreviewLatin': [
+      'assets/fonts/NotoSans-Regular.ttf',
+      '/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf',
+    ],
+    'MaterialIcons': [
+      if (flutterRoot != null)
+        '$flutterRoot/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+      '/home/hazem/development/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+    ],
+  };
+  for (final font in fonts.entries) {
+    final candidates = font.value.where((path) => File(path).existsSync());
+    if (candidates.isEmpty) {
+      if (font.key == 'MaterialIcons') continue;
+      throw StateError('Missing bundled preview font: ${font.key}');
+    }
+    final file = File(candidates.first);
     await (FontLoader(font.key)
-          ..addFont(File(font.value).readAsBytes().then(ByteData.sublistView)))
+          ..addFont(file.readAsBytes().then(ByteData.sublistView)))
         .load();
   }
 }
