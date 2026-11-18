@@ -52,7 +52,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     WidgetsBinding.instance.addObserver(this);
     _step = context.read<RideDraftBloc>().state.hasRoute
         ? RideJourneyStep.vehicle
-        : RideJourneyStep.places;
+        : RideJourneyStep.entry;
   }
 
   @override
@@ -113,12 +113,12 @@ class _RideRequestPageState extends State<RideRequestPage>
     FocusScope.of(context).unfocus();
     if (_location?.state.point != null) {
       _location?.clearPoint();
-    } else if (_step == RideJourneyStep.places) {
+    } else if (_step == RideJourneyStep.entry) {
       Navigator.of(context).maybePop();
     } else {
       setState(() {
         _pickingPickup = false;
-        _step = RideJourneyStep.places;
+        _step = RideJourneyStep.entry;
       });
     }
   }
@@ -155,6 +155,7 @@ class _RideRequestPageState extends State<RideRequestPage>
           _step = RideJourneyStep.vehicle;
         } else {
           _pickingPickup = bloc.state.pickup == null;
+          _step = RideJourneyStep.entry;
         }
       });
     }
@@ -177,7 +178,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     _mapSelectionPending = false;
     setState(() {
       final draft = context.read<RideDraftBloc>().state;
-      _step = draft.hasRoute ? RideJourneyStep.vehicle : RideJourneyStep.places;
+      _step = draft.hasRoute ? RideJourneyStep.vehicle : RideJourneyStep.entry;
       _pickingPickup = draft.pickup == null;
     });
     // Keep the selected pin until the draft contains its endpoint. The map and
@@ -308,6 +309,7 @@ class _RideRequestPageState extends State<RideRequestPage>
                 _step = RideJourneyStep.vehicle;
               } else {
                 _pickingPickup = state.pickup == null;
+                _step = RideJourneyStep.entry;
               }
             });
           }
@@ -341,7 +343,7 @@ class _RideRequestPageState extends State<RideRequestPage>
     };
     return PopScope(
       canPop:
-          (_step == RideJourneyStep.places || active?.trip != null) &&
+          (_step == RideJourneyStep.entry || active?.trip != null) &&
           location.point == null &&
           !state.confirmationPending,
       onPopInvokedWithResult: (didPop, _) {

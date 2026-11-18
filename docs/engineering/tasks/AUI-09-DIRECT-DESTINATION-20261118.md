@@ -7,3 +7,5 @@ Integration: fetched origin/ahmad-ui and merged latest address/map refinements (
 References: current user screenshot; existing AUI-09 protocol and project instructions. Existing API/mock/auth contracts unchanged.
 Verification: incremental Android debug build/install/run succeeded on emulator-5554; existing emulator reused. Focused destination-entry regression test recorded in /tmp/tam-direct-destination-test.log. Broad checks deferred per iteration pace; earlier broad failures remain in AUI-09 delivery report.
 Visual: native UI hierarchy confirms route header and place picker with no introductory CTA; full visual screenshot review not performed in this follow-up.
+
+Follow-up: user removed the persistent destination-search step too. Default scene now contains map and editable top endpoints only. Picker appears on endpoint tap, disappears after selection; complete routes show vehicle/fare. Shell keeps same map mounted when panel is hidden and clears its map inset. Focused regression 'shows only map until an endpoint is edited' passed. Android rebuilt/run; no broad suite repeated.

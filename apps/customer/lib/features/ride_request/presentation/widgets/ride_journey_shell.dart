@@ -20,7 +20,9 @@ class RideJourneyShell extends StatefulWidget {
     required this.preferredExtent,
     this.expandOnChange,
     this.maximumExtent,
+    this.showPanel = true,
   }) : assert(panel != null || panelBuilder != null);
+  final bool showPanel;
   final Widget header;
   final Widget? panel;
   final Widget Function(VoidCallback collapse)? panelBuilder;
@@ -73,6 +75,10 @@ class _RideJourneyShellState extends State<RideJourneyShell>
   @override
   void didUpdateWidget(RideJourneyShell oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.showPanel != oldWidget.showPanel && !widget.showPanel) {
+      _panelHeight = 0;
+      _mapInset.value = 0;
+    }
     if (widget.expandOnChange != oldWidget.expandOnChange ||
         widget.stageKey != oldWidget.stageKey ||
         (widget.preferredExtent != oldWidget.preferredExtent && !_compact)) {
@@ -159,87 +165,90 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                 end: AppSpacing.lg,
                 child: widget.header,
               ),
-            AnimatedBuilder(
-              animation: _extent,
-              builder: (context, child) => Positioned(
-                bottom: keyboardInset + AppSpacing.md,
-                left: AppSpacing.md,
-                right: AppSpacing.md,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: math.min(
-                      (_extent.value * _height).clamp(0, _height),
-                      math.max(
-                        0,
-                        _height -
-                            keyboardInset -
-                            (keyboardInset > 0 ? AppSpacing.sm : 96),
+            if (widget.showPanel)
+              AnimatedBuilder(
+                animation: _extent,
+                builder: (context, child) => Positioned(
+                  bottom: keyboardInset + AppSpacing.md,
+                  left: AppSpacing.md,
+                  right: AppSpacing.md,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: math.min(
+                        (_extent.value * _height).clamp(0, _height),
+                        math.max(
+                          0,
+                          _height -
+                              keyboardInset -
+                              (keyboardInset > 0 ? AppSpacing.sm : 96),
+                        ),
                       ),
                     ),
+                    child: child!,
                   ),
-                  child: child!,
                 ),
-              ),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  child: RidePanelSizeObserver(
-                    onHeight: (height) {
-                      _panelHeight = height;
-                      if (mounted && _keyboardInset == 0) {
-                        _mapInset.value = height + AppSpacing.md;
-                      }
-                    },
-                    child: Material(
-                      color: c.surfaceContainerLowest,
-                      elevation: AppElevation.raised,
-                      borderRadius: BorderRadius.circular(AppRadii.sheet),
-                      clipBehavior: Clip.antiAlias,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (keyboardInset > 0)
-                            const SizedBox(height: AppSpacing.sm),
-                          if (keyboardInset == 0)
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onVerticalDragStart: (_) =>
-                                  FocusScope.of(context).unfocus(),
-                              onVerticalDragUpdate: (details) {
-                                _extent.stop();
-                                _extent.value =
-                                    (_extent.value - details.delta.dy / _height)
-                                        .clamp(_minimum, _maximumAllowed);
-                              },
-                              onVerticalDragEnd: (details) {
-                                final velocity = details.primaryVelocity ?? 0;
-                                final fold =
-                                    velocity > 250 ||
-                                    (velocity >= -250 &&
-                                        _extent.value <
-                                            (_minimum + _preferred) / 2);
-                                _move(fold ? _minimum : _preferred);
-                              },
-                              child: Tooltip(
-                                message: _compact
-                                    ? t.rideRequestExpandPanel
-                                    : t.rideRequestCollapsePanel,
-                                child: InkWell(
-                                  key: const Key('ride-sheet-toggle'),
-                                  onTap: () =>
-                                      _move(_compact ? _preferred : _minimum),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: AppDimensions.minTapTarget,
-                                    child: Center(
-                                      child: Container(
-                                        width: 36,
-                                        height: 4,
-                                        decoration: BoxDecoration(
-                                          color: c.outlineVariant,
-                                          borderRadius: BorderRadius.circular(
-                                            AppRadii.sm,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 600),
+                    child: RidePanelSizeObserver(
+                      onHeight: (height) {
+                        _panelHeight = height;
+                        if (mounted && _keyboardInset == 0) {
+                          _mapInset.value = height + AppSpacing.md;
+                        }
+                      },
+                      child: Material(
+                        color: c.surfaceContainerLowest,
+                        elevation: AppElevation.raised,
+                        borderRadius: BorderRadius.circular(AppRadii.sheet),
+                        clipBehavior: Clip.antiAlias,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (keyboardInset > 0)
+                              const SizedBox(height: AppSpacing.sm),
+                            if (keyboardInset == 0)
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onVerticalDragStart: (_) =>
+                                    FocusScope.of(context).unfocus(),
+                                onVerticalDragUpdate: (details) {
+                                  _extent.stop();
+                                  _extent.value =
+                                      (_extent.value -
+                                              details.delta.dy / _height)
+                                          .clamp(_minimum, _maximumAllowed);
+                                },
+                                onVerticalDragEnd: (details) {
+                                  final velocity = details.primaryVelocity ?? 0;
+                                  final fold =
+                                      velocity > 250 ||
+                                      (velocity >= -250 &&
+                                          _extent.value <
+                                              (_minimum + _preferred) / 2);
+                                  _move(fold ? _minimum : _preferred);
+                                },
+                                child: Tooltip(
+                                  message: _compact
+                                      ? t.rideRequestExpandPanel
+                                      : t.rideRequestCollapsePanel,
+                                  child: InkWell(
+                                    key: const Key('ride-sheet-toggle'),
+                                    onTap: () =>
+                                        _move(_compact ? _preferred : _minimum),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: AppDimensions.minTapTarget,
+                                      child: Center(
+                                        child: Container(
+                                          width: 36,
+                                          height: 4,
+                                          decoration: BoxDecoration(
+                                            color: c.outlineVariant,
+                                            borderRadius: BorderRadius.circular(
+                                              AppRadii.sm,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -247,42 +256,41 @@ class _RideJourneyShellState extends State<RideJourneyShell>
                                   ),
                                 ),
                               ),
-                            ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: AnimatedSize(
-                              alignment: Alignment.topCenter,
-                              duration:
-                                  keyboardTransition ||
-                                      MediaQuery.disableAnimationsOf(context)
-                                  ? const Duration(milliseconds: 1)
-                                  : AppMotion.medium,
-                              curve: AppMotion.easeOut,
-                              child: RideJourneyPanelContent(
-                                compact: _compact,
-                                expandedHeight: math.max(
-                                  240,
-                                  _preferred * _height -
-                                      AppDimensions.minTapTarget,
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: AnimatedSize(
+                                alignment: Alignment.topCenter,
+                                duration:
+                                    keyboardTransition ||
+                                        MediaQuery.disableAnimationsOf(context)
+                                    ? const Duration(milliseconds: 1)
+                                    : AppMotion.medium,
+                                curve: AppMotion.easeOut,
+                                child: RideJourneyPanelContent(
+                                  compact: _compact,
+                                  expandedHeight: math.max(
+                                    240,
+                                    _preferred * _height -
+                                        AppDimensions.minTapTarget,
+                                  ),
+                                  stageKey: widget.stageKey,
+                                  collapsedLabel: widget.collapsedLabel,
+                                  onExpand: () => _move(_preferred),
+                                  child:
+                                      widget.panelBuilder?.call(
+                                        () => _move(_minimum),
+                                      ) ??
+                                      widget.panel!,
                                 ),
-                                stageKey: widget.stageKey,
-                                collapsedLabel: widget.collapsedLabel,
-                                onExpand: () => _move(_preferred),
-                                child:
-                                    widget.panelBuilder?.call(
-                                      () => _move(_minimum),
-                                    ) ??
-                                    widget.panel!,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
           ],
         );
       },

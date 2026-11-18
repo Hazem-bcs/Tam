@@ -91,6 +91,7 @@ class RideJourneyBody extends StatelessWidget {
                 RideJourneyStep.vehicle => .67,
               };
         return RideJourneyShell(
+          showPanel: tracking || selecting || step != RideJourneyStep.entry,
           stageKey: tracking
               ? ('active', liveTrip?.id, liveTrip?.status)
               : selecting

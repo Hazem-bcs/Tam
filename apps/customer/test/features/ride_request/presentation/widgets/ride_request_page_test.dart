@@ -144,12 +144,13 @@ void main() {
     });
   }
 
-  testWidgets('opens destination selection without an introductory step', (
-    tester,
-  ) async {
+  testWidgets('shows only map until an endpoint is edited', (tester) async {
     setSize(tester, 390, 844);
     final (_, bloc, _) = await pumpRide(tester, locale: const Locale('ar'));
     expect(find.byType(RideJourneyEntry), findsNothing);
+    expect(find.byType(RidePlacePicker), findsNothing);
+    await tester.tap(find.text('إلى أين تريد الذهاب؟'));
+    await tester.pumpAndSettle();
     expect(
       tester.widget<RidePlacePicker>(find.byType(RidePlacePicker)).pickup,
       isFalse,
