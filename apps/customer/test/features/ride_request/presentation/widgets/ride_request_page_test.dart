@@ -14,6 +14,7 @@ import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.da
 import 'package:tam_customer/features/ride_request/data/mock/mock_ride_request_repository.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_place_suggestion_tile.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -151,11 +152,27 @@ void main() {
     );
     await tester.tap(find.text('حدد مكان الانطلاق'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('المزة، شارع الجلاء').last);
+    await tester.enterText(find.byType(TextFormField), 'المزة');
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RidePlaceSuggestionTile &&
+            widget.label == 'المزة، شارع الجلاء',
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('إلى أين تريد الذهاب؟'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('أبو رمانة، شارع الحمراء').last);
+    await tester.enterText(find.byType(TextFormField), 'أبو رمانة');
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is RidePlaceSuggestionTile &&
+            widget.label == 'أبو رمانة، شارع الحمراء',
+      ),
+    );
     await tester.pumpAndSettle();
     expect(bloc.state.quote?.fare.amountMinor, 27000);
     await screenshot(tester, 'ride-ar-390.png');
@@ -238,6 +255,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Aleppo Citadel'), findsOneWidget);
     await tester.tap(find.text('Aleppo Citadel'));
+    tester.view.resetViewInsets();
     await tester.pumpAndSettle();
     expect(find.text('Aleppo Citadel'), findsOneWidget);
     expect(tester.takeException(), isNull);

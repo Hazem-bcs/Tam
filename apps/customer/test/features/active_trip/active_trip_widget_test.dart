@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/unavailable_active_trip_repository.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+
 import '../../support/page_scroll.dart';
 import 'active_trip_test_support.dart';
 import 'active_trip_widget_support.dart';
@@ -47,7 +48,10 @@ void main() {
     await tester.tap(find.text('تأكيد الإلغاء'));
     await tester.pumpAndSettle();
     expect(fixture.store.find(id)!.status, TripStatus.cancelled);
-    await tester.drag(find.byType(ListView), const Offset(0, 1600));
+    await tester.drag(
+      find.byKey(const Key('active-trip-scroll')),
+      const Offset(0, 1600),
+    );
     await tester.pumpAndSettle();
     await capture(tester, 'cancelled-ar-800');
     expect(find.byKey(const Key('active-cancel')), findsNothing);
@@ -98,7 +102,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(cubit.state.offline, isTrue);
       expect(cubit.state.trip, old);
-      await tester.drag(find.byType(ListView), const Offset(0, 1600));
+      await tester.drag(
+        find.byKey(const Key('active-trip-scroll')),
+        const Offset(0, 1600),
+      );
       await tester.pumpAndSettle();
       await capture(tester, 'offline-ar-800');
       fixture.advance(15);

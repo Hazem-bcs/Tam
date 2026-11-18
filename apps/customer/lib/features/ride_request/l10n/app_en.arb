@@ -172,5 +172,20 @@
         "type": "String"
       }
     }
+  },
+  "rideRequestSwapRoute": "Swap pickup and destination",
+  "rideRequestAddCoupon": "Add a discount code",
+  "rideRequestAddCouponShort": "Add",
+  "rideRequestNoActiveCoupons": "Your active coupons appear here automatically",
+  "rideRequestOfferLabel": "{code} · {percent}% off",
+  "@rideRequestOfferLabel": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
   }
 }

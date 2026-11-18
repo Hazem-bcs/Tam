@@ -31,7 +31,12 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('schedule-date')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.edit_outlined));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(DatePickerDialog),
+        matching: find.byIcon(Icons.edit_outlined),
+      ),
+    );
     await tester.pumpAndSettle();
     tester.view.viewInsets = const FakeViewPadding(bottom: 200);
     await tester.pumpAndSettle();

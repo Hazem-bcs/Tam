@@ -742,6 +742,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your wallet balance is insufficient. Choose cash to continue.';
 
   @override
+  String get rideRequestSwapRoute => 'Swap pickup and destination';
+
+  @override
+  String get rideRequestAddCoupon => 'Add a discount code';
+
+  @override
+  String get rideRequestAddCouponShort => 'Add';
+
+  @override
+  String get rideRequestNoActiveCoupons =>
+      'Your active coupons appear here automatically';
+
+  @override
+  String rideRequestOfferLabel(String code, int percent) {
+    return '$code · $percent% off';
+  }
+
+  @override
   String get tripsAll => 'All';
 
   @override
@@ -1680,6 +1698,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeTripSupport => 'Get help with this trip';
+
+  @override
+  String get activeTripSupportShort => 'Support';
+
+  @override
+  String get activeTripDetailsShort => 'Order details';
 
   @override
   String get chatTitle => 'Driver';

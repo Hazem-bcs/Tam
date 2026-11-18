@@ -1,11 +1,14 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
+import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/maps/presentation/maps_scope.dart';
 import 'package:tam_customer/features/maps/presentation/widgets/map_feedback.dart';
+import 'package:tam_customer/features/ride_request/domain/ride_coupon_offer.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_location_cubit.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_body.dart';
@@ -17,11 +20,18 @@ import 'package:tam_customer/shared/domain/trip.dart';
 class RideRequestPage extends StatefulWidget {
   const RideRequestPage({
     super.key,
+    this.couponOffers = const [],
+    this.onActivateCoupon,
     required this.navigation,
     this.savedAddressPickerBuilder,
+    this.hasActiveTracking = false,
+    this.simulatedTracking = false,
   });
   final CustomerNavigation navigation;
+  final bool hasActiveTracking, simulatedTracking;
   final Widget Function(ValueChanged<TripLocation>)? savedAddressPickerBuilder;
+  final List<RideCouponOffer> couponOffers;
+  final ValueChanged<String>? onActivateCoupon;
   @override
   State<RideRequestPage> createState() => _RideRequestPageState();
 }
@@ -33,7 +43,8 @@ class _RideRequestPageState extends State<RideRequestPage>
   bool _pickingPickup = true,
       _selectionPending = false,
       _mapSelectionPending = false,
-      _settingsPromptOpen = false;
+      _settingsPromptOpen = false,
+      _initialLocationRequested = false;
 
   @override
   void initState() {
@@ -55,16 +66,32 @@ class _RideRequestPageState extends State<RideRequestPage>
       settings: maps.locationSettings,
       language: Localizations.localeOf(context).languageCode,
     );
-    if (context.read<RideDraftBloc>().state.pickup == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _location?.locate();
-      });
+    if (!widget.hasActiveTracking ||
+        context.read<ActiveTripCubit>().state.phase == ActiveTripPhase.empty) {
+      _locateInitialPickup();
     }
+  }
+
+  void _locateInitialPickup() {
+    if (_initialLocationRequested ||
+        _location == null ||
+        context.read<RideDraftBloc>().state.pickup != null) {
+      return;
+    }
+    _initialLocationRequested = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _location?.locate();
+    });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _location?.resumed();
+    if (state == AppLifecycleState.resumed) {
+      _location?.resumed();
+      if (widget.hasActiveTracking) {
+        context.read<ActiveTripCubit>().refresh(silent: true);
+      }
+    }
   }
 
   @override
@@ -76,7 +103,9 @@ class _RideRequestPageState extends State<RideRequestPage>
 
   void _back() {
     final draft = context.read<RideDraftBloc>().state;
-    if (draft.confirmedTrip != null) {
+    if (draft.confirmedTrip != null ||
+        (widget.hasActiveTracking &&
+            context.read<ActiveTripCubit>().state.trip != null)) {
       widget.navigation.openHome();
       return;
     }
@@ -246,90 +275,113 @@ class _RideRequestPageState extends State<RideRequestPage>
     }
   }
 
-  Widget _draft(
-    BuildContext context,
-    RideLocationState location,
-  ) => BlocConsumer<RideDraftBloc, RideDraftState>(
-    listenWhen: (previous, current) =>
-        previous.confirmedTrip?.id != current.confirmedTrip?.id ||
-        ((_selectionPending || _mapSelectionPending) &&
-            (previous.pickup != current.pickup ||
-                previous.destination != current.destination)),
-    listener: (context, state) {
-      if (state.confirmedTrip != null) {
-        widget.navigation.openActiveTrip(
-          id: state.confirmedTrip!.id,
-          replaceCurrent: true,
-        );
-      } else if (_mapSelectionPending) {
-        _finishMapSelection();
-      } else if (_selectionPending && !state.searching) {
-        _selectionPending = false;
-        setState(() {
-          if (state.hasRoute) {
-            _step = RideJourneyStep.vehicle;
-          } else {
-            _pickingPickup = state.pickup == null;
+  Widget _draft(BuildContext context, RideLocationState location) =>
+      BlocConsumer<RideDraftBloc, RideDraftState>(
+        listenWhen: (previous, current) =>
+            previous.confirmedTrip?.id != current.confirmedTrip?.id ||
+            ((_selectionPending || _mapSelectionPending) &&
+                (previous.pickup != current.pickup ||
+                    previous.destination != current.destination)),
+        listener: (context, state) {
+          if (state.confirmedTrip != null) {
+            if (widget.hasActiveTracking) {
+              context.read<ActiveTripCubit>().track(state.confirmedTrip!);
+            } else {
+              widget.navigation.openActiveTrip(
+                id: state.confirmedTrip!.id,
+                replaceCurrent: true,
+              );
+            }
+          } else if (_mapSelectionPending) {
+            _finishMapSelection();
+          } else if (_selectionPending && !state.searching) {
+            _selectionPending = false;
+            setState(() {
+              if (state.hasRoute) {
+                _step = RideJourneyStep.vehicle;
+              } else {
+                _pickingPickup = state.pickup == null;
+              }
+            });
           }
-        });
-      }
-    },
-    builder: (context, state) {
-      final canConfirm =
-          context.read<RideDraftBloc>().canConfirm ||
-          (state.failureStep == RideFailureStep.confirmation &&
-              state.quote != null);
-      final enabled = switch (_step) {
-        RideJourneyStep.entry => !state.confirmationPending,
-        RideJourneyStep.places => state.hasRoute && !state.confirmationPending,
-        RideJourneyStep.vehicle => canConfirm && !location.locating,
-      };
-      return PopScope(
-        canPop:
-            _step == RideJourneyStep.entry &&
-            location.point == null &&
-            !state.confirmationPending,
-        onPopInvokedWithResult: (didPop, _) {
-          if (!didPop) _back();
         },
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Theme.of(context).colorScheme.surface,
-            systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-          ),
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: SafeArea(
-              maintainBottomViewPadding: true,
-              child: RideJourneyBody(
-                step: _step,
-                draft: state,
-                location: location,
-                pickingPickup: _pickingPickup,
-                onBack: _back,
-                onPickup: () => _pick(true),
-                onDestination: () => _pick(false),
-                onSelected: _select,
-                onContinue: enabled ? () => _continue(state) : null,
-                onMapPoint: (point) => _location?.selectPoint(point),
-                onMapPickup: (value) => _useMapPoint(value, pickup: true),
-                onMapDestination: (value) => _useMapPoint(value, pickup: false),
-                onClearPoint: () => _location?.clearPoint(),
-                onLocate: _location == null
-                    ? null
-                    : () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        _location!.locate(requireFresh: true, focusMap: true);
-                      },
-                onSettings: _location?.openSettings,
-                savedAddressPickerBuilder: widget.savedAddressPickerBuilder,
-              ),
+        builder: (context, state) => widget.hasActiveTracking
+            ? BlocConsumer<ActiveTripCubit, ActiveTripState>(
+                listenWhen: (previous, current) =>
+                    previous.phase != current.phase &&
+                    current.phase == ActiveTripPhase.empty,
+                listener: (context, _) => _locateInitialPickup(),
+                builder: (context, active) =>
+                    _scene(context, state, location, active: active),
+              )
+            : _scene(context, state, location),
+      );
+
+  Widget _scene(
+    BuildContext context,
+    RideDraftState state,
+    RideLocationState location, {
+    ActiveTripState? active,
+  }) {
+    final canConfirm =
+        context.read<RideDraftBloc>().canConfirm ||
+        (state.failureStep == RideFailureStep.confirmation &&
+            state.quote != null);
+    final enabled = switch (_step) {
+      RideJourneyStep.entry => !state.confirmationPending,
+      RideJourneyStep.places => state.hasRoute && !state.confirmationPending,
+      RideJourneyStep.vehicle => canConfirm && !location.locating,
+    };
+    return PopScope(
+      canPop:
+          (_step == RideJourneyStep.entry || active?.trip != null) &&
+          location.point == null &&
+          !state.confirmationPending,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _back();
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Theme.of(context).colorScheme.surface,
+          systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+        ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            maintainBottomViewPadding: true,
+            child: RideJourneyBody(
+              couponOffers: widget.couponOffers,
+              onActivateCoupon: widget.onActivateCoupon,
+              active: active,
+              navigation: widget.navigation,
+              simulated: widget.simulatedTracking,
+              step: _step,
+              draft: state,
+              location: location,
+              pickingPickup: _pickingPickup,
+              onBack: _back,
+              onPickup: () => _pick(true),
+              onDestination: () => _pick(false),
+              onSelected: _select,
+              onContinue: enabled ? () => _continue(state) : null,
+              onMapPoint: (point) => _location?.selectPoint(point),
+              onMapPickup: (value) => _useMapPoint(value, pickup: true),
+              onMapDestination: (value) => _useMapPoint(value, pickup: false),
+              onClearPoint: () => _location?.clearPoint(),
+              onLocate: _location == null
+                  ? null
+                  : () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      _location!.locate(requireFresh: true, focusMap: true);
+                    },
+              onSettings: _location?.openSettings,
+              savedAddressPickerBuilder: widget.savedAddressPickerBuilder,
             ),
           ),
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) => Theme(

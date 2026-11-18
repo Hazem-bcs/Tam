@@ -366,3 +366,7 @@ AUI-05-ORDER-DETAILS-20261117: READY → IMPLEMENTING → READY_FOR_REVIEW؛root
 AUI-06-INLINE-RATING-20261117: READY → IMPLEMENTING → READY_FOR_REVIEW؛root،أساس53ee590؛تقييمداخلتفاصيلالطلب،حذفإعادةالطلب،بياناتإيصالتجريبيةونجومصغيرةوشرائحخيارات؛81اختبارًاناجحًا،تحليلمستهدفنظيف،فحصAndroid؛mainدونتغيير.
 
 AUI-08-RATING-MOTION-20261118: READY → IMPLEMENTING → READY_FOR_REVIEW؛root،أساسالتكاملالحاليed908ee؛ظهورمتدرجللنجوموأزرارإرسال/دعممتجاوبة؛66اختبارًاناجحًاوتحليلمستهدفنظيفوبناءAndroid؛إلغاءنافذةالسائقالجديدةوالاحتفاظبالصورة؛mainدونتغيير.
+
+AUI-09-RIDE-JOURNEY-20261118: READY → IMPLEMENTING؛ root، أساس e88e313 على ahmad-ui؛ اختيار ومتابعة على خريطة واحدة، كوبونات واستعادة محلية معزولة. [البطاقة](tasks/AUI-09-RIDE-JOURNEY-20261118.md).
+
+AUI-09-RIDE-JOURNEY-20261118: READY_FOR_REVIEW؛ root،176اختبارًا مستهدفًا و4اختبارات رسم ناجحة،تحليل42ملفًا نظيف،الفحص الشامل865نجاحًا/46إخفاقًا موثقة. حُفظ تقدم ahmad-ui إلىccb7d08؛ لاpushأودمجmain. [التسليم](../ahmad-ui/deliveries/AUI-09-RIDE-JOURNEY-20261118/REPORT.ar.md).

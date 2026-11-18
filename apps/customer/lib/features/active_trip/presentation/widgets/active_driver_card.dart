@@ -111,7 +111,7 @@ class ActiveDriverContactBar extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final stacked =
-            constraints.maxWidth < 350 ||
+            constraints.maxWidth < 320 ||
             MediaQuery.textScalerOf(context).scale(1) > 1.5;
         final gap = onCall == null ? 0.0 : AppSpacing.sm;
         final width = stacked || onCall == null

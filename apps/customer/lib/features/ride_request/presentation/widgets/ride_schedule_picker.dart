@@ -41,40 +41,67 @@ class RideSchedulePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            ChoiceChip(
-              showCheckmark: false,
-              labelStyle: compact
-                  ? Theme.of(context).textTheme.labelSmall
-                  : null,
-              labelPadding: compact
-                  ? const EdgeInsets.symmetric(horizontal: AppSpacing.xs)
-                  : null,
-              key: const Key('ride-immediate'),
-              avatar: const Icon(Icons.bolt_outlined),
-              label: Text(l.rideRequestImmediate),
-              selected: scheduledAt == null,
-              onSelected: enabled ? (_) => onChanged(null) : null,
+        if (MediaQuery.textScalerOf(context).scale(1) > 1.5)
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              ChoiceChip(
+                key: const Key('ride-immediate'),
+                label: Text(l.rideRequestImmediate),
+                avatar: const Icon(Icons.bolt_outlined),
+                selected: scheduledAt == null,
+                onSelected: enabled ? (_) => onChanged(null) : null,
+              ),
+              ChoiceChip(
+                key: const Key('ride-scheduled'),
+                label: Text(l.rideRequestScheduled),
+                avatar: const Icon(Icons.calendar_month_outlined),
+                selected: scheduledAt != null,
+                onSelected: enabled ? (_) => _pick(context) : null,
+              ),
+            ],
+          )
+        else
+          SegmentedButton<bool>(
+            emptySelectionAllowed: true,
+            showSelectedIcon: false,
+            style: SegmentedButton.styleFrom(
+              visualDensity: VisualDensity.standard,
             ),
-            ChoiceChip(
-              showCheckmark: false,
-              labelStyle: compact
-                  ? Theme.of(context).textTheme.labelSmall
-                  : null,
-              labelPadding: compact
-                  ? const EdgeInsets.symmetric(horizontal: AppSpacing.xs)
-                  : null,
-              key: const Key('ride-scheduled'),
-              avatar: const Icon(Icons.calendar_month_outlined),
-              label: Text(l.rideRequestScheduled),
-              selected: scheduledAt != null,
-              onSelected: enabled ? (_) => _pick(context) : null,
-            ),
-          ],
-        ),
+            segments: [
+              ButtonSegment(
+                value: false,
+                icon: const Icon(Icons.bolt_rounded),
+                label: Text(
+                  key: const Key('ride-immediate'),
+                  l.rideRequestImmediate,
+                ),
+              ),
+              ButtonSegment(
+                value: true,
+                icon: const Icon(Icons.calendar_month_outlined),
+                label: Text(
+                  key: const Key('ride-scheduled'),
+                  l.rideRequestScheduled,
+                ),
+              ),
+            ],
+            selected: {scheduledAt != null},
+            onSelectionChanged: !enabled
+                ? null
+                : (values) {
+                    if (values.isEmpty) {
+                      if (scheduledAt != null) _pick(context);
+                      return;
+                    }
+                    if (values.single) {
+                      _pick(context);
+                    } else {
+                      onChanged(null);
+                    }
+                  },
+          ),
         if (scheduledAt != null) ...[
           const SizedBox(height: AppSpacing.sm),
           Text(rideTimeLabel(context, scheduledAt!, policy: policy)),

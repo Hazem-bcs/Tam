@@ -2,26 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
-import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_search_journey.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_display.dart';
-import 'package:tam_customer/features/active_trip/presentation/widgets/active_trip_overview.dart';
+import 'package:tam_customer/features/active_trip/presentation/widgets/active_journey_panel.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_backdrop.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_shell.dart';
+import 'package:tam_customer/features/ride_request/presentation/widgets/ride_route_header.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
-import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'package:tam_customer/shared/widgets/tam_loading_indicator.dart';
 
+/// Deep-linked live trips use the same map-led surface as inline bookings.
 class ActiveTripPage extends StatefulWidget {
   const ActiveTripPage({
     super.key,
     required this.navigation,
     this.showDemoAvatar = false,
   });
-
   final CustomerNavigation navigation;
   final bool showDemoAvatar;
-
   @override
   State<ActiveTripPage> createState() => _ActiveTripPageState();
 }
@@ -48,93 +45,42 @@ class _ActiveTripPageState extends State<ActiveTripPage>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    final searching = context.select<ActiveTripCubit, bool>(
-      (cubit) => cubit.state.trip?.status == TripStatus.requested,
-    );
-    if (searching) {
-      return Theme(
-        data: AppTheme.rideJourney(Theme.of(context)),
-        child: Builder(
-          builder: (context) => Scaffold(
-            body: SafeArea(
-              child: BlocBuilder<ActiveTripCubit, ActiveTripState>(
-                builder: (context, state) => ActiveSearchJourney(
-                  state: state,
-                  navigation: widget.navigation,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(l.activeTripTitle),
-        actions: [
-          IconButton(
-            tooltip: l.activeTripHome,
-            icon: const Icon(Icons.home_outlined),
-            onPressed: widget.navigation.openHome,
-          ),
-        ],
-      ),
+  Widget build(BuildContext context) => Theme(
+    data: AppTheme.rideJourney(Theme.of(context)),
+    child: Scaffold(
       body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: BlocBuilder<ActiveTripCubit, ActiveTripState>(
-              builder: (context, state) {
-                if (state.phase == ActiveTripPhase.loading) {
-                  return Center(
-                    child: TamLoadingIndicator(
-                      semanticLabel: l.activeTripLoading,
-                    ),
-                  );
-                }
-                final trip = state.trip;
-                return ListView(
-                  key: const Key('active-trip-scroll'),
-                  padding: const EdgeInsetsDirectional.fromSTEB(
-                    AppSpacing.lg, AppSpacing.sm,
-                    AppSpacing.lg, AppSpacing.xl,
-                  ),
-                  children: [
-                    if (trip == null) ...[
-                      Text(
-                        state.phase == ActiveTripPhase.failed
-                            ? activeTripError(l, state.failure)
-                            : l.activeTripEmpty,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      TamButton.secondary(
-                        label: l.activeTripRefresh,
-                        isLoading: state.refreshing,
-                        loadingLabel: l.activeTripLoading,
-                        onPressed: () => context.read<ActiveTripCubit>().refresh(),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      TamButton.primary(
-                        label: l.activeTripNewBooking,
-                        onPressed: widget.navigation.openRideRequest,
-                      ),
-                    ] else
-                      ActiveTripOverview(
-                        state: state,
-                        navigation: widget.navigation,
-                        showDemoAvatar: widget.showDemoAvatar,
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
+        child: BlocBuilder<ActiveTripCubit, ActiveTripState>(
+          builder: (context, state) {
+            final trip = state.trip;
+            return RideJourneyShell(
+              stageKey: ('active', trip?.id, trip?.status),
+              collapsedLabel: AppLocalizations.of(context).activeTripTitle,
+              preferredExtent: trip?.status == TripStatus.requested ? .51 : .63,
+              maximumExtent: .67,
+              header: RideRouteHeader(
+                backToHome: true,
+                pickup: trip?.booking.pickup,
+                destination: trip?.booking.destination,
+                onBack: widget.navigation.openHome,
+              ),
+              mapBuilder: (inset) => RideJourneyBackdrop(
+                pickup: trip?.booking.pickup,
+                destination: trip?.booking.destination,
+                bottomInset: inset,
+                driver: state.offline || state.positionStale
+                    ? null
+                    : trip?.live?.position?.point,
+              ),
+              panel: ActiveJourneyPanel(
+                state: state,
+                navigation: widget.navigation,
+                showDemoAvatar: widget.showDemoAvatar,
+                simulated: widget.showDemoAvatar,
+              ),
+            );
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
 }

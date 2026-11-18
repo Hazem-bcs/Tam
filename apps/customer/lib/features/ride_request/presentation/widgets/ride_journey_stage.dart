@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tam_customer/features/ride_request/domain/ride_coupon_offer.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_journey_entry.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
@@ -11,6 +12,8 @@ enum RideJourneyStep { entry, places, vehicle }
 class RideJourneyStage extends StatelessWidget {
   const RideJourneyStage({
     super.key,
+    this.couponOffers = const [],
+    this.onActivateCoupon,
     required this.step,
     required this.state,
     required this.pickingPickup,
@@ -32,6 +35,8 @@ class RideJourneyStage extends StatelessWidget {
   final VoidCallback? onContinue;
   final Widget Function(ValueChanged<TripLocation>)? savedAddressPickerBuilder;
 
+  final List<RideCouponOffer> couponOffers;
+  final ValueChanged<String>? onActivateCoupon;
   @override
   Widget build(BuildContext context) {
     if (step == RideJourneyStep.entry) {
@@ -60,6 +65,8 @@ class RideJourneyStage extends StatelessWidget {
     }
     return RideVehicleFareSheet(
       state: state,
+      couponOffers: couponOffers,
+      onActivateCoupon: onActivateCoupon,
       onContinue: onContinue,
       locationStatus: locationStatus,
     );

@@ -102,6 +102,11 @@ final class MockRideRequestRepository implements RideRequestRepository {
     required RideQuote quote,
     required String idempotencyKey,
   }) async {
+    try {
+      await _trips.ensureReady();
+    } on MockTripStoreFailure catch (failure) {
+      throw RideRequestFailure(failure.code);
+    }
     _checkRoute(quote.pickup, quote.destination);
     if (idempotencyKey.trim().isEmpty) {
       throw const RideRequestFailure('VALIDATION_ERROR');
@@ -134,6 +139,7 @@ final class MockRideRequestRepository implements RideRequestRepository {
         idempotencyKey: idempotencyKey,
       );
       _committedQuotesByKey[idempotencyKey] = quote.id;
+      await _trips.flush();
       if (loseFirstConfirmationResponse) {
         loseFirstConfirmationResponse = false;
         throw const RideRequestFailure('SERVICE_UNAVAILABLE');

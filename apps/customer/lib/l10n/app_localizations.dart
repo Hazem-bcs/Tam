@@ -1442,6 +1442,36 @@ abstract class AppLocalizations {
   /// **'رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.'**
   String get rideRequestWalletInsufficient;
 
+  /// No description provided for @rideRequestSwapRoute.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبديل الانطلاق والوجهة'**
+  String get rideRequestSwapRoute;
+
+  /// No description provided for @rideRequestAddCoupon.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كوبون حسم'**
+  String get rideRequestAddCoupon;
+
+  /// No description provided for @rideRequestAddCouponShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة'**
+  String get rideRequestAddCouponShort;
+
+  /// No description provided for @rideRequestNoActiveCoupons.
+  ///
+  /// In ar, this message translates to:
+  /// **'كوبوناتك الفعّالة تظهر هنا تلقائيًا'**
+  String get rideRequestNoActiveCoupons;
+
+  /// No description provided for @rideRequestOfferLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{code} · حسم {percent}٪'**
+  String rideRequestOfferLabel(String code, int percent);
+
   /// No description provided for @tripsAll.
   ///
   /// In ar, this message translates to:
@@ -3169,6 +3199,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المساعدة بخصوص الرحلة'**
   String get activeTripSupport;
+
+  /// No description provided for @activeTripSupportShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم'**
+  String get activeTripSupportShort;
+
+  /// No description provided for @activeTripDetailsShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الطلب'**
+  String get activeTripDetailsShort;
 
   /// No description provided for @chatTitle.
   ///

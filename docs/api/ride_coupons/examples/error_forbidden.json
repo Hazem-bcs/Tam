@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "FORBIDDEN",
+    "message": {
+      "ar": "غير مسموح لهذا الحساب.",
+      "en": "Forbidden for this account."
+    }
+  }
+}

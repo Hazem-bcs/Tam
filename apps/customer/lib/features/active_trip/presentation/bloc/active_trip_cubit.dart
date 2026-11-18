@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_state.dart';
@@ -35,6 +36,13 @@ final class ActiveTripCubit extends Cubit<ActiveTripState> {
   Timer? _timer;
   bool _loading = false, _dirty = false;
   int _epoch = 0;
+
+  void track(Trip trip) {
+    _epoch++;
+    _tripId = trip.id;
+    emit(ActiveTripState(phase: ActiveTripPhase.ready, trip: trip));
+    unawaited(refresh(silent: true));
+  }
 
   void checkFreshness() {
     if (isClosed || state.trip == null) return;

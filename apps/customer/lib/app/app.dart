@@ -8,6 +8,7 @@ import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/locale/app_locale_controller.dart';
 import 'package:tam_customer/app/router/app_router.dart';
 import 'package:tam_customer/app/theme/app_theme.dart';
+import 'package:tam_customer/core/cache/local_cache_store.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/account_management/data/mock/mock_account_management_repository.dart';
@@ -48,6 +49,7 @@ import 'package:tam_customer/features/support/data/mock/mock_support_repository.
 import 'package:tam_customer/features/support/data/unavailable_support_repository.dart';
 import 'package:tam_customer/features/support/domain/support_repository.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
+import 'package:tam_customer/shared/data/mock/mock_trip_snapshot_store.dart';
 import 'package:tam_customer/shared/data/mock/mock_trip_store.dart';
 import 'package:tam_customer/shared/data/mock/seed_trips.dart';
 
@@ -113,6 +115,11 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
     _mockTrips = MockTripStore(
       seed: seedMockTrips(includeReceiptPreview: true),
       now: widget.clock,
+      snapshots:
+          locator.isRegistered<LocalCacheStore>() &&
+              widget.authRepository == null
+          ? MockTripSnapshotStore(locator<LocalCacheStore>())
+          : null,
     );
     final modes = widget.dataModes ?? AppConfig.featureDataModes;
     final ActiveTripRepository activeTrips =
@@ -219,6 +226,12 @@ class _TamAppState extends State<TamApp> with WidgetsBindingObserver {
         AuthStatus.localAccess,
       ].contains(state.status)) {
         _maps.currentLocation?.setSession(true);
+        final owner = state.status == AuthStatus.authenticated
+            ? 'user:${state.user!.id}'
+            : state.status == AuthStatus.localAccess
+            ? 'local:${state.localPhoneE164}'
+            : 'guest';
+        unawaited(_mockTrips.openSession(owner));
         sessionEntered = true;
       } else if (state.status == AuthStatus.signedOut && sessionEntered) {
         _maps.currentLocation?.setSession(false);

@@ -13,7 +13,6 @@ import 'package:tam_customer/app/router/support_routes.dart';
 import 'package:tam_customer/core/config/app_config.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
 import 'package:tam_customer/features/account_management/domain/account_management_repository.dart';
-import 'package:tam_customer/features/active_trip/active_trip_entry.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
 import 'package:tam_customer/features/addresses/addresses_entry.dart';
 import 'package:tam_customer/features/addresses/domain/addresses_repository.dart';
@@ -134,10 +133,16 @@ GoRouter createAppRouter(
         GoRoute(
           path: path,
           pageBuilder: (context, state) {
-            final child = buildActiveTripFeature(
-              repository: activeTrips,
+            final child = buildRideRequestFeature(
+              context,
               navigation: navigation(context),
-              policy: AppConfig.activeTripPolicy,
+              dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
+              mockTrips: trips,
+              addresses: addresses,
+              activeTrips: activeTrips,
+              simulatedTracking:
+                  dataModes.forFeature(CustomerFeature.activeTrip) ==
+                  FeatureDataMode.mock,
               now: clock,
               tripId: state.pathParameters['tripId'],
             );
@@ -157,6 +162,11 @@ GoRouter createAppRouter(
             dataMode: dataModes.forFeature(CustomerFeature.rideRequest),
             mockTrips: trips,
             addresses: addresses,
+            activeTrips: activeTrips,
+            simulatedTracking:
+                dataModes.forFeature(CustomerFeature.activeTrip) ==
+                FeatureDataMode.mock,
+            now: clock,
             prefill: state.extra is TripPrefill
                 ? state.extra as TripPrefill
                 : null,

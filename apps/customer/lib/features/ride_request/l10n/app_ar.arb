@@ -172,5 +172,20 @@
         "type": "String"
       }
     }
+  },
+  "rideRequestSwapRoute": "تبديل الانطلاق والوجهة",
+  "rideRequestAddCoupon": "إضافة كوبون حسم",
+  "rideRequestAddCouponShort": "إضافة",
+  "rideRequestNoActiveCoupons": "كوبوناتك الفعّالة تظهر هنا تلقائيًا",
+  "rideRequestOfferLabel": "{code} · حسم {percent}٪",
+  "@rideRequestOfferLabel": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
   }
 }

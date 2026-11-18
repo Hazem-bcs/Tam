@@ -17,6 +17,10 @@ final class PickupSelected extends RideDraftEvent {
   List<Object?> get props => [location, fromDevice];
 }
 
+final class RideEndpointsSwapped extends RideDraftEvent {
+  const RideEndpointsSwapped();
+}
+
 final class DestinationSelected extends RideDraftEvent {
   const DestinationSelected(this.location);
   final TripLocation location;

@@ -40,6 +40,17 @@ final class RideDraftBloc extends Bloc<RideDraftEvent, RideDraftState> {
     on<DestinationSelected>(
       (event, emit) => _edit(state.copyWith(destination: event.location), emit),
     );
+    on<RideEndpointsSwapped>((event, emit) {
+      if (state.pickup == null || state.destination == null) return;
+      _edit(
+        state.copyWith(
+          pickup: state.destination,
+          destination: state.pickup,
+          pickupFromDevice: false,
+        ),
+        emit,
+      );
+    });
     on<VehicleClassSelected>((event, emit) {
       if (_locked || state.vehicleClass == event.vehicleClass) return;
       final cached = state.vehicleQuotes[event.vehicleClass];

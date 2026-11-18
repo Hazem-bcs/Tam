@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "code": "TAM10",
+      "percent": 10,
+      "is_available": true,
+      "expires_at": null,
+      "remaining_trips": null,
+      "total_trips": null
+    },
+    {
+      "code": "NOW25",
+      "percent": 25,
+      "is_available": false,
+      "expires_at": "2026-09-30T00:00:00Z",
+      "remaining_trips": 0,
+      "total_trips": 2
+    }
+  ]
+}

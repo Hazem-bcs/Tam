@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "COUPON_INVALID",
+    "message": {
+      "ar": "الكوبون غير صالح أو غير متاح لحسابك.",
+      "en": "The coupon is invalid or unavailable for this account."
+    }
+  }
+}

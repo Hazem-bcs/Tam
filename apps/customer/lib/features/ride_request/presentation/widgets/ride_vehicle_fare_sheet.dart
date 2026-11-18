@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
+import 'package:tam_customer/features/ride_request/domain/ride_coupon_offer.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/widgets/tam_button.dart';
-import 'ride_coupon_field.dart';
+
+import 'ride_coupon_picker.dart';
 import 'ride_journey_sheet.dart';
 import 'ride_payment_picker.dart';
 import 'ride_quote_review.dart';
@@ -14,6 +16,8 @@ import 'ride_vehicle_picker.dart';
 class RideVehicleFareSheet extends StatelessWidget {
   const RideVehicleFareSheet({
     super.key,
+    this.couponOffers = const [],
+    this.onActivateCoupon,
     required this.state,
     this.onContinue,
     this.locationStatus,
@@ -21,6 +25,8 @@ class RideVehicleFareSheet extends StatelessWidget {
   final RideDraftState state;
   final VoidCallback? onContinue;
   final Widget? locationStatus;
+  final List<RideCouponOffer> couponOffers;
+  final ValueChanged<String>? onActivateCoupon;
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
@@ -30,24 +36,23 @@ class RideVehicleFareSheet extends StatelessWidget {
     return RideJourneySheet(
       edgeToEdgeContent: true,
       compact: true,
-      header: Row(
+      header: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
+          RideSchedulePicker(
+            compact: true,
+            scheduledAt: state.scheduledAt,
+            enabled: enabled,
+            policy: bloc.schedulePolicy,
+            now: () => bloc.currentTime,
+            onChanged: (time) => bloc.add(RideScheduleChanged(time)),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Semantics(
+            header: true,
             child: Text(
               l.rideRequestChooseClass,
               style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Flexible(
-            flex: 2,
-            child: RideSchedulePicker(
-              compact: true,
-              scheduledAt: state.scheduledAt,
-              enabled: enabled,
-              policy: bloc.schedulePolicy,
-              now: () => bloc.currentTime,
-              onChanged: (time) => bloc.add(RideScheduleChanged(time)),
             ),
           ),
         ],
@@ -81,6 +86,20 @@ class RideVehicleFareSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                RideCouponPicker(
+                  offers: couponOffers,
+                  code: state.couponCode,
+                  quote: state.quote,
+                  enabled: enabled,
+                  loading: quoting,
+                  invalid: state.errorCode == 'COUPON_INVALID',
+                  onApply: (code) {
+                    onActivateCoupon?.call(code);
+                    bloc.add(RideCouponApplied(code));
+                  },
+                  onRemove: () => bloc.add(const RideCouponRemoved()),
+                ),
+                const SizedBox(height: AppSpacing.sm),
                 RideQuoteReview(quote: state.quote, loading: quoting),
                 const SizedBox(height: AppSpacing.sm),
                 RidePaymentPicker(
@@ -89,15 +108,6 @@ class RideVehicleFareSheet extends StatelessWidget {
                   onChanged: (value) => bloc.add(RidePaymentChanged(value)),
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                RideCouponField(
-                  code: state.couponCode,
-                  quote: state.quote,
-                  enabled: enabled,
-                  loading: quoting,
-                  invalid: state.errorCode == 'COUPON_INVALID',
-                  onApply: (code) => bloc.add(RideCouponApplied(code)),
-                  onRemove: () => bloc.add(const RideCouponRemoved()),
-                ),
                 if (state.errorCode != null &&
                     state.errorCode != 'COUPON_INVALID') ...[
                   const SizedBox(height: AppSpacing.sm),

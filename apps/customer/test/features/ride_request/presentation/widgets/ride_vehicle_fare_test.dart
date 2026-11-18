@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +8,7 @@ import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_
 import 'package:tam_customer/features/ride_request/presentation/widgets/ride_animated_fare.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+
 import '../../../../support/page_scroll.dart';
 import '../../scheduling/schedule_widget_support.dart';
 
@@ -53,6 +55,7 @@ void main() {
       expect(bloc.state.vehicleQuotes, hasLength(4));
       await tap(tester, 'ride-payment-wallet');
       expect(bloc.state.paymentMethod, TripPaymentMethod.wallet);
+      await tap(tester, 'ride-coupon-add');
       final input = find.byKey(const Key('ride-coupon-input'));
       await revealPageWidget(tester, input);
       await tester.enterText(input, 'TAM10');
@@ -80,6 +83,7 @@ void main() {
     (tester) async {
       size(tester, 390, 900);
       final bloc = await pumpSchedule(tester, locale: 'en');
+      await tap(tester, 'ride-coupon-add');
       final input = find.byKey(const Key('ride-coupon-input'));
       await revealPageWidget(tester, input);
       await tester.enterText(input, 'BAD');
@@ -126,6 +130,7 @@ void main() {
           tester,
           'selection-${scenario.$1}-${scenario.$2.toInt()}-x${scenario.$4.toInt()}',
         );
+        await tap(tester, 'ride-coupon-add');
         final input = find.byKey(const Key('ride-coupon-input'));
         await revealPageWidget(tester, input);
         if (scenario.$5) {

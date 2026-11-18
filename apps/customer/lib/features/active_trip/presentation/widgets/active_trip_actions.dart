@@ -13,10 +13,12 @@ class ActiveTripActions extends StatelessWidget {
     super.key,
     required this.state,
     required this.navigation,
+    this.compact = false,
   });
 
   final ActiveTripState state;
   final CustomerNavigation navigation;
+  final bool compact;
 
   Future<void> _cancel(BuildContext context) async {
     final l = AppLocalizations.of(context);
@@ -58,9 +60,9 @@ class ActiveTripActions extends StatelessWidget {
             liveRegion: true,
             child: Text(
               activeTripError(l, state.actionFailure),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colors.error,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: colors.error),
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -86,7 +88,8 @@ class ActiveTripActions extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
-        if (state.canRebook) ...[
+        if (state.canRebook &&
+            (!compact || trip.status != TripStatus.completed)) ...[
           TamButton.primary(
             key: const Key('active-rebook'),
             label: l.activeTripRebook,
@@ -99,37 +102,91 @@ class ActiveTripActions extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
         ],
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(AppRadii.lg),
-          ),
-          child: Column(
-            children: [
-              ListTile(
-                key: const Key('active-support'),
-                contentPadding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: AppSpacing.lg,
+        if (compact)
+          LayoutBuilder(
+            builder: (context, bounds) {
+              final narrow =
+                  bounds.maxWidth < 280 ||
+                  MediaQuery.textScalerOf(context).scale(1) > 1.5;
+              Widget action(
+                String key,
+                String label,
+                String image,
+                VoidCallback callback,
+              ) => OutlinedButton.icon(
+                key: Key(key),
+                onPressed: busy ? null : callback,
+                icon: Image.asset(
+                  'assets/notifications/$image.webp',
+                  width: 24,
+                  height: 24,
+                  excludeFromSemantics: true,
                 ),
-                leading: const Icon(Icons.support_agent_outlined),
-                title: Text(l.activeTripSupport),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: busy ? null : () => navigation.openSupport(tripId: trip.id),
-              ),
-              Divider(height: 1, color: colors.outlineVariant),
-              ListTile(
-                key: const Key('active-details'),
-                contentPadding: const EdgeInsetsDirectional.symmetric(
-                  horizontal: AppSpacing.lg,
+                label: Text(
+                  label,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
-                leading: const Icon(Icons.receipt_long_outlined),
-                title: Text(l.activeTripDetails),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: busy ? null : () => navigation.openTrip(trip.id),
-              ),
-            ],
+              );
+              final support = action(
+                'active-support',
+                l.activeTripSupportShort,
+                'support',
+                () => navigation.openSupport(tripId: trip.id),
+              );
+              final details = action(
+                'active-details',
+                l.activeTripDetailsShort,
+                'ride_completed',
+                () => navigation.openTrip(trip.id),
+              );
+              return narrow
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [support, details],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(child: support),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(child: details),
+                      ],
+                    );
+            },
+          )
+        else
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: colors.surfaceContainerLowest,
+              borderRadius: BorderRadius.circular(AppRadii.lg),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  key: const Key('active-support'),
+                  contentPadding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  leading: const Icon(Icons.support_agent_outlined),
+                  title: Text(l.activeTripSupport),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: busy
+                      ? null
+                      : () => navigation.openSupport(tripId: trip.id),
+                ),
+                Divider(height: 1, color: colors.outlineVariant),
+                ListTile(
+                  key: const Key('active-details'),
+                  contentPadding: const EdgeInsetsDirectional.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: Text(l.activeTripDetails),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: busy ? null : () => navigation.openTrip(trip.id),
+                ),
+              ],
+            ),
           ),
-        ),
         if (state.canCancel && !state.cancelUncertain) ...[
           const SizedBox(height: AppSpacing.md),
           OutlinedButton.icon(

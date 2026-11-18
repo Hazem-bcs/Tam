@@ -1,0 +1,459 @@
+{
+  "info": {
+    "name": "Tam Ride Coupons v1 (proposed)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.example.com/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "My coupons",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": "{{base_url}}/coupons"
+      },
+      "response": [
+        {
+          "name": "coupons_success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": [\n    {\n      \"code\": \"TAM10\",\n      \"percent\": 10,\n      \"is_available\": true,\n      \"expires_at\": null,\n      \"remaining_trips\": null,\n      \"total_trips\": null\n    },\n    {\n      \"code\": \"NOW25\",\n      \"percent\": 25,\n      \"is_available\": false,\n      \"expires_at\": \"2026-09-30T00:00:00Z\",\n      \"remaining_trips\": 0,\n      \"total_trips\": 2\n    }\n  ]\n}"
+        },
+        {
+          "name": "coupons_empty",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": []\n}"
+        },
+        {
+          "name": "error_unavailable",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "Error",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة الآن.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_unauthenticated",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "Error",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_forbidden",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "Error",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"غير مسموح لهذا الحساب.\",\n      \"en\": \"Forbidden for this account.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_rate_limited",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/coupons"
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Try again later.\"\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Activate a coupon",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/coupons/activate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"code\": \"TAM10\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "name": "activate_success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"data\": {\n    \"code\": \"TAM10\",\n    \"percent\": 10,\n    \"is_available\": true,\n    \"expires_at\": null,\n    \"remaining_trips\": null,\n    \"total_trips\": null\n  }\n}"
+        },
+        {
+          "name": "error_coupon",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 422,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"COUPON_INVALID\",\n    \"message\": {\n      \"ar\": \"الكوبون غير صالح أو غير متاح لحسابك.\",\n      \"en\": \"The coupon is invalid or unavailable for this account.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_unavailable",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 503,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"SERVICE_UNAVAILABLE\",\n    \"message\": {\n      \"ar\": \"الخدمة غير متاحة الآن.\",\n      \"en\": \"Service unavailable.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_unauthenticated",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"UNAUTHENTICATED\",\n    \"message\": {\n      \"ar\": \"يلزم تسجيل الدخول.\",\n      \"en\": \"Authentication required.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_forbidden",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 403,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": {\n      \"ar\": \"غير مسموح لهذا الحساب.\",\n      \"en\": \"Forbidden for this account.\"\n    }\n  }\n}"
+        },
+        {
+          "name": "error_rate_limited",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/coupons/activate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"code\": \"TAM10\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Error",
+          "code": 429,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": {\n    \"code\": \"RATE_LIMITED\",\n    \"message\": {\n      \"ar\": \"حاول لاحقًا.\",\n      \"en\": \"Try again later.\"\n    }\n  }\n}"
+        }
+      ]
+    }
+  ]
+}

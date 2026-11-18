@@ -2,17 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tam_customer/app/app.dart';
+import 'package:tam_customer/app/di/service_locator.dart';
 import 'package:tam_customer/app/router/app_routes.dart';
+import 'package:tam_customer/app/router/customer_navigation.dart';
 import 'package:tam_customer/core/config/feature_data_mode.dart';
+import 'package:tam_customer/core/config/map_configuration.dart';
 import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_cubit.dart';
 import 'package:tam_customer/features/active_trip/presentation/pages/active_trip_page.dart';
 import 'package:tam_customer/features/auth/data/memory_auth_session_store.dart';
 import 'package:tam_customer/features/home/presentation/pages/home_page.dart';
+import 'package:tam_customer/features/maps/maps_dependencies.dart';
+import 'package:tam_customer/features/ride_request/data/mock/mock_ride_places.dart';
 import 'package:tam_customer/features/ride_request/presentation/bloc/ride_draft_bloc.dart';
 import 'package:tam_customer/features/ride_request/presentation/pages/ride_request_page.dart';
 import 'package:tam_customer/features/trips/presentation/bloc/trip_details_cubit.dart';
 import 'package:tam_customer/features/trips/presentation/pages/trip_details_page.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+
+import '../features/maps/maps_test_support.dart';
 import '../support/fake_auth_repository.dart';
 import 'support/customer_app_harness.dart';
 
@@ -20,26 +27,31 @@ void main() {
   testWidgets(
     'booking opens tracking, Home restores it, history cancellation stays in sync',
     (tester) async {
+      locator.registerFactory<MapsDependencies>(
+        () => MapsDependencies(
+          configuration: const MapConfiguration(),
+          repository: MapsProbe(),
+          deviceLocation: LocationProbe(),
+        ),
+      );
+      addTearDown(() => locator.unregister<MapsDependencies>());
       var now = DateTime.now().toUtc();
       await launchCustomerApp(tester, clock: () => now);
       await enterCustomerSession(tester);
       final router = customerRouter(tester);
-      router.push(AppRoutes.rideRequest);
+      RouterCustomerNavigation(router).openRideRequest(
+        prefill: TripPrefill(
+          pickup: mockRidePlaces[0].location,
+          destination: mockRidePlaces[1].location,
+        ),
+      );
       await tester.pumpAndSettle();
-      for (final item in [
-        ('حدد مكان الانطلاق', 'المزة، شارع الجلاء'),
-        ('إلى أين تريد الذهاب؟', 'أبو رمانة، شارع الحمراء'),
-      ]) {
-        await tester.tap(find.text(item.$1));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(item.$2).last);
-        await tester.pumpAndSettle();
-      }
       await tester.tap(find.text('تأكيد طلب الرحلة'));
-      await tester.pumpAndSettle();
-      expect(find.byType(ActiveTripPage), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.byType(RideRequestPage), findsOneWidget);
       final tracker = tester
-          .element(find.byType(ActiveTripPage))
+          .element(find.byType(RideRequestPage).last)
           .read<ActiveTripCubit>();
       final id = tracker.state.trip!.id;
       expect(tracker.state.trip!.status, TripStatus.requested);
@@ -47,10 +59,10 @@ void main() {
       now = now.add(const Duration(seconds: 18));
       await tester.pump(const Duration(seconds: 18));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('home-active-trip')));
+      RouterCustomerNavigation(router).openRideRequest();
       await tester.pumpAndSettle();
       final restored = tester
-          .element(find.byType(ActiveTripPage))
+          .element(find.byType(RideRequestPage).last)
           .read<ActiveTripCubit>();
       expect(restored.state.trip!.id, id);
       expect(restored.state.trip!.status, TripStatus.driverEnRoute);
@@ -59,6 +71,7 @@ void main() {
           .element(find.byType(TripDetailsPage))
           .read<TripDetailsCubit>();
       expect(details.state.trip!.id, id);
+      await revealPageWidget(tester, find.text('إلغاء الرحلة'));
       await tester.tap(find.text('إلغاء الرحلة'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('تأكيد الإلغاء'));
@@ -85,14 +98,14 @@ void main() {
       router.go(AppRoutes.activeTrip);
       await tester.pumpAndSettle();
       final next = tester
-          .element(find.byType(ActiveTripPage))
+          .element(find.byType(RideRequestPage).last)
           .read<ActiveTripCubit>();
       expect(next.state.phase, ActiveTripPhase.empty);
       router.go(AppRoutes.activeTripLocation(id));
       await tester.pumpAndSettle();
       expect(
         tester
-            .element(find.byType(ActiveTripPage))
+            .element(find.byType(RideRequestPage).last)
             .read<ActiveTripCubit>()
             .state
             .trip,

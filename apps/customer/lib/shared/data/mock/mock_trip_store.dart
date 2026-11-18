@@ -1,13 +1,20 @@
 import 'dart:async';
+
 import 'package:tam_customer/shared/domain/trip.dart';
 import 'package:tam_customer/shared/domain/trip_live_details.dart';
+
+import 'mock_trip_snapshot_store.dart';
 
 /// Development-only state shared by booking and trip-history data adapters.
 /// Repositories translate these data failures into their own domain failures.
 final class MockTripStore {
-  MockTripStore({Iterable<Trip> seed = const [], DateTime Function()? now})
-    : _seed = {for (final trip in seed) trip.id: trip},
-      _now = now ?? DateTime.now {
+  MockTripStore({
+    Iterable<Trip> seed = const [],
+    DateTime Function()? now,
+    MockTripSnapshotStore? snapshots,
+  }) : _seed = {for (final trip in seed) trip.id: trip},
+       _now = now ?? DateTime.now,
+       _snapshots = snapshots {
     _trips = Map.of(_seed);
   }
   final Map<String, Trip> _seed;
@@ -16,6 +23,70 @@ final class MockTripStore {
   final _changes = StreamController<List<Trip>>.broadcast(sync: true);
   final Map<String, Trip> _requests = {};
   var _sequence = 0;
+  final MockTripSnapshotStore? _snapshots;
+  String? _owner;
+  int _sessionEpoch = 0;
+  Future<void> _ready = Future.value();
+  Future<bool> _saved = Future.value(true);
+  bool _restoreFailed = false;
+  bool isRestoring = false;
+
+  Future<void> openSession(String owner) {
+    if (_owner == owner && !_restoreFailed) return _ready;
+    _owner = owner;
+    final epoch = ++_sessionEpoch;
+    final completion = Completer<void>();
+    _ready = completion.future;
+    isRestoring = true;
+    _reset(_seed, persist: false);
+    unawaited(_restore(owner, epoch).whenComplete(() => completion.complete()));
+    return _ready;
+  }
+
+  Future<void> _restore(String owner, int epoch) async {
+    try {
+      final restored = await _snapshots?.restore(owner) ?? const <Trip>[];
+      if (epoch != _sessionEpoch) return;
+      for (final trip in restored) {
+        if (!_seed.containsKey(trip.id)) _trips[trip.id] = trip;
+      }
+      _restoreFailed = false;
+    } catch (_) {
+      if (epoch == _sessionEpoch) _restoreFailed = true;
+    } finally {
+      if (epoch == _sessionEpoch) {
+        isRestoring = false;
+        if (!_changes.isClosed) _changes.add(trips);
+      }
+    }
+  }
+
+  Future<void> ensureReady() async {
+    await _ready;
+    if (_restoreFailed && _owner != null) await openSession(_owner!);
+    if (_restoreFailed) throw const MockTripStoreFailure('SERVICE_UNAVAILABLE');
+  }
+
+  void _persist() {
+    final owner = _owner, snapshots = _snapshots;
+    if (owner == null || snapshots == null || isRestoring || _restoreFailed) {
+      return;
+    }
+    _saved = snapshots.save(
+      owner,
+      trips.where((trip) => !_seed.containsKey(trip.id)),
+      _now().toUtc(),
+    );
+  }
+
+  Future<void> flush() async {
+    if (!await _saved) {
+      _persist();
+      if (!await _saved) {
+        throw const MockTripStoreFailure('SERVICE_UNAVAILABLE');
+      }
+    }
+  }
 
   List<Trip> get trips {
     final values = _trips.values.toList()
@@ -54,6 +125,7 @@ final class MockTripStore {
     );
     _trips[id] = trip;
     _requests[idempotencyKey] = trip;
+    _persist();
     _changes.add(trips);
     return trip;
   }
@@ -83,6 +155,7 @@ final class MockTripStore {
             ),
           );
     _trips[id] = updated;
+    _persist();
     _changes.add(trips);
     return updated;
   }
@@ -109,6 +182,7 @@ final class MockTripStore {
       throw const MockTripStoreFailure('TRIP_STATE_CONFLICT');
     }
     _trips[updated.id] = updated;
+    _persist();
     _changes.add(trips);
     return updated;
   }
@@ -117,17 +191,36 @@ final class MockTripStore {
 
   /// Remove session-created operations and restore only synthetic fixtures.
   /// Notification fixtures can then resolve their shared historic-trip IDs.
-  void resetSession() => _reset(_seed);
+  void resetSession() {
+    ++_sessionEpoch;
+    _owner = null;
+    isRestoring = false;
+    _restoreFailed = false;
+    _ready = Future.value();
+    _reset(_seed, persist: false);
+    final snapshots = _snapshots;
+    if (snapshots != null) {
+      // Serialize logout deletion after in-flight writes, before another owner.
+      _saved = snapshots.clear().then(
+        (_) => true,
+        onError: (Object _, StackTrace _) => false,
+      );
+    }
+  }
 
-  void _reset(Map<String, Trip> seed) {
+  void _reset(Map<String, Trip> seed, {bool persist = true}) {
     _trips
       ..clear()
       ..addAll(seed);
     _requests.clear();
+    if (persist) _persist();
     _changes.add(trips);
   }
 
-  Future<void> dispose() => _changes.close();
+  Future<void> dispose() {
+    ++_sessionEpoch;
+    return _changes.close();
+  }
 }
 
 final class MockTripStoreFailure implements Exception {

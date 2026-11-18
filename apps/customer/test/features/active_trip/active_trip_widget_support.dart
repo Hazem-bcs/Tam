@@ -8,6 +8,7 @@ import 'package:tam_customer/features/active_trip/presentation/bloc/active_trip_
 import 'package:tam_customer/features/active_trip/presentation/pages/active_trip_page.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 import 'package:tam_customer/shared/domain/trip.dart';
+
 import '../../support/preview_fonts.dart';
 
 const captureActiveUi = bool.fromEnvironment('CAPTURE_ACTIVE_TRIP_UI');
@@ -32,9 +33,10 @@ Future<ActiveTripCubit> pumpActiveTrip(
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(scale)),
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(scale),
+            disableAnimations: true,
+          ),
           child: child!,
         ),
         home: BlocProvider(

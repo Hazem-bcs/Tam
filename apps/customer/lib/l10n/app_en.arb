@@ -321,6 +321,21 @@
       }
     }
   },
+  "rideRequestSwapRoute": "Swap pickup and destination",
+  "rideRequestAddCoupon": "Add a discount code",
+  "rideRequestAddCouponShort": "Add",
+  "rideRequestNoActiveCoupons": "Your active coupons appear here automatically",
+  "rideRequestOfferLabel": "{code} · {percent}% off",
+  "@rideRequestOfferLabel": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "tripsAll": "All",
   "tripsActive": "Active",
   "tripsCompletedFilter": "Completed",
@@ -710,6 +725,8 @@
   "activeTripChat": "Chat with driver",
   "activeTripCompletion": "Trip summary and rating",
   "activeTripSupport": "Get help with this trip",
+  "activeTripSupportShort": "Support",
+  "activeTripDetailsShort": "Order details",
   "chatTitle": "Driver",
   "chatRetry": "Retry",
   "chatMessageHint": "Write a message…",

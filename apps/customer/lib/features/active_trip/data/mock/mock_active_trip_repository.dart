@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_scenario.dart';
 import 'package:tam_customer/features/active_trip/data/mock/active_trip_simulation.dart';
 import 'package:tam_customer/features/active_trip/domain/active_trip_repository.dart';
@@ -35,7 +36,7 @@ final class MockActiveTripRepository implements ActiveTripRepository {
 
   /// Also called on resume/read, catching up elapsed simulated driver events.
   void advance() {
-    if (_disposed || _advancing) return;
+    if (_disposed || _advancing || _store.isRestoring) return;
     _advancing = true;
     try {
       final now = _now().toUtc();
@@ -71,6 +72,7 @@ final class MockActiveTripRepository implements ActiveTripRepository {
 
   @override
   Future<Trip?> fetch(String tripId) async {
+    await _ready();
     advance();
     final trip = _store.find(tripId);
     _checkConnection(trip);
@@ -88,6 +90,7 @@ final class MockActiveTripRepository implements ActiveTripRepository {
 
   @override
   Future<Trip?> current() async {
+    await _ready();
     advance();
     final active = _store.trips.where((trip) => trip.status.isActive).toList()
       ..sort((a, b) {
@@ -108,15 +111,26 @@ final class MockActiveTripRepository implements ActiveTripRepository {
 
   @override
   Future<Trip> cancel(String tripId) async {
+    await _ready();
     advance();
     _checkConnection(_store.find(tripId));
     try {
       final trip = _store.cancel(tripId);
+      await _store.flush();
       if (loseNextCancelResponse) {
         loseNextCancelResponse = false;
         throw const ActiveTripFailure('NETWORK_ERROR');
       }
       return (await fetch(trip.id))!;
+    } on MockTripStoreFailure catch (failure) {
+      throw ActiveTripFailure(failure.code);
+    }
+  }
+
+  Future<void> _ready() async {
+    try {
+      await _store.ensureReady();
+      await _store.flush();
     } on MockTripStoreFailure catch (failure) {
       throw ActiveTripFailure(failure.code);
     }

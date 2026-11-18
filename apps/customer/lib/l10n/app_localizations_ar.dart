@@ -728,6 +728,24 @@ class AppLocalizationsAr extends AppLocalizations {
       'رصيد المحفظة غير كافٍ. اختر الدفع النقدي للمتابعة.';
 
   @override
+  String get rideRequestSwapRoute => 'تبديل الانطلاق والوجهة';
+
+  @override
+  String get rideRequestAddCoupon => 'إضافة كوبون حسم';
+
+  @override
+  String get rideRequestAddCouponShort => 'إضافة';
+
+  @override
+  String get rideRequestNoActiveCoupons =>
+      'كوبوناتك الفعّالة تظهر هنا تلقائيًا';
+
+  @override
+  String rideRequestOfferLabel(String code, int percent) {
+    return '$code · حسم $percent٪';
+  }
+
+  @override
   String get tripsAll => 'الكل';
 
   @override
@@ -1652,6 +1670,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeTripSupport => 'المساعدة بخصوص الرحلة';
+
+  @override
+  String get activeTripSupportShort => 'الدعم';
+
+  @override
+  String get activeTripDetailsShort => 'تفاصيل الطلب';
 
   @override
   String get chatTitle => 'السائق';

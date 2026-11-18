@@ -321,6 +321,21 @@
       }
     }
   },
+  "rideRequestSwapRoute": "تبديل الانطلاق والوجهة",
+  "rideRequestAddCoupon": "إضافة كوبون حسم",
+  "rideRequestAddCouponShort": "إضافة",
+  "rideRequestNoActiveCoupons": "كوبوناتك الفعّالة تظهر هنا تلقائيًا",
+  "rideRequestOfferLabel": "{code} · حسم {percent}٪",
+  "@rideRequestOfferLabel": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "tripsAll": "الكل",
   "tripsActive": "النشطة",
   "tripsCompletedFilter": "المكتملة",
@@ -710,6 +725,8 @@
   "activeTripChat": "محادثة السائق",
   "activeTripCompletion": "ملخص الرحلة وتقييمها",
   "activeTripSupport": "المساعدة بخصوص الرحلة",
+  "activeTripSupportShort": "الدعم",
+  "activeTripDetailsShort": "تفاصيل الطلب",
   "chatTitle": "السائق",
   "chatRetry": "إعادة المحاولة",
   "chatMessageHint": "اكتب رسالة…",
