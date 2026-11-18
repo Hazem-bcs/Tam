@@ -167,7 +167,7 @@ void main() {
     expect(fixture.store.trips, hasLength(1));
   });
   test(
-    'current prioritizes dispatched trips then earliest scheduled time',
+    'current excludes reservations and upcoming orders by scheduled time',
     () async {
       final later = fixture.book(
         scheduledAt: fixture.now.add(const Duration(days: 2)),
@@ -175,12 +175,38 @@ void main() {
       final earlier = fixture.book(
         scheduledAt: fixture.now.add(const Duration(days: 1)),
       );
-      expect((await fixture.repository.current())!.id, earlier.id);
+      expect(await fixture.repository.current(), isNull);
+      expect((await fixture.repository.upcoming()).map((trip) => trip.id), [
+        earlier.id,
+        later.id,
+      ]);
+      expect((await fixture.repository.fetch(earlier.id))!.id, earlier.id);
       final immediate = fixture.book();
       expect((await fixture.repository.current())!.id, immediate.id);
       await fixture.repository.cancel(immediate.id);
       await fixture.repository.cancel(earlier.id);
-      expect((await fixture.repository.current())!.id, later.id);
+      expect(await fixture.repository.current(), isNull);
+      expect((await fixture.repository.upcoming()).map((trip) => trip.id), [
+        later.id,
+      ]);
+    },
+  );
+  test(
+    'upcoming lookup reports outage and retries without losing reservations',
+    () async {
+      final reservation = fixture.book(
+        scheduledAt: fixture.now.add(const Duration(days: 1)),
+      );
+      fixture.repository.failNextFetch = true;
+      await expectLater(
+        fixture.repository.upcoming(),
+        throwsA(isA<ActiveTripFailure>()),
+      );
+      expect((await fixture.repository.upcoming()).single.id, reservation.id);
+      expect(
+        (await fixture.repository.fetch(reservation.id))!.status,
+        TripStatus.scheduled,
+      );
     },
   );
   test(
@@ -199,6 +225,7 @@ void main() {
   test('API stub never fabricates a current trip or cancellation', () async {
     const api = UnavailableActiveTripRepository();
     await expectLater(api.current(), throwsA(isA<ActiveTripFailure>()));
+    await expectLater(api.upcoming(), throwsA(isA<ActiveTripFailure>()));
     await expectLater(api.fetch('x'), throwsA(isA<ActiveTripFailure>()));
     await expectLater(api.cancel('x'), throwsA(isA<ActiveTripFailure>()));
     expect(fixture.store.trips, isEmpty);

@@ -89,11 +89,15 @@ position:latitude/longitude finite ضمن[-90,90]/[-180,180]، وrecorded_at UTC
 
 لا body أو query.200 مع data:Trip|null. null يعني لا توجد رحلة نشطة متاحة
 للحساب، وليس فشل شبكة. يقرأ الخادم من موارد المستخدم نفسه في معاملة متسقة.
-الأولوية لغير scheduled أولًا، الأحدث created_at ثم id ASC، ثم أقرب موعد
-scheduled_at مع created_at DESC وid ASC لكسر التعادل. لا تعاد رحلة نهائية.
-هذه سياسة الاستعادة لهذا الإصدار؛ لا تفرض حدًا على عدد الحجوزات أو endpoint إنشاء جديد.
+يُرجع الرحلة الفورية أو التي بدأ توزيعها فقط، بالأحدث created_at ثم id ASC؛
+لا تُرجع scheduled المستقبلية ولا الرحلات النهائية. إذا كانت كل الرحلات
+مجدولة يعيد data: null؛ هذا فراغ حقيقي ولا يعني حذف الحجز أو فشل الاتصال.
+تُعرض الحجوزات المجدولة خارج السجل في الرئيسية بواسطة
+GET /trips?filter=scheduled&sort=scheduled_at_asc ضمن امتداد الجدولة، وتبقى
+GET /trips/{id} وسيلة متابعة كل معرف مستقل. هذا تعديل مقترح بتاريخ
+2026-11-18؛ يحتاج اعتماد الباكند قبل تفعيل API، ولا يغير حدود Auth.
 يجب تعريف هذا المسار قبل /trips/{id} في Laravel لمنع تفسير current كمعرف.
-الأمثلة live-en-route وlive-scheduled وcurrent-empty في examples/.
+الأمثلة live-en-route وcurrent-empty في examples/ لهذه العملية؛ live-scheduled للتفاصيل بالمعرف.
 
 ## GET /trips/{id}/live
 
