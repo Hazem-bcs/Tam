@@ -1,5 +1,6 @@
 {
   "@@locale": "ar",
+  "chatToday": "محادثة اليوم",
   "chatTitle": "السائق",
   "chatRetry": "إعادة المحاولة",
   "chatMessageHint": "اكتب رسالة…",

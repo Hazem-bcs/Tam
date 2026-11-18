@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "chatToday": "Today’s conversation",
   "chatTitle": "Driver",
   "chatRetry": "Retry",
   "chatMessageHint": "Write a message…",

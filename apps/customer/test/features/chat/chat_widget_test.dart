@@ -9,6 +9,12 @@ import 'chat_widget_support.dart';
 
 void main() {
   setUpAll(loadChatFonts);
+  testWidgets('groups current messages under the local day', (tester) async {
+    final repo = ControlledChatRepository();
+    addTearDown(repo.events.close);
+    await pumpChat(tester, repository: repo);
+    expect(find.text('محادثة اليوم'), findsOneWidget);
+  });
   testWidgets(
     'late send does not erase newer draft, and original text remains',
     (tester) async {

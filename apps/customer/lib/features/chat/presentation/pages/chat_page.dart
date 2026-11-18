@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
 
 import '../bloc/chat_cubit.dart';
+import '../widgets/chat_background.dart';
 import '../widgets/chat_composer.dart';
+import '../widgets/chat_header.dart';
 import '../widgets/chat_status_banner.dart';
 import '../widgets/chat_timeline.dart';
 
@@ -99,61 +101,60 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             ? metadata?.driverName
             : metadata?.driverNameEn;
         return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(onPressed: widget.onBack),
-            title: Text(name ?? t.chatTitle),
-            actions: [
-              IconButton(
-                key: const Key('chat-refresh'),
-                tooltip: t.chatRefresh,
-                onPressed: cubit.refresh,
-                icon: const Icon(Icons.refresh),
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: LayoutBuilder(
-                  builder: (context, constraints) => Column(
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: constraints.maxHeight * .22,
+          body: ChatBackground(
+            child: SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Column(
+                      children: [
+                        ChatHeader(
+                          name: name ?? t.chatTitle,
+                          onBack: widget.onBack,
+                          onRefresh: cubit.refresh,
                         ),
-                        child: ChatStatusBanner(state: state),
-                      ),
-                      Expanded(
-                        child: ChatTimeline(
-                          key: _timelineKey,
-                          latestMessageKey: _latestMessageKey,
-                          state: state,
-                          controller: _scroll,
-                          onLoadOlder: cubit.loadOlder,
-                          onRetry: cubit.retry,
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: constraints.maxHeight * .16,
+                          ),
+                          child: ChatStatusBanner(state: state),
                         ),
-                      ),
-                      if (!_atNewest)
-                        TextButton.icon(
-                          key: const Key('chat-newest'),
-                          onPressed: () {
-                            _scroll.jumpTo(0);
-                            _scheduleRead();
-                          },
-                          icon: const Icon(Icons.arrow_downward),
-                          label: Text(t.chatNewest),
+                        Expanded(
+                          child: ChatTimeline(
+                            key: _timelineKey,
+                            latestMessageKey: _latestMessageKey,
+                            state: state,
+                            now: cubit.now,
+                            controller: _scroll,
+                            onLoadOlder: cubit.loadOlder,
+                            onRetry: cubit.retry,
+                          ),
                         ),
-                      ChatComposer(
-                        enabled: state.canSend,
-                        maxLength: cubit.policy.maxBodyCodePoints,
-                        maxHeight: (constraints.maxHeight * .5).clamp(40, 180),
-                        onSend: (body) =>
-                            _resumed &&
-                            ModalRoute.of(context)?.isCurrent != false &&
-                            cubit.send(body),
-                      ),
-                    ],
+                        if (!_atNewest)
+                          TextButton.icon(
+                            key: const Key('chat-newest'),
+                            onPressed: () {
+                              _scroll.jumpTo(0);
+                              _scheduleRead();
+                            },
+                            icon: const Icon(Icons.arrow_downward),
+                            label: Text(t.chatNewest),
+                          ),
+                        ChatComposer(
+                          enabled: state.canSend,
+                          maxLength: cubit.policy.maxBodyCodePoints,
+                          maxHeight: (constraints.maxHeight * .28).clamp(
+                            40,
+                            180,
+                          ),
+                          onSend: (body) =>
+                              _resumed &&
+                              ModalRoute.of(context)?.isCurrent != false &&
+                              cubit.send(body),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

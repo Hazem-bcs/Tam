@@ -731,6 +731,7 @@
   "activeTripSupport": "Get help with this trip",
   "activeTripSupportShort": "Support",
   "activeTripDetailsShort": "Order details",
+  "chatToday": "Today’s conversation",
   "chatTitle": "Driver",
   "chatRetry": "Retry",
   "chatMessageHint": "Write a message…",

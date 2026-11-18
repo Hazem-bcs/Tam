@@ -1718,6 +1718,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeTripDetailsShort => 'Order details';
 
   @override
+  String get chatToday => 'Today’s conversation';
+
+  @override
   String get chatTitle => 'Driver';
 
   @override

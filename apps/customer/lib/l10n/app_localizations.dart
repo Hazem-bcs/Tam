@@ -3236,6 +3236,12 @@ abstract class AppLocalizations {
   /// **'تفاصيل الطلب'**
   String get activeTripDetailsShort;
 
+  /// No description provided for @chatToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة اليوم'**
+  String get chatToday;
+
   /// No description provided for @chatTitle.
   ///
   /// In ar, this message translates to:

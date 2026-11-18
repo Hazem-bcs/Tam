@@ -1690,6 +1690,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeTripDetailsShort => 'تفاصيل الطلب';
 
   @override
+  String get chatToday => 'محادثة اليوم';
+
+  @override
   String get chatTitle => 'السائق';
 
   @override

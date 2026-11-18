@@ -25,62 +25,94 @@ class ChatMessageBubble extends StatelessWidget {
     final time = MaterialLocalizations.of(
       context,
     ).formatTimeOfDay(TimeOfDay.fromDateTime(sentAt.toLocal()));
-    return Align(
-      alignment: customer ? Alignment.centerRight : Alignment.centerLeft,
-      child: FractionallySizedBox(
-        widthFactor: .88,
-        child: Align(
-          alignment: customer ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: customer ? colors.primary : colors.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(AppRadii.lg),
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      child: Row(
+        mainAxisAlignment: customer
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!customer) ...[
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: colors.primaryContainer,
+              foregroundColor: colors.primary,
+              child: const Icon(Icons.person_rounded, size: 22),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  body,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: foreground),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Wrap(
-                  spacing: AppSpacing.sm,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text(
-                      time,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelSmall?.copyWith(color: foreground),
+            const SizedBox(width: AppSpacing.sm),
+          ],
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: customer ? colors.primary : colors.primaryContainer,
+                borderRadius: BorderRadius.circular(AppRadii.lg),
+                boxShadow: [
+                  BoxShadow(
+                    color: colors.shadow.withValues(alpha: .09),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    body,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: customer
+                          ? colors.onPrimary
+                          : colors.onPrimaryContainer,
                     ),
-                    if (customer) Icon(statusIcon, size: 16, color: foreground),
-                    if (customer)
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
                       Text(
-                        status,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.labelSmall?.copyWith(color: foreground),
-                      ),
-                    if (onRetry != null)
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: foreground,
+                        time,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: foreground,
                         ),
-                        onPressed: onRetry,
-                        child: Text(AppLocalizations.of(context).chatRetry),
                       ),
-                  ],
-                ),
-              ],
+                      if (customer)
+                        Icon(statusIcon, size: 16, color: foreground),
+                      if (customer)
+                        Text(
+                          status,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: foreground,
+                          ),
+                        ),
+                      if (onRetry != null)
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: foreground,
+                          ),
+                          onPressed: onRetry,
+                          child: Text(AppLocalizations.of(context).chatRetry),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+          if (customer) ...[
+            const SizedBox(width: AppSpacing.sm),
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: colors.primaryContainer,
+              foregroundColor: colors.primary,
+              child: const Icon(Icons.person_rounded, size: 22),
+            ),
+          ],
+        ],
       ),
     );
   }

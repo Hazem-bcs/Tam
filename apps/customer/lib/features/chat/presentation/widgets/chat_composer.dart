@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tam_customer/app/theme/app_tokens.dart';
 import 'package:tam_customer/l10n/app_localizations.dart';
-import 'package:tam_customer/shared/widgets/tam_text_field.dart';
 
 class ChatComposer extends StatefulWidget {
   const ChatComposer({
@@ -30,47 +29,68 @@ class _ChatComposerState extends State<ChatComposer> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     final length = _controller.text.trim().runes.length;
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.md),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: widget.maxHeight),
-              // Keep the input and its wrapping counter scrollable together
-              // when the keyboard leaves only a short composer viewport.
-              child: SingleChildScrollView(
-                child: TamTextField(
-                  key: const Key('chat-input'),
-                  controller: _controller,
-                  enabled: widget.enabled,
-                  labelText: t.chatMessageHint,
-                  maxLines: null,
-                  helperText: t.chatCharacterCount(length, widget.maxLength),
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (_) => setState(() {}),
+      child: Material(
+        color: colors.surfaceContainerLowest,
+        elevation: AppElevation.raised,
+        borderRadius: BorderRadius.circular(AppRadii.sheet),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.sm),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: widget.maxHeight),
+                  child: SingleChildScrollView(
+                    child: TextField(
+                      key: const Key('chat-input'),
+                      controller: _controller,
+                      enabled: widget.enabled,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (_) => setState(() {}),
+                      decoration: InputDecoration(
+                        hintText: t.chatMessageHint,
+                        helperText: length > 0
+                            ? t.chatCharacterCount(length, widget.maxLength)
+                            : null,
+                        filled: true,
+                        fillColor: colors.surfaceContainerLow,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                          vertical: AppSpacing.md,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppRadii.sheet),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(width: AppSpacing.sm),
+              IconButton.filled(
+                key: const Key('chat-send'),
+                tooltip: t.chatSend,
+                onPressed:
+                    widget.enabled && length > 0 && length <= widget.maxLength
+                    ? () {
+                        if (widget.onSend(_controller.text)) {
+                          _controller.clear();
+                          setState(() {});
+                        }
+                      }
+                    : null,
+                icon: const Icon(Icons.send_rounded),
+              ),
+            ],
           ),
-          const SizedBox(width: AppSpacing.sm),
-          IconButton.filled(
-            key: const Key('chat-send'),
-            tooltip: t.chatSend,
-            onPressed:
-                widget.enabled && length > 0 && length <= widget.maxLength
-                ? () {
-                    if (widget.onSend(_controller.text)) {
-                      _controller.clear();
-                      setState(() {});
-                    }
-                  }
-                : null,
-            icon: const Icon(Icons.send),
-          ),
-        ],
+        ),
       ),
     );
   }
